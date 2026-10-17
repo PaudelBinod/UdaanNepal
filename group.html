@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Udaan Nepal — My Group</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060B19;--deep:#101216;--panel:#22262C;--hover:#2A2F36;--blue:#0066FF;--blue2:#0052CC;--cyan:#00E5FF;--amber:#F59E0B;--text:#F8FAFC;--sub:#CBD5E1;--muted:#94A3B8;--border:rgba(255,255,255,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Manrope,sans-serif;min-height:100vh}
+button,input,textarea{font:inherit}button{cursor:pointer}.app{height:calc(100vh - 32px);min-height:620px;max-width:1180px;margin:16px auto;background:var(--deep);border:1px solid var(--border);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 25px 80px #0008}
+.top{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--border);flex:none}.top button{background:none;border:0;color:var(--sub);font-size:22px;width:42px;height:42px;border-radius:11px}.top button:hover{background:var(--hover);color:#fff}.title{font:600 1.05rem Poppins}.notify{position:relative}.count{position:absolute;right:3px;top:2px;background:var(--blue);border:2px solid var(--deep);border-radius:50%;font-size:10px;width:18px;height:18px;display:grid;place-items:center;color:white}
+.main{display:flex;flex:1;min-height:0}.groups{width:350px;border-right:1px solid var(--border);display:flex;flex-direction:column}.search{padding:17px}.searchbox{position:relative}.searchbox span{position:absolute;left:13px;top:10px;color:var(--muted)}.searchbox input{width:100%;height:43px;padding:0 12px 0 39px;background:#1a1e24;color:#fff;border:1px solid var(--border);border-radius:12px;outline:0}.searchbox input:focus{border-color:#0066ff99}.label{padding:0 18px 9px;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:1.3px}.list{overflow:auto;flex:1;padding:0 8px}.group{width:100%;display:flex;align-items:center;gap:11px;padding:11px 10px;border:0;background:transparent;color:#fff;text-align:left;border-radius:13px;margin-bottom:3px}.group:hover{background:var(--hover)}.group.active{background:#0066ff1f}.avatar{width:46px;height:46px;flex:none;border-radius:14px;background:#26324a;color:var(--cyan);display:grid;place-items:center;font-size:12px;font-weight:700}.ginfo{min-width:0;flex:1}.grow{display:flex;justify-content:space-between;gap:8px}.gname{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.time{font-size:10px;color:var(--muted);white-space:nowrap}.preview{font-size:12px;color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.unread{background:var(--blue);font-size:10px;border-radius:99px;padding:3px 7px}.actions{padding:12px 16px 16px;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:8px}.btn{height:41px;border-radius:11px;border:1px solid var(--border);background:var(--panel);color:#fff;font-weight:700;font-size:12px}.btn:hover{background:var(--hover)}.primary{background:var(--blue);border-color:var(--blue)}.primary:hover{background:var(--blue2)}
+.chat{flex:1;display:flex;flex-direction:column;min-width:0;background:#15181d}.empty{margin:auto;text-align:center;color:var(--muted);max-width:350px;padding:30px}.empty .emptyicon{width:70px;height:70px;border-radius:22px;background:var(--panel);display:grid;place-items:center;margin:auto auto 16px;font-size:29px}.empty h2{font:600 18px Poppins;color:#fff;margin:0 0 8px}.empty p{font-size:13px;line-height:1.6}.chatview{display:none;height:100%;flex-direction:column}.chatview.show{display:flex}.chathead{height:70px;display:flex;align-items:center;padding:0 17px;background:#1b1f25;border-bottom:1px solid var(--border)}.chathead .avatar{width:42px;height:42px;margin-right:10px}.chatname{flex:1}.chatname strong{display:block;font-size:14px}.chatname span{display:block;color:var(--muted);font-size:11px;margin-top:3px}.messages{flex:1;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:11px}.day{text-align:center;color:var(--muted);font-size:10px}.msg{max-width:72%;align-self:flex-start}.msg.own{align-self:flex-end}.sender{font-size:10px;color:var(--cyan);font-weight:700;margin:0 9px 4px}.bubble{padding:10px 12px;border:1px solid var(--border);background:var(--panel);border-radius:15px 15px 15px 5px;font-size:13px;line-height:1.5}.own .bubble{background:var(--blue);border-color:var(--blue);border-radius:15px 15px 5px 15px}.meta{font-size:9px;color:var(--muted);text-align:right;margin-top:4px}.own .meta{color:#dbeafe}.answered{font-size:9px;color:#86efac;font-weight:700;margin-top:4px}.composer{display:flex;gap:8px;align-items:center;padding:12px;border-top:1px solid var(--border);background:#1b1f25}.attach,.send{width:41px;height:41px;border:0;border-radius:11px}.attach{background:transparent;color:var(--muted)}.attach:hover{background:var(--hover);color:#fff}.send{background:var(--blue);color:#fff;font-weight:700}.send:hover{background:var(--blue2)}.composer input{flex:1;height:41px;background:#12151a;color:#fff;border:1px solid var(--border);border-radius:11px;padding:0 12px;outline:0}.composer input:focus{border-color:#0066ff99}
+.modalbg{position:fixed;inset:0;background:#000a;backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;z-index:10}.modalbg.show{display:flex}.modal{width:min(450px,100%);background:#1b1f25;border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:0 25px 80px #000b}.modal h2{font:600 18px Poppins;margin:0 0 5px}.modal p{font-size:12px;color:var(--muted);margin:0 0 17px}.field{margin:0 0 12px}.field label{display:block;font-size:11px;font-weight:700;color:var(--sub);margin-bottom:5px}.field input,.field textarea{width:100%;background:#111419;color:#fff;border:1px solid var(--border);border-radius:10px;padding:10px;outline:0}.field textarea{min-height:75px;resize:vertical}.modalactions{display:flex;justify-content:flex-end;gap:8px;margin-top:17px}.notices{display:grid;gap:8px}.notice{background:#15191e;border:1px solid var(--border);padding:11px;border-radius:10px}.notice strong{font-size:12px}.notice span{display:block;color:var(--muted);font-size:10px;margin-top:3px}.toast{position:fixed;right:20px;bottom:20px;background:#20252c;color:#fff;border:1px solid var(--border);border-radius:11px;padding:11px 14px;font-size:12px;opacity:0;transform:translateY(8px);transition:.2s;z-index:30}.toast.show{opacity:1;transform:none}
+@media(max-width:800px){.app{margin:0;width:100%;height:100vh;min-height:0;border:0;border-radius:0}.groups{width:100%;border:0}.chat{display:none}.main.open .groups{display:none}.main.open .chat{display:flex;position:absolute;inset:68px 0 0}.mobileback{display:block!important}.msg{max-width:87%}}@media(min-width:801px){.mobileback{display:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><button onclick="back()" aria-label="Back">←</button><div class="title">My Group</div><button class="notify" onclick="modal('notifications')" aria-label="Notifications">🔔<i class="count">3</i></button></header>
+<main class="main" id="main">
+<section class="groups">
+<div class="search"><div class="searchbox"><span>⌕</span><input id="search" placeholder="Search groups..." aria-label="Search groups"></div></div>
+<div class="label">MY GROUPS</div><div class="list" id="list"></div>
+<div class="actions"><button class="btn" onclick="modal('join')">Join Group</button><button class="btn primary" onclick="modal('create')">+ New Group</button></div>
+</section>
+<section class="chat">
+<div class="empty" id="empty"><div class="emptyicon">💬</div><h2>Select a group to start chatting</h2><p>Your academic conversations, doubts and group discussions will appear here.</p></div>
+<div class="chatview" id="chatview">
+<div class="chathead"><button class="top mobileback" onclick="closeChat()">←</button><div class="avatar" id="cavatar"></div><div class="chatname"><strong id="cname"></strong><span id="cmembers"></span></div><button class="top" style="width:40px;height:40px;padding:0" onclick="groupInfo()">⋮</button></div>
+<div class="messages" id="messages"></div>
+<div class="composer"><button class="attach" onclick="toast('Attachment picker ready for backend upload')" aria-label="Attach">📎</button><input id="input" placeholder="Type a message..." aria-label="Message"><button class="send" onclick="send()">➤</button></div>
+</div></section>
+</main></div>
+
+<div class="modalbg" id="create"><div class="modal"><h2>Create New Group</h2><p>Create a simple space for learning together.</p><div class="field"><label>Group Name *</label><input id="newname" placeholder="e.g. SEE Mathematics"></div><div class="field"><label>Description</label><textarea id="newdesc" placeholder="What is this group about?"></textarea></div><div class="field"><label>Subject / Topic</label><input id="newsubject" placeholder="e.g. Mathematics"></div><div class="modalactions"><button class="btn" onclick="closeModal('create')">Cancel</button><button class="btn primary" onclick="createGroup()">Create Group</button></div></div></div>
+<div class="modalbg" id="join"><div class="modal"><h2>Join a Group</h2><p>Enter the group code shared by your teacher or group member.</p><div class="field"><label>Group Code</label><input id="code" placeholder="e.g. UDN-1024"></div><div class="modalactions"><button class="btn" onclick="closeModal('join')">Cancel</button><button class="btn primary" onclick="joinGroup()">Join Group</button></div></div></div>
+<div class="modalbg" id="notifications"><div class="modal"><h2>Notifications</h2><p>Recent activity from your groups.</p><div class="notices"><div class="notice"><strong>Aarav replied to your message</strong><span>2 minutes ago · SEE Mathematics</span></div><div class="notice"><strong>Physics Grade 10 has a new message</strong><span>15 minutes ago</span></div><div class="notice"><strong>Teacher posted an announcement</strong><span>1 hour ago · Robotics Club</span></div></div><div class="modalactions"><button class="btn primary" onclick="closeModal('notifications')">Done</button></div></div></div>
+<div class="modalbg" id="info"><div class="modal"><h2 id="ititle"></h2><p id="idesc"></p><div class="notices" id="members"></div><div class="modalactions"><button class="btn" onclick="leave()">Leave Group</button><button class="btn primary" onclick="closeModal('info')">Close</button></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="site-content.js"></script>
+<script>
+document.addEventListener('un-content', function(ev){
+  var f = (ev.detail && ev.detail.features) || {};
+  if (f.group_chat === true) return;
+  document.body.innerHTML = '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;font-family:Manrope,system-ui,sans-serif;background:#17191D;color:#F8FAFC;"><h2 style="font-family:Poppins,sans-serif;">My Group is coming soon</h2><p style="color:#94A3B8;max-width:420px;">We are building a space for study groups. It will open here when it is ready.</p><a href="courses" style="background:#0066FF;color:#fff;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:700;">Back to My Courses</a></div>';
+});
+</script>
+<script>
+// Reuse the singleton client created by site-content.js (avoids duplicate GoTrueClient warning)
+const supabaseClient = window.supabaseClient;
+/* My Group is an account page — require login before showing anything. */
+(async function requireLogin(){
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if(!user){ window.location.href = 'auth?redirect=group'; }
+})();
+</script>
+<script>
+let groups=[
+{id:1,name:"SEE Mathematics",members:47,unread:3,time:"2 min ago",preview:"Aarav: Can anyone explain Q.5?",avatar:"SM",desc:"A friendly space for SEE Mathematics preparation."},
+{id:2,name:"Physics Grade 10",members:24,unread:1,time:"18 min ago",preview:"Riya: I found the answer.",avatar:"P10",desc:"Discuss concepts, questions and practical problems."},
+{id:3,name:"Robotics Club",members:18,unread:5,time:"1 hr ago",preview:"Suman: Tomorrow's project meeting?",avatar:"RC",desc:"Build, experiment and learn robotics together."},
+{id:4,name:"Coding Group",members:32,unread:0,time:"Yesterday",preview:"Binod: Try this Python approach.",avatar:"CG",desc:"Peer learning for coding and programming."}
+];
+let chats={
+1:[["Aarav","How do we solve question 5?","8:42 PM",0,0],["Riya","Use the formula for the area first, then substitute the values.","8:44 PM",0,0],["You","Oh! Got it. Thanks!","8:45 PM",1,0],["Suman","I got the same answer. The second step is where I almost made a mistake.","8:46 PM",0,1]],
+2:[["Riya","I found the answer to today's numerical. Want me to share the steps?","7:15 PM",0,0],["You","Yes please!","7:16 PM",1,0]],
+3:[["Suman","Tomorrow's project meeting is at 4 PM.","5:20 PM",0,0],["You","I'll be there.","5:22 PM",1,0]],
+4:[["Binod","Try this Python approach for the loop problem.","Yesterday",0,1]]
+};
+let current=null;
+const list=document.getElementById("list");
+function render(filter=""){list.innerHTML="";groups.filter(g=>g.name.toLowerCase().includes(filter.toLowerCase())).forEach(g=>{let b=document.createElement("button");b.className="group"+(current===g.id?" active":"");b.innerHTML=`<div class="avatar">${g.avatar}</div><div class="ginfo"><div class="grow"><span class="gname">${g.name}</span><span class="time">${g.time}</span></div><div class="preview">${g.preview}</div></div>${g.unread?`<span class="unread">${g.unread}</span>`:""}`;b.onclick=()=>openGroup(g.id);list.appendChild(b)})}
+function openGroup(id){current=id;let g=groups.find(x=>x.id===id);g.unread=0;document.getElementById("empty").style.display="none";document.getElementById("chatview").classList.add("show");document.getElementById("cavatar").textContent=g.avatar;document.getElementById("cname").textContent=g.name;document.getElementById("cmembers").textContent=g.members+" members";document.getElementById("main").classList.add("open");renderMessages();render(document.getElementById("search").value)}
+function renderMessages(){let box=document.getElementById("messages");box.innerHTML='<div class="day">Today</div>'; (chats[current]||[]).forEach((m,i)=>{let d=document.createElement("div");d.className="msg"+(m[3]?" own":"");d.innerHTML=(m[3]?"":`<div class="sender">${m[0]}${m[0]==="Riya"?" · ✓ Teacher":""}</div>`)+`<div class="bubble">${esc(m[1])}</div><div class="meta">${m[2]} · <button style="border:0;background:none;color:inherit" onclick="messageAction(${i})">⋮</button></div>${m[4]?'<div class="answered">✓ Answered</div>':""}`;box.appendChild(d)});box.scrollTop=box.scrollHeight}
+function send(){let input=document.getElementById("input"),text=input.value.trim();if(!text)return;let t=new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});chats[current].push(["You",text,t,1,0]);let g=groups.find(x=>x.id===current);g.preview="You: "+text;g.time="Just now";input.value="";renderMessages();render(document.getElementById("search").value)}
+document.getElementById("input").addEventListener("keydown",e=>{if(e.key==="Enter")send()});
+document.getElementById("search").addEventListener("input",e=>render(e.target.value));
+function messageAction(i){if(confirm("Mark this message as answered?")){chats[current][i][4]=1;renderMessages();toast("Message marked as answered ✓")}}
+function groupInfo(){let g=groups.find(x=>x.id===current);document.getElementById("ititle").textContent=g.name;document.getElementById("idesc").textContent=g.members+" members · Udaan Nepal learning group";document.getElementById("members").innerHTML=["Aarav Sharma","Riya Thapa · ✓ Teacher","Suman KC","Binod Paudel","You"].map(x=>`<div class="notice"><strong>${x}</strong><span>Member</span></div>`).join("");modal("info")}
+function leave(){if(confirm("Leave this group?")){groups=groups.filter(g=>g.id!==current);delete chats[current];current=null;closeModal("info");closeChat();render();toast("You left the group")}}
+function createGroup(){let n=document.getElementById("newname").value.trim();if(!n){toast("Please enter a group name");return}let id=Date.now();groups.unshift({id,name:n,members:1,unread:0,time:"Just now",preview:"Group created. Start the conversation.",avatar:n.split(/\s+/).map(x=>x[0]).join("").slice(0,3).toUpperCase(),desc:document.getElementById("newdesc").value||"New Udaan Nepal learning group."});chats[id]=[];closeModal("create");render();openGroup(id);toast("Group created successfully")}
+function joinGroup(){let c=document.getElementById("code").value.trim();if(!c){toast("Please enter a group code");return}closeModal("join");document.getElementById("code").value="";toast("Group join request received")}
+function closeChat(){current=null;document.getElementById("chatview").classList.remove("show");document.getElementById("empty").style.display="block";document.getElementById("main").classList.remove("open");render()}
+function back(){
+    window.location.href = "index";
+}
+function modal(id){document.getElementById(id).classList.add("show")}function closeModal(id){document.getElementById(id).classList.remove("show")}
+document.querySelectorAll(".modalbg").forEach(x=>x.onclick=e=>{if(e.target===x)x.classList.remove("show")});
+function toast(s){let t=document.getElementById("toast");t.textContent=s;t.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove("show"),2200)}
+function esc(s){let d=document.createElement("div");d.textContent=s;return d.innerHTML}
+render();
+</script>
+</body>
+</html>
+    

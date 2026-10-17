@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terms & Conditions | Udaan Nepal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A1128;--card:#111B3C;--text:#E6EBFA;--muted:#9AA6C7;--accent:#00E5FF;--border:rgba(255,255,255,.1);}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.7;}
+header{border-bottom:1px solid var(--border);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+header a{color:var(--text);text-decoration:none;font-family:Sora,sans-serif;font-weight:700;}
+header nav a{font-family:Inter,sans-serif;font-weight:500;font-size:14px;color:var(--accent);margin-left:14px;}
+main{max-width:780px;margin:0 auto;padding:28px 16px 60px;}
+h1{font-family:Sora,sans-serif;font-size:28px;margin:0 0 6px;}
+.updated{color:var(--muted);font-size:13px;margin-bottom:22px;}
+.draft{background:rgba(255,184,0,.1);border:1px solid rgba(255,184,0,.4);border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:22px;display:none;}
+h2{font-family:Sora,sans-serif;font-size:18px;margin:28px 0 8px;color:var(--accent);scroll-margin-top:16px;}
+p{margin:0 0 12px;color:var(--text);} ul{margin:0 0 12px;padding-left:22px;} li{margin-bottom:6px;}
+footer{border-top:1px solid var(--border);padding:20px 16px;text-align:center;color:var(--muted);font-size:13px;}
+footer a{color:var(--accent);}
+</style>
+</head>
+<body>
+<header><a href="index">Udaan Nepal</a><nav><a href="index">Home</a><a href="courses">My Courses</a><a href="privacy">Privacy Policy</a></nav></header>
+<main>
+  <h1>Terms & Conditions</h1>
+  <div class="updated" id="updated"></div>
+  <article id="doc"></article>
+</main>
+<footer>Questions? <a href="#" data-c="email" data-pre="mailto:">info@udaannepal.com</a> · <a href="#" data-c="phone" data-pre="tel:"></a></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="site-content.js"></script>
+<script src="legal-defaults.js"></script>
+<script>
+(function(){
+  var KEY = 'terms';
+  function render(text){
+    var doc = document.getElementById('doc'); doc.textContent = '';
+    var list = null;
+    String(text).split('\n').forEach(function(line){
+      line = line.replace(/\s+$/,'');
+      if(!line.trim()){ list = null; return; }
+      if(line.indexOf('## ') === 0){
+        list = null;
+        var t = line.slice(3), id = null, m = /\s*\{#([\w-]+)\}\s*$/.exec(t);
+        if(m){ id = m[1]; t = t.slice(0, m.index); }
+        var h = document.createElement('h2'); h.textContent = t; if(id) h.id = id; doc.append(h);
+      } else if(line.indexOf('- ') === 0){
+        if(!list){ list = document.createElement('ul'); doc.append(list); }
+        var li = document.createElement('li'); li.textContent = line.slice(2); list.append(li);
+      } else {
+        list = null; var p = document.createElement('p'); p.textContent = line; doc.append(p);
+      }
+    });
+    if(location.hash){ var el = document.getElementById(location.hash.slice(1)); if(el) el.scrollIntoView(); }
+  }
+  var text = (window.UN_LEGAL||{})[KEY] || '';
+  render(text);
+  document.getElementById('updated').textContent = 'Last updated: 5 October 2026';
+  if(window.UN && UN.sb){
+    UN.sb.from('site_settings').select('value').eq('key', KEY + '_content').maybeSingle().then(function(r){
+      var v = r && r.data && r.data.value;
+      if(v && typeof v.text === 'string' && v.text.trim()){
+        render(v.text);
+        if(v.updated) document.getElementById('updated').textContent = 'Last updated: ' + v.updated;
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In or Sign Up — Udaan Nepal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#17191D;
+  --bg-deep:#101216;
+  --card:#22262C;
+  --card-hover:#2A2F36;
+  --electric:#0066FF;
+  --electric-hover:#0052CC;
+  --cyan:#00E5FF;
+  --amber:#F59E0B;
+  --red:#F04452;
+
+  --text-primary:#F8FAFC;
+  --text-secondary:#CBD5E1;
+  --text-muted:#94A3B8;
+  --border:rgba(255,255,255,0.08);
+  --border-strong:rgba(255,255,255,0.16);
+
+  --radius:14px;
+  --radius-sm:9px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Manrope',sans-serif;background:var(--bg-deep);color:var(--text-primary);line-height:1.55;min-height:100vh;}
+h1,h2,h3{font-family:'Poppins',sans-serif;letter-spacing:-0.01em;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+img{max-width:100%;display:block;}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important;}}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;border-radius:10px;font-weight:700;font-size:14px;border:none;cursor:pointer;transition:background .2s ease, transform .15s ease;width:100%;}
+.btn-primary{background:var(--electric);color:#fff;}
+.btn-primary:hover:not(:disabled){background:var(--electric-hover);}
+.btn-primary:disabled{background:#33445e;color:rgba(255,255,255,0.5);cursor:not-allowed;}
+.btn-outline{background:transparent;border:1.5px solid var(--border-strong);color:var(--text-primary);}
+.btn-outline:hover{border-color:var(--cyan);color:var(--cyan);}
+.btn-text{background:none;border:none;color:var(--electric);font-weight:700;font-size:13.5px;padding:0;}
+.btn-text:hover{color:var(--cyan);}
+
+/* ===== LAYOUT ===== */
+.auth-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;}
+
+/* ===== LEFT BRANDING PANEL ===== */
+.brand-panel{
+  background:radial-gradient(ellipse 90% 70% at 25% 15%, #14213D 0%, var(--bg-deep) 65%);
+  position:relative;overflow:hidden;padding:48px;display:flex;flex-direction:column;justify-content:space-between;
+}
+.brand-panel::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size:48px 48px;mask-image:radial-gradient(ellipse 70% 70% at 25% 20%, black, transparent);
+}
+.brand-panel::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 80% 85%, rgba(0,229,255,0.10), transparent 45%);}
+.back-link{position:relative;z-index:2;display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--text-secondary);width:fit-content;}
+.back-link:hover{color:var(--cyan);}
+
+.brand-mid{position:relative;z-index:2;}
+.brand-logo{display:flex;align-items:center;gap:12px;margin-bottom:34px;}
+.brand-mark{width:44px;height:44px;border-radius:11px;background:linear-gradient(135deg,var(--electric),var(--cyan));display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:800;color:#101216;font-size:19px;}
+.brand-name{font-family:'Poppins',sans-serif;font-weight:700;font-size:19px;}
+.brand-mid h2{font-size:clamp(28px,3vw,38px);line-height:1.1;margin-bottom:14px;}
+.brand-mid h2 .accent{background:linear-gradient(135deg,var(--cyan),var(--electric));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.brand-mid p{color:var(--text-secondary);font-size:15px;max-width:380px;}
+
+.brand-pillars{position:relative;z-index:2;display:flex;flex-direction:column;gap:14px;}
+.pillar{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text-secondary);}
+.pillar .dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);flex-shrink:0;}
+
+@media(max-width:980px){ .auth-wrap{grid-template-columns:1fr;} .brand-panel{display:none;} }
+
+/* ===== RIGHT AUTH PANEL ===== */
+.auth-panel{display:flex;align-items:center;justify-content:center;padding:40px 24px;}
+.auth-card{width:100%;max-width:440px;}
+.mobile-brand{display:none;margin-bottom:26px;}
+.mobile-brand .brand-logo{margin-bottom:10px;}
+.mobile-brand p{color:var(--text-secondary);font-size:13.5px;}
+@media(max-width:980px){ .mobile-brand{display:block;} }
+.mobile-back{display:none;margin-bottom:18px;font-size:13.5px;color:var(--text-secondary);align-items:center;gap:8px;}
+@media(max-width:980px){ .mobile-back{display:inline-flex;} }
+
+/* tabs */
+.auth-tabs{display:flex;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:5px;margin-bottom:28px;}
+.auth-tab{flex:1;padding:11px;border-radius:100px;border:none;background:transparent;color:var(--text-secondary);font-size:13.5px;font-weight:700;letter-spacing:.02em;transition:all .2s ease;}
+.auth-tab.active{background:var(--electric);color:#fff;}
+
+.view{display:none;animation:fadeIn .3s ease;}
+.view.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.view h1{font-size:23px;margin-bottom:8px;}
+.view > p.sub{color:var(--text-secondary);font-size:14px;margin-bottom:26px;}
+
+/* form elements */
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.form-group label{font-size:12.5px;font-weight:700;color:var(--text-secondary);letter-spacing:.02em;}
+.form-group label .req{color:var(--amber);}
+.form-group label .opt{color:var(--text-muted);font-weight:500;text-transform:none;}
+.input-wrap{position:relative;}
+.form-group input, .form-group select{
+  width:100%;padding:13px 14px;border-radius:9px;border:1px solid var(--border-strong);
+  background:var(--bg-deep);color:var(--text-primary);font-family:inherit;font-size:14px;
+  transition:border-color .2s ease, box-shadow .2s ease;
+}
+/* Override browser autofill styles which paint a white background and make text invisible */
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover,
+.form-group input:-webkit-autofill:focus{
+  -webkit-text-fill-color:var(--text-primary);
+  -webkit-box-shadow:0 0 0 1000px var(--bg-deep) inset;
+  box-shadow:0 0 0 1000px var(--bg-deep) inset;
+  border-color:var(--border-strong);
+  caret-color:var(--text-primary);
+}
+.form-group input:focus, .form-group select:focus{outline:none;border-color:var(--electric);box-shadow:0 0 0 3px rgba(0,102,255,0.16);}
+.form-group.has-error input{border-color:var(--red);}
+.field-error{font-size:12px;color:var(--red);display:none;}
+.field-error.show{display:block;}
+.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);padding:4px;display:flex;}
+.pw-toggle:hover{color:var(--text-secondary);}
+
+.row-between{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px;}
+.remember{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);}
+.remember input{accent-color:var(--electric);width:15px;height:15px;}
+
+.form-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:520px){.form-row2{grid-template-columns:1fr;}}
+
+/* role select cards */
+.role-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:22px;}
+.role-card{
+  padding:16px 10px;border-radius:10px;border:1.5px solid var(--border-strong);background:var(--bg-deep);
+  text-align:center;transition:all .2s ease;
+}
+.role-card .ic{width:32px;height:32px;margin:0 auto 8px;border-radius:9px;background:rgba(0,102,255,0.12);color:#6FA8FF;display:flex;align-items:center;justify-content:center;}
+.role-card .name{font-size:13px;font-weight:700;margin-bottom:2px;}
+.role-card .sub{font-size:11px;color:var(--text-muted);}
+.role-card.selected{border-color:var(--electric);background:rgba(0,102,255,0.1);box-shadow:0 0 0 1px var(--electric);}
+.role-card.selected .ic{background:rgba(0,229,255,0.16);color:var(--cyan);}
+.role-error{font-size:12px;color:var(--red);display:none;margin:-12px 0 16px;}
+.role-error.show{display:block;}
+
+/* password strength */
+.pw-strength{display:flex;gap:5px;margin-top:8px;margin-bottom:4px;}
+.pw-strength .bar{height:4px;flex:1;border-radius:100px;background:var(--border-strong);transition:background .2s ease;}
+.pw-requirements{font-size:11.5px;color:var(--text-muted);margin-top:6px;}
+.pw-requirements.ok{color:var(--cyan);}
+
+.terms-row{display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:var(--text-secondary);margin-bottom:20px;}
+.terms-row input{accent-color:var(--electric);width:16px;height:16px;margin-top:2px;flex-shrink:0;}
+.terms-row a{color:var(--electric);text-decoration:underline;}
+
+.switch-line{text-align:center;font-size:13.5px;color:var(--text-secondary);margin-top:20px;}
+
+/* verification code */
+.otp-row{display:flex;gap:10px;justify-content:center;margin:22px 0 18px;}
+.otp-row input{
+  width:46px;height:54px;text-align:center;font-size:20px;font-weight:700;border-radius:9px;
+  border:1.5px solid var(--border-strong);background:var(--bg-deep);color:var(--text-primary);font-family:inherit;
+}
+.otp-row input:focus{outline:none;border-color:var(--electric);box-shadow:0 0 0 3px rgba(0,102,255,0.16);}
+.resend-line{text-align:center;font-size:13px;color:var(--text-muted);margin-bottom:24px;}
+.resend-line button{background:none;border:none;color:var(--electric);font-weight:700;font-size:13px;}
+.resend-line button:disabled{color:var(--text-muted);cursor:not-allowed;}
+
+/* success state */
+.success-box{text-align:center;padding:10px 0;}
+.success-icon{width:64px;height:64px;margin:0 auto 18px;border-radius:50%;background:rgba(0,229,255,0.12);color:var(--cyan);display:flex;align-items:center;justify-content:center;border:2px solid rgba(0,229,255,0.3);}
+.success-box h1{margin-bottom:8px;}
+.success-box p{color:var(--text-secondary);font-size:14px;margin-bottom:22px;}
+.success-summary{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px;text-align:left;margin-bottom:24px;}
+.success-row{display:flex;justify-content:space-between;padding:7px 0;font-size:13.5px;border-bottom:1px solid var(--border);}
+.success-row:last-child{border-bottom:none;}
+.success-row .k{color:var(--text-muted);}
+.success-row .v{color:var(--text-primary);font-weight:700;}
+
+.generic-note{background:rgba(0,102,255,0.08);border:1px solid rgba(0,102,255,0.22);border-radius:var(--radius-sm);padding:14px 16px;font-size:13px;color:var(--text-secondary);margin-bottom:22px;}
+
+.legal-note{text-align:center;font-size:11.5px;color:var(--text-muted);margin-top:28px;line-height:1.6;}
+.legal-note a{color:var(--text-secondary);text-decoration:underline;}
+
+.back-step{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);margin-bottom:18px;background:none;border:none;padding:0;}
+.back-step:hover{color:var(--cyan);}
+</style>
+</head>
+<body data-greeting="1">
+
+<div class="auth-wrap">
+
+  <!-- ===== LEFT BRANDING PANEL ===== -->
+  <div class="brand-panel">
+    <a href="index" class="back-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Udaan Nepal
+    </a>
+    <div class="brand-mid">
+      <div class="brand-logo">
+        <div class="brand-mark">U</div>
+        <div class="brand-name">Udaan Nepal</div>
+      </div>
+      <h2>Fuel your flight<br>to <span class="accent">success</span>.</h2>
+      <p>Learn. Build. Grow. — join Udaan Nepal's learning ecosystem for practical, accessible education across Nepal.</p>
+    </div>
+    <div class="brand-pillars">
+      <div class="pillar"><span class="dot"></span>Learning</div>
+      <div class="pillar"><span class="dot"></span>Skills</div>
+      <div class="pillar"><span class="dot"></span>Mentorship</div>
+      <div class="pillar"><span class="dot"></span>Practical Education</div>
+    </div>
+  </div>
+
+  <!-- ===== RIGHT AUTH PANEL ===== -->
+  <div class="auth-panel">
+    <div class="auth-card">
+
+      <a href="index" class="mobile-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Udaan Nepal
+      </a>
+      <div class="mobile-brand">
+        <div class="brand-logo">
+          <div class="brand-mark">U</div>
+          <div class="brand-name">Udaan Nepal</div>
+        </div>
+        <p>Fuel your flight to success.</p>
+      </div>
+
+      <!-- TABS -->
+      <div class="auth-tabs" id="authTabs" role="tablist">
+        <button class="auth-tab active" data-tab="login" role="tab" aria-selected="true">Login</button>
+        <button class="auth-tab" data-tab="signup" role="tab" aria-selected="false">Sign Up</button>
+      </div>
+
+      <!-- ===================== LOGIN VIEW ===================== -->
+      <div class="view active" id="view-login">
+        <h1>Welcome Back</h1>
+        <p class="sub">Sign in to continue to Udaan Nepal.</p>
+
+        <form id="loginForm" novalidate>
+          <div class="form-group">
+            <label for="loginId">Email or Phone <span class="req">*</span></label>
+            <input type="text" id="loginId" autocomplete="username">
+            <span class="field-error">Please enter your email.</span>
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password <span class="req">*</span></label>
+            <div class="input-wrap">
+              <input type="password" id="loginPassword" autocomplete="current-password">
+              <button type="button" class="pw-toggle" data-target="loginPassword" aria-label="Show password">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <span class="field-error">Please enter your password.</span>
+          </div>
+          <div class="row-between">
+            <label class="remember"><input type="checkbox"> Remember me</label>
+            <button type="button" class="btn-text" id="forgotBtn">Forgot password?</button>
+          </div>
+          <button type="submit" class="btn btn-primary" id="loginSubmit">Login</button>
+        </form>
+        <div class="switch-line">Don't have an account? <button class="btn-text" data-goto="signup">Sign Up</button></div>
+      </div>
+
+      <!-- ===================== SIGNUP VIEW ===================== -->
+      <div class="view" id="view-signup">
+        <h1>Create Your Account</h1>
+        <p class="sub">Join Udaan Nepal and start your learning journey.</p>
+
+        <form id="signupForm" novalidate>
+          <label style="font-size:12.5px;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:10px;">I am a... <span class="req" style="color:var(--amber);">*</span></label>
+          <div class="role-cards" id="roleCards">
+            <button type="button" class="role-card" data-role="student">
+              <div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+              <div class="name">Student</div><div class="sub">Learn</div>
+            </button>
+            <button type="button" class="role-card" data-role="parent">
+              <div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+              <div class="name">Parent</div><div class="sub">Support</div>
+            </button>
+          </div>
+          <span class="role-error" id="roleError">Please select your role.</span>
+          <p style="font-size:12px;color:var(--text-muted);margin:-6px 0 16px;">Are you a teacher? Sign up as a student or parent first. Udaan Nepal will send you a teacher invitation link.</p>
+
+          <div id="signupFields" style="display:none;">
+            <div class="form-group">
+              <label for="suName">Full Name <span class="req">*</span></label>
+              <input type="text" id="suName">
+              <span class="field-error">Please enter your full name.</span>
+            </div>
+            <div class="form-row2">
+              <div class="form-group">
+                <label for="suEmail">Email <span class="req">*</span></label>
+                <input type="email" id="suEmail">
+                <span class="field-error">Please enter a valid email address.</span>
+              </div>
+              <div class="form-group">
+                <label for="suPhone">Phone Number <span class="req">*</span></label>
+                <input type="tel" id="suPhone">
+                <span class="field-error">Please enter your phone number.</span>
+              </div>
+            </div>
+
+            <!-- STUDENT-ONLY -->
+            <div class="role-only" data-for="student">
+              <div class="form-row2">
+                <div class="form-group"><label for="suSchoolStudent">School / Institution <span class="opt">(optional)</span></label><input type="text" id="suSchoolStudent"></div>
+                <div class="form-group"><label for="suGrade">Grade / Class <span class="opt">(optional)</span></label><input type="text" id="suGrade"></div>
+              </div>
+            </div>
+
+            <!-- PARENT: no extra fields beyond the base set -->
+
+            <div class="form-group">
+              <label for="suPassword">Password <span class="req">*</span></label>
+              <div class="input-wrap">
+                <input type="password" id="suPassword" autocomplete="new-password">
+                <button type="button" class="pw-toggle" data-target="suPassword" aria-label="Show password">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <div class="pw-strength" id="pwStrength">
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+              </div>
+              <div class="pw-requirements" id="pwReq">Must contain 8+ characters, an uppercase letter, a lowercase letter and a number.</div>
+              <span class="field-error">Please create a password that meets the requirements.</span>
+            </div>
+            <div class="form-group">
+              <label for="suConfirm">Confirm Password <span class="req">*</span></label>
+              <div class="input-wrap">
+                <input type="password" id="suConfirm" autocomplete="new-password">
+                <button type="button" class="pw-toggle" data-target="suConfirm" aria-label="Show password">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <span class="field-error">Passwords do not match.</span>
+            </div>
+
+            <div class="terms-row">
+              <input type="checkbox" id="suTerms">
+              <label for="suTerms">I agree to Udaan Nepal's <a href="terms" target="_blank" rel="noopener">Terms & Conditions</a> and <a href="privacy" target="_blank" rel="noopener">Privacy Policy</a>.</label>
+            </div>
+            <span class="field-error" id="termsError" style="margin-top:-14px;margin-bottom:14px;">Please accept the Terms & Conditions to continue.</span>
+
+            <button type="submit" class="btn btn-primary" id="signupSubmit">Create Account</button>
+          </div>
+        </form>
+        <div class="switch-line">Already have an account? <button class="btn-text" data-goto="login">Login</button></div>
+      </div>
+
+      <!-- ===================== VERIFICATION VIEW ===================== -->
+      <div class="view" id="view-verify">
+        <button class="back-step" id="verifyBack"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back</button>
+        <h1>Check Your Email</h1>
+        <p class="sub" id="verifySub">We have sent you a link to confirm your email address.</p>
+        <div class="generic-note">Open the email and tap the confirmation link. Then come back here and log in. If you cannot see it, check your Spam or Promotions folder.</div>
+        <span class="field-error" id="otpError" style="display:block;text-align:center;margin:10px 0;"></span>
+        <div class="resend-line">Did not get the email? <button id="resendBtn" type="button">Resend email</button></div>
+        <button class="btn btn-primary" id="verifySubmit">Go to Login</button>
+      </div>
+
+      <!-- ===================== SIGNUP SUCCESS VIEW ===================== -->
+      <div class="view" id="view-success">
+        <div class="success-box">
+          <div class="success-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <h1>Account Created</h1>
+          <p>Welcome to Udaan Nepal.</p>
+          <div class="success-summary">
+            <div class="success-row"><span class="k">Name</span><span class="v" id="sumName">—</span></div>
+            <div class="success-row"><span class="k">Role</span><span class="v" id="sumRole">—</span></div>
+          </div>
+          <button class="btn btn-primary" id="continueBtn">Continue to Udaan Nepal</button>
+        </div>
+      </div>
+
+      <!-- ===================== LOGIN SUCCESS VIEW ===================== -->
+      <div class="view" id="view-login-success">
+        <div class="success-box">
+          <div class="success-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <h1>Welcome Back</h1>
+          <p>You're signed in to Udaan Nepal.</p>
+          <div class="success-summary">
+            <div class="success-row"><span class="k">Role</span><span class="v" id="loginSumRole">—</span></div>
+          </div>
+          <button class="btn btn-primary" id="loginContinueBtn">Continue to Dashboard</button>
+        </div>
+      </div>
+
+      <!-- ===================== FORGOT PASSWORD: STEP 1 ===================== -->
+      <div class="view" id="view-forgot1">
+        <button class="back-step" id="forgot1Back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back to Login</button>
+        <h1>Forgot Password</h1>
+        <p class="sub">Enter your account email and we'll send you a link to set a new password.</p>
+        <div class="form-group">
+          <label for="forgotId">Email <span class="req">*</span></label>
+          <input type="email" id="forgotId" autocomplete="email">
+          <span class="field-error">Please enter your email or phone.</span>
+        </div>
+        <button class="btn btn-primary" id="forgotSendBtn">Send reset link</button>
+      </div>
+
+      <!-- ===================== FORGOT PASSWORD: GENERIC CONFIRM ===================== -->
+      <div class="view" id="view-forgot2">
+        <h1>Check Your Email</h1>
+        <div class="generic-note">If an account matches that email, a link to reset your password is on its way. Open it on this phone or computer. Check your Spam folder too.</div>
+        <button class="btn btn-primary" id="forgotBackLoginBtn" style="margin-top:18px;">Back to Login</button>
+      </div>
+
+      <!-- ===================== FORGOT PASSWORD: NEW PASSWORD ===================== -->
+      <div class="view" id="view-forgot3">
+        <h1>Create New Password</h1>
+        <p class="sub">Choose a new password for your account.</p>
+        <div class="form-group">
+          <label for="newPassword">New Password <span class="req">*</span></label>
+          <div class="input-wrap">
+            <input type="password" id="newPassword">
+            <button type="button" class="pw-toggle" data-target="newPassword" aria-label="Show password">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="pw-requirements">Must contain 8+ characters, an uppercase letter, a lowercase letter and a number.</div>
+          <span class="field-error">Please create a password that meets the requirements.</span>
+        </div>
+        <div class="form-group">
+          <label for="newPasswordConfirm">Confirm New Password <span class="req">*</span></label>
+          <div class="input-wrap">
+            <input type="password" id="newPasswordConfirm">
+            <button type="button" class="pw-toggle" data-target="newPasswordConfirm" aria-label="Show password">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <span class="field-error">Passwords do not match.</span>
+        </div>
+        <button class="btn btn-primary" id="updatePasswordBtn">Update Password</button>
+      </div>
+
+      <!-- ===================== FORGOT PASSWORD: DONE ===================== -->
+      <div class="view" id="view-forgot4">
+        <div class="success-box">
+          <div class="success-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <h1>Password Updated</h1>
+          <p>Your password has been changed. You can now log in with your new password.</p>
+          <button class="btn btn-primary" id="backToLoginBtn">Back to Login</button>
+        </div>
+      </div>
+
+      <div class="legal-note">By continuing, you agree to Udaan Nepal's <a href="terms" target="_blank" rel="noopener">Terms & Conditions</a> and <a href="privacy" target="_blank" rel="noopener">Privacy Policy</a>.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>window.__authHash = window.location.hash || ""; window.__authSearch = window.location.search || "";</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="site-content.js"></script>
+<script>
+/* =========================================================
+   SUPABASE SETUP
+   URL and anon/publishable key are safe to expose in client code —
+   they only allow what the database's Row Level Security rules permit.
+========================================================= */
+// Reuse the singleton client created by site-content.js (avoids duplicate GoTrueClient warning)
+const supabaseClient = window.supabaseClient;
+</script>
+<script>
+/* ===== VIEW SWITCHING ===== */
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function setTab(tab){
+  document.querySelectorAll('.auth-tab').forEach(t=>{
+    const active = t.dataset.tab===tab;
+    t.classList.toggle('active', active);
+    t.setAttribute('aria-selected', String(active));
+  });
+}
+
+document.querySelectorAll('.auth-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    setTab(tab.dataset.tab);
+    showView('view-'+tab.dataset.tab);
+  });
+});
+document.querySelectorAll('[data-goto]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.goto;
+    setTab(target);
+    showView('view-'+target);
+  });
+});
+
+/* ===== PASSWORD VISIBILITY TOGGLE ===== */
+document.querySelectorAll('.pw-toggle').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const input = document.getElementById(btn.dataset.target);
+    const showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+  });
+});
+
+/* =========================================================
+   LOGIN
+========================================================= */
+(function(){
+  const form = document.getElementById('loginForm');
+  const submitBtn = document.getElementById('loginSubmit');
+  let submitting = false;
+
+  function markError(el){ el.closest('.form-group')?.classList.add('has-error'); el.closest('.form-group')?.querySelector('.field-error')?.classList.add('show'); }
+  function clearErrors(){
+    form.querySelectorAll('.field-error').forEach(e=>e.classList.remove('show'));
+    form.querySelectorAll('.has-error').forEach(e=>e.classList.remove('has-error'));
+  }
+
+  form.addEventListener('submit', async e=>{
+    e.preventDefault();
+    if(submitting) return;
+    clearErrors();
+    let valid = true;
+    const id = document.getElementById('loginId');
+    const pw = document.getElementById('loginPassword');
+    if(!id.value.trim()){ markError(id); valid=false; }
+    if(!pw.value.trim()){ markError(pw); valid=false; }
+    if(!valid) return;
+
+    // NOTE: real password login currently requires an EMAIL address.
+    // Phone+password login needs Supabase phone auth (SMS provider) set up separately.
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(id.value.trim())){
+      markError(id);
+      id.closest('.form-group').querySelector('.field-error').textContent = 'Please log in with your email for now — phone login is coming soon.';
+      id.closest('.form-group').querySelector('.field-error').classList.add('show');
+      return;
+    }
+
+    submitting = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Logging in...';
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: id.value.trim(),
+      password: pw.value
+    });
+
+    submitting = false;
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Login';
+
+    if(error){
+      // Generic message — never confirm/deny whether an account exists.
+      markError(pw);
+      const notConfirmed = error.code === 'email_not_confirmed' || /not confirmed/i.test(error.message||'');
+      pw.closest('.form-group').querySelector('.field-error').textContent = notConfirmed ? 'Please confirm your email first. Open the link we emailed you (check Spam too), then log in.' : 'Incorrect email or password.';
+      pw.closest('.form-group').querySelector('.field-error').classList.add('show');
+      return;
+    }
+
+    // Fetch the real role from the database — never trust anything client-side for this.
+    const { data: profile } = await supabaseClient
+      .from('profiles')
+      .select('role')
+      .eq('id', data.user.id)
+      .single();
+
+    const role = profile?.role || 'student';
+    document.getElementById('loginSumRole').textContent = role.charAt(0).toUpperCase()+role.slice(1);
+    showView('view-login-success');
+  });
+
+  document.getElementById('loginContinueBtn').addEventListener('click', ()=>{
+    const params = new URLSearchParams(window.location.search);
+    const redirect = params.get('redirect');
+    // Only allow redirecting to a real page on this same site — never to an
+    // external URL — so this can't be abused to send someone somewhere unsafe.
+    const safePages = ['profile','courses','notice','group','enroll-course','learn','quiz','admin','teacher-invite'];
+    const dest = safePages.includes(redirect) ? redirect : 'profile';
+    // Replace the auth page in history so pressing Back after login does not
+    // return the user to the login form — it goes to the page before that instead.
+    window.location.replace(dest);
+  });
+})();
+
+/* =========================================================
+   FORGOT PASSWORD
+========================================================= */
+document.getElementById('forgotBtn').addEventListener('click', ()=>{ showView('view-forgot1'); });
+document.getElementById('forgot1Back').addEventListener('click', ()=>{ setTab('login'); showView('view-login'); });
+
+document.getElementById('forgotSendBtn').addEventListener('click', async ()=>{
+  const input = document.getElementById('forgotId');
+  const grp = input.closest('.form-group'), err = grp.querySelector('.field-error');
+  const email = input.value.trim();
+  if(!/^\S+@\S+\.\S+$/.test(email)){ grp.classList.add('has-error'); err.classList.add('show'); return; }
+  grp.classList.remove('has-error'); err.classList.remove('show');
+  const btn = document.getElementById('forgotSendBtn'); btn.disabled = true; btn.textContent = 'Sending...';
+  try{
+    await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + window.location.pathname });
+  }catch(e){ /* same message either way, so nobody can test which emails exist */ }
+  btn.disabled = false; btn.textContent = 'Send reset link';
+  showView('view-forgot2');
+});
+document.getElementById('forgotBackLoginBtn').addEventListener('click', ()=>{ setTab('login'); showView('view-login'); });
+
+/* When the person arrives from the reset email, Supabase signs them in briefly
+   with a recovery session and fires PASSWORD_RECOVERY. Show the new-password form. */
+let recoveryMode = false;
+function showResetLinkProblem(msg){
+  showView('view-forgot1');
+  setTab('login');
+  const g = document.getElementById('forgotId').closest('.form-group');
+  const err = g.querySelector('.field-error');
+  err.textContent = msg; err.classList.add('show'); g.classList.add('has-error');
+}
+function enterRecovery(){ recoveryMode = true; showView('view-forgot3'); }
+supabaseClient.auth.onAuthStateChange((event)=>{
+  if(event === 'PASSWORD_RECOVERY') enterRecovery();
+});
+(async function handleResetLink(){
+  const h = window.__authHash || '', s = window.__authSearch || '';
+  const hp = new URLSearchParams(h.replace(/^#/, '')), sp = new URLSearchParams(s);
+  // The link was already used, or it expired (email apps sometimes "open" links in advance).
+  if(hp.get('error') || hp.get('error_code') || sp.get('error_code')){
+    showResetLinkProblem('This reset link has expired or was already used. Enter your email to get a new one.');
+    history.replaceState(null, '', window.location.pathname);
+    return;
+  }
+  const isRecovery = hp.get('type') === 'recovery' || sp.get('type') === 'recovery';
+  if(!isRecovery) return;
+  enterRecovery();
+  // Make sure a recovery session really exists; otherwise the new password could not be saved.
+  setTimeout(async ()=>{
+    const { data } = await supabaseClient.auth.getSession();
+    if(!data || !data.session){ recoveryMode = false; showResetLinkProblem('We could not verify this reset link. Please request a new one.'); }
+  }, 2500);
+})();
+
+document.getElementById('updatePasswordBtn').addEventListener('click', async ()=>{
+  const pw = document.getElementById('newPassword');
+  const cf = document.getElementById('newPasswordConfirm');
+  let valid = true;
+  [pw, cf].forEach(el=>{ el.closest('.form-group').classList.remove('has-error'); el.closest('.form-group').querySelector('.field-error').classList.remove('show'); });
+
+  if(!isStrongPassword(pw.value)){ markGroupError(pw); valid=false; }
+  if(pw.value !== cf.value || !cf.value){ markGroupError(cf); valid=false; }
+  if(!valid) return;
+  if(!recoveryMode){ showResetLinkProblem('This page needs the link from your reset email. Please request a new link.'); return; }
+
+  const btn = document.getElementById('updatePasswordBtn'); btn.disabled = true;
+  const { error } = await supabaseClient.auth.updateUser({ password: pw.value });
+  btn.disabled = false;
+  if(error){ showResetLinkProblem('Could not update the password: ' + error.message + ' — please request a new reset link.'); return; }
+  await supabaseClient.auth.signOut();
+  history.replaceState(null, '', window.location.pathname);
+  showView('view-forgot4');
+});
+document.getElementById('backToLoginBtn').addEventListener('click', ()=>{ setTab('login'); showView('view-login'); });
+
+function markGroupError(el){ el.closest('.form-group').classList.add('has-error'); el.closest('.form-group').querySelector('.field-error').classList.add('show'); }
+
+/* =========================================================
+   OTP INPUT HELPERS (shared by verify + forgot-password)
+========================================================= */
+function wireOtpRow(rowId){
+  const inputs = document.querySelectorAll('#'+rowId+' input');
+  inputs.forEach((inp, idx)=>{
+    inp.addEventListener('input', ()=>{
+      inp.value = inp.value.replace(/[^0-9]/g,'');
+      if(inp.value && idx < inputs.length-1) inputs[idx+1].focus();
+    });
+    inp.addEventListener('keydown', e=>{
+      if(e.key==='Backspace' && !inp.value && idx>0) inputs[idx-1].focus();
+    });
+  });
+}
+
+function getOtpValue(rowId){
+  return Array.from(document.querySelectorAll('#'+rowId+' input')).map(i=>i.value).join('');
+}
+
+function startResendCooldown(btnId, label){
+  const btn = document.getElementById(btnId);
+  const text = label || 'Resend email';
+  let seconds = 60;
+  btn.disabled = true;
+  btn.textContent = `${text} (${seconds}s)`;
+  const timer = setInterval(()=>{
+    seconds--;
+    if(seconds<=0){ clearInterval(timer); btn.disabled = false; btn.textContent = text; }
+    else { btn.textContent = `${text} (${seconds}s)`; }
+  }, 1000);
+}
+document.getElementById('resendBtn').addEventListener('click', async ()=>{
+  const err = document.getElementById('otpError');
+  if(!window.__signupEmail){ err.textContent = 'Please sign up again.'; return; }
+  err.textContent = '';
+  startResendCooldown('resendBtn');
+  const { error } = await supabaseClient.auth.resend({ type:'signup', email: window.__signupEmail, options:{ emailRedirectTo: window.location.origin + '/auth' } });
+  if(error){ err.textContent = 'Could not send the email right now. Please wait a minute and try again.'; }
+});
+
+/* =========================================================
+   SIGNUP
+========================================================= */
+(function(){
+  let selectedRole = null;
+  window.__demoRole = 'student';
+
+  document.querySelectorAll('.role-card').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedRole = card.dataset.role;
+      window.__demoRole = selectedRole;
+      document.getElementById('roleError').classList.remove('show');
+      document.getElementById('signupFields').style.display = 'block';
+      document.querySelectorAll('.role-only').forEach(block=>{
+        block.style.display = block.dataset.for===selectedRole ? 'block' : 'none';
+      });
+    });
+  });
+
+  /* password strength */
+  function isStrongPassword(pw){
+    return pw.length>=8 && /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /[0-9]/.test(pw);
+  }
+  window.isStrongPassword = isStrongPassword;
+
+  function pwScore(pw){
+    let score=0;
+    if(pw.length>=8) score++;
+    if(/[A-Z]/.test(pw)) score++;
+    if(/[a-z]/.test(pw) && /[0-9]/.test(pw)) score++;
+    if(pw.length>=12 && /[^A-Za-z0-9]/.test(pw)) score++;
+    return score;
+  }
+  const suPassword = document.getElementById('suPassword');
+  suPassword.addEventListener('input', ()=>{
+    const score = pwScore(suPassword.value);
+    const bars = document.querySelectorAll('#pwStrength .bar');
+    const colors = ['var(--red)','var(--amber)','var(--cyan)','var(--electric)'];
+    bars.forEach((b,i)=>{ b.style.background = i<score ? colors[Math.min(score-1,3)] : 'var(--border-strong)'; });
+    const reqEl = document.getElementById('pwReq');
+    reqEl.classList.toggle('ok', isStrongPassword(suPassword.value));
+  });
+
+  const form = document.getElementById('signupForm');
+  const submitBtn = document.getElementById('signupSubmit');
+  let submitting = false;
+
+  function markError(el){ el.closest('.form-group')?.classList.add('has-error'); el.closest('.form-group')?.querySelector('.field-error')?.classList.add('show'); }
+  function clearErrors(){
+    form.querySelectorAll('.field-error').forEach(e=>e.classList.remove('show'));
+    form.querySelectorAll('.has-error').forEach(e=>e.classList.remove('has-error'));
+    document.getElementById('termsError').classList.remove('show');
+    document.getElementById('roleError').classList.remove('show');
+  }
+
+  form.addEventListener('submit', async e=>{
+    e.preventDefault();
+    if(submitting) return;
+    clearErrors();
+    let valid = true;
+
+    if(!selectedRole){ document.getElementById('roleError').classList.add('show'); valid=false; return; }
+
+    const name = document.getElementById('suName');
+    const email = document.getElementById('suEmail');
+    const phone = document.getElementById('suPhone');
+    const pw = document.getElementById('suPassword');
+    const cf = document.getElementById('suConfirm');
+    const terms = document.getElementById('suTerms');
+
+    if(!name.value.trim()){ markError(name); valid=false; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())){ markError(email); valid=false; }
+    if(!/^[0-9+\-\s]{7,15}$/.test(phone.value.trim())){ markError(phone); valid=false; }
+
+    if(!isStrongPassword(pw.value)){ markError(pw); valid=false; }
+    if(pw.value !== cf.value || !cf.value){ markError(cf); valid=false; }
+    if(!terms.checked){ document.getElementById('termsError').classList.add('show'); valid=false; }
+
+    if(!valid) return;
+
+    submitting = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Creating Account...';
+
+    // metadata keys here must match what the "handle_new_user" database
+    // trigger reads (full_name, phone, role, school, grade, designation).
+    const metadata = {
+      full_name: name.value.trim(),
+      phone: phone.value.trim(),
+      role: selectedRole
+    };
+    if(selectedRole==='student'){
+      metadata.school = document.getElementById('suSchoolStudent').value.trim();
+      metadata.grade = document.getElementById('suGrade').value.trim();
+    }
+
+    const { data, error } = await supabaseClient.auth.signUp({
+      email: email.value.trim(),
+      password: pw.value,
+      options: { data: metadata, emailRedirectTo: window.location.origin + '/auth' }
+    });
+
+    submitting = false;
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Create Account';
+
+    if(error){
+      markError(email);
+      email.closest('.form-group').querySelector('.field-error').textContent = error.message;
+      email.closest('.form-group').querySelector('.field-error').classList.add('show');
+      return;
+    }
+
+    window.__signupName = name.value.trim();
+    window.__signupEmail = email.value.trim();
+    if(data && data.session){
+      // Email confirmation is off: the person is already signed in.
+      document.getElementById('sumName').textContent = name.value.trim();
+      document.getElementById('sumRole').textContent = selectedRole.charAt(0).toUpperCase()+selectedRole.slice(1);
+      showView('view-success');
+    } else {
+      // Email confirmation is on: they must open the link we emailed first.
+      document.getElementById('verifySub').textContent = 'We have sent a confirmation link to ' + window.__signupEmail + '.';
+      document.getElementById('otpError').textContent = '';
+      showView('view-verify');
+      startResendCooldown('resendBtn');
+    }
+  });
+})();
+
+document.getElementById('verifyBack').addEventListener('click', ()=>{ setTab('signup'); showView('view-signup'); });
+
+document.getElementById('verifySubmit').addEventListener('click', ()=>{ setTab('login'); showView('view-login'); });
+
+document.getElementById('continueBtn').addEventListener('click', ()=>{
+  window.location.href = 'profile';
+});
+</script>
+
+</body>
+</html>

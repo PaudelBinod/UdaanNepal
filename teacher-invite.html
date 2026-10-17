@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Teacher Invitation | Udaan Nepal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A1128;--card:#111B3C;--text:#E6EBFA;--muted:#9AA6C7;--accent:#00E5FF;--ok:#3DDC97;--bad:#FF8A94;--border:rgba(255,255,255,.12);}
+*{box-sizing:border-box;}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.6;}
+.box{max-width:440px;width:100%;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px 22px;text-align:center;}
+h1{font-family:Sora,sans-serif;font-size:22px;margin:0 0 10px;}
+p{margin:0 0 16px;color:var(--muted);}
+.btn{display:inline-block;min-height:46px;padding:12px 22px;border-radius:12px;background:#0066FF;color:#fff;font-weight:600;text-decoration:none;border:0;font-size:15px;cursor:pointer;}
+.ok{color:var(--ok);} .bad{color:var(--bad);}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1 id="h">Teacher invitation</h1>
+  <p id="msg">Checking your invitation…</p>
+  <div id="act"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const supabaseClient = supabase.createClient(
+  'https://idwbxagsxpkkqwfjftox.supabase.co',
+  'sb_publishable_ju3GQ5lGipjlLtDRZZXxPg__J7tzqfw'
+);
+const KEY = 'un_teacher_invite';
+const $ = id => document.getElementById(id);
+function say(h, m, cls){ $('h').textContent = h; $('msg').textContent = m; $('msg').className = cls || ''; }
+function link(text, href){ const a = document.createElement('a'); a.className = 'btn'; a.href = href; a.textContent = text; $('act').textContent = ''; $('act').append(a); }
+(async function(){
+  let token = new URLSearchParams(location.search).get('token');
+  try{
+    if(token){ localStorage.setItem(KEY, token); history.replaceState(null, '', 'teacher-invite'); }
+    else token = localStorage.getItem(KEY);
+  }catch(e){}
+  if(!token || !/^[a-f0-9]{32,80}$/i.test(token)){ say('Invitation not found','Please open the invitation link that Udaan Nepal sent you.','bad'); link('Go to home page','index'); return; }
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if(!user){
+    say('Log in to accept','Log in with the email address this invitation was sent to. If you do not have an account yet, sign up as a student or parent first, using that same email. Then open this invitation link again.');
+    link('Log in or sign up','auth.html?redirect=teacher-invite'); return;
+  }
+  const { error } = await supabaseClient.rpc('redeem_teacher_invite', { p_token: token });
+  if(error){ say('Could not accept', error.message, 'bad'); link('Back to my account','profile'); return; }
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  say('Welcome, teacher!','Your account is now a teacher account. You can create your first course from My Courses.','ok');
+  link('Go to My Courses','courses');
+})();
+</script>
+</body>
+</html>

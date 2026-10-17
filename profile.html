@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile — Udaan Nepal</title>
+<meta name="description" content="Manage your Udaan Nepal profile — update your name, photo, and account details.">
+<meta property="og:title" content="My Profile — Udaan Nepal">
+<meta property="og:description" content="View and update your Udaan Nepal account profile.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://udaannepal.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#17191D;
+  --bg-deep:#101216;
+  --card:#22262C;
+  --card-hover:#2A2F36;
+  --electric:#0066FF;
+  --electric-hover:#0052CC;
+  --cyan:#00E5FF;
+  --amber:#F59E0B;
+  --red:#F04452;
+
+  --text-primary:#F8FAFC;
+  --text-secondary:#CBD5E1;
+  --text-muted:#94A3B8;
+  --border:rgba(255,255,255,0.08);
+  --border-strong:rgba(255,255,255,0.16);
+
+  --radius:14px;
+  --radius-sm:9px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.6;min-height:100vh;}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;letter-spacing:-0.01em;}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;}
+.container{max-width:1140px;margin:0 auto;padding:0 24px;}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important;}}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:9px;font-weight:700;font-size:13px;border:none;cursor:pointer;transition:transform .15s ease, background .15s ease;}
+.btn-primary{background:var(--electric);color:#fff;}
+.btn-primary:hover{background:var(--electric-hover);}
+.btn-outline{background:transparent;border:1.5px solid var(--border-strong);color:var(--text-primary);}
+.btn-outline:hover{border-color:var(--cyan);color:var(--cyan);}
+.btn-ghost{background:rgba(255,255,255,0.05);color:var(--text-primary);border:1px solid var(--border);}
+.btn-ghost:hover{background:rgba(255,255,255,0.09);}
+.btn-danger{background:rgba(240,68,82,0.12);color:var(--red);border:1px solid rgba(240,68,82,0.3);}
+.btn-danger:hover{background:rgba(240,68,82,0.2);}
+
+.section-title{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;}
+.divider{height:1px;background:var(--border);margin:40px 0;}
+
+/* ===== TOP BAR ===== */
+.topbar{position:sticky;top:0;z-index:200;background:rgba(23,25,29,0.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1140px;margin:0 auto;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px 9px 12px;border-radius:100px;border:1px solid var(--border-strong);background:var(--card);color:var(--text-primary);font-size:13.5px;font-weight:700;transition:border-color .2s ease, background .2s ease;}
+.back-btn:hover{border-color:var(--cyan);background:var(--card-hover);}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.icon-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border-strong);background:var(--card);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;position:relative;transition:background .2s ease;}
+.icon-btn:hover{background:var(--card-hover);}
+.icon-btn .dot{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--amber);}
+
+/* dev-only role switcher, clearly marked as prototype tool */
+.dev-switcher{display:flex;align-items:center;gap:6px;padding:5px;border-radius:100px;background:var(--card);border:1px dashed var(--border-strong);}
+.dev-switcher span{font-size:10px;color:var(--text-muted);padding-left:8px;letter-spacing:.04em;text-transform:uppercase;}
+.dev-switcher button{padding:6px 12px;border-radius:100px;border:none;background:transparent;color:var(--text-muted);font-size:11.5px;font-weight:700;}
+.dev-switcher button.active{background:var(--electric);color:#fff;}
+
+/* ===== PROFILE HEADER ===== */
+.profile-header{padding:36px 0 8px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.avatar{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,var(--electric),var(--cyan));display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:800;font-size:26px;color:#101216;flex-shrink:0;}
+.profile-id{flex:1;min-width:180px;}
+.profile-id h1{font-size:21px;margin-bottom:6px;}
+.profile-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.role-badge{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:100px;}
+.role-badge.student{background:rgba(0,102,255,0.14);color:#6FA8FF;border:1px solid rgba(0,102,255,0.3);}
+.role-badge.teacher{background:rgba(0,229,255,0.12);color:var(--cyan);border:1px solid rgba(0,229,255,0.3);}
+.role-badge.parent{background:rgba(245,158,11,0.14);color:var(--amber);border:1px solid rgba(245,158,11,0.3);}
+.member-since{font-size:12.5px;color:var(--text-muted);}
+
+/* ===== STATS ===== */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:28px 0 36px;}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px 16px;}
+.stat-box .num{font-family:'Poppins',sans-serif;font-weight:800;font-size:24px;margin-bottom:4px;}
+.stat-box .label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);}
+@media(max-width:700px){.stats-grid{grid-template-columns:1fr 1fr;}}
+
+/* ===== ACTION LIST ===== */
+.action-list{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:36px;}
+.action-row{display:flex;align-items:center;gap:14px;padding:16px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .18s ease;}
+.action-row:last-child{border-bottom:none;}
+.action-row:hover, .action-row:focus-visible{background:var(--card-hover);}
+.action-icon{width:38px;height:38px;border-radius:10px;background:rgba(0,102,255,0.12);color:#6FA8FF;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.action-body{flex:1;min-width:0;}
+.action-title{font-size:14px;font-weight:700;margin-bottom:2px;}
+.action-desc{font-size:12.5px;color:var(--text-muted);}
+.action-arrow{color:var(--text-muted);flex-shrink:0;}
+
+/* ===== CONTINUE LEARNING ===== */
+.continue-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:16px;}
+.continue-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:14px;}
+.continue-top h4{font-size:16px;margin-bottom:4px;}
+.continue-top .lesson{font-size:13px;color:var(--text-muted);}
+.progress-track{height:7px;border-radius:100px;background:var(--bg-deep);overflow:hidden;margin-bottom:10px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--electric),var(--cyan));border-radius:100px;transition:width .6s ease;}
+.progress-label{font-size:12px;color:var(--text-muted);margin-bottom:14px;}
+
+/* ===== RECENT COURSES (teacher) ===== */
+.course-row{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
+.course-row h4{font-size:15.5px;margin-bottom:8px;}
+.course-stats{display:flex;gap:16px;font-size:12.5px;color:var(--text-muted);flex-wrap:wrap;}
+
+/* ===== CHILD CARD (parent) ===== */
+.child-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin-bottom:14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.child-avatar{width:52px;height:52px;border-radius:50%;background:rgba(245,158,11,0.14);color:var(--amber);display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:800;font-size:18px;flex-shrink:0;}
+.child-info{flex:1;min-width:160px;}
+.child-info h4{font-size:15.5px;margin-bottom:3px;}
+.child-info .sub{font-size:12.5px;color:var(--text-muted);}
+
+.child-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0 30px;}
+.child-action-chip{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;text-align:center;font-size:12.5px;font-weight:700;color:var(--text-secondary);transition:background .2s ease, border-color .2s ease;}
+.child-action-chip:hover{background:var(--card-hover);border-color:rgba(0,229,255,0.3);}
+@media(max-width:700px){.child-actions{grid-template-columns:1fr 1fr;}}
+
+.suggest-box{background:var(--card);border:1px dashed var(--border-strong);border-radius:var(--radius);padding:22px;margin-bottom:20px;}
+.suggest-box h4{font-size:15px;margin-bottom:8px;}
+.suggest-box p{font-size:13px;color:var(--text-muted);margin-bottom:16px;}
+.suggest-flow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
+.suggest-flow select{flex:1;min-width:200px;padding:12px 14px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-deep);color:var(--text-primary);font-family:inherit;font-size:13.5px;}
+.suggest-confirm{display:none;background:rgba(0,102,255,0.08);border:1px solid rgba(0,102,255,0.25);border-radius:var(--radius-sm);padding:14px 16px;font-size:13px;color:var(--text-secondary);}
+.suggest-confirm.show{display:block;}
+
+/* ===== PARENT CHILD TABS ===== */
+.child-tabs{display:flex;gap:6px;margin:14px 0 0;flex-wrap:wrap;}
+.child-tab{padding:7px 14px;border-radius:100px;font-size:12.5px;font-weight:700;border:1.5px solid var(--border-strong);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .18s ease;}
+.child-tab.active{background:var(--electric);border-color:var(--electric);color:#fff;}
+.child-report{background:var(--bg-deep);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-top:14px;margin-bottom:6px;display:none;}
+.child-report.active{display:block;}
+.report-stat-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+.report-stat{flex:1;min-width:100px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;text-align:center;}
+.report-stat .num{font-size:22px;font-weight:800;color:var(--electric);}
+.report-stat .lbl{font-size:11.5px;color:var(--text-muted);margin-top:3px;}
+.report-course-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);font-size:13.5px;}
+.report-course-row:last-child{border-bottom:none;}
+.ref-id-box{background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.2);border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.ref-id-box .rid{font-size:18px;font-weight:800;letter-spacing:.1em;color:var(--cyan);font-family:'Poppins',monospace;}
+.ref-id-copy{background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;border-radius:6px;transition:color .18s ease;}
+.ref-id-copy:hover{color:var(--cyan);}
+.no-children-box{background:var(--card);border:1px dashed var(--border-strong);border-radius:var(--radius);padding:30px;text-align:center;margin-bottom:20px;}
+.no-children-box p{font-size:13px;color:var(--text-muted);margin-bottom:16px;}
+
+/* ===== PERSONAL INFO ===== */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:26px;margin-bottom:36px;}
+.info-item .k{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;}
+.info-item .v{font-size:14.5px;font-weight:600;}
+.info-grid-foot{grid-column:1/-1;display:flex;justify-content:flex-end;padding-top:8px;border-top:1px solid var(--border);margin-top:6px;}
+@media(max-width:600px){.info-grid{grid-template-columns:1fr;}}
+
+/* ===== ACCOUNT SECTION ===== */
+.account-list{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:60px;}
+.account-row{display:flex;align-items:center;gap:14px;padding:16px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .18s ease;}
+.account-row:last-child{border-bottom:none;}
+.account-row:hover{background:var(--card-hover);}
+.account-row.danger{color:var(--red);}
+.account-row .action-icon{background:rgba(255,255,255,0.05);color:var(--text-secondary);}
+.account-row.danger .action-icon{background:rgba(240,68,82,0.12);color:var(--red);}
+
+/* ===== MODAL ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(8,9,11,0.7);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .25s ease, visibility .25s ease;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.active{opacity:1;visibility:visible;}
+.modal-box{background:var(--card);border:1px solid var(--border-strong);border-radius:var(--radius);padding:30px;width:100%;max-width:440px;transform:translateY(14px);transition:transform .25s ease;}
+.modal-overlay.active .modal-box{transform:translateY(0);}
+.modal-box h3{font-size:18px;margin-bottom:8px;}
+.modal-box p{font-size:13.5px;color:var(--text-secondary);margin-bottom:22px;}
+.modal-actions{display:flex;gap:12px;justify-content:flex-end;}
+
+.modal-box.edit-modal{max-width:480px;text-align:left;}
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.form-group label{font-size:12.5px;font-weight:700;color:var(--text-secondary);}
+.form-group input{padding:11px 14px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-deep);color:var(--text-primary);font-family:inherit;font-size:13.5px;}
+.form-group input:focus{outline:none;border-color:var(--electric);}
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover,
+.form-group input:-webkit-autofill:focus{
+  -webkit-text-fill-color:var(--text-primary);
+  -webkit-box-shadow:0 0 0 1000px var(--bg-deep) inset;
+  box-shadow:0 0 0 1000px var(--bg-deep) inset;
+  border-color:var(--border-strong);
+  caret-color:var(--text-primary);
+}
+.avatar-edit-row{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
+.avatar-edit-row .avatar{width:56px;height:56px;font-size:20px;}
+
+@media(max-width:600px){
+  .topbar-inner{padding:14px 16px;}
+  .profile-header{padding:26px 0 6px;}
+  .info-grid{padding:20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP BAR (no hamburger, no sidebar) ===== -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <button class="back-btn" id="backBtn" aria-label="Go back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back
+    </button>
+    <div class="topbar-right">
+      <a class="icon-btn" href="notice" aria-label="Notices and announcements" style="text-decoration:none;color:inherit;display:inline-flex;align-items:center;justify-content:center;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </a>
+      <a id="adminLink" href="admin" style="display:none;text-decoration:none;color:var(--cyan);font-size:12px;font-weight:700;padding:6px 12px;border:1px solid rgba(0,229,255,0.3);border-radius:7px;align-items:center;gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg>
+        Admin
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="container" id="pageContainer" style="visibility:hidden;">
+
+  <!-- ===== PROFILE HEADER ===== -->
+  <div class="profile-header">
+    <div class="avatar" id="avatarInitials"></div>
+    <div class="profile-id">
+      <h1 id="profileName"></h1>
+      <div class="profile-meta">
+        <span class="role-badge student" id="roleBadge"></span>
+        <span class="member-since" id="memberSince"></span>
+      </div>
+    </div>
+    <button class="btn btn-outline" id="editProfileBtn">Edit Profile</button>
+  </div>
+
+  <!-- ===== ROLE-SPECIFIC CONTENT ===== -->
+  <div id="roleContent"></div>
+
+  <div class="divider"></div>
+
+  <!-- ===== PERSONAL INFORMATION ===== -->
+  <div class="section-title">Personal Information</div>
+  <div class="info-grid" id="infoGrid"></div>
+
+  <!-- ===== ACCOUNT ===== -->
+  <div class="section-title">Account</div>
+  <div class="account-list">
+    <a class="account-row" href="notice" style="text-decoration:none;color:inherit;">
+      <div class="action-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+      <div class="action-body"><div class="action-title">Notices &amp; announcements</div></div>
+      <div class="action-arrow">→</div>
+    </a>
+    <div class="account-row" id="pwRow" tabindex="0" role="button">
+      <div class="action-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      <div class="action-body"><div class="action-title">Change Password</div></div>
+      <div class="action-arrow">→</div>
+    </div>
+    <div class="account-row danger" id="logoutRow" tabindex="0" role="button">
+      <div class="action-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
+      <div class="action-body"><div class="action-title">Log Out</div></div>
+      <div class="action-arrow">→</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== LOGOUT CONFIRM MODAL ===== -->
+<div class="modal-overlay" id="logoutModal">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <h3 id="logoutTitle">Log Out?</h3>
+    <p>Are you sure you want to log out?</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="logoutCancel">Cancel</button>
+      <button class="btn btn-danger" id="logoutConfirm">Log Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHANGE PASSWORD MODAL ===== -->
+<div class="modal-overlay" id="pwModal">
+  <div class="modal-box edit-modal" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+    <h3 id="pwTitle">Change Password</h3>
+    <form id="pwForm">
+      <div class="form-group"><label for="pwNew">New password</label><input type="password" id="pwNew" autocomplete="new-password"></div>
+      <div class="form-group"><label for="pwNew2">Confirm new password</label><input type="password" id="pwNew2" autocomplete="new-password"></div>
+      <p style="font-size:13px;opacity:.7;margin:6px 0 0;">At least 8 characters, with an uppercase letter, a lowercase letter and a number.</p>
+      <p id="pwMsg" style="font-size:14px;margin:10px 0 0;min-height:18px;"></p>
+      <div class="modal-actions" style="margin-top:14px;">
+        <button type="button" class="btn btn-outline" id="pwCancel">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="pwSave">Update password</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== EDIT PROFILE MODAL ===== -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal-box edit-modal" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+    <h3 id="editTitle">Edit Profile</h3>
+    <div class="avatar-edit-row">
+      <div class="avatar" id="editAvatarPreview" style="overflow:hidden;">BP</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <button class="btn btn-ghost" type="button" id="changePhotoBtn">Change Photo</button>
+        <span style="font-size:11px;color:var(--text-muted);">JPG or PNG, max 2 MB</span>
+      </div>
+      <input type="file" id="avatarFileInput" accept="image/jpeg,image/png,image/webp" style="display:none;">
+    </div>
+    <form id="editForm">
+      <div class="form-group"><label for="editName">Full Name</label><input type="text" id="editName"></div>
+      <div class="form-group"><label for="editPhone">Phone</label><input type="tel" id="editPhone"></div>
+      <div class="form-group"><label for="editEmail">Email</label><input type="email" id="editEmail"></div>
+      <div class="form-group"><label for="editAddress">Address</label><input type="text" id="editAddress"></div>
+      <div class="form-group" id="editSchoolWrap" style="display:none;"><label for="editSchool">School</label><input type="text" id="editSchool"></div>
+      <div class="form-group" id="editGradeWrap" style="display:none;"><label for="editGrade">Grade / Class</label><input type="text" id="editGrade"></div>
+      <div class="form-group" id="editDesigWrap" style="display:none;"><label for="editDesig">Designation</label><input type="text" id="editDesig"></div>
+      <div class="modal-actions" style="margin-top:20px;">
+        <button type="button" class="btn btn-outline" id="editCancel">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== SUGGEST COURSE MODAL (parent only) ===== -->
+<div class="modal-overlay" id="suggestModal">
+  <div class="modal-box edit-modal" role="dialog" aria-modal="true" aria-labelledby="suggestTitle">
+    <h3 id="suggestTitle">Suggest a Course</h3>
+    <p>Choose a child and a course — they'll see your suggestion on their profile.</p>
+    <div class="form-group">
+      <label for="suggestChild">Child</label>
+      <select id="suggestChild" style="padding:11px 14px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-deep);color:var(--text-primary);font-family:inherit;font-size:13.5px;"></select>
+    </div>
+    <div class="form-group">
+      <label for="suggestCourse">Course</label>
+      <select id="suggestCourse" style="padding:11px 14px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-deep);color:var(--text-primary);font-family:inherit;font-size:13.5px;"></select>
+    </div>
+    <div id="suggestMsg" style="font-size:13px;color:var(--text-muted);margin-bottom:10px;display:none;"></div>
+    <div class="modal-actions" style="margin-top:16px;">
+      <button type="button" class="btn btn-outline" id="suggestCancel">Cancel</button>
+      <button type="button" class="btn btn-primary" id="suggestSend">Send Suggestion</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADD CHILD MODAL (parent only) ===== -->
+<div class="modal-overlay" id="addChildModal">
+  <div class="modal-box edit-modal" role="dialog" aria-modal="true" aria-labelledby="addChildTitle">
+    <h3 id="addChildTitle">Link a Child</h3>
+    <p>Enter the student's Reference ID — they can find it on their own profile page.</p>
+    <div class="form-group">
+      <label for="childRefInput">Student Reference ID</label>
+      <input type="text" id="childRefInput" placeholder="e.g. UN-2024-001234" style="text-transform:uppercase;letter-spacing:.05em;">
+    </div>
+    <div id="addChildMsg" style="font-size:13px;margin-bottom:10px;display:none;"></div>
+    <div class="modal-actions" style="margin-top:16px;">
+      <button type="button" class="btn btn-outline" id="addChildCancel">Cancel</button>
+      <button type="button" class="btn btn-primary" id="addChildConfirm">Link Child</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ENROLL CHILD MODAL (parent only) ===== -->
+<div class="modal-overlay" id="enrollChildModal">
+  <div class="modal-box edit-modal" role="dialog" aria-modal="true" aria-labelledby="enrollChildTitle">
+    <h3 id="enrollChildTitle">Enroll Child in Course</h3>
+    <p id="enrollChildDesc">Choose a child and course to enroll on their behalf.</p>
+    <div class="form-group">
+      <label for="enrollChildSel">Child</label>
+      <select id="enrollChildSel" style="padding:11px 14px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-deep);color:var(--text-primary);font-family:inherit;font-size:13.5px;"></select>
+    </div>
+    <div class="form-group">
+      <label for="enrollCourseSel">Course</label>
+      <select id="enrollCourseSel" style="padding:11px 14px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-deep);color:var(--text-primary);font-family:inherit;font-size:13.5px;"></select>
+    </div>
+    <div id="enrollChildMsg" style="font-size:13px;margin-bottom:10px;display:none;"></div>
+    <div class="modal-actions" style="margin-top:16px;">
+      <button type="button" class="btn btn-outline" id="enrollChildCancel">Cancel</button>
+      <button type="button" class="btn btn-primary" id="enrollChildConfirm">Enroll Child</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="site-content.js"></script>
+<script>
+/* ===== TOAST NOTIFICATION SYSTEM ===== */
+(function(){
+  const style = document.createElement('style');
+  style.textContent = `
+  #un-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);z-index:9999;
+    background:#1E2530;border:1px solid rgba(255,255,255,0.14);border-radius:12px;padding:13px 20px 13px 16px;
+    display:flex;align-items:center;gap:12px;font-family:'Manrope',sans-serif;font-size:13.5px;color:#F8FAFC;
+    box-shadow:0 8px 32px rgba(0,0,0,0.55);min-width:240px;max-width:420px;
+    transition:transform .35s cubic-bezier(.22,.9,.32,1),opacity .35s ease;opacity:0;pointer-events:none;}
+  #un-toast.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto;}
+  #un-toast .t-icon{width:20px;height:20px;flex-shrink:0;}
+  #un-toast.t-ok .t-icon{color:#22C55E;}
+  #un-toast.t-err .t-icon{color:#F04452;}
+  #un-toast.t-info .t-icon{color:#00E5FF;}
+  `;
+  document.head.appendChild(style);
+  const el = document.createElement('div'); el.id = 'un-toast';
+  el.innerHTML = '<svg class="t-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg><span class="t-msg"></span>';
+  document.body.appendChild(el);
+})();
+let _toastTimer;
+function showToast(msg, type='info'){
+  const el = document.getElementById('un-toast');
+  const icons = {
+    ok:'<polyline points="20 6 9 17 4 12"/>',
+    err:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+    info:'<circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'
+  };
+  el.querySelector('.t-icon').innerHTML = icons[type] || icons.info;
+  el.querySelector('.t-msg').textContent = msg;
+  el.className = 'show t-' + type;
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(()=>{ el.classList.remove('show'); }, 4000);
+}
+
+// Reuse the singleton client created by site-content.js (avoids duplicate GoTrueClient warning)
+const supabaseClient = window.supabaseClient;
+
+/* =========================================================
+   REAL USER DATA — fetched from the authenticated Supabase
+   session and the profiles table. Never from client selection.
+========================================================= */
+let currentUser = null;
+let currentRole = 'student';
+
+function initials(name){
+  return (name||'?').split(' ').map(p=>p[0]).slice(0,2).join('').toUpperCase();
+}
+
+async function loadCurrentUser(){
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if(!user){
+    window.location.href = 'auth.html?redirect=profile';
+    return false;
+  }
+  const { data: profile, error } = await supabaseClient
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .single();
+
+  if(error || !profile){
+    console.error('Could not load profile:', error);
+    return false;
+  }
+
+  currentUser = {
+    id: user.id,
+    name: profile.full_name || user.email,
+    role: profile.role,
+    email: user.email,
+    phone: profile.phone || 'Not set',
+    address: profile.address || 'Not set',
+    memberSince: new Date(profile.created_at).getFullYear().toString(),
+    school: profile.school || 'Not set',
+    grade: profile.grade || 'Not set',
+    designation: profile.designation || 'Not set',
+    avatar_url: profile.avatar_url || null,
+    reference_id: profile.reference_id || null,
+    children: []
+  };
+  currentRole = currentUser.role;
+
+  // Load linked children if this user is a parent (active + pending)
+  if(currentRole === 'parent'){
+    const { data: links } = await supabaseClient
+      .from('parent_children')
+      .select('id, status, child_id, profiles:child_id(id, full_name, school, grade, reference_id)')
+      .eq('parent_id', user.id)
+      .in('status', ['active', 'pending']);
+    currentUser.children = (links || []).map(l => ({
+      ...l.profiles,
+      _linkId: l.id,
+      _linkStatus: l.status
+    })).filter(Boolean);
+  }
+
+  // Load pending parent requests if this user is a student
+  if(currentRole === 'student'){
+    const { data: reqs } = await supabaseClient
+      .from('parent_children')
+      .select('id, parent_id, profiles:parent_id(full_name)')
+      .eq('child_id', user.id)
+      .eq('status', 'pending');
+    currentUser.pendingParentRequests = (reqs || []).map(r => ({
+      linkId: r.id,
+      parentId: r.parent_id,
+      parentName: r.profiles && r.profiles.full_name || 'Unknown'
+    }));
+  }
+
+  // Show admin link if staff
+  supabaseClient.from('staff_roles').select('role').eq('user_id', user.id).limit(1).then(r=>{
+    if(r && r.data && r.data.length){ const a=document.getElementById('adminLink'); if(a) a.style.display='inline-flex'; }
+  });
+
+  return true;
+}
+</script>
+<script>
+
+function renderHeader(){
+  const u = currentUser;
+  document.getElementById('profileName').textContent = u.name;
+  // Main avatar
+  const avatarEl = document.getElementById('avatarInitials');
+  if(u.avatar_url){
+    avatarEl.style.backgroundImage = `url('${u.avatar_url}')`;
+    avatarEl.style.backgroundSize = 'cover';
+    avatarEl.style.backgroundPosition = 'center';
+    avatarEl.style.overflow = 'hidden';
+    avatarEl.textContent = '';
+  } else {
+    avatarEl.style.backgroundImage = '';
+    avatarEl.textContent = initials(u.name);
+  }
+  // Edit modal avatar preview
+  const previewEl = document.getElementById('editAvatarPreview');
+  if(u.avatar_url){
+    previewEl.style.backgroundImage = `url('${u.avatar_url}')`;
+    previewEl.style.backgroundSize = 'cover';
+    previewEl.style.backgroundPosition = 'center';
+    previewEl.textContent = '';
+  } else {
+    previewEl.style.backgroundImage = '';
+    previewEl.textContent = initials(u.name);
+  }
+  document.getElementById('memberSince').textContent = 'Member since ' + u.memberSince;
+  const badge = document.getElementById('roleBadge');
+  badge.className = 'role-badge ' + currentRole;
+  badge.textContent = currentRole==='parent' ? 'Parent / Guardian' : (currentRole.charAt(0).toUpperCase()+currentRole.slice(1));
+}
+
+function renderInfo(){
+  const u = currentUser;
+  const grid = document.getElementById('infoGrid');
+  let rows = [
+    ['Full Name', u.name],
+    ['Email', u.email],
+    ['Phone', u.phone],
+    ['Address', u.address]
+  ];
+  if(currentRole==='student') rows.push(['School', u.school], ['Grade / Class', u.grade]);
+  if(currentRole==='teacher') rows.push(['Designation', u.designation]);
+
+  grid.innerHTML = rows.map(r=>`<div class="info-item"><div class="k">${r[0]}</div><div class="v">${r[1]}</div></div>`).join('')
+    + `<div class="info-grid-foot"><button class="btn btn-outline" id="infoEditBtn">Edit Profile</button></div>`;
+
+  document.getElementById('infoEditBtn').addEventListener('click', openEditModal);
+}
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function studentContent(){
+  const refId = currentUser.reference_id || null;
+  const refHtml = refId ? `
+    <div class="ref-id-box">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;">Your Reference ID</div>
+        <div class="rid" id="refIdText">${esc(refId)}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">Share this with your parent/guardian to link accounts.</div>
+      </div>
+      <button class="ref-id-copy" id="copyRefBtn" title="Copy ID" aria-label="Copy Reference ID">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+    </div>` : '';
+  return `
+    <div class="section-title">My Learning</div>
+    ${refHtml}
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-box"><div class="num" id="stEnrolled">–</div><div class="label">Enrolled Courses</div></div>
+      <div class="stat-box"><div class="num" id="stTaken">–</div><div class="label">Quizzes Taken</div></div>
+      <div class="stat-box"><div class="num" id="stPassed">–</div><div class="label">Quizzes Passed</div></div>
+      <div class="stat-box"><div class="num" id="stAvg">–</div><div class="label">Quiz Average</div></div>
+    </div>
+
+    <div class="section-title">My Courses</div>
+    <div id="myCourseList"><div class="course-row"><div>Loading…</div></div></div>
+
+    <div class="section-title" style="margin-top:30px;">My Quizzes</div>
+    <div id="myQuizList"><div class="course-row"><div>Loading…</div></div></div>
+
+    <div id="pendingParentsSection" style="display:none;margin-top:30px;">
+      <div class="section-title">Parent Link Requests</div>
+      <div id="pendingParentsList"></div>
+    </div>
+
+    <div id="suggestionsSection" style="display:none;margin-top:30px;">
+      <div class="section-title">Parent Suggestions</div>
+      <div id="suggestionsList"></div>
+    </div>
+
+    <div class="action-list" style="margin-top:30px;">
+      ${actionRow('course','Browse More Courses','Find and enroll in a new course','enroll-course')}
+    </div>
+  `;
+}
+
+function wireCopyRefBtn(){
+  const btn = document.getElementById('copyRefBtn');
+  if(!btn) return;
+  btn.addEventListener('click', ()=>{
+    const id = (document.getElementById('refIdText')||{}).textContent || '';
+    navigator.clipboard.writeText(id).then(()=>showToast('Reference ID copied!','ok')).catch(()=>showToast('Could not copy.','err'));
+  });
+}
+
+async function respondToParentRequest(linkId, action){
+  const { error } = await supabaseClient
+    .from('parent_children')
+    .update({ status: action === 'accept' ? 'active' : 'rejected' })
+    .eq('id', linkId)
+    .eq('child_id', currentUser.id); // safety: only child can update their own requests
+  if(error){ showToast('Error: '+error.message, 'err'); return; }
+  showToast(action === 'accept' ? 'Parent linked successfully!' : 'Request rejected.', action === 'accept' ? 'ok' : 'err');
+  // Remove from pending list and re-render
+  currentUser.pendingParentRequests = (currentUser.pendingParentRequests||[]).filter(r=>r.linkId!==linkId);
+  renderPendingParents();
+}
+
+function renderPendingParents(){
+  const reqs = currentUser.pendingParentRequests || [];
+  const sec = document.getElementById('pendingParentsSection');
+  const list = document.getElementById('pendingParentsList');
+  if(!sec || !list) return;
+  if(!reqs.length){ sec.style.display='none'; return; }
+  sec.style.display = '';
+  list.innerHTML = reqs.map(r=>`
+    <div class="course-row" style="background:rgba(245,158,11,0.05);border:1px solid rgba(245,158,11,0.2);border-radius:var(--radius-sm);padding:14px;margin-bottom:8px;">
+      <div>
+        <h4 style="font-size:14px;">${esc(r.parentName)}</h4>
+        <div class="course-stats"><span>Wants to link as your parent/guardian</span></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0;">
+        <button class="btn btn-primary" style="font-size:12px;padding:7px 14px;" onclick="respondToParentRequest('${r.linkId}','accept')">Accept</button>
+        <button class="btn btn-danger" style="font-size:12px;padding:7px 14px;" onclick="respondToParentRequest('${r.linkId}','reject')">Reject</button>
+      </div>
+    </div>`).join('');
+}
+
+async function loadStudentStats(){
+  wireCopyRefBtn();
+  renderPendingParents();
+  const uid = currentUser.id;
+  const [en, qa] = await Promise.all([
+    supabaseClient.from('enrollments').select('course_id, courses(id,title)').eq('student_id', uid),
+    supabaseClient.from('quiz_attempts').select('score,passed').eq('user_id', uid)
+  ]);
+  const rows = en.data || [], at = qa.data || [];
+  const set = (id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
+  set('stEnrolled', rows.length);
+  set('stTaken', at.length);
+  set('stPassed', at.filter(a=>a.passed).length);
+  set('stAvg', at.length ? Math.round(at.reduce((s,a)=>s+a.score,0)/at.length)+'%' : '–');
+  const list = document.getElementById('myCourseList');
+  if(!list) return;
+  list.innerHTML = rows.length ? rows.map(r=>`
+    <div class="course-row">
+      <div><h4>${esc(r.courses && r.courses.title || 'Course')}</h4></div>
+      <a href="learn?course=${encodeURIComponent(r.course_id)}" class="btn btn-outline">Open →</a>
+    </div>`).join('')
+    : `<div class="course-row"><div><h4>No courses yet</h4><div class="course-stats"><span>Pick a course to get started.</span></div></div><a href="enroll-course" class="btn btn-primary">Browse courses</a></div>`;
+
+  // quizzes from every enrolled course (the database only returns quizzes this student may take)
+  const ql = document.getElementById('myQuizList');
+  if(!ql) return;
+  const ids = [...new Set(rows.map(r=>r.course_id))];
+  const res = await Promise.all(ids.map(id=>supabaseClient.rpc('quiz_list',{p_course:id})));
+  const cname = {}; rows.forEach(r=>{ cname[r.course_id] = r.courses && r.courses.title || 'Course'; });
+  const quizzes = [];
+  res.forEach((r,i)=>(r.data||[]).forEach(q=>quizzes.push({...q, course:cname[ids[i]]})));
+  ql.innerHTML = quizzes.length ? quizzes.map(q=>`
+    <div class="course-row">
+      <div><h4>${esc(q.title)}</h4><div class="course-stats"><span>${esc(q.course)}</span><span>${q.question_count} questions</span><span>${q.best_score!=null ? 'Best score: '+q.best_score+'%' : 'Not attempted'}</span></div></div>
+      <a href="quiz?quiz_id=${encodeURIComponent(q.id)}" class="btn btn-outline">${q.best_score!=null?'Try again':'Start'} →</a>
+    </div>`).join('')
+    : `<div class="course-row"><div><h4>No quizzes yet</h4><div class="course-stats"><span>Quizzes from your courses will appear here.</span></div></div></div>`;
+
+  // Parent suggestions for this student
+  const { data: suggestions } = await supabaseClient
+    .from('course_suggestions')
+    .select('id, created_at, courses(id,title), profiles:parent_id(full_name)')
+    .eq('child_id', uid)
+    .order('created_at', {ascending: false})
+    .limit(10);
+  const suggSec = document.getElementById('suggestionsSection');
+  const suggList = document.getElementById('suggestionsList');
+  if(suggestions && suggestions.length && suggSec && suggList){
+    suggSec.style.display = '';
+    suggList.innerHTML = suggestions.map(s=>`
+      <div class="course-row">
+        <div>
+          <h4>${esc(s.courses && s.courses.title || 'Course')}</h4>
+          <div class="course-stats"><span>Suggested by ${esc(s.profiles && s.profiles.full_name || 'Parent')}</span></div>
+        </div>
+        <a href="enroll-course?course=${encodeURIComponent(s.courses && s.courses.id || '')}" class="btn btn-outline">Enroll →</a>
+      </div>`).join('');
+  }
+}
+
+function teacherContent(){
+  return `
+    <div class="section-title">My Teaching</div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="num" id="tcCourses">–</div><div class="label">My Courses</div></div>
+      <div class="stat-box"><div class="num" id="tcStudents">–</div><div class="label">Enrollments</div></div>
+      <div class="stat-box"><div class="num" id="tcLessons">–</div><div class="label">Lessons</div></div>
+      <div class="stat-box"><div class="num" id="tcQuizzes">–</div><div class="label">Quizzes</div></div>
+    </div>
+
+    <div class="section-title">My Courses</div>
+    <div id="tcList"><div class="course-row"><div>Loading…</div></div></div>
+
+    <div class="section-title" style="margin-top:30px;">Upload Quiz Questions from Excel</div>
+    <div class="card" style="padding:22px;margin-bottom:16px;">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:16px;">
+        Upload an Excel file to add questions to any of your quizzes. Each row in the file becomes one question.
+        <a id="dlTemplateBtn" href="#" style="color:var(--cyan);font-weight:700;margin-left:6px;">Download Template ↓</a>
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;">
+        <div style="flex:1;min-width:180px;">
+          <label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:6px;">Select Quiz</label>
+          <select id="uploadQuizSelect" style="width:100%;padding:10px 12px;background:var(--bg-deep);border:1px solid var(--border-strong);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13.5px;">
+            <option value="">— Choose a quiz —</option>
+          </select>
+        </div>
+        <div style="flex:1;min-width:180px;">
+          <label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:6px;">Excel File (.xlsx)</label>
+          <input type="file" id="quizExcelInput" accept=".xlsx,.xls" style="width:100%;padding:9px 12px;background:var(--bg-deep);border:1px solid var(--border-strong);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;cursor:pointer;">
+        </div>
+        <button id="uploadQuestionsBtn" class="btn btn-primary" style="padding:10px 20px;white-space:nowrap;">Upload Questions</button>
+      </div>
+      <div id="uploadProgress" style="display:none;margin-top:14px;font-size:13px;color:var(--text-muted);"></div>
+    </div>
+
+    <div class="section-title" style="margin-top:30px;">Teaching Actions</div>
+    <div class="action-list">
+      ${actionRow('course','My Courses','Create and manage your courses, lessons, quizzes and students','courses')}
+      ${actionRow('create','Create Course','Set up a new course','courses')}
+    </div>
+  `;
+}
+
+async function loadTeacherStats(){
+  const uid = currentUser.id;
+  const { data: cs } = await supabaseClient.from('courses').select('id,title,status').eq('instructor_id', uid).order('created_at',{ascending:false});
+  const courses = cs || [], ids = courses.map(c=>c.id);
+  let en=[], ls=[], qz=[];
+  if(ids.length){
+    const [a,b,c] = await Promise.all([
+      supabaseClient.from('enrollments').select('course_id').in('course_id', ids),
+      supabaseClient.from('lessons').select('course_id').in('course_id', ids),
+      supabaseClient.from('quizzes').select('course_id').in('course_id', ids)
+    ]);
+    en=a.data||[]; ls=b.data||[]; qz=c.data||[];
+  }
+  const set = (id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
+  set('tcCourses', courses.length); set('tcStudents', en.length); set('tcLessons', ls.length); set('tcQuizzes', qz.length);
+  const cnt = (arr,id)=>arr.filter(x=>x.course_id===id).length;
+  const list = document.getElementById('tcList');
+  if(!list) return;
+  list.innerHTML = courses.length ? courses.slice(0,5).map(c=>`
+    <div class="course-row">
+      <div><h4>${esc(c.title)}</h4><div class="course-stats"><span>${cnt(en,c.id)} Students</span><span>${cnt(ls,c.id)} Lessons</span><span>${cnt(qz,c.id)} Quizzes</span><span>${esc(c.status)}</span></div></div>
+      <a href="courses." class="btn btn-outline">Manage →</a>
+    </div>`).join('')
+    : `<div class="course-row"><div><h4>No courses yet</h4><div class="course-stats"><span>Create your first course to begin.</span></div></div><a href="courses" class="btn btn-primary">Create course</a></div>`;
+
+  // Populate quiz select dropdown for Excel upload
+  const quizSel = document.getElementById('uploadQuizSelect');
+  if(quizSel && qz.length){
+    // Re-fetch quizzes with id and title
+    const { data: quizRows } = await supabaseClient.from('quizzes').select('id,title,course_id').in('course_id', ids);
+    (quizRows||[]).forEach(q=>{
+      const course = courses.find(c=>c.id===q.course_id);
+      const opt = document.createElement('option');
+      opt.value = q.id;
+      opt.textContent = `${esc(q.title)}${course?' — '+esc(course.title):''}`;
+      quizSel.appendChild(opt);
+    });
+  }
+  initExcelUpload();
+}
+
+function childInitials(name){
+  return (name||'?').split(' ').map(p=>p[0]).slice(0,2).join('').toUpperCase();
+}
+
+function parentContent(){
+  const u = currentUser;
+  const children = u.children || [];
+
+  if(!children.length){
+    return `
+    <div class="section-title">My Children</div>
+    <div class="no-children-box">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" style="margin-bottom:14px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <p>No children linked yet. Ask your child for their Reference ID to connect.</p>
+      <button class="btn btn-primary" id="openAddChildBtn">Link a Child</button>
+    </div>
+    <div class="action-list">
+      ${actionRow('course','Browse Courses','See all available courses','enroll-course')}
+    </div>`;
+  }
+
+  const cards = children.map((child, idx) => {
+    const initials = childInitials(child.full_name);
+    const school = child.school || '';
+    const grade = child.grade || '';
+    const sub = [grade, school].filter(Boolean).join(' · ') || 'Student';
+    const isPending = child._linkStatus === 'pending';
+    if(isPending){
+      return `
+      <div class="child-card" id="childCard-${idx}" style="opacity:.75;">
+        <div class="child-avatar" style="background:rgba(245,158,11,0.15);color:var(--amber);">${esc(initials)}</div>
+        <div class="child-info">
+          <h4>${esc(child.full_name || 'Student')}</h4>
+          <div class="sub">${esc(sub)}</div>
+          <div style="margin-top:6px;display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,11,0.12);color:var(--amber);border:1px solid rgba(245,158,11,0.3);border-radius:20px;padding:3px 10px;font-size:11.5px;font-weight:700;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Awaiting student approval
+          </div>
+        </div>
+      </div>`;
+    }
+    return `
+    <div class="child-card" id="childCard-${idx}">
+      <div class="child-avatar">${esc(initials)}</div>
+      <div class="child-info">
+        <h4>${esc(child.full_name || 'Student')}</h4>
+        <div class="sub">${esc(sub)}</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:10px;">
+        <div class="child-tabs" style="margin:0;">
+          <button class="child-tab active" data-child="${idx}" data-tab="courses">Courses</button>
+          <button class="child-tab" data-child="${idx}" data-tab="report">Report</button>
+        </div>
+        <button class="btn btn-danger" id="removeChildBtn-${idx}" data-linkid="${child._linkId}" style="font-size:12px;padding:6px 14px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Remove Link
+        </button>
+      </div>
+    </div>
+    <div class="child-report active" id="childPanel-${idx}-courses">
+      <div id="childCourseList-${idx}"><div style="font-size:13px;color:var(--text-muted);">Loading…</div></div>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+        <button class="btn btn-primary" id="enrollChildBtn-${idx}" data-child="${idx}">Enroll in Course</button>
+        <button class="btn btn-outline" id="suggestChildBtn-${idx}" data-child="${idx}">Suggest a Course</button>
+      </div>
+    </div>
+    <div class="child-report" id="childPanel-${idx}-report">
+      <div id="childReportData-${idx}"><div style="font-size:13px;color:var(--text-muted);">Loading…</div></div>
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+      <span>My Children</span>
+      <button class="btn btn-outline" id="openAddChildBtn" style="font-size:12px;padding:7px 14px;">+ Link Another</button>
+    </div>
+    ${cards}
+    <div class="divider"></div>`;
+}
+
+function actionRow(iconKey, title, desc, href){
+  const icons = {
+    course:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+    lesson:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>',
+    notes:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>',
+    quiz:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+    results:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 15l3-3 3 3 5-6"/></svg>',
+    group:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',
+    create:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+    students:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    access:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'
+  };
+  const tag = href ? 'a' : 'div';
+  const hrefAttr = href ? ` href="${href}"` : '';
+  return `
+  <${tag}${hrefAttr} class="action-row" tabindex="0" role="button" aria-label="${title}">
+    <div class="action-icon">${icons[iconKey]||''}</div>
+    <div class="action-body"><div class="action-title">${title}</div><div class="action-desc">${desc}</div></div>
+    <div class="action-arrow">→</div>
+  </${tag}>`;
+}
+
+function renderRoleContent(){
+  const wrap = document.getElementById('roleContent');
+  if(currentRole==='student') wrap.innerHTML = studentContent();
+  else if(currentRole==='teacher') wrap.innerHTML = teacherContent();
+  else wrap.innerHTML = parentContent();
+  if(currentRole==='student') loadStudentStats();
+  else if(currentRole==='teacher') loadTeacherStats();
+  if(currentRole==='parent') initParentHandlers();
+}
+
+document.addEventListener('un-content', ()=>{ if(currentRole==='parent') renderRoleContent(); });
+
+/* ===== TEACHER EXCEL UPLOAD ===== */
+function initExcelUpload(){
+  const uploadBtn = document.getElementById('uploadQuestionsBtn');
+  const fileInput = document.getElementById('quizExcelInput');
+  const quizSel   = document.getElementById('uploadQuizSelect');
+  const progress  = document.getElementById('uploadProgress');
+  const dlBtn     = document.getElementById('dlTemplateBtn');
+
+  if(!uploadBtn) return;
+
+  // Download template — open GitHub raw or direct link
+  if(dlBtn) dlBtn.addEventListener('click', e=>{
+    e.preventDefault();
+    // Generate a minimal template on the fly via data URI isn't feasible without SheetJS
+    // Instead direct to the uploaded template asset URL (set after first deploy)
+    // For now open instructions
+    showToast('Download the template from your profile page after the next deploy.', 'info');
+  });
+
+  uploadBtn.addEventListener('click', async ()=>{
+    const quizId = quizSel && quizSel.value;
+    const file   = fileInput && fileInput.files[0];
+
+    if(!quizId){ showToast('Please select a quiz first.', 'err'); return; }
+    if(!file){   showToast('Please choose an Excel file.', 'err'); return; }
+    if(!file.name.match(/\.xlsx?$/i)){ showToast('File must be .xlsx or .xls', 'err'); return; }
+
+    uploadBtn.disabled = true;
+    uploadBtn.textContent = 'Reading file…';
+    progress.style.display = '';
+    progress.textContent = 'Parsing Excel file…';
+
+    try {
+      // Load SheetJS dynamically
+      if(!window.XLSX){
+        await new Promise((res,rej)=>{
+          const s = document.createElement('script');
+          s.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+          s.onload = res; s.onerror = ()=>rej(new Error('Could not load Excel parser'));
+          document.head.appendChild(s);
+        });
+      }
+
+      const buf  = await file.arrayBuffer();
+      const wb   = XLSX.read(buf, { type: 'array' });
+      // Look for "Quiz Questions" sheet, fallback to first sheet
+      const sheetName = wb.SheetNames.includes('Quiz Questions') ? 'Quiz Questions' : wb.SheetNames[0];
+      const ws   = wb.Sheets[sheetName];
+      const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+
+      // Find header row (first row with "Question" in col 0)
+      let dataStart = 1;
+      for(let i=0;i<Math.min(rows.length,5);i++){
+        if(String(rows[i][0]).toLowerCase().includes('question')){ dataStart=i+1; break; }
+      }
+
+      const questions = [];
+      for(let i=dataStart; i<rows.length; i++){
+        const r = rows[i];
+        const qText = String(r[0]||'').trim();
+        if(!qText) continue; // skip blank rows
+        const optA = String(r[1]||'').trim();
+        const optB = String(r[2]||'').trim();
+        const optC = String(r[3]||'').trim();
+        const optD = String(r[4]||'').trim();
+        const correct = String(r[5]||'').trim().toUpperCase();
+        const explanation = String(r[6]||'').trim();
+        const code = String(r[7]||'').trim();
+
+        if(!optA||!optB){ progress.textContent=`Row ${i+1}: skipped (needs at least 2 options)`; continue; }
+        if(!['A','B','C','D'].includes(correct)){ progress.textContent=`Row ${i+1}: skipped (Correct Answer must be A, B, C or D)`; continue; }
+
+        questions.push({ qText, options:[optA,optB,optC,optD], correct, explanation, code });
+      }
+
+      if(!questions.length){ showToast('No valid questions found in the file.', 'err'); uploadBtn.disabled=false; uploadBtn.textContent='Upload Questions'; return; }
+
+      progress.textContent = `Uploading ${questions.length} questions…`;
+
+      // Insert questions one by one (or batch)
+      let inserted = 0, failed = 0;
+      for(const q of questions){
+        // Insert question row
+        const { data: qRow, error: qErr } = await supabaseClient
+          .from('quiz_questions')
+          .insert({ quiz_id: quizId, question_text: q.qText, code_snippet: q.code||null, explanation: q.explanation||null })
+          .select('id').single();
+        if(qErr||!qRow){
+          failed++;
+          // Show the actual error on first failure so we can debug
+          if(failed===1) progress.textContent = `Question insert error: ${qErr ? qErr.message+' (code:'+qErr.code+')' : 'no row returned'}`;
+          continue;
+        }
+
+        // Build options array
+        const optLabels = ['A','B','C','D'];
+        const opts = q.options.map((option_text,idx)=>({
+          question_id: qRow.id,
+          option_text,
+          is_correct: optLabels[idx]===q.correct
+        })).filter(o=>o.option_text); // drop empty options
+
+        const { error: oErr } = await supabaseClient.from('quiz_options').insert(opts);
+        if(oErr){
+          failed++;
+          if(failed===1) progress.textContent = `Options insert error: ${oErr.message} (code:${oErr.code})`;
+        } else { inserted++; }
+        progress.textContent = inserted>0 ? `Uploaded ${inserted} of ${questions.length}…` : progress.textContent;
+      }
+
+      showToast(`Done! ${inserted} question${inserted!==1?'s':''} added.${failed?' '+failed+' failed.':''}`, inserted?'ok':'err');
+      progress.textContent = `✓ ${inserted} question${inserted!==1?'s':''} uploaded successfully.${failed?' '+failed+' row(s) had errors.':''}`;
+    } catch(err){
+      showToast('Upload failed: '+(err.message||'unknown error'), 'err');
+      progress.textContent = 'Error: '+(err.message||'unknown error');
+    }
+
+    uploadBtn.disabled = false;
+    uploadBtn.textContent = 'Upload Questions';
+    fileInput.value = '';
+  });
+}
+
+/* ===== PARENT FEATURE LOGIC ===== */
+let _allCourses = null; // cache of public courses for parent modals
+
+async function fetchAllCourses(){
+  if(_allCourses) return _allCourses;
+  const { data, error } = await supabaseClient
+    .from('courses')
+    .select('id, title, price, is_free')
+    .eq('status', 'published')
+    .order('title');
+  if(error) console.warn('fetchAllCourses error:', error.message);
+  _allCourses = data || [];
+  return _allCourses;
+}
+
+async function loadChildCourses(childId, panelId){
+  const panel = document.getElementById(panelId);
+  if(!panel) return;
+  const [enRes, progRes] = await Promise.all([
+    supabaseClient.from('enrollments').select('course_id, status, courses(id, title)').eq('student_id', childId).eq('status', 'active'),
+    supabaseClient.from('lesson_progress').select('lesson_id, lessons(course_id)').eq('student_id', childId)
+  ]);
+  const rows = enRes.data || [];
+  if(!rows.length){
+    panel.innerHTML = '<div style="font-size:13px;color:var(--text-muted);">Not enrolled in any courses yet.</div>';
+    return;
+  }
+  // count completed lessons per course
+  const donePerCourse = {};
+  (progRes.data||[]).forEach(p => {
+    const cid = p.lessons && p.lessons.course_id;
+    if(cid) donePerCourse[cid] = (donePerCourse[cid]||0)+1;
+  });
+  // fetch total lessons per course
+  const cids = rows.map(r=>r.course_id);
+  const { data: lc } = await supabaseClient.from('lessons').select('course_id').in('course_id', cids);
+  const totalPerCourse = {};
+  (lc||[]).forEach(l => { totalPerCourse[l.course_id] = (totalPerCourse[l.course_id]||0)+1; });
+
+  panel.innerHTML = rows.map(r => {
+    const done = donePerCourse[r.course_id]||0;
+    const total = totalPerCourse[r.course_id]||0;
+    const pct = total>0 ? Math.round((done/total)*100) : 0;
+    const barColor = pct===100 ? '#22c55e' : 'var(--electric)';
+    return `<div class="report-course-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+      <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+        <span style="font-weight:600;">${esc(r.courses&&r.courses.title||'Course')}</span>
+        <span style="font-size:12px;color:var(--text-muted);">${done}/${total}${pct===100?' ✓':''}</span>
+      </div>
+      <div style="width:100%;height:6px;background:rgba(255,255,255,.08);border-radius:100px;overflow:hidden;">
+        <div style="height:100%;width:${pct}%;background:${barColor};border-radius:100px;"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function loadChildReport(childId, panelId){
+  const panel = document.getElementById(panelId);
+  if(!panel) return;
+
+  const [enRes, qaRes, progRes] = await Promise.all([
+    supabaseClient.from('enrollments').select('course_id, courses(id,title)').eq('student_id', childId).eq('status','active'),
+    supabaseClient.from('quiz_attempts').select('score,passed').eq('user_id', childId),
+    supabaseClient.from('lesson_progress').select('lesson_id, lessons(course_id)').eq('student_id', childId)
+  ]);
+
+  const enrollments = enRes.data || [];
+  const attempts = qaRes.data || [];
+  const progress = progRes.data || [];
+
+  // Map: course_id → count of completed lessons
+  const donePerCourse = {};
+  progress.forEach(p => {
+    const cid = p.lessons && p.lessons.course_id;
+    if(cid) donePerCourse[cid] = (donePerCourse[cid] || 0) + 1;
+  });
+
+  const passed = attempts.filter(a=>a.passed).length;
+  const avg = attempts.length ? Math.round(attempts.reduce((s,a)=>s+a.score,0)/attempts.length) : null;
+  const totalDone = Object.values(donePerCourse).reduce((s,n)=>s+n,0);
+
+  // Fetch total lesson counts for enrolled courses
+  let totalPerCourse = {};
+  if(enrollments.length){
+    const cids = enrollments.map(e=>e.course_id);
+    const { data: lessonCounts } = await supabaseClient
+      .from('lessons')
+      .select('course_id')
+      .in('course_id', cids);
+    (lessonCounts||[]).forEach(l => {
+      totalPerCourse[l.course_id] = (totalPerCourse[l.course_id] || 0) + 1;
+    });
+  }
+
+  // Build progress bar HTML per course
+  const courseRows = enrollments.map(r => {
+    const cid = r.course_id;
+    const done = donePerCourse[cid] || 0;
+    const total = totalPerCourse[cid] || 0;
+    const pct = total > 0 ? Math.round((done/total)*100) : 0;
+    const barColor = pct === 100 ? '#22c55e' : 'var(--electric)';
+    return `<div class="report-course-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+      <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+        <span style="font-weight:600;">${esc(r.courses&&r.courses.title||'Course')}</span>
+        <span style="font-size:12px;color:var(--text-muted);">${done}/${total} lessons${pct===100?' ✓':''}</span>
+      </div>
+      <div style="width:100%;height:6px;background:rgba(255,255,255,.08);border-radius:100px;overflow:hidden;">
+        <div style="height:100%;width:${pct}%;background:${barColor};border-radius:100px;transition:width .4s;"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  panel.innerHTML = `
+    <div class="report-stat-row">
+      <div class="report-stat"><div class="num">${enrollments.length}</div><div class="lbl">Courses</div></div>
+      <div class="report-stat"><div class="num">${totalDone}</div><div class="lbl">Lessons Done</div></div>
+      <div class="report-stat"><div class="num">${passed}</div><div class="lbl">Quizzes Passed</div></div>
+      <div class="report-stat"><div class="num">${avg !== null ? avg+'%' : '–'}</div><div class="lbl">Avg Score</div></div>
+    </div>
+    ${enrollments.length ? `
+    <div style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin:14px 0 10px;">Course Progress</div>
+    <div style="display:flex;flex-direction:column;gap:12px;">${courseRows}</div>
+    ` : '<div style="font-size:13px;color:var(--text-muted);">No enrolled courses.</div>'}`;
+}
+
+function populateChildSelects(selectIds){
+  // Only show active (approved) children in action dropdowns
+  const children = (currentUser.children || []).filter(c=>c._linkStatus === 'active');
+  selectIds.forEach(selId => {
+    const sel = document.getElementById(selId);
+    if(!sel) return;
+    sel.innerHTML = children.length
+      ? children.map((c,i)=>`<option value="${i}">${esc(c.full_name||'Student')}</option>`).join('')
+      : '<option disabled selected value="">No approved children yet</option>';
+  });
+}
+
+async function populateCourseSelects(selectIds){
+  const courses = await fetchAllCourses();
+  selectIds.forEach(selId => {
+    const sel = document.getElementById(selId);
+    if(!sel) return;
+    sel.innerHTML = courses.length
+      ? courses.map(c=>`<option value="${c.id}">${esc(c.title)}${!c.price_npr || c.price_npr === 0 ? ' (Free)' : ' (Rs '+Number(c.price_npr).toLocaleString('en-IN')+')'}</option>`).join('')
+      : '<option disabled selected>No courses available</option>';
+  });
+}
+
+function openSuggestModal(preselectedChildIdx){
+  const modal = document.getElementById('suggestModal');
+  const msg = document.getElementById('suggestMsg');
+  msg.style.display = 'none';
+  populateChildSelects(['suggestChild']);
+  populateCourseSelects(['suggestCourse']);
+  if(preselectedChildIdx != null){
+    document.getElementById('suggestChild').value = preselectedChildIdx;
+  }
+  modal.classList.add('active');
+}
+
+function openEnrollChildModal(preselectedChildIdx){
+  const modal = document.getElementById('enrollChildModal');
+  const msg = document.getElementById('enrollChildMsg');
+  msg.style.display = 'none';
+  populateChildSelects(['enrollChildSel']);
+  populateCourseSelects(['enrollCourseSel']);
+  if(preselectedChildIdx != null){
+    document.getElementById('enrollChildSel').value = preselectedChildIdx;
+  }
+  modal.classList.add('active');
+}
+
+function initParentHandlers(){
+  const children = currentUser.children || [];
+  const activeChildren = children.filter(c=>c._linkStatus==='active');
+
+  // Load courses and reports for each active child
+  children.forEach((child, idx) => {
+    if(child._linkStatus !== 'active') return; // skip pending cards
+    loadChildCourses(child.id, `childCourseList-${idx}`);
+    loadChildReport(child.id, `childReportData-${idx}`);
+
+    // Tab switching
+    document.querySelectorAll(`.child-tab[data-child="${idx}"]`).forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll(`.child-tab[data-child="${idx}"]`).forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        const tabName = tab.dataset.tab;
+        document.querySelectorAll(`[id^="childPanel-${idx}-"]`).forEach(p=>p.classList.remove('active'));
+        const panel = document.getElementById(`childPanel-${idx}-${tabName}`);
+        if(panel) panel.classList.add('active');
+      });
+    });
+
+    // Remove link button
+    const removeBtn = document.getElementById(`removeChildBtn-${idx}`);
+    if(removeBtn) removeBtn.addEventListener('click', async ()=>{
+      const linkId = removeBtn.dataset.linkid;
+      if(!confirm(`Remove link with ${child.full_name}? They will no longer be visible on your profile.`)) return;
+      const { error } = await supabaseClient.from('parent_children').update({ status:'removed' }).eq('id', linkId).eq('parent_id', currentUser.id);
+      if(error){ showToast('Could not remove link: '+error.message, 'err'); return; }
+      showToast(`Link with ${child.full_name} removed.`, 'ok');
+      // Refresh
+      await loadCurrentUser();
+      document.getElementById('roleContent').innerHTML = parentContent();
+      initParentHandlers();
+    });
+
+    // Enroll & Suggest per child (use activeChildren index)
+    const activeIdx = activeChildren.findIndex(c=>c.id===child.id);
+    const enrollBtn = document.getElementById(`enrollChildBtn-${idx}`);
+    if(enrollBtn) enrollBtn.addEventListener('click', ()=>openEnrollChildModal(activeIdx));
+    const suggestBtn = document.getElementById(`suggestChildBtn-${idx}`);
+    if(suggestBtn) suggestBtn.addEventListener('click', ()=>openSuggestModal(activeIdx));
+  });
+
+  // Add/link child button
+  const addBtn = document.getElementById('openAddChildBtn');
+  if(addBtn) addBtn.addEventListener('click', ()=>{
+    document.getElementById('childRefInput').value = '';
+    const msg = document.getElementById('addChildMsg');
+    msg.style.display = 'none';
+    document.getElementById('addChildModal').classList.add('active');
+  });
+}
+
+/* Link child confirm */
+document.getElementById('addChildCancel').addEventListener('click', ()=>document.getElementById('addChildModal').classList.remove('active'));
+document.getElementById('addChildConfirm').addEventListener('click', async ()=>{
+  // Normalise input: strip dashes, uppercase, then reformat as UN-YYYY-NNNNNN
+  const raw = document.getElementById('childRefInput').value.trim().toUpperCase().replace(/-/g, '');
+  // Accept both "UN2026007606" and already-dashed "UN-2026-007606"
+  const refId = raw.replace(/^UN(\d{4})(\d+)$/, 'UN-$1-$2') || raw;
+  const msg = document.getElementById('addChildMsg');
+  if(!refId){ msg.style.color='var(--red)'; msg.textContent='Please enter a Reference ID.'; msg.style.display=''; return; }
+
+  const btn = document.getElementById('addChildConfirm');
+  btn.disabled = true; btn.textContent = 'Linking…';
+
+  // Find student by reference_id (try normalised form first, then raw stripped)
+  let { data: students, error: findErr } = await supabaseClient
+    .from('profiles')
+    .select('id, full_name, role')
+    .eq('reference_id', refId)
+    .eq('role', 'student');
+
+  // Fallback: try without dashes in case DB stored it differently
+  if((!students || !students.length) && refId !== raw){
+    const fb = await supabaseClient.from('profiles').select('id, full_name, role').eq('reference_id', raw).eq('role','student');
+    if(fb.data && fb.data.length){ students = fb.data; findErr = null; }
+  }
+
+  if(findErr || !students || !students.length){
+    msg.style.color='var(--red)'; msg.textContent='No student found with that Reference ID.'; msg.style.display='';
+    btn.disabled=false; btn.textContent='Link Child'; return;
+  }
+  const student = students[0];
+
+  // Check not already linked (any status)
+  const { data: existing } = await supabaseClient
+    .from('parent_children')
+    .select('id, status')
+    .eq('parent_id', currentUser.id)
+    .eq('child_id', student.id);
+
+  let linkErr = null;
+  if(existing && existing.length){
+    const existStatus = existing[0].status;
+    if(existStatus === 'pending'){
+      msg.style.color='var(--amber)'; msg.textContent=`A request to ${student.full_name} is already pending their approval.`; msg.style.display='';
+      btn.disabled=false; btn.textContent='Link Child'; return;
+    } else if(existStatus === 'active'){
+      msg.style.color='var(--amber)'; msg.textContent=`${student.full_name} is already linked.`; msg.style.display='';
+      btn.disabled=false; btn.textContent='Link Child'; return;
+    } else {
+      // Previously removed or rejected — reactivate as pending
+      const { error: upErr } = await supabaseClient
+        .from('parent_children')
+        .update({ status: 'pending' })
+        .eq('id', existing[0].id);
+      linkErr = upErr;
+    }
+  } else {
+    // No existing record — insert fresh
+    const { error: insErr } = await supabaseClient
+      .from('parent_children')
+      .insert({ parent_id: currentUser.id, child_id: student.id, status: 'pending' });
+    linkErr = insErr;
+  }
+
+  btn.disabled=false; btn.textContent='Link Child';
+  if(linkErr){
+    msg.style.color='var(--red)'; msg.textContent='Could not send request: '+linkErr.message; msg.style.display=''; return;
+  }
+
+  document.getElementById('addChildModal').classList.remove('active');
+  showToast(`Request sent to ${student.full_name} — waiting for their approval.`, 'ok');
+  // Reload parent data (include pending so the amber badge appears immediately)
+  const { data: links } = await supabaseClient
+    .from('parent_children')
+    .select('id, status, child_id, profiles:child_id(id, full_name, school, grade, reference_id)')
+    .eq('parent_id', currentUser.id)
+    .in('status', ['active', 'pending']);
+  currentUser.children = (links||[]).map(l=>({
+    ...l.profiles,
+    _linkId: l.id,
+    _linkStatus: l.status
+  })).filter(Boolean);
+  renderAll();
+});
+
+/* Suggest course submit */
+document.getElementById('suggestCancel').addEventListener('click', ()=>document.getElementById('suggestModal').classList.remove('active'));
+document.getElementById('suggestSend').addEventListener('click', async ()=>{
+  const childIdx = parseInt(document.getElementById('suggestChild').value);
+  const courseId = document.getElementById('suggestCourse').value;
+  const activeChildren = (currentUser.children||[]).filter(c=>c._linkStatus==='active');
+  const child = activeChildren[childIdx];
+  const msg = document.getElementById('suggestMsg');
+  if(!child || !courseId || courseId === 'No courses available'){
+    msg.style.color='var(--red)';
+    msg.textContent = !child ? 'No approved children. Ask your child to accept your link request first.' : 'Please select a course.';
+    msg.style.display=''; return;
+  }
+
+  const btn = document.getElementById('suggestSend');
+  btn.disabled=true; btn.textContent='Sending…';
+
+  const { error } = await supabaseClient
+    .from('course_suggestions')
+    .insert({ parent_id: currentUser.id, child_id: child.id, course_id: courseId });
+
+  btn.disabled=false; btn.textContent='Send Suggestion';
+  if(error){
+    msg.style.color='var(--red)'; msg.textContent='Could not send suggestion: '+error.message; msg.style.display=''; return;
+  }
+  document.getElementById('suggestModal').classList.remove('active');
+  showToast('Course suggestion sent to '+( child.full_name||'your child')+'!', 'ok');
+});
+
+/* Enroll child submit */
+document.getElementById('enrollChildCancel').addEventListener('click', ()=>document.getElementById('enrollChildModal').classList.remove('active'));
+document.getElementById('enrollChildConfirm').addEventListener('click', async ()=>{
+  const childIdx = parseInt(document.getElementById('enrollChildSel').value);
+  const courseId = document.getElementById('enrollCourseSel').value;
+  const activeChildren = (currentUser.children||[]).filter(c=>c._linkStatus==='active');
+  const child = activeChildren[childIdx];
+  const msg = document.getElementById('enrollChildMsg');
+  if(!child || !courseId){
+    msg.style.color='var(--red)';
+    msg.textContent = !child ? 'No approved children. Ask your child to accept your link request first.' : 'Please select a course.';
+    msg.style.display=''; return;
+  }
+
+  // Check not already enrolled
+  const { data: existing } = await supabaseClient
+    .from('enrollments')
+    .select('id')
+    .eq('student_id', child.id)
+    .eq('course_id', courseId);
+
+  if(existing && existing.length){
+    msg.style.color='var(--amber)'; msg.textContent=`${child.full_name} is already enrolled in this course.`; msg.style.display=''; return;
+  }
+
+  const btn = document.getElementById('enrollChildConfirm');
+  btn.disabled=true; btn.textContent='Enrolling…';
+
+  const { error } = await supabaseClient
+    .from('enrollments')
+    .insert({ student_id: child.id, course_id: courseId, enrolled_by_parent: currentUser.id, status: 'active' });
+
+  btn.disabled=false; btn.textContent='Enroll Child';
+  if(error){
+    msg.style.color='var(--red)'; msg.textContent='Could not enroll: '+error.message; msg.style.display=''; return;
+  }
+  document.getElementById('enrollChildModal').classList.remove('active');
+  showToast((child.full_name||'Child')+' enrolled successfully!', 'ok');
+  // Refresh child courses panel
+  const currentChildIdx = Array.from(document.querySelectorAll('.child-card')).findIndex((_,i)=>i===childIdx);
+  if(currentChildIdx>=0) loadChildCourses(child.id, `childCourseList-${childIdx}`);
+});
+
+function renderAll(){
+  renderHeader();
+  renderRoleContent();
+  renderInfo();
+}
+
+/* ===== BACK BUTTON ===== */
+document.getElementById('backBtn').addEventListener('click', ()=>{
+  if(window.history.length > 1){ window.history.back(); }
+  else { window.location.href = 'index'; }
+});
+
+/* ===== EDIT PROFILE MODAL ===== */
+function openEditModal(){
+  const u = currentUser;
+  document.getElementById('editName').value = u.name;
+  document.getElementById('editPhone').value = u.phone;
+  document.getElementById('editEmail').value = u.email;
+  document.getElementById('editEmail').readOnly = true;
+  document.getElementById('editAddress').value = u.address==='Not set' ? '' : u.address;
+  document.getElementById('editPhone').value = u.phone==='Not set' ? '' : u.phone;
+  const isS = currentRole==='student', isT = currentRole==='teacher';
+  document.getElementById('editSchoolWrap').style.display = isS ? '' : 'none';
+  document.getElementById('editGradeWrap').style.display = isS ? '' : 'none';
+  document.getElementById('editDesigWrap').style.display = isT ? '' : 'none';
+  document.getElementById('editSchool').value = u.school==='Not set' ? '' : u.school;
+  document.getElementById('editGrade').value = u.grade==='Not set' ? '' : u.grade;
+  document.getElementById('editDesig').value = u.designation==='Not set' ? '' : u.designation;
+  document.getElementById('editModal').classList.add('active');
+}
+document.getElementById('editProfileBtn').addEventListener('click', openEditModal);
+document.getElementById('editCancel').addEventListener('click', ()=>document.getElementById('editModal').classList.remove('active'));
+
+/* ===== CHANGE PHOTO ===== */
+let pendingAvatarFile = null;
+document.getElementById('changePhotoBtn').addEventListener('click', ()=>{
+  document.getElementById('avatarFileInput').click();
+});
+document.getElementById('avatarFileInput').addEventListener('change', e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 2 * 1024 * 1024){ showToast('Photo must be smaller than 2 MB.', 'err'); e.target.value=''; return; }
+  pendingAvatarFile = file;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    const preview = document.getElementById('editAvatarPreview');
+    preview.style.backgroundImage = `url('${ev.target.result}')`;
+    preview.style.backgroundSize = 'cover';
+    preview.style.backgroundPosition = 'center';
+    preview.textContent = '';
+  };
+  reader.readAsDataURL(file);
+});
+document.getElementById('editForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const u = currentUser;
+  const newName = document.getElementById('editName').value.trim() || u.name;
+  const newPhone = document.getElementById('editPhone').value.trim();
+  const newAddress = document.getElementById('editAddress').value.trim();
+  const patch = { full_name: newName, phone: newPhone || null, address: newAddress || null };
+  if(currentRole==='student'){ patch.school = document.getElementById('editSchool').value.trim() || null; patch.grade = document.getElementById('editGrade').value.trim() || null; }
+  if(currentRole==='teacher'){ patch.designation = document.getElementById('editDesig').value.trim() || null; }
+  // Email changes are intentionally not saved here — Supabase requires a
+  // separate re-verification step for email changes, not yet wired up.
+
+  const saveBtn = e.target.querySelector('button[type="submit"]');
+  saveBtn.disabled = true;
+  saveBtn.textContent = 'Saving...';
+
+  /* Upload avatar if a new file was selected */
+  if(pendingAvatarFile){
+    const ext = pendingAvatarFile.name.split('.').pop();
+    const path = `avatars/${u.id}.${ext}`;
+    const { data: upData, error: upErr } = await supabaseClient.storage
+      .from('site-assets')
+      .upload(path, pendingAvatarFile, { upsert: true, contentType: pendingAvatarFile.type });
+    if(upErr){
+      showToast('Photo upload failed: ' + upErr.message, 'err');
+    } else {
+      const { data: urlData } = supabaseClient.storage.from('site-assets').getPublicUrl(path);
+      patch.avatar_url = urlData.publicUrl;
+      u.avatar_url = patch.avatar_url;
+    }
+    pendingAvatarFile = null;
+  }
+
+  const { error } = await supabaseClient
+    .from('profiles')
+    .update(patch)
+    .eq('id', u.id)
+    .select();
+
+  saveBtn.disabled = false;
+  saveBtn.textContent = 'Save Changes';
+
+  if(error){
+    showToast('Could not save changes: ' + error.message, 'err');
+    return;
+  }
+
+  u.name = newName; u.phone = newPhone || 'Not set'; u.address = newAddress || 'Not set';
+  if('school' in patch){ u.school = patch.school || 'Not set'; u.grade = patch.grade || 'Not set'; }
+  if('designation' in patch){ u.designation = patch.designation || 'Not set'; }
+  document.getElementById('editModal').classList.remove('active');
+  renderAll();
+  showToast('Profile updated successfully!', 'ok');
+});
+
+/* ===== SUGGEST COURSE MODAL — handled in parent logic section above ===== */
+
+/* ===== CHANGE PASSWORD ===== */
+function strongPw(v){ return v.length>=8 && /[A-Z]/.test(v) && /[a-z]/.test(v) && /[0-9]/.test(v); }
+document.getElementById('pwRow').addEventListener('click', ()=>{
+  document.getElementById('pwForm').reset(); document.getElementById('pwMsg').textContent='';
+  document.getElementById('pwModal').classList.add('active');
+});
+document.getElementById('pwCancel').addEventListener('click', ()=>document.getElementById('pwModal').classList.remove('active'));
+document.getElementById('pwForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const msg = document.getElementById('pwMsg'), a = document.getElementById('pwNew').value, b = document.getElementById('pwNew2').value;
+  msg.style.color = '#e5484d';
+  if(!strongPw(a)){ msg.textContent = 'Password needs 8+ characters with an uppercase letter, a lowercase letter and a number.'; return; }
+  if(a !== b){ msg.textContent = 'The two passwords do not match.'; return; }
+  const btn = document.getElementById('pwSave'); btn.disabled = true; btn.textContent = 'Updating...';
+  const { error } = await supabaseClient.auth.updateUser({ password: a });
+  btn.disabled = false; btn.textContent = 'Update password';
+  if(error){ msg.textContent = 'Could not update: ' + error.message; return; }
+  msg.style.color = '#2e9e5b'; msg.textContent = 'Password updated.';
+  setTimeout(()=>document.getElementById('pwModal').classList.remove('active'), 1200);
+});
+
+/* ===== LOGOUT MODAL ===== */
+document.getElementById('logoutRow').addEventListener('click', ()=>document.getElementById('logoutModal').classList.add('active'));
+document.getElementById('logoutCancel').addEventListener('click', ()=>document.getElementById('logoutModal').classList.remove('active'));
+document.getElementById('logoutConfirm').addEventListener('click', async ()=>{
+  document.getElementById('logoutModal').classList.remove('active');
+  await supabaseClient.auth.signOut();
+  window.location.href = 'auth';
+});
+
+/* close modals on overlay click / Escape */
+document.querySelectorAll('.modal-overlay').forEach(overlay=>{
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.classList.remove('active'); });
+});
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ document.querySelectorAll('.modal-overlay.active').forEach(o=>o.classList.remove('active')); }
+});
+
+/* keyboard activation for row-style buttons */
+document.addEventListener('keydown', e=>{
+  if((e.key==='Enter'||e.key===' ') && document.activeElement.matches('.action-row,.account-row,.child-action-chip')){
+    e.preventDefault();
+    document.activeElement.click();
+  }
+});
+
+/* ===== INIT ===== */
+(async function init(){
+  const ok = await loadCurrentUser();
+  if(ok) renderAll();
+  // Reveal page only after real data is loaded (prevents wrong-account flash)
+  document.getElementById('pageContainer').style.visibility = 'visible';
+})();
+</script>
+
+</body>
+</html>

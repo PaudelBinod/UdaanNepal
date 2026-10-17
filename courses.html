@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Courses — Udaan Nepal</title>
+<meta name="description" content="Your Udaan Nepal course dashboard — track progress, access lessons, and manage your learning.">
+<meta property="og:title" content="My Courses — Udaan Nepal">
+<meta property="og:description" content="Access your enrolled courses, track progress, and continue learning with Udaan Nepal.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://udaannepal.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#17191D;
+  --bg-deep:#101216;
+  --card:#22262C;
+  --card-hover:#2A2F36;
+  --electric:#0066FF;
+  --electric-hover:#0052CC;
+  --cyan:#00E5FF;
+  --amber:#F59E0B;
+  --red:#F04452;
+
+  --text-primary:#F8FAFC;
+  --text-secondary:#CBD5E1;
+  --text-muted:#94A3B8;
+  --border:rgba(255,255,255,0.08);
+  --border-strong:rgba(255,255,255,0.16);
+
+  --radius:14px;
+  --radius-sm:9px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.6;overflow-x:hidden;}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;letter-spacing:-0.01em;}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;}
+.container{max-width:1240px;margin:0 auto;padding:0 24px;}
+section{position:relative;}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important;}}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:9px;font-weight:700;font-size:13.5px;border:none;cursor:pointer;transition:transform .2s ease, background .2s ease;}
+.btn-primary{background:var(--electric);color:#fff;}
+.btn-primary:hover:not(:disabled){background:var(--electric-hover);transform:translateY(-1px);}
+.btn-primary:disabled{background:#33445e;color:rgba(255,255,255,0.5);cursor:not-allowed;}
+.btn-outline{background:transparent;border:1.5px solid var(--border-strong);color:var(--text-primary);}
+.btn-outline:hover{border-color:var(--cyan);color:var(--cyan);}
+.btn-ghost{background:rgba(255,255,255,0.05);color:var(--text-primary);border:1px solid var(--border);}
+.btn-ghost:hover{background:rgba(255,255,255,0.09);}
+.btn-sm{padding:9px 16px;font-size:12.5px;}
+
+.section-title{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;}
+
+/* ===== HEADER ===== */
+.site-header{position:fixed;top:0;left:0;right:0;z-index:900;background:rgba(23,25,29,0.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:1240px;margin:0 auto;gap:16px;}
+.brand{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.brand-mark{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--electric),var(--cyan));display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:800;color:#101216;font-size:16px;flex-shrink:0;}
+.brand-text{font-family:'Poppins',sans-serif;font-weight:700;font-size:16.5px;}
+.header-right{display:flex;align-items:center;gap:12px;}
+
+
+
+.menu-btn{width:44px;height:44px;border-radius:9px;border:1px solid var(--border-strong);background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;flex-shrink:0;}
+.menu-btn span{width:18px;height:2px;background:var(--text-primary);border-radius:2px;transition:transform .3s ease, opacity .3s ease;}
+.menu-btn.active span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.menu-btn.active span:nth-child(2){opacity:0;}
+.menu-btn.active span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+
+/* ===== SIDEBAR ===== */
+.overlay{position:fixed;inset:0;background:rgba(8,9,11,0.65);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s ease;z-index:1000;}
+.overlay.active{opacity:1;visibility:visible;}
+.sidebar{position:fixed;top:0;right:0;height:100%;width:340px;max-width:88vw;background:var(--card);border-left:1px solid var(--border-strong);z-index:1001;transform:translateX(100%);transition:transform .4s cubic-bezier(.22,.9,.32,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,0.5);}
+.sidebar.active{transform:translateX(0);}
+.sidebar-head{display:flex;justify-content:space-between;align-items:center;padding:22px 22px 18px;border-bottom:1px solid var(--border);}
+.sidebar-head h4{font-size:14px;font-weight:700;color:var(--text-secondary);letter-spacing:.08em;text-transform:uppercase;}
+.sidebar-close{width:36px;height:36px;border-radius:50%;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);display:flex;align-items:center;justify-content:center;font-size:18px;transition:background .2s ease, transform .2s ease;}
+.sidebar-close:hover{background:rgba(255,255,255,0.08);transform:rotate(90deg);}
+.sidebar-nav{padding:14px;flex:1;}
+.sidebar-item{display:flex;align-items:center;gap:14px;padding:13px 14px;border-radius:10px;color:var(--text-secondary);font-size:14.5px;font-weight:600;transition:background .2s ease,color .2s ease, padding-left .2s ease;margin-bottom:2px;}
+.sidebar-item .icon{width:20px;height:20px;color:var(--cyan);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.sidebar-item:hover,.sidebar-item:focus-visible{background:rgba(0,102,255,0.12);color:var(--text-primary);padding-left:18px;}
+.sidebar-item.active{background:rgba(0,102,255,0.16);color:var(--text-primary);}
+.sidebar-item.active .icon{color:var(--electric);}
+.sidebar-item.logout{color:#FF9B8A;}
+.sidebar-item.logout .icon{color:#FF9B8A;}
+.sidebar-foot{padding:18px 22px 24px;border-top:1px solid var(--border);font-size:11px;color:var(--text-muted);letter-spacing:.06em;}
+
+/* ===== HERO ===== */
+.hero{padding:120px 0 30px;}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:26px;}
+.hero h1{font-size:clamp(24px,3vw,32px);margin-bottom:6px;}
+.hero p{color:var(--text-secondary);font-size:14px;}
+.search-bar{position:relative;max-width:320px;width:100%;}
+.search-bar input{width:100%;padding:12px 14px 12px 42px;border-radius:10px;border:1.5px solid var(--border-strong);background:var(--card);color:var(--text-primary);font-family:inherit;font-size:13.5px;}
+.search-bar input:focus{outline:none;border-color:var(--electric);}
+.search-bar .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;}
+
+/* ===== STATS ===== */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:36px;}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px 16px;}
+.stat-box .num{font-family:'Poppins',sans-serif;font-weight:800;font-size:24px;margin-bottom:4px;}
+.stat-box .label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);}
+@media(max-width:700px){.stats-grid{grid-template-columns:1fr 1fr;}}
+
+/* ===== FILTER TABS ===== */
+.filter-tabs{display:flex;gap:10px;overflow-x:auto;margin-bottom:26px;padding-bottom:4px;}
+.filter-tab{flex-shrink:0;padding:9px 18px;border-radius:100px;border:1.5px solid var(--border-strong);background:var(--card);font-size:13px;font-weight:700;color:var(--text-secondary);transition:all .2s ease;white-space:nowrap;}
+.filter-tab:hover{border-color:var(--cyan);color:var(--text-primary);}
+.filter-tab.active{background:var(--electric);border-color:var(--electric);color:#fff;}
+
+/* ===== COURSE CARDS ===== */
+.course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:44px;}
+.course-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .25s ease, border-color .25s ease;}
+.course-card:hover{transform:translateY(-4px);border-color:rgba(0,229,255,0.3);}
+.course-media{aspect-ratio:16/9;background:linear-gradient(150deg,#1B2030,#0F1216);display:flex;align-items:center;justify-content:center;color:var(--text-muted);position:relative;}
+.course-media .ic{width:34px;height:34px;color:var(--cyan);opacity:.7;}
+.course-status-tag{position:absolute;top:12px;left:12px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:100px;}
+.tag-progress{background:rgba(0,102,255,0.16);color:#6FA8FF;border:1px solid rgba(0,102,255,0.35);}
+.tag-completed{background:rgba(0,229,255,0.14);color:var(--cyan);border:1px solid rgba(0,229,255,0.3);}
+.tag-notstarted{background:rgba(148,163,184,0.12);color:var(--text-muted);border:1px solid var(--border-strong);}
+.tag-published{background:rgba(0,229,255,0.14);color:var(--cyan);border:1px solid rgba(0,229,255,0.3);}
+.tag-draft{background:rgba(245,158,11,0.14);color:var(--amber);border:1px solid rgba(245,158,11,0.3);}
+.tag-review{background:rgba(0,102,255,0.16);color:#6FA8FF;border:1px solid rgba(0,102,255,0.35);}
+.tag-rejected{background:rgba(239,68,68,0.14);color:#F87171;border:1px solid rgba(239,68,68,0.35);}
+.tag-pay{background:rgba(245,158,11,0.14);color:var(--amber);border:1px solid rgba(245,158,11,0.3);}
+.review-note{margin-top:10px;padding:10px 12px;border-radius:10px;font-size:12.5px;line-height:1.5;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);color:var(--text-secondary);}
+.pay-instr{white-space:pre-line;font-size:13px;line-height:1.6;padding:12px 14px;border-radius:10px;background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.25);color:var(--text-secondary);margin-bottom:16px;}
+.pay-err{color:#F87171;font-size:12.5px;margin:0 0 12px;min-height:16px;}
+.price-pill{font-size:11px;font-weight:800;padding:3px 9px;border-radius:100px;border:1px solid var(--border-strong);color:var(--text-secondary);}
+
+.course-body{padding:18px 20px 20px;flex:1;display:flex;flex-direction:column;}
+.course-cat{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;}
+.course-body h4{font-size:16px;margin-bottom:8px;}
+.course-sub{font-size:12.5px;color:var(--text-muted);margin-bottom:14px;}
+.progress-track{height:6px;border-radius:100px;background:var(--bg-deep);overflow:hidden;margin-bottom:8px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--electric),var(--cyan));border-radius:100px;}
+.progress-label{font-size:11.5px;color:var(--text-muted);margin-bottom:16px;}
+.course-meta-row{display:flex;gap:14px;font-size:11.5px;color:var(--text-muted);margin-bottom:16px;flex-wrap:wrap;}
+.course-card .btn{margin-top:auto;width:100%;}
+
+@media(max-width:980px){.course-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:620px){.course-grid{grid-template-columns:1fr;}}
+
+/* ===== TEACHER COURSE ROW ===== */
+.course-row{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
+.course-row-title{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
+.course-row h4{font-size:15.5px;}
+.course-stats{display:flex;gap:16px;font-size:12.5px;color:var(--text-muted);flex-wrap:wrap;}
+
+/* ===== EMPTY STATE ===== */
+.empty-state{display:none;text-align:center;padding:60px 20px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:36px;}
+.empty-state.show{display:block;}
+.empty-state h4{font-size:17px;margin-bottom:8px;}
+.empty-state p{color:var(--text-secondary);font-size:13.5px;margin-bottom:18px;}
+
+/* ===== MODAL ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(8,9,11,0.72);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .25s ease, visibility .25s ease;z-index:1100;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.active{opacity:1;visibility:visible;}
+.modal-box{background:var(--card);border:1px solid var(--border-strong);border-radius:var(--radius);padding:30px;width:100%;max-width:560px;max-height:85vh;overflow-y:auto;transform:translateY(14px);transition:transform .25s ease;}
+.modal-overlay.active .modal-box{transform:translateY(0);}
+.modal-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:6px;}
+.modal-box h3{font-size:19px;}
+.modal-close{width:32px;height:32px;border-radius:50%;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:background .2s ease, transform .2s ease;}
+.modal-close:hover{background:rgba(255,255,255,0.08);transform:rotate(90deg);}
+.modal-sub{font-size:13px;color:var(--text-muted);margin-bottom:20px;}
+
+.modal-tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:20px;border-bottom:1px solid var(--border);}
+.modal-tab{flex-shrink:0;padding:10px 14px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-muted);font-size:12.5px;font-weight:700;white-space:nowrap;}
+.modal-tab.active{color:var(--text-primary);border-bottom-color:var(--electric);}
+.modal-tab-panel{display:none;}
+.modal-tab-panel.active{display:block;}
+
+.lesson-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);font-size:13.5px;}
+.lesson-item:last-child{border-bottom:none;}
+.lesson-item .lnum{width:26px;height:26px;border-radius:50%;background:var(--bg-deep);border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text-muted);flex-shrink:0;}
+.lesson-item.done .lnum{background:rgba(0,229,255,0.14);color:var(--cyan);border-color:rgba(0,229,255,0.3);}
+.lesson-item .ltitle{flex:1;}
+.lesson-item .ltime{font-size:11.5px;color:var(--text-muted);}
+
+.placeholder-block{background:var(--bg-deep);border:1px dashed var(--border-strong);border-radius:var(--radius-sm);padding:26px;text-align:center;color:var(--text-muted);font-size:13px;}
+
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.form-group label{font-size:12.5px;font-weight:700;color:var(--text-secondary);}
+.form-group input, .form-group select, .form-group textarea{width:100%;padding:11px 14px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-deep);color:var(--text-primary);font-family:inherit;font-size:13.5px;}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus{outline:none;border-color:var(--electric);}
+.form-group textarea{resize:vertical;min-height:80px;}
+
+@media(max-width:600px){.modal-box{padding:22px;}}
+
+/* Autofill override */
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover,
+.form-group input:-webkit-autofill:focus{
+  -webkit-text-fill-color:var(--text-primary);
+  -webkit-box-shadow:0 0 0 1000px var(--bg-deep) inset;
+  box-shadow:0 0 0 1000px var(--bg-deep) inset;
+  border-color:var(--border-strong);
+  caret-color:var(--text-primary);
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index" class="brand">
+      <div class="brand-mark">U</div>
+      <div class="brand-text">Udaan Nepal</div>
+    </a>
+    <div class="header-right">
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="sidebar" id="sidebar" aria-hidden="true">
+  <div class="sidebar-head">
+    <h4>Menu</h4>
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">&times;</button>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="courses" class="sidebar-item active"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>My Courses</a>
+    <a href="profile" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></span>My Profile</a>
+    <a href="notice" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>Notice</a>
+    <a href="group" data-feature="group_chat" style="display:none" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>My Group</a>
+    <a href="admin" class="sidebar-item" id="adminLink" style="display:none;"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></span>Admin Panel</a>
+    <a href="auth" class="sidebar-item logout"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Log Out</a>
+  </nav>
+  <div class="sidebar-foot">UDAAN NEPAL · MY COURSES</div>
+</aside>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-top">
+      <div>
+        <h1 id="pageTitle">My Courses</h1>
+        <p id="pageSub">Everything you're enrolled in, in one place.</p>
+      </div>
+      <div class="search-bar">
+        <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <input type="text" id="searchInput" placeholder="Search courses..." aria-label="Search courses">
+      </div>
+    </div>
+
+    <div id="pageContent"></div>
+  </div>
+</section>
+
+<!-- ===== MANAGE COURSE MODAL (teacher) ===== -->
+<div class="modal-overlay" id="manageModal">
+  <div class="modal-box">
+    <div class="modal-top">
+      <div>
+        <h3 id="mmTitle">Course Title</h3>
+        <div class="modal-sub" id="mmSub">Students · Lessons · Quizzes</div>
+      </div>
+      <button class="modal-close" id="mmClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" data-mtab="overview">Overview</button>
+      <button class="modal-tab" data-mtab="lessons">Lessons</button>
+      <button class="modal-tab" data-mtab="quizzes">Quizzes</button>
+      <button class="modal-tab" data-mtab="students">Students</button>
+      <button class="modal-tab" data-mtab="results">Results</button>
+      <button class="modal-tab" data-mtab="settings">Settings</button>
+    </div>
+    <div class="modal-tab-panel active" data-mpanel="overview" id="mmOverview"></div>
+    <div class="modal-tab-panel" data-mpanel="lessons" id="mmLessons"></div>
+    <div class="modal-tab-panel" data-mpanel="quizzes" id="mmQuizzes"></div>
+    <div class="modal-tab-panel" data-mpanel="students" id="mmStudents"></div>
+    <div class="modal-tab-panel" data-mpanel="results" id="mmResults"><div class="placeholder-block">Loading quiz results…</div></div>
+    <div class="modal-tab-panel" data-mpanel="settings" id="mmSettings"></div>
+  </div>
+</div>
+
+<!-- ===== CREATE COURSE MODAL (teacher) ===== -->
+<div class="modal-overlay" id="createModal">
+  <div class="modal-box">
+    <div class="modal-top">
+      <h3>Create Course</h3>
+      <button class="modal-close" id="createClose" aria-label="Close">&times;</button>
+    </div>
+    <p class="modal-sub">Set up the basics — you can add lessons and quizzes after creating the course.</p>
+    <form id="createForm">
+      <div class="form-group"><label for="ccTitle">Course Title</label><input type="text" id="ccTitle" required></div>
+      <div class="form-group"><label for="ccDesc">Short Description</label><textarea id="ccDesc"></textarea></div>
+      <div class="form-group"><label for="ccCategory">Category</label><input type="text" id="ccCategory" placeholder="e.g. Programming, Office Skills"></div>
+      <div class="form-group">
+        <label for="ccLanguage">Teaching language</label>
+        <select id="ccLanguage"><option value="English">English</option><option value="Nepali">Nepali (नेपाली)</option><option value="Both">Both English and Nepali</option></select>
+      </div>
+      <div class="form-group">
+        <label for="ccClass">Class / Grade</label>
+        <select id="ccClass">
+          <option value="">General / Skill Course (not tied to a class)</option>
+          <option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option>
+          <option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option>
+          <option>Class 9</option><option>Class 10</option>
+          <option>Class 11 - Sci</option><option>Class 11 - Mgmt</option>
+          <option>Class 12 - Sci</option><option>Class 12 - Mgmt</option>
+          <option>Bachelors</option><option>Masters</option>
+        </select>
+      </div>
+      <div class="form-group"><label for="ccPrice">Price (NPR)</label><input type="number" id="ccPrice" min="0" max="1000000" step="1" value="0" inputmode="numeric"><div style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">Enter 0 for a free course. Paid courses open for a student only after Udaan Nepal confirms their payment.</div></div>
+      <p class="modal-sub" style="margin:0 0 16px;">New courses start as a draft. When you are ready, submit it for review — the Udaan Nepal academic team approves it before students can see it.</p>
+      <button type="submit" class="btn btn-primary">Create Course</button>
+    </form>
+  </div>
+</div>
+
+<!-- ===== PAYMENT MODAL ===== -->
+<div class="modal-overlay" id="payModal">
+  <div class="modal-box" style="max-width:480px;">
+    <div class="modal-top">
+      <h3 id="payTitle">Submit payment</h3>
+      <button class="modal-close" id="payClose" aria-label="Close">&times;</button>
+    </div>
+    <p class="modal-sub" id="paySub"></p>
+    <div class="pay-instr" id="payInstr">Loading payment details…</div>
+    <div id="payQrBox" style="display:none;text-align:center;margin:-4px 0 16px;"><img id="payQr" alt="Scan to pay" style="max-width:230px;width:100%;border-radius:12px;background:#fff;padding:8px;"></div>
+    <form id="payForm">
+      <div class="form-group"><label for="payMethod">Paid through</label>
+        <select id="payMethod"><option value="esewa">eSewa</option><option value="khalti">Khalti</option><option value="bank">Bank transfer</option><option value="cash">Cash at office</option><option value="other">Other</option></select></div>
+      <div class="form-group"><label for="payRef">Transaction ID</label><input type="text" id="payRef" maxlength="100" autocomplete="off" placeholder="From your payment receipt"></div>
+      <div class="form-group"><label for="payFile">Payment screenshot (optional if you entered the ID)</label><input type="file" id="payFile" accept="image/jpeg,image/png,application/pdf"><div style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">JPG, PNG or PDF, up to 5 MB.</div></div>
+      <p class="pay-err" id="payErr"></p>
+      <button type="submit" class="btn btn-primary" id="paySubmit">Send for approval</button>
+    </form>
+  </div>
+</div>
+
+<!-- ===== ENROLL / SUGGEST CONFIRM MODAL ===== -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box" style="max-width:420px;">
+    <h3 id="confirmTitle">Confirm</h3>
+    <p class="modal-sub" id="confirmText"></p>
+    <div style="display:flex;gap:12px;justify-content:flex-end;">
+      <button class="btn btn-outline" id="confirmCancel">Cancel</button>
+      <button class="btn btn-primary" id="confirmOk">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="site-content.js"></script>
+<script>
+// Reuse the singleton client created by site-content.js (avoids duplicate GoTrueClient warning)
+const supabaseClient = window.supabaseClient;
+
+/* ===== INLINE TOAST NOTIFICATION ===== */
+(function(){
+  const style = document.createElement('style');
+  style.textContent = `
+  #un-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);z-index:9999;
+    background:#1E2530;border:1px solid rgba(255,255,255,0.14);border-radius:12px;padding:13px 20px 13px 16px;
+    display:flex;align-items:center;gap:12px;font-family:'Manrope',sans-serif;font-size:13.5px;color:#F8FAFC;
+    box-shadow:0 8px 32px rgba(0,0,0,0.55);min-width:240px;max-width:420px;
+    transition:transform .35s cubic-bezier(.22,.9,.32,1),opacity .35s ease;opacity:0;pointer-events:none;}
+  #un-toast.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto;}
+  #un-toast .t-icon{width:20px;height:20px;flex-shrink:0;}
+  #un-toast.t-ok .t-icon{color:#22C55E;}
+  #un-toast.t-err .t-icon{color:#F04452;}
+  #un-toast.t-info .t-icon{color:#00E5FF;}
+  `;
+  document.head.appendChild(style);
+  const el = document.createElement('div'); el.id = 'un-toast';
+  el.innerHTML = '<svg class="t-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg><span class="t-msg"></span>';
+  document.body.appendChild(el);
+})();
+let _toastTimer;
+function showToast(msg, type='info'){
+  const el = document.getElementById('un-toast');
+  const icons = {
+    ok:'<polyline points="20 6 9 17 4 12"/>',
+    err:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+    info:'<circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'
+  };
+  el.querySelector('.t-icon').innerHTML = icons[type] || icons.info;
+  el.querySelector('.t-msg').textContent = msg;
+  el.className = 'show t-' + type;
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(()=>{ el.classList.remove('show'); }, 4000);
+}
+
+let currentUserId = null;
+let parentChildren = []; // children linked to this parent (active only)
+
+async function loadRealRole(){
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if(!user){
+    window.location.href = 'auth?redirect=courses';
+    return null;
+  }
+  currentUserId = user.id;
+  supabaseClient.from('staff_roles').select('role').eq('user_id', user.id).limit(1).then(r=>{
+    if(r && r.data && r.data.length){ const a = document.getElementById('adminLink'); if(a) a.style.display = 'flex'; }
+  }, ()=>{});
+  const { data: profile } = await supabaseClient
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+  const role = profile?.role || 'student';
+  // Pre-load children for parents
+  if(role === 'parent'){
+    const { data: links } = await supabaseClient
+      .from('parent_children')
+      .select('child_id, profiles:child_id(id, full_name)')
+      .eq('parent_id', user.id)
+      .eq('status', 'active');
+    parentChildren = (links||[]).map(l=>l.profiles).filter(Boolean);
+  }
+  return role;
+}
+</script>
+<script>
+/* =========================================================
+   DATA HELPERS — real Supabase queries.
+   Courses/profiles aren't directly linked by a foreign key
+   (both just reference auth.users), so instructor names are
+   fetched separately and merged in JS rather than via a
+   single nested select.
+========================================================= */
+
+function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+function rs(n){ return n>0 ? 'Rs '+Number(n).toLocaleString('en-IN') : 'Free'; }
+const COURSE_STATUS = {
+  draft:['Draft','tag-draft'], pending_review:['In review','tag-review'],
+  published:['Published','tag-published'], rejected:['Needs changes','tag-rejected']
+};
+
+async function fetchProfileNames(ids){
+  const unique = [...new Set(ids)].filter(Boolean);
+  if(unique.length===0) return {};
+  const { data } = await supabaseClient.from('public_profiles').select('id, full_name').in('id', unique);
+  const map = {};
+  (data||[]).forEach(p=>{ map[p.id] = p.full_name; });
+  return map;
+}
+
+async function fetchLessonCounts(courseIds){
+  if(courseIds.length===0) return {};
+  const { data } = await supabaseClient.from('lessons').select('id, course_id').in('course_id', courseIds);
+  const counts = {};
+  (data||[]).forEach(l=>{ counts[l.course_id] = (counts[l.course_id]||0) + 1; });
+  return counts;
+}
+
+async function fetchEnrollmentCounts(courseIds){
+  if(courseIds.length===0) return {};
+  const { data } = await supabaseClient.from('enrollments').select('id, course_id').in('course_id', courseIds);
+  const counts = {};
+  (data||[]).forEach(e=>{ counts[e.course_id] = (counts[e.course_id]||0) + 1; });
+  return counts;
+}
+
+/* Student's enrolled courses, with computed progress from lesson_progress. */
+async function fetchStudentCourses(){
+  const { data: enrollments } = await supabaseClient
+    .from('enrollments').select('id, course_id, status').eq('student_id', currentUserId);
+  const courseIds = (enrollments||[]).map(e=>e.course_id);
+  if(courseIds.length===0) return [];
+  const enrByCourse = {};
+  (enrollments||[]).forEach(e=>{ enrByCourse[e.course_id] = e; });
+  const { data: pays } = await supabaseClient.from('payments')
+    .select('enrollment_id, status, note, submitted_at').eq('student_id', currentUserId).order('submitted_at',{ascending:false});
+
+  const { data: courses } = await supabaseClient.from('courses').select('*').in('id', courseIds);
+  const { data: lessons } = await supabaseClient.from('lessons').select('*').in('course_id', courseIds).order('order_index');
+  const { data: progress } = await supabaseClient.from('lesson_progress').select('lesson_id').eq('student_id', currentUserId);
+  const doneLessonIds = new Set((progress||[]).map(p=>p.lesson_id));
+  const instructorNames = await fetchProfileNames((courses||[]).map(c=>c.instructor_id));
+
+  return (courses||[]).map(c=>{
+    const courseLessons = (lessons||[]).filter(l=>l.course_id===c.id).map(l=>({
+      id:l.id, title:l.title, done:doneLessonIds.has(l.id), time: l.duration_minutes ? l.duration_minutes+' min' : '—', video_url: l.video_url
+    }));
+    const total = courseLessons.length;
+    const doneCount = courseLessons.filter(l=>l.done).length;
+    const progressPct = total>0 ? Math.round((doneCount/total)*100) : 0;
+    const enr = enrByCourse[c.id];
+    const myPays = (pays||[]).filter(p=>p.enrollment_id===enr.id);
+    let pay = 'none';
+    if(enr.status!=='active'){
+      if(myPays.some(p=>p.status==='submitted')) pay = 'submitted';
+      else if(myPays.length && myPays[0].status==='rejected') pay = 'rejected';
+      else pay = 'due';
+    }
+    const status = enr.status!=='active' ? 'payment' : progressPct===100 && total>0 ? 'completed' : progressPct>0 ? 'in-progress' : 'not-started';
+    return {
+      id:c.id, enrollmentId: enr.id, enrStatus: enr.status, pay, payNote: (myPays[0]&&myPays[0].note)||'', price: c.price_npr||0,
+      title:c.title, category:c.category||'General', instructor:instructorNames[c.instructor_id]||'Unknown',
+      level:c.class_level||c.level||'—', status, progress:progressPct, lessons:courseLessons
+    };
+  });
+}
+
+/* Published courses the student hasn't enrolled in yet. */
+async function fetchCatalogCourses(){
+  const { data: enrollments } = await supabaseClient
+    .from('enrollments').select('course_id').eq('student_id', currentUserId);
+  const enrolledIds = (enrollments||[]).map(e=>e.course_id);
+
+  let query = supabaseClient.from('courses').select('*').eq('status','published');
+  const { data: courses } = await query;
+  const available = (courses||[]).filter(c=>!enrolledIds.includes(c.id));
+  const instructorNames = await fetchProfileNames(available.map(c=>c.instructor_id));
+
+  return available.map(c=>({
+    id:c.id, title:c.title, category:c.category||'General',
+    instructor:instructorNames[c.instructor_id]||'Unknown', level:c.level||'—',
+    desc:c.description||'No description yet.', price:c.price_npr||0
+  }));
+}
+
+/* Courses a teacher has created, with real student/lesson counts. */
+async function fetchTeacherCourses(){
+  const { data: courses } = await supabaseClient.from('courses').select('*').eq('instructor_id', currentUserId).order('created_at',{ascending:false});
+  const ids = (courses||[]).map(c=>c.id);
+  const lessonCounts = await fetchLessonCounts(ids);
+  const enrollCounts = await fetchEnrollmentCounts(ids);
+  return (courses||[]).map(c=>({
+    id:c.id, title:c.title, status:c.status, classLevel: c.class_level, price:c.price_npr||0, reviewNote:c.review_note||'',
+    students: enrollCounts[c.id]||0, lessons: lessonCounts[c.id]||0, quizzes:0
+  }));
+}
+
+let currentRole = 'student';
+let activeFilter = 'all';
+let searchTerm = '';
+let STUDENT_COURSES = [];
+let CATALOG_COURSES = [];
+let TEACHER_COURSES = [];
+
+/* ===== SEARCH ===== */
+let searchTimer;
+document.getElementById('searchInput').addEventListener('input', e=>{
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(()=>{ searchTerm = e.target.value.trim().toLowerCase(); render(); }, 200);
+});
+
+/* =========================================================
+   RENDER: STUDENT VIEW
+========================================================= */
+async function renderStudent(){
+  document.getElementById('pageTitle').textContent = 'My Courses';
+  document.getElementById('pageSub').textContent = 'Everything you\'re enrolled in, in one place.';
+
+  STUDENT_COURSES = await fetchStudentCourses();
+  CATALOG_COURSES = await fetchCatalogCourses();
+
+  const enrolled = STUDENT_COURSES.filter(c=>c.status!=='payment').length;
+  const inProgress = STUDENT_COURSES.filter(c=>c.status==='in-progress').length;
+  const completed = STUDENT_COURSES.filter(c=>c.status==='completed').length;
+
+  let filtered = STUDENT_COURSES.filter(c=>{
+    if(activeFilter!=='all' && c.status!==activeFilter) return false;
+    if(searchTerm && !(c.title.toLowerCase().includes(searchTerm) || c.category.toLowerCase().includes(searchTerm))) return false;
+    return true;
+  });
+
+  const filterTabs = [
+    ['all','All'], ['in-progress','In Progress'], ['completed','Completed'], ['not-started','Not Started']
+  ].map(([key,label])=>`<button class="filter-tab ${activeFilter===key?'active':''}" data-filter="${key}">${label}</button>`).join('');
+
+  const cardsHtml = filtered.length ? filtered.map(c=>{
+    if(c.status==='payment'){
+      const lbl = c.pay==='submitted' ? ['Payment under review','tag-review'] : c.pay==='rejected' ? ['Payment rejected','tag-rejected'] : ['Payment due','tag-pay'];
+      const cta = c.pay==='submitted'
+        ? '<button class="btn btn-outline" disabled>Waiting for approval…</button>'
+        : `<button class="btn btn-primary" data-pay="${esc(c.id)}">${c.pay==='rejected'?'Resubmit payment':'Pay '+esc(rs(c.price))} →</button>`;
+      const note = c.pay==='rejected' ? `<div class="review-note">Your last payment was not accepted${c.payNote?': '+esc(c.payNote):'.'} Please check the details and send it again.</div>` : '';
+      const hint = c.pay==='submitted' ? 'We received your payment details. You will get access as soon as Udaan Nepal confirms them.' : 'This is a paid course. It opens as soon as your payment is confirmed.';
+      return `
+      <div class="course-card">
+        <div class="course-media">
+          <span class="course-status-tag ${lbl[1]}">${lbl[0]}</span>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">${esc(c.category)}</div>
+          <h4>${esc(c.title)}</h4>
+          <div class="course-sub">${esc(c.instructor)} · ${esc(c.level)}</div>
+          <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:14px;">${hint}</p>
+          ${note}
+          ${cta}
+          ${c.pay!=='submitted' ? `<button class="btn btn-outline btn-sm" style="margin-top:10px;" data-cancel-enroll="${esc(c.id)}">Cancel enrollment</button>` : ''}
+        </div>
+      </div>`;
+    }
+    const tagClass = c.status==='completed' ? 'tag-completed' : c.status==='in-progress' ? 'tag-progress' : 'tag-notstarted';
+    const tagLabel = c.status==='completed' ? 'Completed' : c.status==='in-progress' ? 'In Progress' : 'Not Started';
+    const ctaLabel = c.status==='not-started' ? 'Start Course' : c.status==='completed' ? 'Review Course' : 'Continue';
+    return `
+    <div class="course-card">
+      <div class="course-media">
+        <span class="course-status-tag ${tagClass}">${tagLabel}</span>
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <div class="course-body">
+        <div class="course-cat">${c.category}</div>
+        <h4>${esc(c.title)}</h4>
+        <div class="course-sub">${esc(c.instructor)} · ${esc(c.level)}</div>
+        <div class="progress-track"><div class="progress-fill" style="width:${c.progress}%;"></div></div>
+        <div class="progress-label">${c.progress}% completed</div>
+        <button class="btn btn-primary" data-open-course="${c.id}">${ctaLabel} →</button>
+      </div>
+    </div>`;
+  }).join('') : '';
+
+  const catalogHtml = CATALOG_COURSES.length ? CATALOG_COURSES.map(c=>`
+    <div class="course-card">
+      <div class="course-media">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <div class="course-body">
+        <div class="course-cat">${c.category}</div>
+        <h4>${esc(c.title)}</h4>
+        <div class="course-sub">${esc(c.instructor)} · ${esc(c.level)} · <b>${esc(rs(c.price))}</b></div>
+        <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:16px;">${esc(c.desc)}</p>
+        <button class="btn btn-outline" data-enroll="${esc(c.id)}">${c.price>0?'Enroll · '+esc(rs(c.price)):'Enroll'}</button>
+      </div>
+    </div>`).join('') : '<p style="color:var(--text-muted);font-size:13.5px;">No published courses available to browse yet.</p>';
+
+  document.getElementById('pageContent').innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-box"><div class="num">${String(enrolled).padStart(2,'0')}</div><div class="label">Enrolled Courses</div></div>
+      <div class="stat-box"><div class="num">${String(inProgress).padStart(2,'0')}</div><div class="label">In Progress</div></div>
+      <div class="stat-box"><div class="num">${String(completed).padStart(2,'0')}</div><div class="label">Completed</div></div>
+      <div class="stat-box"><div class="num">—</div><div class="label">Quiz Average</div></div>
+    </div>
+
+    <div class="filter-tabs" id="filterTabs">${filterTabs}</div>
+
+    ${filtered.length ? `<div class="course-grid">${cardsHtml}</div>` : `
+      <div class="empty-state show">
+        <h4>No courses found</h4>
+        <p>${STUDENT_COURSES.length===0 ? 'You aren\'t enrolled in any courses yet — browse below to get started.' : 'Try a different filter or search term.'}</p>
+        ${STUDENT_COURSES.length>0 ? '<button class="btn btn-outline" id="clearFilterBtn">Clear Filters</button>' : ''}
+      </div>`
+    }
+
+    <div class="section-title" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;">
+      <span>Browse More Courses</span>
+      <a href="enroll-course" style="font-size:12.5px;color:var(--cyan);font-weight:700;text-transform:none;letter-spacing:0;">Open Full Catalog →</a>
+    </div>
+    <div class="course-grid">${catalogHtml}</div>
+  `;
+
+  document.querySelectorAll('#filterTabs .filter-tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ activeFilter = btn.dataset.filter; render(); });
+  });
+  const clearBtn = document.getElementById('clearFilterBtn');
+  if(clearBtn) clearBtn.addEventListener('click', ()=>{ activeFilter='all'; searchTerm=''; document.getElementById('searchInput').value=''; render(); });
+
+  document.querySelectorAll('[data-open-course]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ window.location.href = 'learn?course=' + encodeURIComponent(btn.dataset.openCourse); });
+  });
+  document.querySelectorAll('[data-pay]').forEach(btn=>{
+    btn.addEventListener('click', ()=>openPayModal(btn.dataset.pay));
+  });
+  document.querySelectorAll('[data-cancel-enroll]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const c = STUDENT_COURSES.find(x=>x.id===btn.dataset.cancelEnroll);
+      openConfirm('Cancel enrollment', `Cancel your enrollment in "${c.title}"? You can enroll again later.`, async ()=>{
+        const { error } = await supabaseClient.from('enrollments').delete().eq('id', c.enrollmentId);
+        if(error){ showToast('Could not cancel: ' + error.message, 'err'); return; }
+        render();
+      });
+    });
+  });
+  document.querySelectorAll('[data-enroll]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const course = CATALOG_COURSES.find(c=>c.id===btn.dataset.enroll);
+      const paid = course.price>0;
+      openConfirm('Enroll in Course', paid
+        ? `"${course.title}" costs ${rs(course.price)}. After you enroll, you will send your payment details and the course opens once Udaan Nepal confirms the payment.`
+        : `Enroll in "${course.title}"? You'll be able to start learning right away.`, async ()=>{
+        const { error } = await supabaseClient.from('enrollments').insert({ student_id: currentUserId, course_id: course.id });
+        if(error){ showToast('Could not enroll: ' + error.message, 'err'); return; }
+        await render();
+        if(paid) openPayModal(course.id);
+      });
+    });
+  });
+}
+
+/* =========================================================
+   RENDER: TEACHER VIEW
+========================================================= */
+async function renderTeacher(){
+  document.getElementById('pageTitle').textContent = 'My Courses';
+  document.getElementById('pageSub').textContent = 'Create and manage the courses you teach.';
+
+  TEACHER_COURSES = await fetchTeacherCourses();
+
+  const totalStudents = TEACHER_COURSES.reduce((s,c)=>s+c.students,0);
+  const totalLessons = TEACHER_COURSES.reduce((s,c)=>s+c.lessons,0);
+
+  let filtered = TEACHER_COURSES.filter(c=>{
+    if(searchTerm && !c.title.toLowerCase().includes(searchTerm)) return false;
+    return true;
+  });
+
+  const rowsHtml = filtered.map(c=>{
+    const st = COURSE_STATUS[c.status] || COURSE_STATUS.draft;
+    return `
+    <div class="course-row">
+      <div>
+        <div class="course-row-title">
+          <h4>${esc(c.title)}</h4>
+          <span class="course-status-tag ${st[1]}">${st[0]}</span>
+          ${c.classLevel ? `<span class="course-status-tag tag-notstarted">${esc(c.classLevel)}</span>` : ''}
+        </div>
+        <div class="course-stats"><span>${c.students} Students</span><span>${c.lessons} Lessons</span><span>${esc(rs(c.price))}</span></div>
+        ${c.status==='rejected' ? `<div class="review-note"><b>The academic team asked for changes:</b> ${esc(c.reviewNote||'No note was left.')}</div>` : ''}
+      </div>
+      <button class="btn btn-outline" data-manage="${c.id}">Manage Course →</button>
+    </div>`;
+  }).join('');
+
+  document.getElementById('pageContent').innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-box"><div class="num">${String(TEACHER_COURSES.length).padStart(2,'0')}</div><div class="label">My Courses</div></div>
+      <div class="stat-box"><div class="num">${totalStudents}</div><div class="label">Students</div></div>
+      <div class="stat-box"><div class="num">${totalLessons}</div><div class="label">Lessons</div></div>
+      <div class="stat-box"><div class="num">—</div><div class="label">Quizzes</div></div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+      <div class="section-title" style="margin-bottom:0;">Your Courses</div>
+      <button class="btn btn-primary btn-sm" id="createCourseBtn">+ Create Course</button>
+    </div>
+
+    ${filtered.length ? rowsHtml : `
+      <div class="empty-state show">
+        <h4>No courses found</h4>
+        <p>${TEACHER_COURSES.length===0 ? 'Create your first course to get started.' : 'Try a different search term.'}</p>
+      </div>`
+    }
+  `;
+
+  document.getElementById('createCourseBtn').addEventListener('click', ()=>{ document.getElementById('createModal').classList.add('active'); });
+  document.querySelectorAll('[data-manage]').forEach(btn=>{
+    btn.addEventListener('click', ()=>openManageModal(btn.dataset.manage));
+  });
+}
+
+async function openManageModal(id){
+  const course = TEACHER_COURSES.find(c=>c.id===id);
+  if(!course) return;
+  document.getElementById('mmTitle').textContent = course.title;
+  document.getElementById('mmSub').textContent = `${course.students} Students · ${course.lessons} Lessons`;
+
+  const { data: fullCourse } = await supabaseClient.from('courses').select('*').eq('id', id).single();
+
+  document.getElementById('mmOverview').innerHTML = `
+    <div class="info-panel" style="margin-bottom:16px;">
+      <div class="info-panel-title">Course Overview</div>
+      <div class="info-row"><span class="k">Category</span><span class="v">${esc(fullCourse?.category||'—')}</span></div>
+      <div class="info-row"><span class="k">Class / Grade</span><span class="v">${esc(fullCourse?.class_level||'General / Skill Course')}</span></div>
+      <div class="info-row"><span class="k">Level</span><span class="v">${esc(fullCourse?.level||'—')}</span></div>
+      <div class="info-row"><span class="k">Status</span><span class="v">${esc((COURSE_STATUS[fullCourse?.status]||COURSE_STATUS.draft)[0])}</span></div>
+      <div class="info-row"><span class="k">Price</span><span class="v">${esc(rs(fullCourse?.price_npr||0))}</span></div>
+    </div>
+    <p style="font-size:13.5px;color:var(--text-secondary);">${esc(fullCourse?.description||'No description added yet.')}</p>
+  `;
+
+  await renderManageLessons(id);
+  await renderManageQuizzes(id);
+  await renderManageStudents(id);
+  await renderManageResults(id);
+
+  const st = fullCourse?.status || 'draft';
+  const lessonCount = course.lessons;
+  const msg = {
+    draft: 'This course is a draft — only you can see it. When it is ready, submit it for review. The Udaan Nepal academic team checks the quality and then publishes it.',
+    rejected: 'The academic team asked for changes' + (fullCourse?.review_note ? ': ' + fullCourse.review_note : '.') + ' Update the course and submit it again.',
+    pending_review: 'This course is waiting for the academic team to review it. You can still add lessons. Withdraw it if you want to keep editing privately.',
+    published: 'This course is live. To unpublish it or change its price, please contact the Udaan Nepal academic team.'
+  }[st] || '';
+  const editable = st !== 'published';
+  document.getElementById('mmSettings').innerHTML = `
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:16px;">${esc(msg)}</p>
+    ${editable ? `<div class="form-group"><label for="mmPrice">Price (NPR) — 0 means free</label><input type="number" id="mmPrice" min="0" max="1000000" step="1" value="${Number(fullCourse?.price_npr||0)}" inputmode="numeric"></div>
+    <button class="btn btn-outline btn-sm" id="savePriceBtn" style="margin-bottom:18px;">Save price</button>` : ''}
+    <div class="group-label">Course picture</div>
+    <div id="thumbBox" style="margin-bottom:16px;">${fullCourse?.thumbnail_url ? `<img src="${esc(fullCourse.thumbnail_url)}" alt="" style="width:160px;height:90px;object-fit:cover;border-radius:10px;display:block;margin-bottom:8px;">` : '<p style="font-size:13px;color:var(--text-muted);margin-bottom:8px;">No picture yet.</p>'}
+      <input type="file" id="thumbFile" accept="image/png,image/jpeg,image/webp"><div id="thumbMsg" style="font-size:12.5px;color:var(--text-muted);min-height:16px;margin-top:4px;">Wide pictures work best (under 2 MB).</div></div>
+    <div class="group-label">Live class (Google Meet)</div>
+    <div class="form-group"><label for="liveLink">Meet link <span class="opt">(starts with https://)</span></label><input type="url" id="liveLink" placeholder="https://meet.google.com/abc-defg-hij"></div>
+    <div class="form-group"><label for="liveWhen">When <span class="opt">(e.g. Every Sunday 7:00 PM)</span></label><input type="text" id="liveWhen" maxlength="200"></div>
+    <button class="btn btn-outline btn-sm" id="saveLiveBtn" style="margin-bottom:18px;">Save live class</button>
+    <div id="settingsErr" class="pay-err"></div>
+    ${st==='draft'||st==='rejected' ? `<button class="btn btn-primary" id="submitReviewBtn">Submit for review</button>` : ''}
+    ${st==='pending_review' ? `<button class="btn btn-outline" id="withdrawBtn">Back to draft</button>` : ''}
+  `;
+  const settingsErr = m => { document.getElementById('settingsErr').textContent = m || ''; };
+  async function setStatus(newStatus){
+    const { error } = await supabaseClient.from('courses').update({ status:newStatus }).eq('id', id);
+    if(error){ settingsErr('Could not update: ' + error.message); return; }
+    document.getElementById('manageModal').classList.remove('active');
+    render();
+  }
+  const savePriceBtn = document.getElementById('savePriceBtn');
+  if(savePriceBtn) savePriceBtn.addEventListener('click', async ()=>{
+    const price = Math.max(0, Math.floor(Number(document.getElementById('mmPrice').value) || 0));
+    const { error } = await supabaseClient.from('courses').update({ price_npr: price }).eq('id', id);
+    if(error){ settingsErr('Could not save price: ' + error.message); return; }
+    settingsErr(''); savePriceBtn.textContent = 'Saved ✓'; setTimeout(()=>{ savePriceBtn.textContent='Save price'; }, 1500);
+  });
+  supabaseClient.from('course_live').select('*').eq('course_id', id).maybeSingle().then(({ data: lv })=>{
+    if(lv){ document.getElementById('liveLink').value = lv.meet_link || ''; document.getElementById('liveWhen').value = lv.schedule || ''; }
+  });
+  document.getElementById('saveLiveBtn').addEventListener('click', async ()=>{
+    const link = document.getElementById('liveLink').value.trim(), when = document.getElementById('liveWhen').value.trim();
+    if(!link){
+      const { error } = await supabaseClient.from('course_live').delete().eq('course_id', id);
+      settingsErr(error ? 'Could not remove: ' + error.message : ''); return;
+    }
+    if(!/^https:\/\//i.test(link)){ settingsErr('The link must start with https://'); return; }
+    const { error } = await supabaseClient.from('course_live').upsert({ course_id:id, meet_link:link, schedule:when||null, updated_at:new Date().toISOString() });
+    if(error){ settingsErr('Could not save: ' + error.message); return; }
+    settingsErr(''); const b = document.getElementById('saveLiveBtn'); b.textContent = 'Saved ✓'; setTimeout(()=>{ b.textContent='Save live class'; }, 1500);
+  });
+  document.getElementById('thumbFile').addEventListener('change', async (e)=>{
+    const f = e.target.files[0]; if(!f) return; const msg = document.getElementById('thumbMsg');
+    if(f.size > 2*1024*1024){ msg.textContent = 'Picture is larger than 2 MB.'; return; }
+    msg.textContent = 'Uploading…';
+    const ext = (f.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,5)||'jpg';
+    const path = `${id}/${Date.now()}.${ext}`;
+    const up = await supabaseClient.storage.from('course-thumbnails').upload(path, f, { contentType: f.type });
+    if(up.error){ msg.textContent = 'Upload failed: ' + up.error.message; return; }
+    const url = supabaseClient.storage.from('course-thumbnails').getPublicUrl(path).data.publicUrl;
+    const { error } = await supabaseClient.from('courses').update({ thumbnail_url: url }).eq('id', id);
+    if(error){ msg.textContent = 'Could not save: ' + error.message; return; }
+    msg.textContent = 'Picture saved ✓';
+  });
+  const submitBtn = document.getElementById('submitReviewBtn');
+  if(submitBtn) submitBtn.addEventListener('click', ()=>{
+    const freshCount = (TEACHER_COURSES.find(c=>c.id===id)||{}).lessons;
+    if(!freshCount){ settingsErr('Add at least one lesson before submitting for review.'); return; }
+    setStatus('pending_review');
+  });
+  const withdrawBtn = document.getElementById('withdrawBtn');
+  if(withdrawBtn) withdrawBtn.addEventListener('click', ()=>setStatus('draft'));
+
+  document.querySelectorAll('#manageModal .modal-tab').forEach(t=>t.classList.toggle('active', t.dataset.mtab==='overview'));
+  document.querySelectorAll('#manageModal .modal-tab-panel').forEach(p=>p.classList.toggle('active', p.dataset.mpanel==='overview'));
+  document.getElementById('manageModal').classList.add('active');
+}
+
+
+/* ======================= QUIZZES (teacher) ======================= */
+async function renderManageQuizzes(courseId, openQuizId){
+  const box = document.getElementById('mmQuizzes');
+  const { data: quizzes, error } = await supabaseClient.from('quizzes').select('*').eq('course_id', courseId).order('created_at');
+  if(error){ box.innerHTML = '<p style="font-size:13px;color:var(--red);">Quizzes are not ready yet (' + esc(error.message) + ').</p>'; return; }
+  const list = quizzes || [];
+  box.textContent = '';
+  const mk = (tag, css, text) => { const e = document.createElement(tag); if(css) e.style.cssText = css; if(text != null) e.textContent = text; return e; };
+  if(!list.length) box.append(mk('p','font-size:13px;color:var(--text-muted);margin-bottom:14px;','No quizzes yet. Students in this course can take a quiz once you publish it.'));
+  list.forEach(q => {
+    const row = mk('div','padding:10px 0;border-top:1px solid var(--border);');
+    row.append(mk('div','font-weight:700;', q.title + (q.is_published ? '' : ' (draft)')));
+    const meta = mk('div','font-size:12.5px;color:var(--text-muted);margin-bottom:6px;', q.time_limit_minutes + ' min · pass mark ' + q.passing_score + '%');
+    row.append(meta);
+    const btns = mk('div','display:flex;gap:8px;flex-wrap:wrap;');
+    const b = (label, fn, danger) => { const x = mk('button', danger ? 'color:var(--red);' : '', label); x.className = 'btn btn-ghost btn-sm'; x.addEventListener('click', fn); return x; };
+    btns.append(
+      b('Edit questions', () => editQuiz(courseId, q)),
+      b(q.is_published ? 'Unpublish' : 'Publish', async () => {
+        if(!q.is_published){ const { count } = await supabaseClient.from('quiz_questions').select('id', { count:'exact', head:true }).eq('quiz_id', q.id); if(!count){ showToast('Add at least one question before publishing.', 'info'); return; } }
+        const { error } = await supabaseClient.from('quizzes').update({ is_published: !q.is_published }).eq('id', q.id);
+        if(error){ showToast(error.message, 'err'); return; } renderManageQuizzes(courseId); }),
+      b('Delete', async () => { if(!confirm('Delete this quiz and all its questions?')) return; const { error } = await supabaseClient.from('quizzes').delete().eq('id', q.id); if(error){ showToast(error.message, 'err'); return; } renderManageQuizzes(courseId); }, true));
+    row.append(btns); box.append(row);
+  });
+  box.append(mk('div','group-label;margin-top:18px;','New quiz').constructor === Object ? null : (()=>{ const g = mk('div','margin-top:18px;','Add a quiz'); g.className = 'group-label'; return g; })());
+  const f = document.createElement('div');
+  f.innerHTML = '<div class="form-group"><label for="nqTitle">Quiz title</label><input type="text" id="nqTitle" maxlength="160"></div>' +
+    '<div class="form-group"><label for="nqPass">Pass mark (%)</label><input type="number" id="nqPass" min="1" max="100" value="60"></div>' +
+    '<div class="form-group"><label for="nqTime">Time limit (minutes)</label><input type="number" id="nqTime" min="1" max="240" value="15"></div>';
+  box.append(f);
+  const add = mk('button', '', '+ Create quiz'); add.className = 'btn btn-primary btn-sm';
+  add.addEventListener('click', async () => {
+    const title = document.getElementById('nqTitle').value.trim(); if(!title){ showToast('Please enter a quiz title.', 'info'); return; }
+    const { data, error } = await supabaseClient.from('quizzes').insert({ course_id: courseId, title, passing_score: parseInt(document.getElementById('nqPass').value,10) || 60, time_limit_minutes: parseInt(document.getElementById('nqTime').value,10) || 15 }).select().single();
+    if(error){ showToast('Could not create: ' + error.message, 'err'); return; }
+    await renderManageQuizzes(courseId); editQuiz(courseId, data);
+  });
+  box.append(add);
+}
+
+async function editQuiz(courseId, quiz){
+  const box = document.getElementById('mmQuizzes');
+  const mk = (tag, css, text) => { const e = document.createElement(tag); if(css) e.style.cssText = css; if(text != null) e.textContent = text; return e; };
+  const { data: qs } = await supabaseClient.from('quiz_questions').select('*, quiz_options(*)').eq('quiz_id', quiz.id).order('sort_order');
+  const questions = qs || [];
+  box.textContent = '';
+  const back = mk('button','margin-bottom:12px;','← All quizzes'); back.className = 'btn btn-ghost btn-sm'; back.addEventListener('click', () => renderManageQuizzes(courseId)); box.append(back);
+  box.append(mk('h4','margin-bottom:10px;', quiz.title));
+  if(!questions.length) box.append(mk('p','font-size:13px;color:var(--text-muted);','No questions yet.'));
+  questions.forEach((q, i) => {
+    const row = mk('div','padding:10px 0;border-top:1px solid var(--border);');
+    row.append(mk('div','font-weight:600;', (i+1) + '. ' + q.question_text));
+    (q.quiz_options || []).sort((a,b)=>a.sort_order-b.sort_order).forEach(o => row.append(mk('div','font-size:13px;margin-left:12px;' + (o.is_correct ? 'color:var(--green);font-weight:700;' : 'color:var(--text-muted);'), (o.is_correct ? '✓ ' : '• ') + o.option_text)));
+    const del = mk('button','color:var(--red);margin-top:6px;','Delete question'); del.className = 'btn btn-ghost btn-sm';
+    del.addEventListener('click', async () => { if(!confirm('Delete this question?')) return; const { error } = await supabaseClient.from('quiz_questions').delete().eq('id', q.id); if(error){ showToast(error.message, 'err'); return; } editQuiz(courseId, quiz); });
+    row.append(del); box.append(row);
+  });
+  const g = mk('div','margin-top:18px;','Add a question'); g.className = 'group-label'; box.append(g);
+  const form = document.createElement('div');
+  form.innerHTML = '<div class="form-group"><label for="nqText">Question</label><textarea id="nqText" maxlength="1000"></textarea></div>' +
+    '<div class="form-group"><label for="nqCode">Code or extra text <span class="opt">(optional)</span></label><textarea id="nqCode" maxlength="4000"></textarea></div>' +
+    '<div class="form-group"><label>Answer choices <span class="opt">(tap the circle next to the correct one)</span></label>' +
+    [1,2,3,4].map(n => '<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;"><input type="radio" name="nqCorrect" value="' + n + '"' + (n===1?' checked':'') + ' style="width:auto;"><input type="text" class="nqOpt" placeholder="Choice ' + n + (n>2?' (optional)':'') + '" maxlength="400"></div>').join('') + '</div>' +
+    '<div class="form-group"><label for="nqExp">Why is it correct? <span class="opt">(optional, shown after the quiz)</span></label><textarea id="nqExp" maxlength="1000"></textarea></div>';
+  box.append(form);
+  const add = mk('button','','+ Add question'); add.className = 'btn btn-primary btn-sm';
+  add.addEventListener('click', async () => {
+    const text = document.getElementById('nqText').value.trim();
+    const opts = [...document.querySelectorAll('.nqOpt')].map((el, i) => ({ text: el.value.trim(), n: i+1 })).filter(o => o.text);
+    const correctN = parseInt(document.querySelector('input[name="nqCorrect"]:checked').value, 10);
+    if(!text){ showToast('Please write the question.', 'info'); return; }
+    if(opts.length < 2){ showToast('Please give at least two answer choices.', 'info'); return; }
+    if(!opts.some(o => o.n === correctN)){ showToast('The selected correct answer is empty — please fill it in.', 'info'); return; }
+    add.disabled = true;
+    const { data: nq, error } = await supabaseClient.from('quiz_questions').insert({ quiz_id: quiz.id, question_text: text, code_snippet: document.getElementById('nqCode').value.trim() || null, explanation: document.getElementById('nqExp').value.trim() || null, sort_order: questions.length + 1 }).select().single();
+    if(error){ showToast('Could not add: ' + error.message, 'err'); add.disabled = false; return; }
+    const { error: oe } = await supabaseClient.from('quiz_options').insert(opts.map((o, i) => ({ question_id: nq.id, option_text: o.text, is_correct: o.n === correctN, sort_order: i+1 })));
+    if(oe){ await supabaseClient.from('quiz_questions').delete().eq('id', nq.id); showToast('Could not save the choices: ' + oe.message, 'err'); add.disabled = false; return; }
+    editQuiz(courseId, quiz);
+  });
+  box.append(add);
+}
+
+async function renderManageLessons(courseId){
+  const { data: lessons } = await supabaseClient.from('lessons').select('*').eq('course_id', courseId).order('order_index');
+  { const tc = TEACHER_COURSES.find(c=>c.id===courseId); if(tc){ tc.lessons = (lessons||[]).length; const sub = document.getElementById('mmSub'); if(sub) sub.textContent = `${tc.students} Students · ${tc.lessons} Lessons`; } }
+  const listHtml = (lessons||[]).length ? (lessons||[]).map((l,i)=>`
+    <div class="lesson-item">
+      <div class="lnum">${i+1}</div>
+      <div class="ltitle">${esc(l.title)}${(l.video_url && /^https?:\/\//i.test(l.video_url)) ? ` · <a href="${esc(l.video_url)}" target="_blank" rel="noopener" style="color:var(--cyan);">▶ Video</a>` : ''}${l.video_path ? ' · 🎞 Uploaded video' : ''}</div>
+      <div class="ltime">${l.duration_minutes?l.duration_minutes+' min':'—'}</div>
+    </div>
+  `).join('') : '<p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">No lessons yet — add your first one below.</p>';
+
+  const { data: materials } = await supabaseClient.from('materials').select('*').eq('course_id', courseId).order('created_at');
+  const materialsHtml = (materials||[]).length ? (materials||[]).map(m=>`
+    <div class="lesson-item">
+      <div class="ltitle">📄 ${esc(m.file_name)}</div>
+      <button class="btn btn-ghost btn-sm" data-download="${esc(m.file_path)}">Download</button>
+      <button class="btn btn-ghost btn-sm" data-delete-material="${esc(m.id)}" data-path="${esc(m.file_path)}" style="color:var(--red);">Delete</button>
+    </div>
+  `).join('') : '<p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">No materials uploaded yet.</p>';
+
+  document.getElementById('mmLessons').innerHTML = `
+    <div style="margin-bottom:18px;">${listHtml}</div>
+    <div class="group-label">Add a Lesson</div>
+    <div class="form-group"><label for="newLessonTitle">Lesson Title</label><input type="text" id="newLessonTitle"></div>
+    <div class="form-group"><label for="newLessonVideo">Video URL <span class="opt">(optional — YouTube, Vimeo, etc.)</span></label><input type="url" id="newLessonVideo" placeholder="https://youtube.com/watch?v=..."></div>
+    <div class="form-group"><label for="newLessonFile">…or upload a video file <span class="opt">(MP4 or WebM, up to 50 MB)</span></label><input type="file" id="newLessonFile" accept="video/mp4,video/webm"><div id="lessonUpMsg" style="font-size:12.5px;color:var(--text-muted);min-height:16px;"></div></div>
+    <div class="form-group"><label for="newLessonDuration">Duration (minutes, optional)</label><input type="number" id="newLessonDuration" min="1"></div>
+    <button class="btn btn-primary btn-sm" id="addLessonBtn">+ Add Lesson</button>
+
+    <div class="group-label" style="margin-top:26px;">Course Materials</div>
+    <div style="margin-bottom:14px;">${materialsHtml}</div>
+    <div class="form-group"><label for="materialFile">Upload a PDF or document</label><input type="file" id="materialFile" accept=".pdf,.doc,.docx,.ppt,.pptx"></div>
+    <button class="btn btn-primary btn-sm" id="uploadMaterialBtn">+ Upload File</button>
+  `;
+
+  document.getElementById('addLessonBtn').addEventListener('click', async ()=>{
+    const title = document.getElementById('newLessonTitle').value.trim();
+    if(!title) return;
+    const duration = parseInt(document.getElementById('newLessonDuration').value) || null;
+    const videoUrl = document.getElementById('newLessonVideo').value.trim() || null;
+    if(videoUrl && !/^https:\/\//i.test(videoUrl)){ showToast('The video link must start with https://', 'info'); return; }
+    let videoPath = null;
+    const vf = document.getElementById('newLessonFile').files[0];
+    if(vf){
+      if(vf.size > 50*1024*1024){ showToast('Video is larger than 50 MB. Upload it to YouTube (unlisted) and paste the link instead.', 'info'); return; }
+      const btn = document.getElementById('addLessonBtn'); btn.disabled = true; btn.textContent = 'Uploading video…';
+      const safe = vf.name.replace(/[^A-Za-z0-9._-]/g,'_');
+      const path = `${courseId}/videos/${Date.now()}_${safe}`;
+      const { error: ve } = await supabaseClient.storage.from('course-materials').upload(path, vf, { contentType: vf.type });
+      btn.disabled = false; btn.textContent = '+ Add Lesson';
+      if(ve){ showToast('Video upload failed: ' + ve.message, 'err'); return; }
+      videoPath = path;
+    }
+    const { error: le } = await supabaseClient.from('lessons').insert({ course_id: courseId, title, duration_minutes: duration, video_url: videoUrl, video_path: videoPath, order_index: (lessons||[]).length });
+    if(le){ showToast('Could not add the lesson: ' + le.message, 'err'); return; }
+    await renderManageLessons(courseId);
+    TEACHER_COURSES = await fetchTeacherCourses();
+  });
+
+  document.getElementById('uploadMaterialBtn').addEventListener('click', async ()=>{
+    const fileInput = document.getElementById('materialFile');
+    const file = fileInput.files[0];
+    if(!file) return;
+    const btn = document.getElementById('uploadMaterialBtn');
+    btn.disabled = true;
+    btn.textContent = 'Uploading...';
+
+    const filePath = `${courseId}/${Date.now()}_${file.name}`;
+    const { error: uploadError } = await supabaseClient.storage.from('course-materials').upload(filePath, file);
+    if(uploadError){
+      showToast('Upload failed: ' + uploadError.message, 'err');
+      btn.disabled = false;
+      btn.textContent = '+ Upload File';
+      return;
+    }
+    await supabaseClient.from('materials').insert({ course_id: courseId, file_name: file.name, file_path: filePath, uploaded_by: currentUserId });
+    await renderManageLessons(courseId);
+  });
+
+  document.querySelectorAll('#mmLessons [data-download]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const { data, error } = await supabaseClient.storage.from('course-materials').createSignedUrl(btn.dataset.download, 60);
+      if(error){ showToast('Could not open file: ' + error.message, 'err'); return; }
+      window.open(data.signedUrl, '_blank');
+    });
+  });
+
+  document.querySelectorAll('#mmLessons [data-delete-material]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      if(!confirm('Delete this file? This cannot be undone.')) return;
+      await supabaseClient.storage.from('course-materials').remove([btn.dataset.path]);
+      await supabaseClient.from('materials').delete().eq('id', btn.dataset.deleteMaterial);
+      await renderManageLessons(courseId);
+    });
+  });
+}
+
+async function renderManageStudents(courseId){
+  const { data: enrollments } = await supabaseClient.from('enrollments').select('student_id, status, created_at').eq('course_id', courseId);
+  const names = await fetchProfileNames((enrollments||[]).map(e=>e.student_id));
+  const listHtml = (enrollments||[]).length
+    ? (enrollments||[]).map(e=>`
+      <div class="lesson-item">
+        <div class="ltitle">${names[e.student_id]||'Unknown student'}</div>
+        <div class="ltime">${e.status==='active'?'<span style="color:#22C55E;font-size:11px;">●</span> Active':'<span style="color:var(--amber);font-size:11px;">●</span> '+esc(e.status||'pending')}</div>
+      </div>`).join('')
+    : '<div class="placeholder-block">No students enrolled yet.</div>';
+  document.getElementById('mmStudents').innerHTML = listHtml;
+}
+
+async function renderManageResults(courseId){
+  const el = document.getElementById('mmResults');
+  if(!el) return;
+  try{
+    const { data: quizzes } = await supabaseClient.from('quizzes').select('id, title').eq('course_id', courseId);
+    if(!quizzes || quizzes.length===0){
+      el.innerHTML = '<div class="placeholder-block">No quizzes in this course yet. Add quizzes to see student results here.</div>';
+      return;
+    }
+    const quizIds = quizzes.map(q=>q.id);
+    const { data: attempts } = await supabaseClient.from('quiz_attempts').select('user_id, quiz_id, score, passed, created_at').in('quiz_id', quizIds).order('created_at', {ascending:false});
+    if(!attempts || attempts.length===0){
+      el.innerHTML = '<div class="placeholder-block">No students have taken any quizzes yet.</div>';
+      return;
+    }
+    const nameMap = await fetchProfileNames([...new Set(attempts.map(a=>a.user_id))]);
+    const quizMap = {};
+    quizzes.forEach(q=>{ quizMap[q.id]=q.title; });
+    const rows = attempts.map(a=>`
+      <div class="lesson-item">
+        <div class="lnum">${a.passed?'✓':'✗'}</div>
+        <div class="ltitle" style="flex:1;">${nameMap[a.user_id]||'Student'} · <span style="color:var(--text-muted);font-size:12px;">${esc(quizMap[a.quiz_id]||'Quiz')}</span></div>
+        <div class="ltime" style="font-size:13px;font-weight:700;color:${a.passed?'#22C55E':'var(--red)'};">${a.score}%</div>
+      </div>`).join('');
+    el.innerHTML = rows;
+  } catch(e){
+    el.innerHTML = '<div class="placeholder-block">Could not load results.</div>';
+  }
+}
+
+/* =========================================================
+   RENDER: PARENT VIEW
+========================================================= */
+async function renderParent(){
+  document.getElementById('pageTitle').textContent = 'Recommended Courses';
+  document.getElementById('pageSub').textContent = 'Browse courses and suggest ones that fit your child.';
+
+  // Parent-child linking isn't built yet, so this shows the published
+  // catalog for browsing purposes; the "Suggest" action is still a
+  // placeholder until that feature exists.
+  const { data: courses } = await supabaseClient.from('courses').select('*').eq('status','published');
+  const instructorNames = await fetchProfileNames((courses||[]).map(c=>c.instructor_id));
+  CATALOG_COURSES = (courses||[]).map(c=>({
+    id:c.id, title:c.title, category:c.category||'General',
+    instructor:instructorNames[c.instructor_id]||'Unknown', level:c.level||'—',
+    desc:c.description||'No description yet.'
+  }));
+
+  let filtered = CATALOG_COURSES.filter(c=>{
+    if(searchTerm && !c.title.toLowerCase().includes(searchTerm)) return false;
+    return true;
+  });
+
+  const cardsHtml = filtered.map(c=>`
+    <div class="course-card">
+      <div class="course-media">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <div class="course-body">
+        <div class="course-cat">${c.category}</div>
+        <h4>${c.title}</h4>
+        <div class="course-sub">${c.instructor} · ${c.level}</div>
+        <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:16px;">${c.desc}</p>
+        <button class="btn btn-primary" data-suggest="${c.id}">Suggest to Your Child</button>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('pageContent').innerHTML = `
+    <div class="section-title">Recommended Courses</div>
+    ${filtered.length ? `<div class="course-grid">${cardsHtml}</div>` : `
+      <div class="empty-state show"><h4>No courses found</h4><p>No published courses are available yet.</p></div>`}
+  `;
+
+  document.querySelectorAll('[data-suggest]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const course = CATALOG_COURSES.find(c=>c.id===btn.dataset.suggest);
+      if(!parentChildren.length){
+        showToast('No linked children yet. Link a child from your Profile page first.', 'err');
+        return;
+      }
+      if(parentChildren.length === 1){
+        // Only one child — suggest directly after confirm
+        openConfirm('Suggest Course', `Send "${course.title}" as a suggestion to ${parentChildren[0].full_name}?`, async ()=>{
+          await doSuggestCourse(course.id, parentChildren[0].id, parentChildren[0].full_name, course.title);
+        });
+      } else {
+        // Multiple children — show child picker
+        openChildPickerForSuggest(course);
+      }
+    });
+  });
+}
+
+async function doSuggestCourse(courseId, childId, childName, courseTitle){
+  const { error } = await supabaseClient.from('course_suggestions').insert({
+    parent_id: currentUserId,
+    child_id: childId,
+    course_id: courseId
+  });
+  if(error){ showToast('Could not send suggestion: '+error.message, 'err'); return; }
+  showToast(`"${courseTitle}" suggested to ${childName}!`, 'ok');
+}
+
+function openChildPickerForSuggest(course){
+  // Build a simple child-select confirm
+  const opts = parentChildren.map(c=>`<option value="${c.id}">${c.full_name}</option>`).join('');
+  document.getElementById('confirmTitle').textContent = 'Suggest to Which Child?';
+  document.getElementById('confirmText').innerHTML = `
+    <div style="margin-bottom:10px;">Suggest <strong>${course.title}</strong> to:</div>
+    <select id="confirmChildSel" style="width:100%;padding:10px;border-radius:9px;border:1px solid rgba(255,255,255,0.16);background:#101216;color:#F8FAFC;font-size:13.5px;">${opts}</select>`;
+  confirmAction = async ()=>{
+    const childId = document.getElementById('confirmChildSel').value;
+    const child = parentChildren.find(c=>c.id===childId);
+    await doSuggestCourse(course.id, childId, child&&child.full_name||'child', course.title);
+  };
+  document.getElementById('confirmModal').classList.add('active');
+}
+
+/* ===== CONFIRM MODAL HELPER ===== */
+let confirmAction = null;
+function openConfirm(title, text, onConfirm){
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmText').textContent = text;
+  confirmAction = onConfirm;
+  document.getElementById('confirmModal').classList.add('active');
+}
+document.getElementById('confirmCancel').addEventListener('click', ()=>document.getElementById('confirmModal').classList.remove('active'));
+document.getElementById('confirmOk').addEventListener('click', ()=>{
+  document.getElementById('confirmModal').classList.remove('active');
+  if(confirmAction) confirmAction();
+});
+
+/* ===== MASTER RENDER ===== */
+async function render(){
+  if(currentRole==='student') await renderStudent();
+  else if(currentRole==='teacher') await renderTeacher();
+  else await renderParent();
+}
+
+/* ===== MANAGE MODAL TABS (teacher) ===== */
+document.querySelectorAll('#manageModal .modal-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('#manageModal .modal-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('#manageModal .modal-tab-panel').forEach(p=>p.classList.toggle('active', p.dataset.mpanel===tab.dataset.mtab));
+  });
+});
+document.getElementById('mmClose').addEventListener('click', ()=>document.getElementById('manageModal').classList.remove('active'));
+
+/* ===== CREATE COURSE MODAL ===== */
+(async function(){
+  try{
+    const { data } = await supabaseClient.from('course_categories').select('name').eq('is_active', true).order('sort_order').order('name');
+    if(!data || !data.length) return;
+    const old = document.getElementById('ccCategory'); const sel = document.createElement('select'); sel.id = 'ccCategory';
+    data.forEach(c=>{ const o = document.createElement('option'); o.value = c.name; o.textContent = c.name; sel.append(o); });
+    old.replaceWith(sel);
+  }catch(e){}
+})();
+document.getElementById('createClose').addEventListener('click', ()=>document.getElementById('createModal').classList.remove('active'));
+document.getElementById('createForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const title = document.getElementById('ccTitle').value.trim();
+  if(!title) return;
+  const description = document.getElementById('ccDesc').value.trim();
+  const category = document.getElementById('ccCategory').value.trim();
+  const classLevel = document.getElementById('ccClass').value || null;
+  const price = Math.max(0, Math.floor(Number(document.getElementById('ccPrice').value) || 0));
+
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Creating...';
+
+  const { error } = await supabaseClient.from('courses').insert({
+    title, description, category, class_level: classLevel, price_npr: price, language: document.getElementById('ccLanguage').value, instructor_id: currentUserId, status: 'draft'
+  });
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Create Course';
+
+  if(error){ showToast('Could not create course: ' + error.message, 'err'); return; }
+
+  document.getElementById('createForm').reset();
+  document.getElementById('createModal').classList.remove('active');
+  render();
+});
+
+/* ===== PAYMENT MODAL ===== */
+let payCourse = null;
+async function openPayModal(courseId){
+  payCourse = STUDENT_COURSES.find(c=>c.id===courseId);
+  if(!payCourse || payCourse.enrStatus==='active') return;
+  document.getElementById('payTitle').textContent = 'Pay for ' + payCourse.title;
+  document.getElementById('paySub').textContent = 'Amount to pay: ' + rs(payCourse.price) + '. Pay using the details below, then enter your transaction ID or upload a screenshot.';
+  document.getElementById('payErr').textContent = '';
+  document.getElementById('payForm').reset();
+  document.getElementById('payInstr').textContent = 'Loading payment details…';
+  document.getElementById('payQrBox').style.display = 'none';
+  document.getElementById('payModal').classList.add('active');
+  try{
+    const { data } = await supabaseClient.from('site_settings').select('value').eq('key','payment_instructions').maybeSingle();
+    const v = (data && data.value) || {};
+    document.getElementById('payInstr').textContent = v.text || (v.qr_url ? 'Scan the QR code below with your banking or wallet app.' : 'Please contact Udaan Nepal for payment instructions.');
+    const qrBox = document.getElementById('payQrBox');
+    if(v.qr_url && /^https:\/\//.test(v.qr_url)){ document.getElementById('payQr').src = v.qr_url; qrBox.style.display = 'block'; } else { qrBox.style.display = 'none'; }
+  }catch(e){
+    document.getElementById('payInstr').textContent = 'Please contact Udaan Nepal for payment instructions.';
+  }
+}
+document.getElementById('payClose').addEventListener('click', ()=>document.getElementById('payModal').classList.remove('active'));
+document.getElementById('payForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const err = document.getElementById('payErr');
+  const btn = document.getElementById('paySubmit');
+  err.textContent = '';
+  const ref = document.getElementById('payRef').value.trim();
+  const file = document.getElementById('payFile').files[0];
+  const method = document.getElementById('payMethod').value;
+  if(!ref && !file){ err.textContent = 'Please enter the transaction ID or upload a screenshot.'; return; }
+  if(file && file.size > 5*1024*1024){ err.textContent = 'The file is larger than 5 MB.'; return; }
+  btn.disabled = true; btn.textContent = 'Sending…';
+  let proofPath = null;
+  if(file){
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,5) || 'jpg';
+    proofPath = currentUserId + '/' + Date.now() + '.' + ext;
+    const up = await supabaseClient.storage.from('payment-proofs').upload(proofPath, file, { contentType: file.type });
+    if(up.error){ err.textContent = 'Could not upload the screenshot: ' + up.error.message; btn.disabled=false; btn.textContent='Send for approval'; return; }
+  }
+  const { error } = await supabaseClient.from('payments').insert({
+    enrollment_id: payCourse.enrollmentId, method, transaction_ref: ref || null, proof_path: proofPath
+  });
+  btn.disabled = false; btn.textContent = 'Send for approval';
+  if(error){
+    err.textContent = error.code === '23505' ? 'You already sent a payment for this course. Please wait for it to be checked.' : 'Could not send payment: ' + error.message;
+    return;
+  }
+  document.getElementById('payModal').classList.remove('active');
+  render();
+});
+
+/* ===== CLOSE MODALS ON OVERLAY CLICK / ESCAPE ===== */
+document.querySelectorAll('.modal-overlay').forEach(overlay=>{
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.classList.remove('active'); });
+});
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ document.querySelectorAll('.modal-overlay.active').forEach(o=>o.classList.remove('active')); }
+});
+</script>
+
+<script>
+/* ===== SIDEBAR ===== */
+(function(){
+  const sidebar=document.getElementById('sidebar'), overlay=document.getElementById('overlay'),
+        menuBtn=document.getElementById('menuBtn'), sidebarClose=document.getElementById('sidebarClose');
+  function openS(){sidebar.classList.add('active');overlay.classList.add('active');menuBtn.classList.add('active');menuBtn.setAttribute('aria-expanded','true');sidebar.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+  function closeS(){sidebar.classList.remove('active');overlay.classList.remove('active');menuBtn.classList.remove('active');menuBtn.setAttribute('aria-expanded','false');sidebar.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  menuBtn.addEventListener('click',()=>sidebar.classList.contains('active')?closeS():openS());
+  sidebarClose.addEventListener('click',closeS);
+  overlay.addEventListener('click',closeS);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&sidebar.classList.contains('active'))closeS();});
+})();
+
+/* ===== INIT ===== */
+(async function init(){
+  const role = await loadRealRole();
+  if(role){
+    currentRole = role;
+    await render();
+    const payId = new URLSearchParams(window.location.search).get('pay');
+    if(payId && currentRole==='student') openPayModal(payId);
+  }
+})();
+</script>
+
+<script>
+document.querySelectorAll('.sidebar-item.logout').forEach(link=>{
+  link.addEventListener('click', async (e)=>{
+    e.preventDefault();
+    await supabaseClient.auth.signOut();
+    window.location.href = 'auth.html';
+  });
+});
+
+/* ===== SIDEBAR USER ===== */
+(async function updateSidebarUser(){
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) return;
+    const { data: profile } = await supabaseClient.from('profiles').select('full_name, role').eq('id', session.user.id).single();
+    const name = (profile && profile.full_name) ? profile.full_name : (session.user.email || 'My Account');
+    const role = (profile && profile.role) ? profile.role.charAt(0).toUpperCase() + profile.role.slice(1) : 'Student';
+    const initial = name.trim().charAt(0).toUpperCase() || 'U';
+    const av = document.querySelector('.sidebar-avatar'), nm = document.querySelector('.sidebar-user-name'), rl = document.querySelector('.sidebar-user-role');
+    if(av) av.textContent = initial;
+    if(nm) nm.textContent = name;
+    if(rl) rl.textContent = role;
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

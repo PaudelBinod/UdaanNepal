@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://idwbxagsxpkkqwfjftox.supabase.co https://fonts.googleapis.com https://fonts.gstatic.com; media-src 'self' https://idwbxagsxpkkqwfjftox.supabase.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdn.tailwindcss.com; frame-src 'self' https://www.youtube.com https://youtube.com https://player.vimeo.com;">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIF — Udaan Nepal Innovation Fair</title>
+    <meta name="description" content="Celebrating young minds, bold ideas, and innovative solutions shaping the future of Nepal at the Udaan Nepal Innovation Fair.">
+    
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="UNIF — Udaan Nepal Innovation Fair">
+    <meta property="og:description" content="Imagine. Innovate. Inspire. Join Nepal's premier youth innovation platform.">
+    <meta property="og:type" content="website">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            DEFAULT: 'var(--color-navy)',
+                            dark: 'var(--color-navy-dark)',
+                            light: 'var(--color-navy-light)'
+                        },
+                        electric: {
+                            DEFAULT: 'var(--color-electric)',
+                            hover: 'var(--color-electric-hover)'
+                        },
+                        cyan: {
+                            DEFAULT: 'var(--color-cyan)'
+                        },
+                        amber: {
+                            accent: 'var(--color-amber)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS Variables & Styling System -->
+    <style>
+        :root {
+            --color-navy: #060B19;
+            --color-navy-dark: #03060E;
+            --color-navy-light: #0F172A;
+            --color-electric: #0066FF;
+            --color-electric-hover: #0052CC;
+            --color-cyan: #00E5FF;
+            --color-amber: #F59E0B;
+        }
+
+        body {
+            background-color: var(--color-navy);
+            color: #E2E8F0;
+            font-family: 'Manrope', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6, .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 229, 255, 0.12);
+        }
+
+        .glass-card-hover:hover {
+            border-color: rgba(0, 229, 255, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -10px rgba(0, 102, 255, 0.3);
+        }
+
+        .glass-nav {
+            background: rgba(6, 11, 25, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Glowing Effects */
+        .text-glow {
+            text-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
+        }
+
+        .glow-box {
+            box-shadow: 0 0 40px -10px rgba(0, 102, 255, 0.4);
+        }
+
+        /* Background Grid Pattern */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #03060E;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1E293B;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0066FF;
+        }
+
+        /* Scroll Progress Bar */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #0066FF, #00E5FF);
+            width: 0%;
+            z-index: 100;
+            transition: width 0.1s ease-out;
+        }
+
+        /* Animations & Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+        /* Force dark background on all form inputs — overrides browser defaults and Tailwind opacity issues */
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="password"],
+        input[type="url"],
+        select,
+        textarea {
+            background-color: #0F1829 !important;
+            color: #F8FAFC !important;
+            border-color: rgba(100, 116, 139, 0.5);
+        }
+        input[type="text"]::placeholder,
+        input[type="email"]::placeholder,
+        input[type="tel"]::placeholder,
+        input[type="number"]::placeholder,
+        input[type="password"]::placeholder,
+        input[type="url"]::placeholder,
+        textarea::placeholder {
+            color: rgba(148, 163, 184, 0.6);
+        }
+        select option {
+            background-color: #0F1829;
+            color: #F8FAFC;
+        }
+
+        /* Override browser autofill yellow/white background on dark form inputs */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #F8FAFC;
+            -webkit-box-shadow: 0 0 0 1000px #0F1829 inset;
+            box-shadow: 0 0 0 1000px #0F1829 inset;
+            caret-color: #F8FAFC;
+        }
+
+        /* ===== PRINT RECEIPT ===== */
+        #printReceipt{display:none;}
+        @media print{
+          body>*{display:none!important;}
+          #printReceipt{
+            display:block!important;
+            font-family:Arial,sans-serif;
+            color:#111;background:#fff;
+            width:100%;max-width:600px;
+            margin:0 auto;padding:32px 28px;
+            box-sizing:border-box;
+          }
+          .pr-header{text-align:center;border-bottom:2px solid #0066FF;padding-bottom:18px;margin-bottom:20px;}
+          .pr-logo{font-weight:800;font-size:20px;color:#0066FF;letter-spacing:-0.02em;margin-bottom:2px;}
+          .pr-event{font-size:13px;color:#555;margin-bottom:8px;}
+          .pr-refbox{display:inline-block;background:#f0f5ff;border:1.5px solid #0066FF;border-radius:8px;padding:6px 18px;font-size:15px;font-weight:800;color:#0066FF;letter-spacing:.12em;margin-top:6px;}
+          .pr-stamp{display:inline-block;border:2px solid #22c55e;border-radius:6px;padding:4px 14px;color:#16a34a;font-weight:800;font-size:13px;letter-spacing:.06em;margin-bottom:8px;}
+          .pr-section{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#0066FF;margin:16px 0 6px;}
+          .pr-grid{width:100%;border-collapse:collapse;margin-bottom:14px;}
+          .pr-grid tr:nth-child(even){background:#f7f9ff;}
+          .pr-grid td{padding:8px 10px;font-size:13px;border-bottom:1px solid #e5e7eb;}
+          .pr-grid td:first-child{color:#555;width:42%;font-weight:600;}
+          .pr-grid td:last-child{color:#111;font-weight:700;}
+          .pr-footer{text-align:center;font-size:11px;color:#888;border-top:1px solid #e5e7eb;padding-top:14px;margin-top:8px;}
+        }
+    </style>
+</head>
+<body class="bg-grid-pattern antialiased selection:bg-electric selection:text-white">
+
+    <!-- Scroll Progress Indicator -->
+    <div id="scroll-progress"></div>
+
+    <!-- ==============================================
+         CONFIGURABLE DATA SECTION (Editable Placeholders)
+         ============================================== -->
+    <script>
+        // EDITABLE EVENT CONFIGURATION
+        const UNIF_CONFIG = {
+            eventDate: "2026-12-15T09:00:00", // Update with official event date
+            venue: "Udaan Nepal, Kathmandu",   // Update with confirmed venue
+            time: "9:00 AM – 5:00 PM",
+            eligibility: "Secondary & High School Students (Grade 6–12)",
+            registrationFee: "Free",
+            registrationLink: "#register",
+            email: "info@udaannepal.com",
+            phone: "", // Set actual phone once confirmed
+            address: "Kathmandu, Nepal",
+            socials: {
+                facebook: "https://facebook.com",
+                instagram: "https://instagram.com",
+                youtube: "https://youtube.com",
+                tiktok: "https://tiktok.com",
+                linkedin: "https://linkedin.com"
+            },
+            promoVideoUrl: "https://www.youtube.com/embed/placeholder" // Replace with official promotional video URL/ID
+        };
+    </script>
+
+    <!-- ==============================================
+         1. STICKY NAVIGATION BAR
+         ============================================== -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-300 py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="index" class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-cyan rounded-lg">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-electric to-cyan flex items-center justify-center font-display font-bold text-white text-xl shadow-lg shadow-electric/30 group-hover:scale-105 transition-transform">
+                    U
+                </div>
+                <div>
+                    <span class="font-display font-bold text-lg tracking-wider text-white block leading-tight">UNIF</span>
+                    <span class="text-[10px] uppercase tracking-widest text-cyan font-medium">Udaan Nepal Innovation Fair</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden lg:flex items-center gap-8">
+                <a href="#about" class="text-sm font-medium text-slate-300 hover:text-cyan transition-colors">About</a>
+                <a href="#innovations" class="text-sm font-medium text-slate-300 hover:text-cyan transition-colors">Innovations</a>
+                <a href="#journey" class="text-sm font-medium text-slate-300 hover:text-cyan transition-colors">Events</a>
+                <a href="#gallery" class="text-sm font-medium text-slate-300 hover:text-cyan transition-colors">Gallery</a>
+                <a href="#faq" class="text-sm font-medium text-slate-300 hover:text-cyan transition-colors">FAQ</a>
+                <a href="#contact" class="text-sm font-medium text-slate-300 hover:text-cyan transition-colors">Contact</a>
+            </nav>
+
+            <!-- CTA Button & Mobile Menu Toggle -->
+            <div class="flex items-center gap-4">
+                <a href="#register" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-gradient-to-r from-electric to-cyan text-white font-semibold text-sm shadow-lg shadow-electric/25 hover:shadow-electric/50 hover:scale-[1.02] transition-all">
+                    Register Now
+                </a>
+                
+                <!-- Mobile Hamburger Button -->
+                <button id="menu-btn" aria-label="Toggle Navigation Menu" class="lg:hidden p-2 rounded-xl glass-card text-slate-200 hover:text-cyan focus:outline-none focus:ring-2 focus:ring-cyan">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden lg:hidden glass-nav border-t border-slate-800 px-6 py-6 absolute top-full left-0 right-0 shadow-2xl flex flex-col gap-4">
+            <a href="#about" class="mobile-link text-base font-medium text-slate-300 hover:text-cyan py-1">About</a>
+            <a href="#innovations" class="mobile-link text-base font-medium text-slate-300 hover:text-cyan py-1">Innovations</a>
+            <a href="#journey" class="mobile-link text-base font-medium text-slate-300 hover:text-cyan py-1">Events</a>
+            <a href="#gallery" class="mobile-link text-base font-medium text-slate-300 hover:text-cyan py-1">Gallery</a>
+            <a href="#faq" class="mobile-link text-base font-medium text-slate-300 hover:text-cyan py-1">FAQ</a>
+            <a href="#contact" class="mobile-link text-base font-medium text-slate-300 hover:text-cyan py-1">Contact</a>
+            <a href="#register" class="mobile-link mt-2 inline-flex items-center justify-center px-5 py-3 rounded-xl bg-gradient-to-r from-electric to-cyan text-white font-semibold text-sm shadow-lg shadow-electric/25">
+                Register Now
+            </a>
+        </div>
+    </header>
+
+    <!-- Floating Mobile Register Button -->
+    <div class="fixed bottom-24 right-6 z-50 sm:hidden">
+        <a href="#register" class="flex items-center justify-center px-6 py-3 rounded-full bg-gradient-to-r from-electric to-cyan text-white font-bold text-sm shadow-2xl shadow-electric/50 animate-bounce">
+            Register Now 🚀
+        </a>
+    </div>
+
+    <!-- ==============================================
+         6. HERO SECTION
+         ============================================== -->
+    <section class="relative min-h-screen flex items-center justify-center pt-32 pb-20 overflow-hidden">
+        <!-- Background Glowing Orbs -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-electric/15 rounded-full blur-[140px] pointer-events-none"></div>
+        <div class="absolute bottom-10 right-10 w-[400px] h-[400px] bg-cyan/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Hero Left Content -->
+                <div class="lg:col-span-7 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card border border-cyan/30 text-cyan text-xs font-semibold mb-6 tracking-wide uppercase">
+                        <span class="w-2 h-2 rounded-full bg-cyan animate-pulse"></span>
+                        Nepal's Premier Youth Innovation Fair
+                    </div>
+                    
+                    <h1 class="font-display font-extrabold text-4xl sm:text-6xl lg:text-7xl tracking-tight text-white mb-6 leading-none">
+                        UDAAN NEPAL <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan via-electric to-blue-400 text-glow">
+                            INNOVATION FAIR
+                        </span>
+                    </h1>
+
+                    <p class="font-display font-bold text-lg sm:text-xl text-amber-accent mb-4 tracking-wide">
+                        Imagine. Innovate. Inspire.
+                    </p>
+
+                    <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 mb-8 font-light leading-relaxed">
+                        “Celebrating young minds, bold ideas, and innovative solutions shaping the future of Nepal.”
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#register" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-electric to-cyan text-white font-bold text-base shadow-xl shadow-electric/30 hover:shadow-electric/60 hover:scale-105 transition-all text-center">
+                            Register Now
+                        </a>
+                        <a href="#about" class="w-full sm:w-auto px-8 py-4 rounded-xl glass-card text-white font-semibold text-base hover:border-cyan transition-all text-center">
+                            Explore UNIF
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Right Visual Element -->
+                <div class="lg:col-span-5 relative">
+                    <div class="relative mx-auto max-w-md lg:max-w-none">
+                        <div class="absolute -inset-1 rounded-3xl bg-gradient-to-r from-electric to-cyan opacity-30 blur-xl"></div>
+                        <div class="relative glass-card rounded-3xl p-6 border border-slate-700/60 shadow-2xl overflow-hidden group">
+                            <!-- Innovation Graphic / Mockup Image -->
+                            <div class="aspect-video rounded-2xl bg-gradient-to-br from-slate-900 to-navy-light flex items-center justify-center relative overflow-hidden">
+                                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80')] bg-cover bg-center opacity-40 group-hover:scale-105 transition-transform duration-700"></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent"></div>
+                                <div class="relative z-10 text-center p-6">
+                                    <div class="w-16 h-16 rounded-2xl bg-electric/20 backdrop-blur-md border border-cyan/40 flex items-center justify-center mx-auto mb-4 text-cyan text-2xl shadow-lg">
+                                        ⚡
+                                    </div>
+                                    <h3 class="font-display font-bold text-white text-lg mb-1">Empowering Creators</h3>
+                                    <p class="text-xs text-slate-400">Showcasing next-gen robotics, AI & sustainability projects</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Mini floating metric pill -->
+                            <div class="mt-4 flex items-center justify-between px-4 py-3 rounded-2xl bg-slate-900/80 border border-slate-800">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></div>
+                                    <span class="text-xs font-semibold text-slate-200">Applications Open</span>
+                                </div>
+                                <span class="text-xs font-bold text-cyan">UNIF 2026</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         7. EVENT COUNTDOWN SECTION
+         ============================================== -->
+    <section class="py-12 relative z-20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-3xl p-8 border border-cyan/20 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 transform translate-x-8 -translate-y-8 w-40 h-40 bg-cyan/10 rounded-full blur-2xl"></div>
+                
+                <div class="text-center mb-6">
+                    <span class="text-xs font-bold uppercase tracking-widest text-cyan">Countdown to Main Event</span>
+                    <h2 class="font-display font-bold text-2xl sm:text-3xl text-white mt-1">UNIF 2026</h2>
+                </div>
+
+                <div id="countdown-container" class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto text-center">
+                    <div class="glass-card rounded-2xl p-4 border border-slate-800">
+                        <span id="days" class="font-display font-extrabold text-3xl sm:text-4xl text-white block">00</span>
+                        <span class="text-xs uppercase tracking-wider text-slate-400 font-medium">Days</span>
+                    </div>
+                    <div class="glass-card rounded-2xl p-4 border border-slate-800">
+                        <span id="hours" class="font-display font-extrabold text-3xl sm:text-4xl text-white block">00</span>
+                        <span class="text-xs uppercase tracking-wider text-slate-400 font-medium">Hours</span>
+                    </div>
+                    <div class="glass-card rounded-2xl p-4 border border-slate-800">
+                        <span id="minutes" class="font-display font-extrabold text-3xl sm:text-4xl text-white block">00</span>
+                        <span class="text-xs uppercase tracking-wider text-slate-400 font-medium">Minutes</span>
+                    </div>
+                    <div class="glass-card rounded-2xl p-4 border border-slate-800">
+                        <span id="seconds" class="font-display font-extrabold text-3xl sm:text-4xl text-cyan block">00</span>
+                        <span class="text-xs uppercase tracking-wider text-slate-400 font-medium">Seconds</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         9. UNIF AT A GLANCE (Animated Stats)
+         ============================================== -->
+    <section class="py-16 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="glass-card rounded-3xl p-6 text-center border border-slate-800 group hover:border-cyan/40 transition-all">
+                    <span class="font-display font-extrabold text-4xl sm:text-5xl text-white block mb-2 text-glow" data-target="100" data-statn="1">0</span>
+                    <span class="text-sm font-semibold text-cyan uppercase tracking-wider" data-statl="1">Projects</span>
+                </div>
+                <div class="glass-card rounded-3xl p-6 text-center border border-slate-800 group hover:border-cyan/40 transition-all">
+                    <span class="font-display font-extrabold text-4xl sm:text-5xl text-white block mb-2 text-glow" data-target="500" data-statn="2">0</span>
+                    <span class="text-sm font-semibold text-cyan uppercase tracking-wider" data-statl="2">Participants</span>
+                </div>
+                <div class="glass-card rounded-3xl p-6 text-center border border-slate-800 group hover:border-cyan/40 transition-all">
+                    <span class="font-display font-extrabold text-4xl sm:text-5xl text-white block mb-2 text-glow" data-target="20" data-statn="3">0</span>
+                    <span class="text-sm font-semibold text-cyan uppercase tracking-wider" data-statl="3">Schools</span>
+                </div>
+                <div class="glass-card rounded-3xl p-6 text-center border border-slate-800 group hover:border-cyan/40 transition-all">
+                    <span class="font-display font-extrabold text-4xl sm:text-5xl text-white block mb-2 text-glow" data-target="10" data-statn="4">0</span>
+                    <span class="text-sm font-semibold text-cyan uppercase tracking-wider" data-statl="4">Categories</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         8. ABOUT UNIF SECTION
+         ============================================== -->
+    <section id="about" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">01 — About UNIF</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white mb-6">What is UNIF?</h2>
+                <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
+                    <strong class="text-white">Udaan Nepal Innovation Fair (UNIF)</strong> <span data-c="unif_about">is the national platform designed to foster scientific curiosity, technological ingenuity, and entrepreneurial spirit among students and young innovators across Nepal.</span>
+                </p>
+            </div>
+
+            <!-- Three Core Cards: Vision, Mission, Purpose -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Vision Card -->
+                <div class="glass-card rounded-3xl p-8 border border-slate-800 glass-card-hover transition-all duration-300">
+                    <div class="w-14 h-14 rounded-2xl bg-electric/20 border border-cyan/40 flex items-center justify-center text-cyan text-2xl mb-6 shadow-lg">
+                        🔭
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-white mb-4">Our Vision</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Encourage young people to imagine and build solutions for the future.
+                    </p>
+                </div>
+
+                <!-- Mission Card -->
+                <div class="glass-card rounded-3xl p-8 border border-slate-800 glass-card-hover transition-all duration-300">
+                    <div class="w-14 h-14 rounded-2xl bg-electric/20 border border-cyan/40 flex items-center justify-center text-cyan text-2xl mb-6 shadow-lg">
+                        🚀
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-white mb-4">Our Mission</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Provide a platform where innovative ideas can be developed, demonstrated, and recognized.
+                    </p>
+                </div>
+
+                <!-- Purpose Card -->
+                <div class="glass-card rounded-3xl p-8 border border-slate-800 glass-card-hover transition-all duration-300">
+                    <div class="w-14 h-14 rounded-2xl bg-electric/20 border border-cyan/40 flex items-center justify-center text-cyan text-2xl mb-6 shadow-lg">
+                        🤝
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-white mb-4">Our Purpose</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Connect students, innovators, educators, organizations, and communities through innovation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         10. PROMOTIONAL VIDEO SECTION
+         ============================================== -->
+    <section class="py-20 relative bg-navy-dark/50">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">02 — Experience UNIF</span>
+            <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mb-4">Ideas. Innovation. Inspiration.</h2>
+            <p class="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-10">
+                Watch the official trailer and witness the incredible energy of Nepal's brightest young builders.
+            </p>
+
+            <!-- Video Player Card -->
+            <div class="glass-card rounded-3xl p-3 border border-slate-700 shadow-2xl relative overflow-hidden group">
+                <div class="aspect-video rounded-2xl overflow-hidden bg-slate-900 relative flex items-center justify-center">
+                    <!-- Replace with official UNIF promotional video or YouTube embed -->
+                    <!-- Example: <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" class="w-full h-full" allowfullscreen></iframe> -->
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80')] bg-cover bg-center opacity-50 group-hover:scale-105 transition-transform duration-700"></div>
+                    <div class="absolute inset-0 bg-navy/60"></div>
+                    
+                    <a href="#video-modal" id="play-video-btn" aria-label="Play Promotional Video" class="relative z-10 w-20 h-20 rounded-full bg-gradient-to-r from-electric to-cyan flex items-center justify-center text-white text-2xl shadow-2xl shadow-electric/60 hover:scale-110 transition-transform">
+                        ▶
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         11. INNOVATION CATEGORIES
+         ============================================== -->
+    <section id="innovations" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">03 — Categories</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white mb-6">Explore Innovation</h2>
+                <p class="text-slate-300 text-base">
+                    Discover the diverse fields where young minds are creating impactful solutions.
+                </p>
+            </div>
+
+            <!-- Categories Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Category 1 -->
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 glass-card-hover transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-electric/20 border border-cyan/30 flex items-center justify-center text-cyan text-xl mb-4 group-hover:scale-110 transition-transform">
+                        🤖
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Robotics & AI</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-4">Autonomous machines, smart algorithms, and automation prototypes.</p>
+                    <span class="text-cyan text-xs font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Learn more →</span>
+                </div>
+
+                <!-- Category 2 -->
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 glass-card-hover transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-electric/20 border border-cyan/30 flex items-center justify-center text-cyan text-xl mb-4 group-hover:scale-110 transition-transform">
+                        🔬
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Science & Tech</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-4">Experimental science models and breakthrough technological tools.</p>
+                    <span class="text-cyan text-xs font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Learn more →</span>
+                </div>
+
+                <!-- Category 3 -->
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 glass-card-hover transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-electric/20 border border-cyan/30 flex items-center justify-center text-cyan text-xl mb-4 group-hover:scale-110 transition-transform">
+                        🌱
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Environment</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-4">Eco-friendly systems, waste management, and conservation projects.</p>
+                    <span class="text-cyan text-xs font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Learn more →</span>
+                </div>
+
+                <!-- Category 4 -->
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 glass-card-hover transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-electric/20 border border-cyan/30 flex items-center justify-center text-cyan text-xl mb-4 group-hover:scale-110 transition-transform">
+                        🏥
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Health & Social</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-4">Healthcare assistive devices and community welfare solutions.</p>
+                    <span class="text-cyan text-xs font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Learn more →</span>
+                </div>
+
+                <!-- Category 5 -->
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 glass-card-hover transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-electric/20 border border-cyan/30 flex items-center justify-center text-cyan text-xl mb-4 group-hover:scale-110 transition-transform">
+                        💻
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Digital Software</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-4">Mobile apps, web platforms, and digital educational tools.</p>
+                    <span class="text-cyan text-xs font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Learn more →</span>
+                </div>
+
+                <!-- Category 6 -->
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 glass-card-hover transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-electric/20 border border-cyan/30 flex items-center justify-center text-cyan text-xl mb-4 group-hover:scale-110 transition-transform">
+                        🌾
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Agriculture & Food</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-4">Smart farming, automated grain storage, and agritech tools.</p>
+                    <span class="text-cyan text-xs font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Learn more →</span>
+                </div>
+
+                <!-- Category 7 -->
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 glass-card-hover transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-electric/20 border border-cyan/30 flex items-center justify-center text-cyan text-xl mb-4 group-hover:scale-110 transition-transform">
+                        ⚡
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Renewable Energy</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-4">Solar, wind, and alternative energy generation prototypes.</p>
+                    <span class="text-cyan text-xs font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Learn more →</span>
+                </div>
+
+                <!-- Category 8 -->
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 glass-card-hover transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-electric/20 border border-cyan/30 flex items-center justify-center text-cyan text-xl mb-4 group-hover:scale-110 transition-transform">
+                        🎨
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Creative Design</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-4">Creative instructional models and design-thinking projects.</p>
+                    <span class="text-cyan text-xs font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Learn more →</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         12. FEATURED PROJECTS SECTION
+         ============================================== -->
+    <section id="sec-featured" class="py-24 relative bg-navy-dark/40" style="display:none">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">04 — Innovations</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white mb-6">Featured Innovations</h2>
+                <p class="text-slate-300 text-base">
+                    A glimpse into extraordinary student projects engineered for the future.
+                </p>
+            </div>
+
+            <!-- 6 Sample Projects Grid -->
+            <div id="featured-projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="glass-card rounded-3xl overflow-hidden border border-slate-800 glass-card-hover transition-all flex flex-col">
+                    <div class="h-48 bg-slate-900 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80" alt="Smart Grain Storage" class="w-full h-full object-cover opacity-75">
+                        <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-electric/80 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider">Agriculture</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display font-bold text-xl text-white mb-2">Automated Grain Storage System</h3>
+                            <p class="text-slate-400 text-xs leading-relaxed mb-4" data-c="unif_project1">Smart automated moisture and temperature control system for grain preservation.</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-800">
+                            <span class="text-xs text-slate-400 font-medium">Team Innovators</span>
+                            <button class="text-cyan text-xs font-bold hover:underline">View Project →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="glass-card rounded-3xl overflow-hidden border border-slate-800 glass-card-hover transition-all flex flex-col">
+                    <div class="h-48 bg-slate-900 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=600&q=80" alt="AI Assistant Robot" class="w-full h-full object-cover opacity-75">
+                        <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-electric/80 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider">Robotics & AI</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display font-bold text-xl text-white mb-2">Autonomous Rescue Rover</h3>
+                            <p class="text-slate-400 text-xs leading-relaxed mb-4" data-c="unif_project2">Remote-guided robotic vehicle designed for disaster site navigation and initial reconnaissance.</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-800">
+                            <span class="text-xs text-slate-400 font-medium">RoboTech Guild</span>
+                            <button class="text-cyan text-xs font-bold hover:underline">View Project →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="glass-card rounded-3xl overflow-hidden border border-slate-800 glass-card-hover transition-all flex flex-col">
+                    <div class="h-48 bg-slate-900 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=600&q=80" alt="Solar Purifier" class="w-full h-full object-cover opacity-75">
+                        <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-electric/80 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider">Environment</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display font-bold text-xl text-white mb-2">Solar Water Purification Unit</h3>
+                            <p class="text-slate-400 text-xs leading-relaxed mb-4" data-c="unif_project3">Low-cost portable solar distillation and filtration apparatus for remote communities.</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-800">
+                            <span class="text-xs text-slate-400 font-medium">EcoPioneers</span>
+                            <button class="text-cyan text-xs font-bold hover:underline">View Project →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="glass-card rounded-3xl overflow-hidden border border-slate-800 glass-card-hover transition-all flex flex-col">
+                    <div class="h-48 bg-slate-900 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80" alt="Health App" class="w-full h-full object-cover opacity-75">
+                        <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-electric/80 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider">Health & Social</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display font-bold text-xl text-white mb-2">MediConnect Nepal App</h3>
+                            <p class="text-slate-400 text-xs leading-relaxed mb-4" data-c="unif_project4">Digital healthcare linkage tool connecting rural patients with regional medical volunteers.</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-800">
+                            <span class="text-xs text-slate-400 font-medium">CodeForGood</span>
+                            <button class="text-cyan text-xs font-bold hover:underline">View Project →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="glass-card rounded-3xl overflow-hidden border border-slate-800 glass-card-hover transition-all flex flex-col">
+                    <div class="h-48 bg-slate-900 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1509391365360-86929bf587c7?auto=format&fit=crop&w=600&q=80" alt="Wind Energy" class="w-full h-full object-cover opacity-75">
+                        <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-electric/80 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider">Renewable Energy</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display font-bold text-xl text-white mb-2">Micro-Wind Turbine Generator</h3>
+                            <p class="text-slate-400 text-xs leading-relaxed mb-4" data-c="unif_project5">Compact vertical-axis wind turbine engineered for household supplementary charging.</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-800">
+                            <span class="text-xs text-slate-400 font-medium">VoltX Labs</span>
+                            <button class="text-cyan text-xs font-bold hover:underline">View Project →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="glass-card rounded-3xl overflow-hidden border border-slate-800 glass-card-hover transition-all flex flex-col">
+                    <div class="h-48 bg-slate-900 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80" alt="Smart Study" class="w-full h-full object-cover opacity-75">
+                        <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-electric/80 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider">Digital Software</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-display font-bold text-xl text-white mb-2">Interactive Science Lab Simulator</h3>
+                            <p class="text-slate-400 text-xs leading-relaxed mb-4" data-c="unif_project6">Virtual reality physics and chemistry experiment simulator for secondary school labs.</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-800">
+                            <span class="text-xs text-slate-400 font-medium">EduFuture</span>
+                            <button class="text-cyan text-xs font-bold hover:underline">View Project →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         13. UNIF INNOVATION WALL (Interactive Filter)
+         ============================================== -->
+    <section id="sec-wall" class="py-24 relative" style="display:none">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">05 — Innovation Wall</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white mb-4">Discover Ideas & Projects</h2>
+                <p class="text-slate-300 text-sm sm:text-base">
+                    “Discover ideas and projects from young innovators participating in UNIF.”
+                </p>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-3 mb-12" id="filter-buttons">
+                <button data-filter="all" class="filter-btn px-5 py-2.5 rounded-xl bg-electric text-white text-xs font-semibold shadow-lg transition-all">All</button>
+                <button data-filter="robotics" class="filter-btn px-5 py-2.5 rounded-xl glass-card text-slate-300 hover:text-white text-xs font-semibold transition-all">Robotics</button>
+                <button data-filter="ai" class="filter-btn px-5 py-2.5 rounded-xl glass-card text-slate-300 hover:text-white text-xs font-semibold transition-all">AI</button>
+                <button data-filter="environment" class="filter-btn px-5 py-2.5 rounded-xl glass-card text-slate-300 hover:text-white text-xs font-semibold transition-all">Environment</button>
+                <button data-filter="health" class="filter-btn px-5 py-2.5 rounded-xl glass-card text-slate-300 hover:text-white text-xs font-semibold transition-all">Health</button>
+                <button data-filter="agriculture" class="filter-btn px-5 py-2.5 rounded-xl glass-card text-slate-300 hover:text-white text-xs font-semibold transition-all">Agriculture</button>
+                <button data-filter="digital" class="filter-btn px-5 py-2.5 rounded-xl glass-card text-slate-300 hover:text-white text-xs font-semibold transition-all">Digital Innovation</button>
+            </div>
+
+            <!-- Filterable Wall Items -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="wall-grid">
+                <!-- Item 1 -->
+                <div class="wall-item glass-card rounded-3xl p-6 border border-slate-800" data-category="robotics">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-cyan mb-2 block">Robotics</span>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Smart Line Follower Robot</h3>
+                    <p class="text-slate-400 text-xs mb-4">Advanced microcontroller-based path tracking robot for industrial cargo transport.</p>
+                    <span class="text-xs text-slate-500 font-medium">Innovator: Team Apex</span>
+                </div>
+                <!-- Item 2 -->
+                <div class="wall-item glass-card rounded-3xl p-6 border border-slate-800" data-category="ai">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-cyan mb-2 block">AI</span>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Nepali Speech-to-Text Model</h3>
+                    <p class="text-slate-400 text-xs mb-4">Neural network optimized for recognizing regional dialects and transcribing local speech.</p>
+                    <span class="text-xs text-slate-500 font-medium">Innovator: NeuralNepal</span>
+                </div>
+                <!-- Item 3 -->
+                <div class="wall-item glass-card rounded-3xl p-6 border border-slate-800" data-category="environment">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-cyan mb-2 block">Environment</span>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Smart Bin with Waste Sorting</h3>
+                    <p class="text-slate-400 text-xs mb-4">IoT-enabled recycling bin that automatically segregates plastic, paper, and organic waste.</p>
+                    <span class="text-xs text-slate-500 font-medium">Innovator: GreenRoots</span>
+                </div>
+                <!-- Item 4 -->
+                <div class="wall-item glass-card rounded-3xl p-6 border border-slate-800" data-category="health">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-cyan mb-2 block">Health</span>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Non-Invasive Glucose Monitor</h3>
+                    <p class="text-slate-400 text-xs mb-4">Optical sensor bracelet providing non-painful blood sugar estimation.</p>
+                    <span class="text-xs text-slate-500 font-medium">Innovator: BioHealth</span>
+                </div>
+                <!-- Item 5 -->
+                <div class="wall-item glass-card rounded-3xl p-6 border border-slate-800" data-category="agriculture">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-cyan mb-2 block">Agriculture</span>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Solar Soil Moisture Drip Unit</h3>
+                    <p class="text-slate-400 text-xs mb-4">Automated irrigation controller powered entirely by standalone photovoltaic panels.</p>
+                    <span class="text-xs text-slate-500 font-medium">Innovator: AgroTech</span>
+                </div>
+                <!-- Item 6 -->
+                <div class="wall-item glass-card rounded-3xl p-6 border border-slate-800" data-category="digital">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-cyan mb-2 block">Digital Innovation</span>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Open Learning Portal for Rural Schools</h3>
+                    <p class="text-slate-400 text-xs mb-4">Low-bandwidth offline-first educational web platform packed with science modules.</p>
+                    <span class="text-xs text-slate-500 font-medium">Innovator: OpenEdu</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         14. EVENT JOURNEY / TIMELINE
+         ============================================== -->
+    <section id="journey" class="py-24 relative bg-navy-dark/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">06 — Journey</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white mb-6">The UNIF Journey</h2>
+                <p class="text-slate-300 text-base">
+                    From initial concept to national recognition — here is how your project comes to life.
+                </p>
+            </div>
+
+            <!-- Timeline Stages Grid/Flex -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 relative">
+                    <span class="absolute top-4 right-4 font-display font-extrabold text-2xl text-slate-800">01</span>
+                    <div class="text-2xl mb-4">📝</div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Registration</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">Submit basic team information and school credentials online.</p>
+                </div>
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 relative">
+                    <span class="absolute top-4 right-4 font-display font-extrabold text-2xl text-slate-800">02</span>
+                    <div class="text-2xl mb-4">💡</div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Idea Submission</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">Provide your project proposal, abstract, and schematic plans.</p>
+                </div>
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 relative">
+                    <span class="absolute top-4 right-4 font-display font-extrabold text-2xl text-slate-800">03</span>
+                    <div class="text-2xl mb-4">🔍</div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Project Selection</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">Expert review panel evaluates entries for feasibility and innovation.</p>
+                </div>
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 relative">
+                    <span class="absolute top-4 right-4 font-display font-extrabold text-2xl text-slate-800">04</span>
+                    <div class="text-2xl mb-4">🛠️</div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Preparation & Mentoring</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">Refine prototypes with expert guidance and virtual coaching sessions.</p>
+                </div>
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 relative">
+                    <span class="absolute top-4 right-4 font-display font-extrabold text-2xl text-slate-800">05</span>
+                    <div class="text-2xl mb-4">🏛️</div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Innovation Fair</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">Showcase your live working model at the official national exhibition.</p>
+                </div>
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 relative">
+                    <span class="absolute top-4 right-4 font-display font-extrabold text-2xl text-slate-800">06</span>
+                    <div class="text-2xl mb-4">⚖️</div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Evaluation</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">Judges review live demonstrations, pitching, and prototype testing.</p>
+                </div>
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 relative md:col-span-2">
+                    <span class="absolute top-4 right-4 font-display font-extrabold text-2xl text-slate-800">07</span>
+                    <div class="text-2xl mb-4">🏆</div>
+                    <h3 class="font-display font-bold text-lg text-white mb-2">Awards & Recognition</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">Celebrate excellence with trophies, certificates, and special grants.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         15. AWARDS & RECOGNITION
+         ============================================== -->
+    <section class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">07 — Prizes</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white mb-6">Awards & Recognition</h2>
+                <p class="text-slate-300 text-base">
+                    Honoring excellence, ingenuity, and profound societal impact.
+                </p>
+            </div>
+
+            <!-- Top 3 Podium Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="glass-card rounded-3xl p-8 border border-slate-800 text-center relative">
+                    <div class="text-4xl mb-4">🥈</div>
+                    <h3 class="font-display font-bold text-xl text-white mb-2">First Runner-up</h3>
+                    <p class="text-slate-400 text-xs">Recognition & Special Innovation Plaque</p>
+                </div>
+                <div class="glass-card rounded-3xl p-8 border border-cyan/40 text-center relative shadow-xl shadow-electric/20 bg-gradient-to-b from-electric/10 to-transparent">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-cyan text-navy font-bold text-xs uppercase">Grand Champion</div>
+                    <div class="text-5xl mb-4 mt-2">🥇</div>
+                    <h3 class="font-display font-bold text-2xl text-white mb-2">Winner</h3>
+                    <p class="text-slate-300 text-xs">Trophy, Certificate & Featured Spotlight</p>
+                </div>
+                <div class="glass-card rounded-3xl p-8 border border-slate-800 text-center relative">
+                    <div class="text-4xl mb-4">🥉</div>
+                    <h3 class="font-display font-bold text-xl text-white mb-2">Second Runner-up</h3>
+                    <p class="text-slate-400 text-xs">Excellence Certificate & Honors</p>
+                </div>
+            </div>
+
+            <!-- Additional Awards Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="glass-card rounded-2xl p-4 text-center border border-slate-800">
+                    <span class="text-xl block mb-1">🌟</span>
+                    <h4 class="font-display font-semibold text-white text-sm">Best Innovation</h4>
+                </div>
+                <div class="glass-card rounded-2xl p-4 text-center border border-slate-800">
+                    <span class="text-xl block mb-1">👥</span>
+                    <h4 class="font-display font-semibold text-white text-sm">People's Choice</h4>
+                </div>
+                <div class="glass-card rounded-2xl p-4 text-center border border-slate-800">
+                    <span class="text-xl block mb-1">🎤</span>
+                    <h4 class="font-display font-semibold text-white text-sm">Best Presentation</h4>
+                </div>
+                <div class="glass-card rounded-2xl p-4 text-center border border-slate-800">
+                    <span class="text-xl block mb-1">🌍</span>
+                    <h4 class="font-display font-semibold text-white text-sm">Best Social Impact</h4>
+                </div>
+                <div class="glass-card rounded-2xl p-4 text-center border border-slate-800 col-span-2 md:col-span-1">
+                    <span class="text-xl block mb-1">♻️</span>
+                    <h4 class="font-display font-semibold text-white text-sm">Sustainability Award</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         16. JUDGES / MENTORS / SPEAKERS
+         ============================================== -->
+    <section class="py-24 relative bg-navy-dark/40" id="judges-section" style="display:none">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">08 — Evaluation</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white mb-6">Meet the Evaluators</h2>
+                <p class="text-slate-300 text-base">
+                    Distinguished experts, scientists, and educators guiding the innovation fair.
+                </p>
+            </div>
+
+            <!-- Profile Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Judge 1 -->
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 text-center group">
+                    <div class="w-24 h-24 rounded-full bg-slate-800 mx-auto mb-4 overflow-hidden border-2 border-cyan/30 relative">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" alt="Judge Photo" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-white mb-1" data-c="unif_judge1_name">[ADD NAME]</h3>
+                    <p class="text-cyan text-xs font-semibold mb-2">Senior Technologist</p>
+                    <p class="text-slate-400 text-xs" data-c="unif_judge1_org">[ADD ORGANIZATION — e.g., Robotics Association Nepal]</p>
+                </div>
+
+                <!-- Judge 2 -->
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 text-center group">
+                    <div class="w-24 h-24 rounded-full bg-slate-800 mx-auto mb-4 overflow-hidden border-2 border-cyan/30 relative">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80" alt="Judge Photo" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-white mb-1" data-c="unif_judge2_name">[ADD NAME]</h3>
+                    <p class="text-cyan text-xs font-semibold mb-2">AI Researcher</p>
+                    <p class="text-slate-400 text-xs" data-c="unif_judge2_org">[ADD ORGANIZATION — e.g., TechHub Kathmandu]</p>
+                </div>
+
+                <!-- Judge 3 -->
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 text-center group">
+                    <div class="w-24 h-24 rounded-full bg-slate-800 mx-auto mb-4 overflow-hidden border-2 border-cyan/30 relative">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80" alt="Judge Photo" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-white mb-1" data-c="unif_judge3_name">[ADD NAME]</h3>
+                    <p class="text-cyan text-xs font-semibold mb-2">STEM Curriculum Expert</p>
+                    <p class="text-slate-400 text-xs" data-c="unif_judge3_org">[ADD ORGANIZATION — e.g., Academic Council]</p>
+                </div>
+
+                <!-- Judge 4 -->
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 text-center group">
+                    <div class="w-24 h-24 rounded-full bg-slate-800 mx-auto mb-4 overflow-hidden border-2 border-cyan/30 relative">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80" alt="Judge Photo" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-white mb-1" data-c="unif_judge4_name">[ADD NAME]</h3>
+                    <p class="text-cyan text-xs font-semibold mb-2">Innovation Mentor</p>
+                    <p class="text-slate-400 text-xs" data-c="unif_judge4_org">[ADD ORGANIZATION — e.g., Startup Foundation]</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         17. GALLERY SECTION
+         ============================================== -->
+    <section id="gallery" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">09 — Gallery</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white mb-4">Moments from UNIF</h2>
+                <p class="text-slate-300 text-sm sm:text-base">
+                    Capturing curiosity, collaboration, and breakthrough moments.
+                </p>
+            </div>
+
+            <!-- Gallery Filter Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-3 mb-12" id="gallery-filter-buttons">
+                <button data-gallery="all" class="gal-filter-btn px-5 py-2.5 rounded-xl bg-electric text-white text-xs font-semibold shadow-lg transition-all">All</button>
+                <button data-gallery="events" class="gal-filter-btn px-5 py-2.5 rounded-xl glass-card text-slate-300 hover:text-white text-xs font-semibold transition-all">Events</button>
+                <button data-gallery="projects" class="gal-filter-btn px-5 py-2.5 rounded-xl glass-card text-slate-300 hover:text-white text-xs font-semibold transition-all">Projects</button>
+                <button data-gallery="participants" class="gal-filter-btn px-5 py-2.5 rounded-xl glass-card text-slate-300 hover:text-white text-xs font-semibold transition-all">Participants</button>
+                <button data-gallery="judges" class="gal-filter-btn px-5 py-2.5 rounded-xl glass-card text-slate-300 hover:text-white text-xs font-semibold transition-all">Judges</button>
+                <button data-gallery="bts" class="gal-filter-btn px-5 py-2.5 rounded-xl glass-card text-slate-300 hover:text-white text-xs font-semibold transition-all">Behind the Scenes</button>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery-grid">
+                <div class="gallery-item glass-card rounded-3xl overflow-hidden border border-slate-800 group cursor-pointer h-64 relative" data-category="events">
+                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80" alt="Event Moment" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent opacity-80"></div>
+                    <span class="absolute bottom-4 left-4 text-xs font-semibold text-cyan uppercase tracking-wider">Events</span>
+                </div>
+                <div class="gallery-item glass-card rounded-3xl overflow-hidden border border-slate-800 group cursor-pointer h-64 relative" data-category="projects">
+                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80" alt="Project Display" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent opacity-80"></div>
+                    <span class="absolute bottom-4 left-4 text-xs font-semibold text-cyan uppercase tracking-wider">Projects</span>
+                </div>
+                <div class="gallery-item glass-card rounded-3xl overflow-hidden border border-slate-800 group cursor-pointer h-64 relative" data-category="participants">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=600&q=80" alt="Participants" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent opacity-80"></div>
+                    <span class="absolute bottom-4 left-4 text-xs font-semibold text-cyan uppercase tracking-wider">Participants</span>
+                </div>
+                <div class="gallery-item glass-card rounded-3xl overflow-hidden border border-slate-800 group cursor-pointer h-64 relative" data-category="judges">
+                    <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=600&q=80" alt="Judges Evaluation" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent opacity-80"></div>
+                    <span class="absolute bottom-4 left-4 text-xs font-semibold text-cyan uppercase tracking-wider">Judges</span>
+                </div>
+                <div class="gallery-item glass-card rounded-3xl overflow-hidden border border-slate-800 group cursor-pointer h-64 relative" data-category="bts">
+                    <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80" alt="Behind the Scenes" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent opacity-80"></div>
+                    <span class="absolute bottom-4 left-4 text-xs font-semibold text-cyan uppercase tracking-wider">Behind the Scenes</span>
+                </div>
+                <div class="gallery-item glass-card rounded-3xl overflow-hidden border border-slate-800 group cursor-pointer h-64 relative" data-category="events">
+                    <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=600&q=80" alt="Audience" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent opacity-80"></div>
+                    <span class="absolute bottom-4 left-4 text-xs font-semibold text-cyan uppercase tracking-wider">Events</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         18. TESTIMONIALS SECTION
+         ============================================== -->
+    <section id="testimonials-section" style="display:none" class="py-24 relative bg-navy-dark/40">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">10 — Testimonials</span>
+            <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white mb-12">What People Say About UNIF</h2>
+
+            <div class="glass-card rounded-3xl p-8 sm:p-12 border border-slate-800 relative">
+                <div id="testimonial-container" class="transition-opacity duration-500">
+                    <p class="text-slate-200 text-lg sm:text-xl font-light italic mb-8 leading-relaxed">
+                        “UNIF provided our students with an unprecedented platform to test their ideas against national standards and receive invaluable mentorship.”
+                    </p>
+                    <h3 class="font-display font-bold text-white text-lg">[ADD NAME — e.g., Dr. Rajesh Sharma]</h3>
+                    <p class="text-cyan text-xs font-semibold uppercase tracking-wider mt-1">[ADD ROLE — e.g., Principal & Educator]</p>
+                </div>
+
+                <!-- Carousel Controls -->
+                <div class="flex items-center justify-center gap-4 mt-8">
+                    <button id="prev-testimonial" aria-label="Previous Testimonial" class="p-3 rounded-xl glass-card text-slate-300 hover:text-cyan border border-slate-800">←</button>
+                    <button id="next-testimonial" aria-label="Next Testimonial" class="p-3 rounded-xl glass-card text-slate-300 hover:text-cyan border border-slate-800">→</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         19. SPONSORS & PARTNERS
+         ============================================== -->
+    <section id="sec-sponsors" class="py-20 relative" style="display:none">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">11 — Partners</span>
+            <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-white mb-12">Our Sponsors & Partners</h2>
+
+            <div id="sponsor-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="glass-card rounded-2xl p-6 flex items-center justify-center border border-slate-800 text-slate-400 font-display font-bold text-sm tracking-wider">[SPONSOR LOGO 1]</div>
+                <div class="glass-card rounded-2xl p-6 flex items-center justify-center border border-slate-800 text-slate-400 font-display font-bold text-sm tracking-wider">[SPONSOR LOGO 2]</div>
+                <div class="glass-card rounded-2xl p-6 flex items-center justify-center border border-slate-800 text-slate-400 font-display font-bold text-sm tracking-wider">[SPONSOR LOGO 3]</div>
+                <div class="glass-card rounded-2xl p-6 flex items-center justify-center border border-slate-800 text-slate-400 font-display font-bold text-sm tracking-wider">[SPONSOR LOGO 4]</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         20. EVENT INFORMATION
+         ============================================== -->
+    <section class="py-20 relative bg-navy-dark/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">12 — Details</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white mb-6">Event Information</h2>
+                <p class="text-slate-300 text-base">
+                    Everything you need to know about attending or participating in UNIF.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 flex items-start gap-4">
+                    <span class="text-2xl">📅</span>
+                    <div>
+                        <h3 class="font-display font-bold text-white text-sm uppercase tracking-wider mb-1">Date</h3>
+                        <p class="text-slate-300 text-sm" data-c="unif_event_date_text">[EVENT DATE]</p>
+                    </div>
+                </div>
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 flex items-start gap-4">
+                    <span class="text-2xl">📍</span>
+                    <div>
+                        <h3 class="font-display font-bold text-white text-sm uppercase tracking-wider mb-1">Venue</h3>
+                        <p class="text-slate-300 text-sm" data-c="unif_venue">[EVENT VENUE]</p>
+                    </div>
+                </div>
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 flex items-start gap-4">
+                    <span class="text-2xl">⏰</span>
+                    <div>
+                        <h3 class="font-display font-bold text-white text-sm uppercase tracking-wider mb-1">Time</h3>
+                        <p class="text-slate-300 text-sm" data-c="unif_time">[EVENT TIME]</p>
+                    </div>
+                </div>
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 flex items-start gap-4">
+                    <span class="text-2xl">👥</span>
+                    <div>
+                        <h3 class="font-display font-bold text-white text-sm uppercase tracking-wider mb-1">Eligibility</h3>
+                        <p class="text-slate-300 text-sm" data-c="unif_eligibility">[ELIGIBILITY INFORMATION]</p>
+                    </div>
+                </div>
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 flex items-start gap-4">
+                    <span class="text-2xl">💰</span>
+                    <div>
+                        <h3 class="font-display font-bold text-white text-sm uppercase tracking-wider mb-1">Registration Fee</h3>
+                        <p class="text-slate-300 text-sm" data-c="unif_fee">[REGISTRATION FEE]</p>
+                    </div>
+                </div>
+                <div class="glass-card rounded-3xl p-6 border border-slate-800 flex items-center justify-between">
+                    <div class="flex items-start gap-4">
+                        <span class="text-2xl">📞</span>
+                        <div>
+                            <h3 class="font-display font-bold text-white text-sm uppercase tracking-wider mb-1">Contact</h3>
+                            <p class="text-slate-300 text-sm" data-c="phone">[OFFICIAL PHONE NUMBER]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <a href="#contact" class="inline-flex items-center justify-center px-6 py-3 rounded-xl glass-card text-cyan font-semibold text-sm hover:border-cyan transition-all">
+                    View Location Map →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         22. FAQ SECTION
+         ============================================== -->
+    <section id="faq" class="py-24 relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">13 — FAQ</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white mb-6">Frequently Asked Questions</h2>
+                <p class="text-slate-300 text-base">
+                    Got questions? We have answers.
+                </p>
+            </div>
+
+            <!-- Accordion List -->
+            <div class="space-y-4" id="faq-accordion">
+                <!-- FAQ 1 -->
+                <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-display font-bold text-white text-base flex items-center justify-between focus:outline-none">
+                        <span>Who can participate in UNIF?</span>
+                        <span class="text-cyan text-xl transition-transform">+</span>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-slate-300 text-xs sm:text-sm leading-relaxed" data-c="unif_faq1">
+                        Open to all secondary school, high school, and undergraduate student innovators across Nepal.
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-display font-bold text-white text-base flex items-center justify-between focus:outline-none">
+                        <span>How do I register?</span>
+                        <span class="text-cyan text-xl transition-transform">+</span>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-slate-300 text-xs sm:text-sm leading-relaxed" data-c="unif_faq2">
+                        Click the 'Register Now' button on this page and fill out the application form with your team and project details. Registration details will be confirmed via email after submission.
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-display font-bold text-white text-base flex items-center justify-between focus:outline-none">
+                        <span>Is there a registration fee?</span>
+                        <span class="text-cyan text-xl transition-transform">+</span>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-slate-300 text-xs sm:text-sm leading-relaxed" data-c="unif_faq3">
+                        Fee details and registration guidelines will be announced along with the official opening of applications. Stay tuned to our announcements for the latest information.
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-display font-bold text-white text-base flex items-center justify-between focus:outline-none">
+                        <span>What types of projects are accepted?</span>
+                        <span class="text-cyan text-xl transition-transform">+</span>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-slate-300 text-xs sm:text-sm leading-relaxed" data-c="unif_faq4">
+                        We welcome projects in Robotics, AI, environmental solutions, software applications, renewable energy prototypes, agricultural tools, and more. Any project that addresses a real-world challenge is eligible.
+                    </div>
+                </div>
+
+                <!-- FAQ 5 -->
+                <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-display font-bold text-white text-base flex items-center justify-between focus:outline-none">
+                        <span>Can I participate as a team?</span>
+                        <span class="text-cyan text-xl transition-transform">+</span>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-slate-300 text-xs sm:text-sm leading-relaxed" data-c="unif_faq5">
+                        Yes, team participation is strongly encouraged. Specific team size limits per project will be shared in the official registration guidelines.
+                    </div>
+                </div>
+
+                <!-- FAQ 6 -->
+                <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-display font-bold text-white text-base flex items-center justify-between focus:outline-none">
+                        <span>What are the judging criteria?</span>
+                        <span class="text-cyan text-xl transition-transform">+</span>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-slate-300 text-xs sm:text-sm leading-relaxed" data-c="unif_faq6">
+                        Projects are evaluated on innovation originality, technical feasibility, practical application, societal impact, and presentation quality.
+                    </div>
+                </div>
+
+                <!-- FAQ 7 -->
+                <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-display font-bold text-white text-base flex items-center justify-between focus:outline-none">
+                        <span>What should participants bring?</span>
+                        <span class="text-cyan text-xl transition-transform">+</span>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-slate-300 text-xs sm:text-sm leading-relaxed" data-c="unif_faq7">
+                        Participants should bring their working prototype, presentation materials, power cords, and team identification. A full checklist will be shared with registered teams closer to the event.
+                    </div>
+                </div>
+
+                <!-- FAQ 8 -->
+                <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-display font-bold text-white text-base flex items-center justify-between focus:outline-none">
+                        <span>When is the project submission deadline?</span>
+                        <span class="text-cyan text-xl transition-transform">+</span>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-slate-300 text-xs sm:text-sm leading-relaxed" data-c="unif_faq8">
+                        Submission deadlines will be published on the official timeline and announcement board. Keep an eye on the countdown and our social channels for exact dates.
+                    </div>
+                </div>
+
+                <!-- FAQ 9 -->
+                <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
+                    <button class="faq-toggle w-full px-6 py-4 text-left font-display font-bold text-white text-base flex items-center justify-between focus:outline-none">
+                        <span>Where will UNIF take place?</span>
+                        <span class="text-cyan text-xl transition-transform">+</span>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-slate-300 text-xs sm:text-sm leading-relaxed" data-c="unif_faq9">
+                        UNIF will be hosted at our primary exhibition venue in Kathmandu, Nepal. Exact venue details will be announced to registered participants in advance.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         21. REGISTRATION CTA SECTION
+         ============================================== -->
+    <section id="register" class="py-24 relative overflow-hidden bg-gradient-to-br from-electric/20 via-navy to-cyan/10">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">Registration</span>
+                <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-white mb-4">
+                    Have an idea that can change something?
+                </h2>
+                <p class="text-cyan font-display font-bold text-xl sm:text-2xl mb-3">Bring it to UNIF.</p>
+                <p class="text-slate-300 text-sm sm:text-base">Register your project for the Udaan Nepal Innovation Fair. Fill in the form below and our team will contact you with the next steps.</p>
+            </div>
+
+            <div id="unif-reg-panel" class="glass-card rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-2xl">
+
+                <!-- Registration form -->
+                <div id="unif-form-wrap">
+                    <div id="unif-mode-toggle" class="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-navy/70 border border-slate-800 mb-6" role="tablist">
+                        <button type="button" data-mode="participant" class="unif-mode-btn px-4 py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-electric to-cyan text-white transition-all">Student / Team</button>
+                        <button type="button" data-mode="school" class="unif-mode-btn px-4 py-3 rounded-xl text-sm font-bold text-slate-300 hover:text-white transition-all">School Registration</button>
+                    </div>
+
+                    <form id="unif-form" novalidate class="space-y-5">
+                        <input type="text" id="hpField" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
+
+                        <!-- STUDENT / TEAM -->
+                        <div id="unif-participant" class="space-y-5">
+                            <p class="text-xs font-bold uppercase tracking-widest text-cyan">Team leader details</p>
+                            <div class="fg"><label for="p_name" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Full Name <span class="text-red-400">*</span></label><input type="text" id="p_name" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="Your full name" ><p class="field-error hidden text-xs text-red-400 mt-1">Please enter your full name.</p></div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="fg"><label for="p_school" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">School / College <span class="text-red-400">*</span></label><input type="text" id="p_school" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="School or college name" ><p class="field-error hidden text-xs text-red-400 mt-1">Please enter your school name.</p></div>
+                                <div class="fg"><label for="p_grade" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Grade / Class <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><input type="text" id="p_grade" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="e.g. Grade 10" ></div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="fg"><label for="p_phone" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Phone Number <span class="text-red-400">*</span></label><input type="tel" id="p_phone" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="98XXXXXXXX" ><p class="field-error hidden text-xs text-red-400 mt-1">Please enter a valid phone number.</p></div>
+                                <div class="fg"><label for="p_email" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Email Address <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><input type="email" id="p_email" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="you@example.com" ></div>
+                            </div>
+                            <div class="fg"><label for="p_address" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Address <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><input type="text" id="p_address" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="Your address" ></div>
+
+                            <p class="text-xs font-bold uppercase tracking-widest text-cyan pt-2">Project details</p>
+                            <div class="fg"><label for="p_title" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Project Title <span class="text-red-400">*</span></label><input type="text" id="p_title" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="What is your project called?" maxlength="200"><p class="field-error hidden text-xs text-red-400 mt-1">Please enter your project title.</p></div>
+                            <div class="fg"><label for="p_category" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Category <span class="text-red-400">*</span></label>
+                                <select id="p_category" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors"><option value="">Select a category</option><option value="Robotics">Robotics</option><option value="AI & Software">AI & Software</option><option value="Environment & Sustainability">Environment & Sustainability</option><option value="Renewable Energy">Renewable Energy</option><option value="Agriculture">Agriculture</option><option value="Health & Medicine">Health & Medicine</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Biology">Biology</option><option value="Mathematics">Mathematics</option><option value="Other">Other</option></select>
+                                <p class="field-error hidden text-xs text-red-400 mt-1">Please select a category.</p></div>
+                            <div class="fg"><label for="p_summary" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Short Description <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><textarea id="p_summary" rows="4" maxlength="2000" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="What does your project do? What problem does it solve?"></textarea></div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="fg"><label for="p_team_size" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Number of Team Members <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><input type="number" id="p_team_size" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="1" min="1" max="20" value="1"></div>
+                                <div class="fg"><label for="p_mentor" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Teacher / Mentor Name <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><input type="text" id="p_mentor" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="Name of your mentor" ></div>
+                            </div>
+                            <div class="fg"><label for="p_members" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Team Member Names <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><textarea id="p_members" rows="2" maxlength="1000" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="List the names of your team members"></textarea></div>
+                            <div class="fg"><label for="p_mentor_phone" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Mentor Phone <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><input type="tel" id="p_mentor_phone" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="Mentor contact number" ></div>
+                            <div class="fg"><label for="p_needs" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Space / Equipment Needs <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><textarea id="p_needs" rows="2" maxlength="1000" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="e.g. table, power socket, display screen"></textarea></div>
+                        </div>
+
+                        <!-- SCHOOL -->
+                        <div id="unif-school" class="space-y-5 hidden">
+                            <p class="text-xs font-bold uppercase tracking-widest text-cyan">School details</p>
+                            <div class="fg"><label for="s_school" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">School Name <span class="text-red-400">*</span></label><input type="text" id="s_school" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="School name" ><p class="field-error hidden text-xs text-red-400 mt-1">Please enter your school name.</p></div>
+                            <div class="fg"><label for="s_address" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">School Address <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><input type="text" id="s_address" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="School address" ></div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="fg"><label for="s_coordinator" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Coordinator Name <span class="text-red-400">*</span></label><input type="text" id="s_coordinator" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="Contact person" ><p class="field-error hidden text-xs text-red-400 mt-1">Please enter a coordinator name.</p></div>
+                                <div class="fg"><label for="s_designation" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Designation <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><input type="text" id="s_designation" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="e.g. Principal, Science Teacher" ></div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="fg"><label for="s_phone" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Phone <span class="text-red-400">*</span></label><input type="tel" id="s_phone" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="98XXXXXXXX" ><p class="field-error hidden text-xs text-red-400 mt-1">Please enter a valid phone number.</p></div>
+                                <div class="fg"><label for="s_email" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Email <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><input type="email" id="s_email" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="school@example.com" ></div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                                <div class="fg"><label for="s_projects" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Approx. Projects <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><input type="text" id="s_projects" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="e.g. 10" ></div>
+                                <div class="fg"><label for="s_students" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Approx. Students <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><input type="text" id="s_students" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="e.g. 30" ></div>
+                                <div class="fg"><label for="s_teachers" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Approx. Teachers <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></label><input type="text" id="s_teachers" class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="e.g. 3" ></div>
+                            </div>
+                            <div class="fg"><span class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Project Categories <span class="normal-case tracking-normal text-slate-500 font-normal">(optional)</span></span>
+                                <div id="s_categories" class="flex flex-wrap gap-2"><label class="chip-label cursor-pointer"><input type="checkbox" value="Robotics" class="peer sr-only"><span class="inline-block px-3 py-1.5 rounded-full border border-slate-700 text-slate-300 text-xs font-semibold peer-checked:bg-electric peer-checked:border-electric peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-cyan transition-colors">Robotics</span></label><label class="chip-label cursor-pointer"><input type="checkbox" value="AI & Software" class="peer sr-only"><span class="inline-block px-3 py-1.5 rounded-full border border-slate-700 text-slate-300 text-xs font-semibold peer-checked:bg-electric peer-checked:border-electric peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-cyan transition-colors">AI & Software</span></label><label class="chip-label cursor-pointer"><input type="checkbox" value="Environment & Sustainability" class="peer sr-only"><span class="inline-block px-3 py-1.5 rounded-full border border-slate-700 text-slate-300 text-xs font-semibold peer-checked:bg-electric peer-checked:border-electric peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-cyan transition-colors">Environment & Sustainability</span></label><label class="chip-label cursor-pointer"><input type="checkbox" value="Renewable Energy" class="peer sr-only"><span class="inline-block px-3 py-1.5 rounded-full border border-slate-700 text-slate-300 text-xs font-semibold peer-checked:bg-electric peer-checked:border-electric peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-cyan transition-colors">Renewable Energy</span></label><label class="chip-label cursor-pointer"><input type="checkbox" value="Agriculture" class="peer sr-only"><span class="inline-block px-3 py-1.5 rounded-full border border-slate-700 text-slate-300 text-xs font-semibold peer-checked:bg-electric peer-checked:border-electric peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-cyan transition-colors">Agriculture</span></label><label class="chip-label cursor-pointer"><input type="checkbox" value="Health & Medicine" class="peer sr-only"><span class="inline-block px-3 py-1.5 rounded-full border border-slate-700 text-slate-300 text-xs font-semibold peer-checked:bg-electric peer-checked:border-electric peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-cyan transition-colors">Health & Medicine</span></label><label class="chip-label cursor-pointer"><input type="checkbox" value="Physics" class="peer sr-only"><span class="inline-block px-3 py-1.5 rounded-full border border-slate-700 text-slate-300 text-xs font-semibold peer-checked:bg-electric peer-checked:border-electric peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-cyan transition-colors">Physics</span></label><label class="chip-label cursor-pointer"><input type="checkbox" value="Chemistry" class="peer sr-only"><span class="inline-block px-3 py-1.5 rounded-full border border-slate-700 text-slate-300 text-xs font-semibold peer-checked:bg-electric peer-checked:border-electric peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-cyan transition-colors">Chemistry</span></label><label class="chip-label cursor-pointer"><input type="checkbox" value="Biology" class="peer sr-only"><span class="inline-block px-3 py-1.5 rounded-full border border-slate-700 text-slate-300 text-xs font-semibold peer-checked:bg-electric peer-checked:border-electric peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-cyan transition-colors">Biology</span></label><label class="chip-label cursor-pointer"><input type="checkbox" value="Mathematics" class="peer sr-only"><span class="inline-block px-3 py-1.5 rounded-full border border-slate-700 text-slate-300 text-xs font-semibold peer-checked:bg-electric peer-checked:border-electric peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-cyan transition-colors">Mathematics</span></label><label class="chip-label cursor-pointer"><input type="checkbox" value="Other" class="peer sr-only"><span class="inline-block px-3 py-1.5 rounded-full border border-slate-700 text-slate-300 text-xs font-semibold peer-checked:bg-electric peer-checked:border-electric peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-cyan transition-colors">Other</span></label></div></div>
+                        </div>
+
+                        <!-- Confirmations -->
+                        <div class="space-y-3 pt-2">
+                            <label class="flex items-start gap-3 text-sm text-slate-300 cursor-pointer"><input type="checkbox" class="term-check mt-1 accent-cyan"> <span>I confirm that the information provided is correct.</span></label>
+                            <label class="flex items-start gap-3 text-sm text-slate-300 cursor-pointer"><input type="checkbox" class="term-check mt-1 accent-cyan"> <span>I agree to the UNIF participation guidelines.</span></label>
+                            <p id="unif-terms-error" class="field-error hidden text-xs text-red-400">Please confirm both checkboxes to continue.</p>
+                        </div>
+
+                        <div id="unif-submit-error" role="alert" class="hidden px-4 py-3 rounded-xl text-sm leading-relaxed" style="background:rgba(240,68,82,0.12);border:1px solid rgba(240,68,82,0.4);color:#FF8A94;"></div>
+
+                        <button type="submit" id="unif-submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-electric to-cyan text-white font-bold text-base shadow-xl shadow-electric/30 hover:shadow-electric/60 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+                            Register for UNIF →
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Success state -->
+                <div id="unif-success" class="hidden text-center py-4">
+                    <div class="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center mx-auto mb-5 text-emerald-300 text-3xl">✓</div>
+                    <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-white mb-3">Registration Successful!</h3>
+                    <p class="text-slate-300 text-sm sm:text-base mb-6">Thank you for registering for UNIF. Your registration has been received and our team will contact you soon.</p>
+                    <div id="unif-ref" class="inline-block px-6 py-3 rounded-xl bg-navy/80 border border-cyan/30 text-cyan font-bold tracking-widest text-lg mb-6">UNIF-000000</div>
+                    <div class="max-w-sm mx-auto text-left text-sm space-y-2 mb-8">
+                        <div class="flex justify-between gap-4 border-b border-slate-800 pb-2"><span class="text-slate-400">Event</span><span class="text-white font-semibold">UNIF 2026</span></div>
+                        <div class="flex justify-between gap-4 border-b border-slate-800 pb-2"><span class="text-slate-400">Registered by</span><span id="unif-sd-name" class="text-white font-semibold text-right">—</span></div>
+                        <div class="flex justify-between gap-4 border-b border-slate-800 pb-2"><span class="text-slate-400">Project / School</span><span id="unif-sd-detail" class="text-white font-semibold text-right">—</span></div>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-6">Please keep your reference number for future communication.</p>
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                        <button type="button" id="unif-print" class="px-6 py-3 rounded-xl glass-card text-white font-semibold text-sm hover:border-cyan transition-all">Print Confirmation</button>
+                        <a href="#top" class="px-6 py-3 rounded-xl glass-card text-cyan font-semibold text-sm hover:border-cyan transition-all">Back to top</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-8">
+                <a href="#contact" class="inline-flex px-8 py-4 rounded-xl glass-card text-white font-semibold text-base hover:border-cyan transition-all">Become a Partner</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         23. CONTACT SECTION
+         ============================================== -->
+    <section id="contact" class="py-24 relative bg-navy-dark/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                <!-- Contact Info -->
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-cyan mb-2 block">14 — Contact</span>
+                    <h2 class="font-display font-extrabold text-3xl sm:text-4xl text-white mb-6">Get in Touch</h2>
+                    <p class="text-slate-300 text-base mb-8">
+                        Have inquiries regarding partnership, sponsorship, or participation? Reach out to our organizing team.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <span class="text-xl">📧</span>
+                            <div>
+                                <h3 class="font-display font-bold text-white text-sm">Email</h3>
+                                <p class="text-slate-400 text-xs" data-c="email">[OFFICIAL EMAIL]</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-xl">📞</span>
+                            <div>
+                                <h3 class="font-display font-bold text-white text-sm">Phone</h3>
+                                <p class="text-slate-400 text-xs" data-c="phone">[OFFICIAL PHONE NUMBER]</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-xl">📍</span>
+                            <div>
+                                <h3 class="font-display font-bold text-white text-sm">Location</h3>
+                                <p class="text-slate-400 text-xs" data-c="address">[OFFICIAL ADDRESS]</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Links -->
+                    <div class="flex items-center gap-4 mt-8">
+                        <a href="#" data-social="facebook" aria-label="Facebook" class="w-10 h-10 rounded-xl glass-card flex items-center justify-center text-slate-300 hover:text-cyan border border-slate-800">FB</a>
+                        <a href="#" data-social="instagram" aria-label="Instagram" class="w-10 h-10 rounded-xl glass-card flex items-center justify-center text-slate-300 hover:text-cyan border border-slate-800">IG</a>
+                        <a href="#" data-social="youtube" aria-label="YouTube" class="w-10 h-10 rounded-xl glass-card flex items-center justify-center text-slate-300 hover:text-cyan border border-slate-800">YT</a>
+                        <a href="#" data-social="tiktok" aria-label="TikTok" class="w-10 h-10 rounded-xl glass-card flex items-center justify-center text-slate-300 hover:text-cyan border border-slate-800">TT</a>
+                        <a href="#" data-social="linkedin" aria-label="LinkedIn" class="w-10 h-10 rounded-xl glass-card flex items-center justify-center text-slate-300 hover:text-cyan border border-slate-800">IN</a>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="glass-card rounded-3xl p-8 border border-slate-800">
+                    <form id="contact-form" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Name</label>
+                            <input type="text" id="form-name" required class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-800 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="Your Name">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Email</label>
+                            <input type="email" id="form-email" required class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-800 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="your.email@example.com">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Subject</label>
+                            <input type="text" id="form-subject" required class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-800 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="Subject">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Message</label>
+                            <textarea id="form-message" rows="4" required class="w-full px-4 py-3 rounded-xl bg-navy/80 border border-slate-800 text-white text-sm focus:outline-none focus:border-cyan transition-colors" placeholder="Your message..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-electric to-cyan text-white font-bold text-sm shadow-lg shadow-electric/30 hover:shadow-electric/50 transition-all">
+                            Send Message
+                        </button>
+                        <!-- Form status notification placeholder (Connect to real backend/form service here) -->
+                        <div id="form-status" class="hidden text-xs text-center font-semibold text-cyan mt-2"></div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         24. FOOTER
+         ============================================== -->
+    <footer class="py-12 border-t border-slate-800/80 bg-navy-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+                <span class="font-display font-bold text-lg tracking-wider text-white block">UNIF</span>
+                <span class="text-xs uppercase tracking-widest text-cyan font-medium">Udaan Nepal Innovation Fair</span>
+                <p class="text-slate-400 text-xs mt-2 max-w-sm">Celebrating young minds, bold ideas, and innovative solutions shaping the future of Nepal.</p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-6 text-xs font-medium text-slate-300">
+                <a href="#about" class="hover:text-cyan transition-colors">About</a>
+                <a href="#innovations" class="hover:text-cyan transition-colors">Innovations</a>
+                <a href="#gallery" class="hover:text-cyan transition-colors">Gallery</a>
+                <a href="#journey" class="hover:text-cyan transition-colors">Events</a>
+                <a href="#faq" class="hover:text-cyan transition-colors">FAQ</a>
+                <a href="#contact" class="hover:text-cyan transition-colors">Contact</a>
+            </div>
+
+            <div class="text-center md:text-right text-xs text-slate-500">
+                <p>© 2026 UNIF — Udaan Nepal Innovation Fair. All rights reserved.</p>
+                <p class="mt-1">Designed & Developed with innovation in mind.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==============================================
+         JAVASCRIPT LOGIC & INTERACTIONS
+         ============================================== -->
+    <script>
+        // 1. Scroll Progress Bar & Navbar Shrink
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scroll-progress').style.width = scrolled + '%';
+
+            const navbar = document.getElementById('navbar');
+            if (winScroll > 50) {
+                navbar.classList.add('py-2');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.add('py-4');
+                navbar.classList.remove('py-2');
+            }
+        });
+
+        // 2. Mobile Navigation Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // 3. Functional Countdown Timer
+        // Configurable Event Date from UNIF_CONFIG
+        let eventDate = new Date(UNIF_CONFIG.eventDate).getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance < 0) {
+                document.getElementById('countdown-container').innerHTML = '<div class="col-span-4 text-center text-cyan font-display font-bold text-xl">UNIF is happening now!</div>';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = String(days).padStart(2, '0');
+            document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // 4. Animated Statistics Counter on Viewport Entry
+        const stats = document.querySelectorAll('[data-target]');
+        let animated = false;
+
+        function runCounters() {
+            stats.forEach(stat => {
+                const target = +stat.getAttribute('data-target');
+                let count = 0;
+                const speed = target / 50;
+
+                const updateCount = () => {
+                    count += speed;
+                    if (count < target) {
+                        stat.innerText = Math.ceil(count) + '+';
+                        setTimeout(updateCount, 30);
+                    } else {
+                        stat.innerText = target + '+';
+                    }
+                };
+                updateCount();
+            });
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !animated) {
+                    runCounters();
+                    animated = true;
+                }
+            });
+        }, { threshold: 0.5 });
+
+        if (stats.length > 0) {
+            observer.observe(stats[0].parentElement);
+        }
+
+        // 5. Innovation Wall Filtering
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const wallItems = document.querySelectorAll('.wall-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-electric', 'text-white');
+                    b.classList.add('glass-card', 'text-slate-300');
+                });
+                btn.classList.remove('glass-card', 'text-slate-300');
+                btn.classList.add('bg-electric', 'text-white');
+
+                const filter = btn.getAttribute('data-filter');
+
+                wallItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 6. Gallery Filtering
+        const galFilterBtns = document.querySelectorAll('.gal-filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        galFilterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                galFilterBtns.forEach(b => {
+                    b.classList.remove('bg-electric', 'text-white');
+                    b.classList.add('glass-card', 'text-slate-300');
+                });
+                btn.classList.remove('glass-card', 'text-slate-300');
+                btn.classList.add('bg-electric', 'text-white');
+
+                const filter = btn.getAttribute('data-gallery');
+
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 7. Testimonials Carousel Slider
+        let testimonials = [];
+        let currentTestimonial = 0;
+        let testimonialTimer = null;
+        const testimonialContainer = document.getElementById('testimonial-container');
+        const prevTestimonialBtn = document.getElementById('prev-testimonial');
+        const nextTestimonialBtn = document.getElementById('next-testimonial');
+
+        function renderTestimonial(index) {
+            testimonialContainer.style.opacity = 0;
+            setTimeout(() => {
+                const t = testimonials[index];
+                testimonialContainer.textContent = '';
+                const q = document.createElement('p');
+                q.className = 'text-slate-200 text-lg sm:text-xl font-light italic mb-8 leading-relaxed';
+                q.textContent = '\u201C' + t.quote + '\u201D';
+                const n = document.createElement('h3');
+                n.className = 'font-display font-bold text-white text-lg';
+                n.textContent = t.name;
+                const r = document.createElement('p');
+                r.className = 'text-cyan text-xs font-semibold uppercase tracking-wider mt-1';
+                r.textContent = t.role || '';
+                testimonialContainer.append(q, n, r);
+                testimonialContainer.style.opacity = 1;
+            }, 200);
+        }
+
+        prevTestimonialBtn.addEventListener('click', () => {
+            if (!testimonials.length) return;
+            currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+            renderTestimonial(currentTestimonial);
+        });
+        nextTestimonialBtn.addEventListener('click', () => {
+            if (!testimonials.length) return;
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            renderTestimonial(currentTestimonial);
+        });
+
+        // Testimonials, the event date and the other editable text come from the admin page
+        document.addEventListener('un-content', (ev) => {
+            const d = ev.detail || {};
+            testimonials = d.testimonials || [];
+            const section = document.getElementById('testimonials-section');
+            if (testimonials.length) {
+                section.style.display = '';
+                renderTestimonial(0);
+                const multi = testimonials.length > 1;
+                prevTestimonialBtn.style.display = nextTestimonialBtn.style.display = multi ? '' : 'none';
+                if (multi && !testimonialTimer) {
+                    testimonialTimer = setInterval(() => {
+                        currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+                        renderTestimonial(currentTestimonial);
+                    }, 6000);
+                }
+            }
+            const when = d.content && d.content.unif_event_date;
+            if (when) {
+                const parsed = new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(when) ? when : when + ':00+05:45').getTime();
+                if (!isNaN(parsed)) { eventDate = parsed; updateCountdown(); }
+            }
+        });
+
+        // 8. FAQ Accordion Logic
+        const faqToggles = document.querySelectorAll('.faq-toggle');
+
+        faqToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const content = toggle.nextElementSibling;
+                const icon = toggle.querySelector('span:last-child');
+                const isOpen = !content.classList.contains('hidden');
+
+                // Close all
+                document.querySelectorAll('.faq-content').forEach(c => c.classList.add('hidden'));
+                document.querySelectorAll('.faq-toggle span:last-child').forEach(i => i.innerText = '+');
+
+                if (!isOpen) {
+                    content.classList.remove('hidden');
+                    icon.innerText = '-';
+                }
+            });
+        });
+
+        // 9. Contact Form Frontend Validation
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('form-name').value.trim();
+            const email = document.getElementById('form-email').value.trim();
+            const subject = document.getElementById('form-subject').value.trim();
+            const message = document.getElementById('form-message').value.trim();
+            if (!(name && email && message)) return;
+            const btn = contactForm.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            formStatus.classList.remove('hidden');
+            formStatus.textContent = 'Sending…';
+            let ok = false;
+            try {
+                const r = await window.UN.sendMessage({ source: 'unif', name, email, subject, message });
+                ok = !r.error;
+            } catch (err) { ok = false; }
+            btn.disabled = false;
+            if (ok) {
+                formStatus.textContent = 'Thank you! Your message has been sent. Our team will reply soon.';
+                contactForm.reset();
+            } else {
+                formStatus.textContent = 'Sorry, your message could not be sent. Please try again or call us.';
+            }
+            setTimeout(() => { formStatus.classList.add('hidden'); }, 6000);
+        });
+    </script>
+
+
+    <script>
+    /* Projects, sponsors and statistics come from the admin page. Sections with no real content stay hidden. */
+    document.addEventListener('un-content', function (ev) {
+      var d = ev.detail || {}, c = d.content || {}, L = d.lists || {};
+      var isUrl = function (v) { return typeof v === 'string' && /^https:\/\//i.test(v); };
+      function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+      // statistics
+      for (var i = 1; i <= 4; i++) {
+        var n = document.querySelector('[data-statn="' + i + '"]'), l = document.querySelector('[data-statl="' + i + '"]');
+        var v = parseInt(c['unif_stat' + i + '_num'], 10);
+        if (n && !isNaN(v)) { n.setAttribute('data-target', String(v)); if (n.textContent !== '0') n.textContent = String(v); }
+        if (l && c['unif_stat' + i + '_label']) l.textContent = c['unif_stat' + i + '_label'];
+      }
+      // sponsors
+      var sp = (L.unif_sponsors || []).filter(function (x) { return x && x.name; });
+      if (sp.length) {
+        var g = document.getElementById('sponsor-grid'); g.textContent = '';
+        sp.forEach(function (x) {
+          var box = el('div', 'glass-card rounded-2xl p-6 flex items-center justify-center border border-slate-800 text-slate-300 font-display font-bold text-sm tracking-wider');
+          if (isUrl(x.logo_url)) { var im = el('img'); im.src = x.logo_url; im.alt = x.name; im.loading = 'lazy'; im.style.cssText = 'max-height:56px;max-width:100%;object-fit:contain;'; box.append(im); } else { box.textContent = x.name; }
+          if (isUrl(x.link)) { var a = el('a'); a.href = x.link; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.style.display = 'contents'; a.append(box); g.append(a); } else { g.append(box); }
+        });
+        document.getElementById('sec-sponsors').style.display = '';
+      }
+      // projects
+      var pr = (L.unif_projects || []).filter(function (x) { return x && x.title; });
+      if (!pr.length) return;
+      var fg = document.getElementById('featured-projects-grid'); fg.textContent = '';
+      pr.slice(0, 6).forEach(function (x) {
+        var card = el('div', 'glass-card rounded-3xl overflow-hidden border border-slate-800 glass-card-hover transition-all flex flex-col');
+        if (isUrl(x.image_url)) {
+          var top = el('div', 'h-48 bg-slate-900 relative overflow-hidden'); var im = el('img', 'w-full h-full object-cover opacity-90'); im.src = x.image_url; im.alt = x.title; im.loading = 'lazy'; top.append(im);
+          if (x.category) { var tg = el('span', 'absolute top-4 left-4 px-3 py-1 rounded-full bg-electric/80 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider', x.category); top.append(tg); }
+          card.append(top);
+        }
+        var body = el('div', 'p-6 flex-1 flex flex-col justify-between'), tx = el('div');
+        tx.append(el('h3', 'font-display font-bold text-xl text-white mb-2', x.title), el('p', 'text-slate-400 text-xs leading-relaxed mb-4', x.desc || ''));
+        body.append(tx); if (x.innovator) body.append(el('div', 'pt-4 border-t border-slate-800 text-xs text-slate-400 font-medium', x.innovator));
+        card.append(body); fg.append(card);
+      });
+      document.getElementById('sec-featured').style.display = '';
+      // wall with filters built from the categories
+      var cats = []; pr.forEach(function (x) { if (x.category && cats.indexOf(x.category) < 0) cats.push(x.category); });
+      var fb = document.getElementById('filter-buttons'), wg = document.getElementById('wall-grid'); fb.textContent = ''; wg.textContent = '';
+      var btnOn = 'filter-btn px-5 py-2.5 rounded-xl bg-electric text-white text-xs font-semibold shadow-lg transition-all', btnOff = 'filter-btn px-5 py-2.5 rounded-xl glass-card text-slate-300 hover:text-white text-xs font-semibold transition-all';
+      function mkBtn(label, key) { var b = el('button', key === '' ? btnOn : btnOff, label); b.addEventListener('click', function () {
+          fb.querySelectorAll('button').forEach(function (o) { o.className = btnOff; }); b.className = btnOn;
+          wg.querySelectorAll('.wall-item').forEach(function (it) { it.style.display = (!key || it.getAttribute('data-category') === key) ? 'block' : 'none'; }); }); return b; }
+      fb.append(mkBtn('All', '')); cats.forEach(function (ct) { fb.append(mkBtn(ct, ct)); });
+      pr.forEach(function (x) {
+        var it = el('div', 'wall-item glass-card rounded-3xl p-6 border border-slate-800'); it.setAttribute('data-category', x.category || '');
+        it.append(el('span', 'text-[10px] font-bold uppercase tracking-widest text-cyan mb-2 block', x.category || ''), el('h3', 'font-display font-bold text-lg text-white mb-2', x.title), el('p', 'text-slate-400 text-xs mb-4', x.desc || ''));
+        if (x.innovator) it.append(el('span', 'text-xs text-slate-500 font-medium', x.innovator)); wg.append(it);
+      });
+      document.getElementById('sec-wall').style.display = '';
+    });
+    </script>
+    <!-- UNIF registration: saves into Supabase (table: unif_registrations) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="site-content.js"></script>
+    <script>
+    document.addEventListener('un-content', function () {
+        var st = window.UN.registrationState('unif');
+        if (st.open) return;
+        var wrap = document.getElementById('unif-form-wrap');
+        if (!wrap) return;
+        wrap.style.display = 'none';
+        var n = document.createElement('div');
+        n.setAttribute('role', 'status');
+        n.className = 'text-center py-8';
+        var h = document.createElement('h3'); h.className = 'font-display font-bold text-2xl text-white mb-2'; h.textContent = 'Registration is closed';
+        var p = document.createElement('p'); p.className = 'text-slate-300';
+        p.textContent = st.message || 'Registration for UNIF is not open right now. Please watch the Notice page for updates.';
+        n.append(h, p); wrap.parentNode.insertBefore(n, wrap);
+    });
+    </script>
+    <script>
+    (function(){
+      // Reuse the singleton client created by site-content.js (avoids duplicate GoTrueClient warning)
+      const supabaseClient = window.supabaseClient;
+      const $ = id => document.getElementById(id);
+      let mode = 'participant';
+      let submitting = false;
+
+      const ON = ['bg-gradient-to-r','from-electric','to-cyan','text-white'];
+      const OFF = ['text-slate-300'];
+      document.querySelectorAll('.unif-mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          mode = btn.dataset.mode;
+          document.querySelectorAll('.unif-mode-btn').forEach(b => {
+            const active = b === btn;
+            ON.forEach(c => b.classList.toggle(c, active));
+            OFF.forEach(c => b.classList.toggle(c, !active));
+          });
+          $('unif-participant').classList.toggle('hidden', mode !== 'participant');
+          $('unif-school').classList.toggle('hidden', mode !== 'school');
+          clearErrors();
+        });
+      });
+
+      function markError(el){
+        const fg = el.closest('.fg'); if(!fg) return;
+        el.classList.add('border-red-500');
+        const err = fg.querySelector('.field-error'); if(err) err.classList.remove('hidden');
+      }
+      function clearErrors(){
+        $('unif-form').querySelectorAll('.field-error').forEach(e => e.classList.add('hidden'));
+        $('unif-form').querySelectorAll('.border-red-500').forEach(e => e.classList.remove('border-red-500'));
+        $('unif-submit-error').classList.add('hidden');
+      }
+      const validPhone = v => /^[0-9+\-\s]{7,15}$/.test((v || '').trim());
+      const validEmail = v => !v.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+      const val = id => ($(id).value || '').trim() || null;
+
+      function validate(){
+        clearErrors();
+        let ok = true;
+        const need = (id) => { if(!$(id).value.trim()){ markError($(id)); ok = false; } };
+        if(mode === 'participant'){
+          need('p_name'); need('p_school'); need('p_title');
+          if(!$('p_category').value){ markError($('p_category')); ok = false; }
+          if(!validPhone($('p_phone').value)){ markError($('p_phone')); ok = false; }
+          if(!validEmail($('p_email').value)){ markError($('p_email')); ok = false; }
+        } else {
+          need('s_school'); need('s_coordinator');
+          if(!validPhone($('s_phone').value)){ markError($('s_phone')); ok = false; }
+          if(!validEmail($('s_email').value)){ markError($('s_email')); ok = false; }
+        }
+        const checks = Array.from(document.querySelectorAll('#unif-form .term-check'));
+        if(!checks.every(c => c.checked)){ $('unif-terms-error').classList.remove('hidden'); ok = false; }
+        return ok;
+      }
+
+      function buildRow(){
+        if(mode === 'participant'){
+          const size = parseInt($('p_team_size').value, 10);
+          return {
+            mode: 'participant', full_name: val('p_name'), school: val('p_school'), grade: val('p_grade'),
+            phone: val('p_phone'), email: val('p_email'), address: val('p_address'),
+            project_title: val('p_title'), category: $('p_category').value, project_summary: val('p_summary'),
+            team_size: (size >= 1 && size <= 20) ? size : 1, team_members: val('p_members'),
+            mentor_name: val('p_mentor'), mentor_phone: val('p_mentor_phone'), special_needs: val('p_needs')
+          };
+        }
+        return {
+          mode: 'school', full_name: val('s_coordinator'), designation: val('s_designation'), school: val('s_school'),
+          address: val('s_address'), phone: val('s_phone'), email: val('s_email'),
+          num_projects: val('s_projects'), num_students: val('s_students'), num_teachers: val('s_teachers'),
+          categories: Array.from(document.querySelectorAll('#s_categories input:checked')).map(c => c.value)
+        };
+      }
+
+      async function save(row){
+        for(let attempt = 0; attempt < 4; attempt++){
+          const ref = 'UNIF-' + Math.floor(100000 + Math.random() * 900000);
+          const { error } = await supabaseClient.from('unif_registrations').insert(Object.assign({ ref: ref }, row));
+          if(!error) return { ref: ref };
+          if(error.code !== '23505') return { error: error };   // 23505 = reference already used, try another
+        }
+        return { error: { message: 'Could not create a reference number.' } };
+      }
+
+      function showSuccess(ref, row){
+        $('unif-ref').textContent = ref;
+        $('unif-sd-name').textContent = row.full_name || '—';
+        $('unif-sd-detail').textContent = row.mode === 'participant' ? (row.project_title || '—') : (row.school || '—');
+        $('unif-form-wrap').classList.add('hidden');
+        $('unif-success').classList.remove('hidden');
+        $('unif-reg-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      $('unif-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if(submitting) return;
+        if(!validate()) return;
+        const row = buildRow();
+        if($('hpField').value){ showSuccess('UNIF-' + Math.floor(100000 + Math.random() * 900000), row); return; }   // spam trap
+
+        submitting = true;
+        const btn = $('unif-submit');
+        btn.disabled = true; btn.textContent = 'Submitting…';
+        let result;
+        try { result = await save(row); } catch(err){ result = { error: err }; }
+        submitting = false;
+        btn.disabled = false; btn.textContent = 'Register for UNIF →';
+
+        if(result.error){
+          console.error(result.error);
+          const box = $('unif-submit-error');
+          box.textContent = 'Sorry, we could not send your registration right now. Please check your internet connection and try again. If it keeps failing, please contact Udaan Nepal directly.';
+          box.classList.remove('hidden');
+          return;
+        }
+        showSuccess(result.ref, row);
+      });
+
+      $('unif-print').addEventListener('click', () => {
+        // Build compact receipt from current success-state data
+        const ref    = $('unif-ref').textContent.trim();
+        const name   = $('unif-sd-name').textContent.trim();
+        const detail = $('unif-sd-detail').textContent.trim();
+        const mode   = $('p_mode') ? $('p_mode').value : '';
+        const modeLabel = mode === 'participant' ? 'Project Participant' : mode === 'visitor' ? 'Visitor' : '—';
+
+        // Extra fields depending on mode
+        let extras = '';
+        if(mode === 'participant'){
+          const cat   = $('p_category')?.value || '';
+          const phone = $('p_phone')?.value.trim() || '';
+          const email = $('p_email')?.value.trim() || '';
+          const org   = $('p_org')?.value.trim() || '';
+          if(cat)   extras += `<tr><td>Category</td><td>${cat}</td></tr>`;
+          if(org)   extras += `<tr><td>Organisation</td><td>${org}</td></tr>`;
+          if(phone) extras += `<tr><td>Phone</td><td>${phone}</td></tr>`;
+          if(email) extras += `<tr><td>Email</td><td>${email}</td></tr>`;
+        } else {
+          const phone = $('v_phone')?.value.trim() || $('p_phone')?.value.trim() || '';
+          const email = $('v_email')?.value.trim() || $('p_email')?.value.trim() || '';
+          const org   = $('v_org')?.value.trim()   || $('p_org')?.value.trim()   || '';
+          if(org)   extras += `<tr><td>Organisation / School</td><td>${org}</td></tr>`;
+          if(phone) extras += `<tr><td>Phone</td><td>${phone}</td></tr>`;
+          if(email) extras += `<tr><td>Email</td><td>${email}</td></tr>`;
+        }
+
+        const today = new Date().toLocaleDateString('en-NP',{year:'numeric',month:'long',day:'numeric'});
+
+        document.getElementById('printReceipt').innerHTML = `
+          <div class="pr-header">
+            <div class="pr-logo">Udaan Nepal</div>
+            <div class="pr-event">UNIF — Udaan Nepal Innovation Fair</div>
+            <div class="pr-stamp">✓ REGISTERED</div><br>
+            <div class="pr-refbox">${ref}</div>
+          </div>
+
+          <div class="pr-section">Participant Details</div>
+          <table class="pr-grid">
+            <tr><td>Name</td><td>${name}</td></tr>
+            <tr><td>Mode</td><td>${modeLabel}</td></tr>
+            <tr><td>${mode==='participant'?'Project / School':'School'}</td><td>${detail}</td></tr>
+            ${extras}
+          </table>
+
+          <div class="pr-section">Registration Info</div>
+          <table class="pr-grid">
+            <tr><td>Reference No.</td><td>${ref}</td></tr>
+            <tr><td>Registered On</td><td>${today}</td></tr>
+            <tr><td>Status</td><td>Confirmed — our team will contact you</td></tr>
+          </table>
+
+          <div class="pr-footer">
+            Please keep this confirmation for your records.<br>
+            Udaan Nepal — udaannepal.com
+          </div>
+        `;
+        window.print();
+      });
+    })();
+    </script>
+
+<!-- Hidden receipt rendered only when printing -->
+<div id="printReceipt"></div>
+</body>
+</html>

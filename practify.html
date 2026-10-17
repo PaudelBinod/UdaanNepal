@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://idwbxagsxpkkqwfjftox.supabase.co https://fonts.googleapis.com https://fonts.gstatic.com; media-src 'self' https://idwbxagsxpkkqwfjftox.supabase.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdn.tailwindcss.com; frame-src 'self' https://www.youtube.com https://youtube.com https://player.vimeo.com;">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practify by Udaan Nepal — Turning Classrooms Into Laboratories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --color-navy:#060B19;
+  --color-navy-dark:#03060E;
+  --color-navy-light:#0F172A;
+  --color-electric:#0066FF;
+  --color-electric-hover:#0052CC;
+  --color-cyan:#00E5FF;
+  --color-amber:#F59E0B;
+
+  --text-primary:#F3F6FC;
+  --text-secondary:#A6B0C3;
+  --text-muted:#6B7690;
+  --border:rgba(255,255,255,0.08);
+  --border-strong:rgba(255,255,255,0.16);
+  --ok:#22C55E;
+  --danger:#F04452;
+
+  --radius:14px;
+  --radius-sm:9px;
+  --shadow-md:0 16px 40px rgba(0,0,0,0.4);
+  --shadow-glow:0 0 0 1px rgba(0,102,255,0.4), 0 0 24px rgba(0,102,255,0.18);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--color-navy);color:var(--text-primary);line-height:1.6;overflow-x:hidden;}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;letter-spacing:-0.01em;}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;}
+.container{max-width:1240px;margin:0 auto;padding:0 24px;}
+.mono{letter-spacing:.06em;}
+section{position:relative;}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important;}}
+
+.eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--color-cyan);display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;}
+.eyebrow::before{content:'';width:16px;height:2px;background:var(--color-cyan);}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 28px;border-radius:10px;font-weight:700;font-size:14px;border:none;cursor:pointer;letter-spacing:.03em;text-transform:uppercase;transition:transform .2s ease, box-shadow .2s ease, background .2s ease;}
+.btn-primary{background:var(--color-electric);color:#fff;box-shadow:0 10px 26px rgba(0,102,255,0.35);}
+.btn-primary:hover{background:var(--color-electric-hover);transform:translateY(-2px);}
+.btn-outline{background:transparent;border:1.5px solid var(--border-strong);color:var(--text-primary);}
+.btn-outline:hover{border-color:var(--color-cyan);color:var(--color-cyan);}
+.btn-ghost{background:rgba(255,255,255,0.04);color:var(--text-primary);border:1px solid var(--border);}
+.btn-ghost:hover{background:rgba(255,255,255,0.08);}
+.btn-sm{padding:10px 16px;font-size:12px;}
+:focus-visible{outline:2px solid var(--color-cyan);outline-offset:3px;}
+
+.section-head{max-width:640px;margin-bottom:48px;}
+.section-head.center{margin-left:auto;margin-right:auto;text-align:center;}
+.section-head.center .eyebrow{justify-content:center;}
+.section-head h2{font-size:clamp(26px,3.4vw,38px);margin-bottom:14px;}
+.section-head p{color:var(--text-secondary);font-size:15.5px;}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* ===== HEADER ===== */
+.site-header{position:fixed;top:0;left:0;right:0;z-index:900;background:rgba(6,11,25,0.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:1240px;margin:0 auto;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-mark{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--color-electric),var(--color-cyan));display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:800;color:#03060E;font-size:16px;flex-shrink:0;}
+.brand-text{font-family:'Poppins',sans-serif;font-weight:700;font-size:16.5px;display:flex;align-items:center;gap:10px;}
+.brand-text span{font-size:10px;font-weight:800;color:var(--color-navy-dark);background:var(--color-amber);padding:3px 8px;border-radius:5px;letter-spacing:.06em;}
+.menu-btn{width:44px;height:44px;border-radius:9px;border:1px solid var(--border-strong);background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;}
+.menu-btn span{width:18px;height:2px;background:var(--text-primary);border-radius:2px;transition:transform .3s ease, opacity .3s ease;}
+.menu-btn.active span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.menu-btn.active span:nth-child(2){opacity:0;}
+.menu-btn.active span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+
+/* ===== SIDEBAR ===== */
+.overlay{position:fixed;inset:0;background:rgba(3,6,14,0.65);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s ease;z-index:1000;}
+.overlay.active{opacity:1;visibility:visible;}
+.sidebar{position:fixed;top:0;right:0;height:100%;width:340px;max-width:88vw;background:var(--color-navy-light);border-left:1px solid var(--border-strong);z-index:1001;transform:translateX(100%);transition:transform .4s cubic-bezier(.22,.9,.32,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,0.5);}
+.sidebar.active{transform:translateX(0);}
+.sidebar-head{display:flex;justify-content:space-between;align-items:center;padding:22px 22px 18px;border-bottom:1px solid var(--border);}
+.sidebar-head h4{font-size:14px;font-weight:700;color:var(--text-secondary);letter-spacing:.08em;text-transform:uppercase;}
+.sidebar-close{width:36px;height:36px;border-radius:50%;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);display:flex;align-items:center;justify-content:center;font-size:18px;transition:background .2s ease, transform .2s ease;}
+.sidebar-close:hover{background:rgba(255,255,255,0.08);transform:rotate(90deg);}
+.sidebar-nav{padding:14px;flex:1;}
+.sidebar-item{display:flex;align-items:center;gap:14px;padding:13px 14px;border-radius:10px;color:var(--text-secondary);font-size:14.5px;font-weight:600;transition:background .2s ease,color .2s ease, padding-left .2s ease;margin-bottom:2px;}
+.sidebar-item .icon{width:20px;height:20px;color:var(--color-cyan);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.sidebar-item:hover,.sidebar-item:focus-visible{background:rgba(0,102,255,0.1);color:var(--text-primary);padding-left:18px;}
+.sidebar-item.logout{color:#FF9B8A;}
+.sidebar-item.logout .icon{color:#FF9B8A;}
+.sidebar-foot{padding:18px 22px 24px;border-top:1px solid var(--border);font-size:11px;color:var(--text-muted);letter-spacing:.06em;}
+
+/* ===== HERO ===== */
+.hero{padding:150px 0 70px;position:relative;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 18% 0%, #0F1D3C 0%, var(--color-navy) 60%);}
+.hero::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 70% 70% at 30% 20%, black, transparent);}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 85% 20%, rgba(0,229,255,0.12), transparent 45%);}
+.hero-inner{position:relative;z-index:2;max-width:740px;}
+.hero h1{font-size:clamp(30px,4.6vw,54px);font-weight:800;line-height:1.05;margin-bottom:16px;}
+.hero h1 .accent{background:linear-gradient(135deg,var(--color-cyan),var(--color-electric));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero-sub{font-size:clamp(16px,1.8vw,19px);color:var(--color-cyan);font-weight:600;margin-bottom:20px;}
+.hero p{color:var(--text-secondary);font-size:16px;max-width:580px;margin-bottom:34px;}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:50px;}
+.hero-media{position:relative;aspect-ratio:20/9;border-radius:var(--radius);background:linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));border:1px solid var(--border-strong);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.hero-media-label{position:relative;z-index:2;text-align:center;color:var(--text-muted);}
+.hero-media-icon{width:56px;height:56px;margin:0 auto 12px;border-radius:14px;background:rgba(0,102,255,0.14);display:flex;align-items:center;justify-content:center;color:var(--color-cyan);}
+.hero-media-tag{position:absolute;top:16px;left:16px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:100px;background:rgba(3,6,14,0.7);border:1px solid var(--border-strong);color:var(--color-amber);z-index:3;}
+
+/* ===== VALUE STRIP ===== */
+.value-strip{background:var(--color-navy-dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:26px 0;}
+.value-strip-inner{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;}
+.value-item{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:700;color:var(--text-secondary);letter-spacing:.02em;}
+.value-item .dot{width:7px;height:7px;border-radius:50%;background:var(--color-cyan);flex-shrink:0;}
+
+/* ===== WHY PRACTIFY / CYCLE ===== */
+.why{padding:100px 0;}
+.cycle{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:56px;}
+.cycle-step{display:flex;align-items:center;gap:10px;}
+.cycle-pill{padding:10px 20px;border-radius:100px;border:1.5px solid var(--border-strong);background:var(--color-navy-light);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-secondary);}
+.cycle-step:nth-child(odd) .cycle-pill{color:var(--color-cyan);border-color:rgba(0,229,255,0.3);}
+.cycle-arrow{color:var(--text-muted);font-size:16px;}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.why-card{background:var(--color-navy-light);border:1px solid var(--border);border-radius:var(--radius);padding:26px 22px;transition:transform .25s ease, border-color .25s ease;}
+.why-card:hover{transform:translateY(-5px);border-color:rgba(0,229,255,0.35);}
+.why-icon{width:44px;height:44px;border-radius:11px;background:rgba(0,102,255,0.12);color:var(--color-cyan);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.why-card h4{font-size:15px;margin-bottom:8px;letter-spacing:.01em;}
+.why-card p{font-size:13.5px;color:var(--text-secondary);}
+@media(max-width:940px){.why-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.why-grid{grid-template-columns:1fr;}}
+
+/* ===== LEARNING AREAS ===== */
+.learning{padding:100px 0;background:var(--color-navy-dark);}
+.learning-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+.learn-card{background:var(--color-navy-light);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;}
+.learn-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-glow);border-color:rgba(0,102,255,0.4);}
+.learn-media{aspect-ratio:16/8;background:linear-gradient(150deg,#111E3B,#0A1428);display:flex;align-items:center;justify-content:center;color:var(--text-muted);position:relative;}
+.learn-media .icon{width:38px;height:38px;color:var(--color-cyan);opacity:.75;}
+.learn-body{padding:26px 26px 28px;}
+.learn-body .tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-amber);margin-bottom:8px;display:block;}
+.learn-body h3{font-size:19px;margin-bottom:10px;}
+.learn-topics{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.learn-topics span{font-size:11.5px;padding:5px 10px;border-radius:100px;background:rgba(0,229,255,0.08);color:var(--color-cyan);border:1px solid rgba(0,229,255,0.2);}
+.learn-cycle{font-size:12.5px;color:var(--text-muted);margin-bottom:18px;font-weight:600;letter-spacing:.02em;}
+@media(max-width:820px){.learning-grid{grid-template-columns:1fr;}}
+
+/* ===== SCHOOL PROGRAMS ===== */
+.programs{padding:100px 0;}
+.programs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.program-card{background:var(--color-navy-light);border:1px solid var(--border);border-radius:var(--radius);padding:26px 22px;display:flex;flex-direction:column;transition:transform .25s ease, border-color .25s ease;}
+.program-card:hover{transform:translateY(-5px);border-color:rgba(0,102,255,0.4);}
+.program-card h4{font-size:16px;margin-bottom:10px;}
+.program-meta{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.program-meta div{font-size:12px;color:var(--text-muted);}
+.program-meta div b{color:var(--text-secondary);font-weight:700;}
+.program-card p{font-size:13px;color:var(--text-secondary);margin-bottom:18px;flex:1;}
+.program-card .btn{width:100%;}
+@media(max-width:940px){.programs-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.programs-grid{grid-template-columns:1fr;}}
+
+/* ===== CAMPS ===== */
+.camps{padding:100px 0;background:var(--color-navy-dark);position:relative;overflow:hidden;}
+.camps::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 40%, rgba(0,102,255,0.10), transparent 45%);}
+.camps-statement{font-size:clamp(20px,2.6vw,30px);font-weight:800;color:var(--text-primary);max-width:700px;margin-bottom:14px;position:relative;z-index:2;}
+.camps-statement .accent{color:var(--color-cyan);}
+.camps-sub{color:var(--text-secondary);font-size:15px;max-width:600px;margin-bottom:50px;position:relative;z-index:2;}
+
+.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:50px;position:relative;z-index:2;}
+.tl-item{background:var(--color-navy-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 16px;position:relative;}
+.tl-item .tl-day{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--color-amber);margin-bottom:8px;}
+.tl-item h5{font-size:15px;margin-bottom:8px;color:var(--color-cyan);}
+.tl-item p{font-size:12.5px;color:var(--text-secondary);}
+.tl-item::after{content:'';position:absolute;top:50%;right:-16px;width:16px;height:1px;background:var(--border-strong);}
+.tl-item:last-child::after{display:none;}
+@media(max-width:940px){.timeline{grid-template-columns:1fr 1fr;} .tl-item::after{display:none;}}
+@media(max-width:560px){.timeline{grid-template-columns:1fr;}}
+
+.camp-info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:40px;position:relative;z-index:2;}
+.camp-info-card{background:var(--color-navy-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;}
+.camp-info-card .k{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;}
+.camp-info-card .v{font-size:14px;color:var(--text-primary);font-weight:600;}
+@media(max-width:820px){.camp-info-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.camp-info-grid{grid-template-columns:1fr;}}
+
+/* ===== HOW IT WORKS ===== */
+.works{padding:100px 0;}
+.works-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;}
+.works-grid::before{content:'';position:absolute;top:26px;left:6%;right:6%;height:2px;background:linear-gradient(90deg,var(--color-electric),var(--color-cyan));opacity:.35;z-index:0;}
+.work-step{text-align:center;position:relative;z-index:1;padding:0 14px;}
+.work-num{width:54px;height:54px;border-radius:50%;background:var(--color-navy-light);border:2px solid var(--color-electric);display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:800;font-size:16px;margin:0 auto 18px;color:var(--color-cyan);}
+.work-step h4{font-size:15.5px;margin-bottom:8px;}
+.work-step p{font-size:13px;color:var(--text-secondary);}
+@media(max-width:820px){.works-grid{grid-template-columns:1fr 1fr;gap:34px 0;} .works-grid::before{display:none;}}
+@media(max-width:520px){.works-grid{grid-template-columns:1fr;}}
+
+/* ===== WHO WE SERVE ===== */
+.serve{padding:100px 0;background:var(--color-navy-dark);}
+.serve-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.serve-card{background:var(--color-navy-light);border:1px solid var(--border);border-radius:var(--radius);padding:30px 26px;transition:transform .25s ease, border-color .25s ease;}
+.serve-card:hover{transform:translateY(-5px);border-color:rgba(0,229,255,0.3);}
+.serve-card .tag{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--color-amber);margin-bottom:10px;display:block;}
+.serve-card h4{font-size:18px;margin-bottom:10px;}
+.serve-card p{font-size:13.5px;color:var(--text-secondary);}
+@media(max-width:820px){.serve-grid{grid-template-columns:1fr;}}
+
+/* ===== OUTCOMES ===== */
+.outcomes{padding:100px 0;}
+.outcomes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.outcome-card{display:flex;gap:16px;align-items:flex-start;padding:22px 0;border-bottom:1px solid var(--border);}
+.outcome-icon{width:42px;height:42px;border-radius:11px;background:rgba(0,229,255,0.1);color:var(--color-cyan);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.outcome-card h4{font-size:15px;margin-bottom:6px;}
+.outcome-card p{font-size:13px;color:var(--text-secondary);}
+@media(max-width:820px){.outcomes-grid{grid-template-columns:1fr;}}
+
+/* ===== MEDIA SHOWCASE ===== */
+.showcase{padding:100px 0;background:var(--color-navy-dark);}
+.showcase-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;}
+.showcase-main{aspect-ratio:4/3.2;border-radius:var(--radius);background:linear-gradient(160deg,#101F3F,#0A1428);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-muted);position:relative;overflow:hidden;}
+.showcase-side{display:grid;grid-template-rows:1fr 1fr;gap:18px;}
+.showcase-tile{border-radius:var(--radius);background:linear-gradient(160deg,#0F1C38,#0A1428);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-muted);position:relative;overflow:hidden;transition:border-color .25s ease;font-size:13px;text-align:center;padding:14px;}
+.showcase-tile:hover,.showcase-main:hover{border-color:rgba(0,229,255,0.35);}
+.showcase-cap{position:absolute;bottom:12px;left:12px;font-size:11px;background:rgba(3,6,14,0.7);border:1px solid var(--border-strong);padding:5px 11px;border-radius:100px;color:var(--text-secondary);}
+.play-mini{width:48px;height:48px;border-radius:50%;background:var(--color-electric);color:#fff;display:flex;align-items:center;justify-content:center;}
+@media(max-width:800px){.showcase-grid{grid-template-columns:1fr;}}
+
+/* ===== SCHOOL VALUE ===== */
+.school-value{padding:100px 0;}
+.sv-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:56px;align-items:center;}
+.sv-list{display:grid;gap:18px;}
+.sv-item{display:flex;gap:14px;align-items:flex-start;padding-bottom:18px;border-bottom:1px solid var(--border);}
+.sv-item:last-child{border-bottom:none;padding-bottom:0;}
+.sv-item .check{width:22px;height:22px;border-radius:6px;background:rgba(0,102,255,0.14);color:var(--color-electric);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.sv-item p{font-size:14.5px;color:var(--text-secondary);}
+.sv-item b{color:var(--text-primary);}
+@media(max-width:900px){.sv-grid{grid-template-columns:1fr;gap:34px;}}
+
+/* ===== INQUIRY FORM ===== */
+.inquiry{padding:100px 0;background:var(--color-navy-dark);}
+.inquiry-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:50px;}
+.inquiry-info h2{font-size:clamp(24px,3vw,32px);margin-bottom:14px;}
+.inquiry-info p{color:var(--text-secondary);font-size:15px;margin-bottom:28px;}
+.inquiry-note{background:var(--color-navy-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px 20px;font-size:13px;color:var(--text-muted);}
+.inquiry-note b{color:var(--color-amber);}
+
+.form-panel{background:var(--color-navy-light);border:1px solid var(--border);border-radius:var(--radius);padding:32px;box-shadow:var(--shadow-md);}
+.group-label{font-size:12.5px;font-weight:700;color:var(--color-cyan);letter-spacing:.06em;text-transform:uppercase;margin:22px 0 12px;}
+.group-label:first-child{margin-top:0;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.form-group{display:flex;flex-direction:column;gap:7px;margin-bottom:16px;}
+.form-group.full{grid-column:1/-1;}
+.form-group label{font-size:13px;font-weight:700;color:var(--text-secondary);}
+.form-group label .req{color:var(--color-amber);}
+.form-group input,.form-group select,.form-group textarea{padding:12px 14px;border-radius:9px;border:1px solid var(--border-strong);background:var(--color-navy-dark);color:var(--text-primary);font-family:inherit;font-size:14px;transition:border-color .2s ease, box-shadow .2s ease;}
+.form-group input:-webkit-autofill,.form-group input:-webkit-autofill:hover,.form-group input:-webkit-autofill:focus{-webkit-text-fill-color:var(--text-primary);-webkit-box-shadow:0 0 0 1000px var(--color-navy-dark) inset;box-shadow:0 0 0 1000px var(--color-navy-dark) inset;caret-color:var(--text-primary);}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--color-electric);box-shadow:0 0 0 3px rgba(0,102,255,0.18);}
+.form-group textarea{resize:vertical;min-height:96px;}
+.field-error{font-size:12px;color:var(--danger);display:none;}
+.field-error.show{display:block;}
+.form-group.has-error input,.form-group.has-error select{border-color:var(--danger);}
+
+.chip-group{display:flex;flex-wrap:wrap;gap:10px;}
+.chip{padding:10px 15px;border-radius:100px;border:1.5px solid var(--border-strong);background:var(--color-navy-dark);font-size:13px;font-weight:600;color:var(--text-secondary);cursor:pointer;transition:all .2s ease;}
+.chip input{display:none;}
+.chip.checked{border-color:var(--color-electric);background:rgba(0,102,255,0.14);color:var(--text-primary);}
+
+.form-panel .btn{width:100%;margin-top:6px;}
+
+/* success state */
+.success-state{display:none;text-align:center;padding:10px 0;}
+.success-state.show{display:block;}
+.form-panel.is-success .form-body{display:none;}
+.confirm-icon{width:66px;height:66px;margin:0 auto 18px;border-radius:50%;background:rgba(34,197,94,0.12);display:flex;align-items:center;justify-content:center;color:var(--ok);border:2px solid rgba(34,197,94,0.3);}
+.success-state h3{font-size:21px;margin-bottom:8px;}
+.success-state>p{color:var(--text-secondary);font-size:14px;margin-bottom:22px;}
+.success-ref{display:inline-block;font-weight:800;font-size:14px;letter-spacing:.05em;color:var(--color-cyan);background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.25);padding:6px 16px;border-radius:100px;margin-bottom:18px;}
+.success-details{background:var(--color-navy-dark);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px;text-align:left;margin-bottom:22px;}
+.success-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13.5px;}
+.success-row:last-child{border-bottom:none;}
+.success-row .k{color:var(--text-muted);}
+.success-row .v{color:var(--text-primary);font-weight:600;text-align:right;}
+
+@media(max-width:900px){.inquiry-grid{grid-template-columns:1fr;gap:34px;}}
+@media(max-width:560px){.form-row{grid-template-columns:1fr;}}
+
+/* ===== TESTIMONIALS PLACEHOLDER ===== */
+.testimonials{padding:80px 0;background:var(--color-navy);}
+.testimonial-placeholder{max-width:640px;margin:0 auto;text-align:center;background:var(--color-navy-light);border:1px dashed var(--border-strong);border-radius:var(--radius);padding:44px 30px;}
+.testimonial-placeholder h4{font-size:16px;margin-bottom:10px;color:var(--text-secondary);}
+.testimonial-placeholder p{font-size:13.5px;color:var(--text-muted);}
+
+/* ===== FAQ ===== */
+.faq{padding:100px 0;}
+.faq-list{max-width:780px;margin:0 auto;}
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-q{width:100%;background:none;border:none;color:var(--text-primary);text-align:left;padding:19px 4px;font-size:15px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+.faq-q .plus{transition:transform .3s ease;color:var(--color-cyan);flex-shrink:0;}
+.faq-item.open .faq-q .plus{transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+.faq-a-inner{padding:0 4px 19px;color:var(--text-secondary);font-size:14px;}
+
+/* ===== FINAL CTA ===== */
+.final-cta{padding:90px 0;background:linear-gradient(135deg,#0A1A38,var(--color-navy-dark));text-align:center;position:relative;overflow:hidden;}
+.final-cta::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 0%, rgba(0,102,255,0.16), transparent 55%);}
+.final-cta h2{font-size:clamp(24px,3.4vw,38px);max-width:700px;margin:0 auto 14px;position:relative;z-index:2;}
+.final-cta p{color:var(--text-secondary);font-size:15.5px;margin-bottom:32px;position:relative;z-index:2;}
+.final-cta-btns{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;position:relative;z-index:2;}
+
+/* ===== FOOTER ===== */
+.footer{background:var(--color-navy-dark);padding:70px 0 30px;border-top:1px solid var(--border);}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px;}
+.footer-brand p{margin-top:16px;font-size:13.5px;color:var(--text-muted);max-width:280px;}
+.footer-col h4{font-size:13.5px;margin-bottom:16px;color:var(--text-secondary);letter-spacing:.04em;}
+.footer-col ul li{margin-bottom:10px;}
+.footer-col ul li a{font-size:13.5px;color:var(--text-muted);transition:color .2s ease;}
+.footer-col ul li a:hover{color:var(--color-cyan);}
+.footer-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;color:var(--text-muted);}
+@media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:520px){.footer-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index" class="brand">
+      <div class="brand-mark">U</div>
+      <div class="brand-text">Udaan Nepal <span>PRACTIFY</span></div>
+    </a>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="sidebar" id="sidebar" aria-hidden="true">
+  <div class="sidebar-head">
+    <h4>Menu</h4>
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">&times;</button>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="courses" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>My Courses</a>
+    <a href="profile" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></span>My Profile</a>
+    <a href="notice" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>Notice</a>
+    <a href="enroll-course" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>Browse Courses</a>
+    <a href="group" data-feature="group_chat" style="display:none" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>My Group</a>
+    <a href="admin" class="sidebar-item" id="adminLink" style="display:none;"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></span>Admin Panel</a>
+    <a href="auth" class="sidebar-item logout"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Log Out</a>
+  </nav>
+  <div class="sidebar-foot mono">UDAAN NEPAL · PRACTIFY</div>
+</aside>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
+  <div class="container hero-inner">
+    <div data-c="pfy_x1" class="eyebrow">Practify · by Udaan Nepal</div>
+    <h1>Turning classrooms into <span class="accent">laboratories</span>.</h1>
+    <div data-c="pfy_x2" class="hero-sub">Learn by Doing. Build by Experimenting.</div>
+    <p data-c="pfy_x3">Practify brings practical, hands-on STEM learning into schools — helping students explore robotics, coding, science and mathematics through experimentation, projects and real-world problem solving.</p>
+    <div class="hero-ctas">
+      <a href="#inquiry" class="btn btn-primary">Request a School Program</a>
+      <a href="#learning" class="btn btn-outline">Explore Our Programs</a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="hero-media">
+      
+      <div class="hero-media-label">
+        <div class="hero-media-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8M12 18v4"/></svg>
+        </div>
+        <div class="mono" style="font-size:12px;">Students building & experimenting — image/video goes here</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VALUE STRIP ===== -->
+<div class="value-strip">
+  <div class="container value-strip-inner">
+    <div class="value-item"><span class="dot"></span>Hands-On Learning</div>
+    <div class="value-item"><span class="dot"></span>School-Based Programs</div>
+    <div class="value-item"><span class="dot"></span>STEM Focused</div>
+    <div class="value-item"><span class="dot"></span>Project-Based Activities</div>
+    <div class="value-item"><span class="dot"></span>Expert-Led Sessions</div>
+  </div>
+</div>
+
+<!-- ===== WHY PRACTIFY ===== -->
+<section class="why reveal" id="why">
+  <div class="container">
+    <div class="section-head">
+      <div data-c="pfy_x4" class="eyebrow">Our philosophy</div>
+      <h2 data-c="pfy_x5">Why Practify?</h2>
+      <p data-c="pfy_x6">Traditional learning can sometimes remain theoretical. Practify helps students understand concepts by experiencing them.</p>
+    </div>
+    <div class="cycle">
+      <div class="cycle-step"><div class="cycle-pill">Learn</div></div><span class="cycle-arrow">→</span>
+      <div class="cycle-step"><div class="cycle-pill">Experiment</div></div><span class="cycle-arrow">→</span>
+      <div class="cycle-step"><div class="cycle-pill">Build</div></div><span class="cycle-arrow">→</span>
+      <div class="cycle-step"><div class="cycle-pill">Test</div></div><span class="cycle-arrow">→</span>
+      <div class="cycle-step"><div class="cycle-pill">Understand</div></div>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <h4 data-c="pfy_x7">Learn Through Experience</h4>
+        <p data-c="pfy_x8">Students engage directly with concepts rather than only reading about them.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+        <h4 data-c="pfy_x9">Build & Experiment</h4>
+        <p data-c="pfy_x10">Students create, test and modify practical projects.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8M12 18v4"/></svg></div>
+        <h4 data-c="pfy_x11">Develop Technology Skills</h4>
+        <p data-c="pfy_x12">Students gain exposure to coding, robotics and technology.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <h4 data-c="pfy_x13">Solve Real Problems</h4>
+        <p data-c="pfy_x14">Students apply concepts to practical, real-world challenges.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LEARNING AREAS ===== -->
+<section class="learning reveal" id="learning">
+  <div class="container">
+    <div class="section-head">
+      <div data-c="pfy_x15" class="eyebrow">What we teach</div>
+      <h2 data-c="pfy_x16">Practical STEM experiences designed for real classrooms</h2>
+    </div>
+    <div class="learning-grid">
+      <div class="learn-card">
+        <div class="learn-media"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="6" y="7" width="12" height="10" rx="2"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><path d="M12 7V4M9 4h6"/></svg></div>
+        <div class="learn-body">
+          <span class="tag">Robotics</span>
+          <h3 data-c="pfy_x17">Robotics</h3>
+          <div class="learn-topics"><span>Sensors & Actuators</span><span>Electronics</span><span>Automation</span><span>Robot Building</span><span>Programming</span></div>
+          <a href="#inquiry" class="btn btn-ghost btn-sm">Explore Robotics</a>
+        </div>
+      </div>
+      <div class="learn-card">
+        <div class="learn-media"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <div class="learn-body">
+          <span class="tag">Coding</span>
+          <h3 data-c="pfy_x18">Coding</h3>
+          <div class="learn-topics"><span>Programming Fundamentals</span><span>Computational Thinking</span><span>Logic</span><span>Algorithms</span></div>
+          <a href="#inquiry" class="btn btn-ghost btn-sm">Explore Coding</a>
+        </div>
+      </div>
+      <div class="learn-card">
+        <div class="learn-media"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 2v6L4 20a1 1 0 0 0 1 2h14a1 1 0 0 0 1-2L15 8V2"/><line x1="9" y1="2" x2="15" y2="2"/></svg></div>
+        <div class="learn-body">
+          <span class="tag">Science Practical</span>
+          <h3 data-c="pfy_x19">Science Practical</h3>
+          <div class="learn-cycle">Question → Experiment → Observe → Analyse → Understand</div>
+          <div class="learn-topics"><span>Experiments</span><span>Measurement</span><span>Hypothesis Testing</span></div>
+          <a href="#inquiry" class="btn btn-ghost btn-sm">Explore Science</a>
+        </div>
+      </div>
+      <div class="learn-card">
+        <div class="learn-media"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+        <div class="learn-body">
+          <span class="tag">Mathematics Practical</span>
+          <h3 data-c="pfy_x20">Mathematics Practical</h3>
+          <div class="learn-topics"><span>Measurement</span><span>Geometry</span><span>Patterns</span><span>Data</span><span>Real-World Modelling</span></div>
+          <a href="#inquiry" class="btn btn-ghost btn-sm">Explore Mathematics</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCHOOL PROGRAMS ===== -->
+<section class="programs reveal" id="programs">
+  <div class="container">
+    <div class="section-head">
+      <div data-c="pfy_x21" class="eyebrow">Engagement models</div>
+      <h2 data-c="pfy_x22">Programs for Schools</h2>
+      <p data-c="pfy_x23">Practify can work with your school through different engagement models, tailored to your students and schedule.</p>
+    </div>
+    <div class="programs-grid">
+      <div class="program-card">
+        <h4 data-c="pfy_x24">School Practical Program</h4>
+        <div class="program-meta"><div><b>Audience:</b> Configurable</div><div><b>Duration:</b> To be discussed</div></div>
+        <p data-c="pfy_x25">Regular practical-learning sessions conducted within the school on an ongoing basis.</p>
+        <a href="#inquiry" class="btn btn-ghost btn-sm">Enquire</a>
+      </div>
+      <div class="program-card">
+        <h4 data-c="pfy_x26">Robotics & Technology Program</h4>
+        <div class="program-meta"><div><b>Audience:</b> Configurable</div><div><b>Duration:</b> To be discussed</div></div>
+        <p data-c="pfy_x27">Structured robotics, coding and technology learning delivered at your school.</p>
+        <a href="#inquiry" class="btn btn-ghost btn-sm">Enquire</a>
+      </div>
+      <div class="program-card">
+        <h4 data-c="pfy_x28">Practical Learning Camp</h4>
+        <div class="program-meta"><div><b>Audience:</b> Configurable</div><div><b>Duration:</b> Multi-day / week-long</div></div>
+        <p data-c="pfy_x29">Intensive practical STEM programs run over multiple days or a full week.</p>
+        <a href="#camps" class="btn btn-ghost btn-sm">See Camps</a>
+      </div>
+      <div class="program-card">
+        <h4 data-c="pfy_x30">Custom School Program</h4>
+        <div class="program-meta"><div><b>Audience:</b> Your requirements</div><div><b>Duration:</b> Fully flexible</div></div>
+        <p data-c="pfy_x31">A program adapted to your school's requirements, student level and learning objectives.</p>
+        <a href="#inquiry" class="btn btn-ghost btn-sm">Enquire</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CAMPS ===== -->
+<section class="camps reveal" id="camps">
+  <div class="container">
+    <div data-c="pfy_x32" class="eyebrow">Practify Camps</div>
+    <div class="camps-statement">One week. <span class="accent" style="color:var(--color-cyan);">Countless questions.</span> Real-world learning.</div>
+    <p data-c="pfy_x33" class="camps-sub">Practify can conduct intensive practical-learning camps for schools over multiple days or weeks. The structure below is an example — actual camp design is customized with your school.</p>
+
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-day">DAY 01</div><h5>Discover</h5><p data-c="pfy_x34">Introduction and exploration of the topic area.</p></div>
+      <div class="tl-item"><div class="tl-day">DAY 02</div><h5>Experiment</h5><p data-c="pfy_x35">Test ideas and investigate concepts hands-on.</p></div>
+      <div class="tl-item"><div class="tl-day">DAY 03</div><h5>Build</h5><p data-c="pfy_x36">Create practical projects based on what's been learned.</p></div>
+      <div class="tl-item"><div class="tl-day">DAY 04</div><h5>Solve</h5><p data-c="pfy_x37">Work through applied challenges and problems.</p></div>
+      <div class="tl-item"><div class="tl-day">DAY 05</div><h5>Present</h5><p data-c="pfy_x38">Demonstrate and explain what was created.</p></div>
+    </div>
+
+    <div class="camp-info-grid">
+      <div class="camp-info-card"><div class="k">Camp Duration</div><div class="v">Configurable</div></div>
+      <div class="camp-info-card"><div class="k">Student Groups</div><div class="v">Configurable</div></div>
+      <div class="camp-info-card"><div class="k">Learning Areas</div><div class="v">Robotics · Coding · Science · Math</div></div>
+      <div class="camp-info-card"><div class="k">School Facilities Needed</div><div class="v">To be confirmed</div></div>
+    </div>
+
+    <a href="#inquiry" class="btn btn-primary">Request a Camp for Your School</a>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="works reveal" id="works">
+  <div class="container">
+    <div class="section-head center">
+      <div data-c="pfy_x39" class="eyebrow">The partnership process</div>
+      <h2 data-c="pfy_x40">How Practify Works</h2>
+    </div>
+    <div class="works-grid">
+      <div class="work-step"><div class="work-num">01</div><h4 data-c="pfy_x41">Connect</h4><p data-c="pfy_x42">The school contacts Udaan Nepal.</p></div>
+      <div class="work-step"><div class="work-num">02</div><h4 data-c="pfy_x43">Understand</h4><p data-c="pfy_x44">We learn your requirements, student groups and learning objectives.</p></div>
+      <div class="work-step"><div class="work-num">03</div><h4 data-c="pfy_x45">Design</h4><p data-c="pfy_x46">Practify recommends or designs an appropriate program.</p></div>
+      <div class="work-step"><div class="work-num">04</div><h4 data-c="pfy_x47">Deliver</h4><p data-c="pfy_x48">The Practify team conducts the sessions, workshops or camp.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHO WE SERVE ===== -->
+<section class="serve reveal">
+  <div class="container">
+    <div class="section-head">
+      <div data-c="pfy_x49" class="eyebrow">Student groups</div>
+      <h2 data-c="pfy_x50">Who We Serve</h2>
+      <p data-c="pfy_x51">Programs are designed around the group we're working with. Exact grade ranges are configured per school.</p>
+    </div>
+    <div class="serve-grid">
+      <div class="serve-card">
+        <span class="tag">Primary</span>
+        <h4 data-c="pfy_x52">Primary</h4>
+        <p data-c="pfy_x53">Exploration, observation, simple experiments and creative problem solving.</p>
+      </div>
+      <div class="serve-card">
+        <span class="tag">Middle School</span>
+        <h4 data-c="pfy_x54">Middle School</h4>
+        <p data-c="pfy_x55">Coding, robotics, science activities and applied mathematics.</p>
+      </div>
+      <div class="serve-card">
+        <span class="tag">Secondary</span>
+        <h4 data-c="pfy_x56">Secondary</h4>
+        <p data-c="pfy_x57">Advanced projects, technology, experimentation and problem solving.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== OUTCOMES ===== -->
+<section class="outcomes reveal">
+  <div class="container">
+    <div class="section-head">
+      <div data-c="pfy_x58" class="eyebrow">Beyond the textbook</div>
+      <h2 data-c="pfy_x59">What Students Take Away</h2>
+    </div>
+    <div class="outcomes-grid">
+      <div class="outcome-card">
+        <div class="outcome-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <div><h4 data-c="pfy_x60">Problem Solving</h4><p data-c="pfy_x61">Approach challenges systematically.</p></div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/><line x1="9" y1="21" x2="15" y2="21"/></svg></div>
+        <div><h4 data-c="pfy_x62">Critical Thinking</h4><p data-c="pfy_x63">Question, test, analyse and improve.</p></div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div><h4 data-c="pfy_x64">Creativity</h4><p data-c="pfy_x65">Turn ideas into practical solutions.</p></div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></div>
+        <div><h4 data-c="pfy_x66">Collaboration</h4><p data-c="pfy_x67">Work together on projects.</p></div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <div><h4 data-c="pfy_x68">Technical Skills</h4><p data-c="pfy_x69">Develop foundational STEM and technology skills.</p></div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.9 6.9L22 10l-5.5 5 1.5 7-6-3.7L6 22l1.5-7L2 10l7.1-1.1z"/></svg></div>
+        <div><h4 data-c="pfy_x70">Confidence</h4><p data-c="pfy_x71">Build confidence by creating and presenting tangible work.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MEDIA SHOWCASE ===== -->
+<section class="showcase reveal" data-gallery="practify_gallery" style="display:none">
+  <div class="container">
+    <div class="section-head">
+      <div data-c="pfy_x72" class="eyebrow">See it in action</div>
+      <h2 data-c="pfy_x73">Practify in Action</h2>
+      <p data-c="pfy_x74">Moments from Practify sessions and camps.</p>
+    </div>
+    <div class="showcase-grid">
+      <div class="showcase-main">Robotics activity photo placeholder<span class="showcase-cap">Robotics Session</span></div>
+      <div class="showcase-side">
+        <div class="showcase-tile">Coding project photo placeholder<span class="showcase-cap">Coding Project</span></div>
+        <div class="showcase-tile">
+          <div class="play-mini"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><polygon points="6 3 20 12 6 21 6 3"/></svg></div>
+          <span class="showcase-cap">Camp Highlight Video</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCHOOL PARTNERSHIP VALUE ===== -->
+<section class="school-value reveal">
+  <div class="container sv-grid">
+    <div>
+      <div data-c="pfy_x75" class="eyebrow">For school administrators</div>
+      <h2 data-c="pfy_x76" style="font-size:clamp(24px,3vw,32px);margin-bottom:14px;">Why Schools Partner With Practify</h2>
+      <p data-c="pfy_x77" style="color:var(--text-secondary);font-size:15px;">A practical STEM layer your school can add without building it in-house.</p>
+    </div>
+    <div class="sv-list">
+      <div class="sv-item"><div class="check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><p><b>Practical learning support</b> — hands-on sessions that complement classroom teaching.</p></div>
+      <div class="sv-item"><div class="check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><p><b>Hands-on STEM exposure</b> — robotics, coding and applied science and math.</p></div>
+      <div class="sv-item"><div class="check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><p><b>School-based delivery</b> — sessions conducted at your premises.</p></div>
+      <div class="sv-item"><div class="check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><p><b>Flexible, customizable program design</b> — built around your students and schedule.</p></div>
+      <div class="sv-item"><div class="check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><p><b>Camp-based learning</b> — for a deeper, immersive experience when needed.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INQUIRY FORM ===== -->
+<section class="inquiry reveal" id="inquiry">
+  <div class="container inquiry-grid">
+    <div class="inquiry-info">
+      <div data-c="pfy_x78" class="eyebrow">School inquiry</div>
+      <h2 data-c="pfy_x79">Bring Practical Learning to Your School</h2>
+      <p data-c="pfy_x80">Tell us about your school's requirements and our team can help design an appropriate Practify program.</p>
+      <div class="inquiry-note"><b>Note:</b> This form is for school and institutional inquiries, not individual student enrollment. If you're a student or parent, please contact your school directly about Practify.</div>
+    </div>
+
+    <div class="form-panel" id="formPanel">
+      <form id="inquiryForm" class="form-body" novalidate>
+        <input type="text" id="hpField" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
+        <div class="group-label">School Information</div>
+        <div class="form-row">
+          <div class="form-group"><label for="schoolName">School Name <span class="req">*</span></label><input type="text" id="schoolName" required><span class="field-error">Please enter your school's name.</span></div>
+          <div class="form-group"><label for="schoolLocation">School Location <span class="req">*</span></label><input type="text" id="schoolLocation" required><span class="field-error">Please enter your school's location.</span></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="contactPerson">Contact Person <span class="req">*</span></label><input type="text" id="contactPerson" required><span class="field-error">Please enter a contact person.</span></div>
+          <div class="form-group"><label for="designation">Designation <span class="req">*</span></label><input type="text" id="designation" placeholder="e.g. Principal, Coordinator" required><span class="field-error">Please enter a designation.</span></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="email">Email <span class="req">*</span></label><input type="email" id="email" required><span class="field-error">Please enter a valid email address.</span></div>
+          <div class="form-group"><label for="phone">Phone <span class="req">*</span></label><input type="tel" id="phone" required><span class="field-error">Please enter a valid phone number.</span></div>
+        </div>
+
+        <div class="group-label">Program Requirements</div>
+        <div class="form-group full">
+          <label>Interested Program <span class="req">*</span></label>
+          <div class="chip-group" id="programChips">
+            <label class="chip"><input type="checkbox" value="Robotics">Robotics</label>
+            <label class="chip"><input type="checkbox" value="Coding">Coding</label>
+            <label class="chip"><input type="checkbox" value="Science Practical">Science Practical</label>
+            <label class="chip"><input type="checkbox" value="Mathematics Practical">Mathematics Practical</label>
+            <label class="chip"><input type="checkbox" value="STEM">STEM</label>
+            <label class="chip"><input type="checkbox" value="Practify Camp">Practify Camp</label>
+            <label class="chip"><input type="checkbox" value="Custom Program">Custom Program</label>
+          </div>
+          <span class="field-error" id="programError">Please select at least one program.</span>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="gradeGroup">Student Grade / Age Group</label><input type="text" id="gradeGroup" placeholder="e.g. Grade 6–8"></div>
+          <div class="form-group"><label for="studentCount">Approximate Number of Students</label><input type="text" id="studentCount" placeholder="e.g. 40"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="duration">Preferred Program Duration</label><input type="text" id="duration" placeholder="e.g. 1 day, 1 week"></div>
+          <div class="form-group"><label for="preferredDates">Preferred Dates</label><input type="text" id="preferredDates" placeholder="e.g. Late September 2026"></div>
+        </div>
+
+        <div class="group-label">Additional Requirements</div>
+        <div class="form-group full">
+          <label for="notes">Tell us about your school's requirements, learning objectives or special requests.</label>
+          <textarea id="notes"></textarea>
+        </div>
+
+        <div id="submitError" role="alert" style="display:none;margin:12px 0 4px;padding:10px 14px;border-radius:9px;background:rgba(240,68,82,0.12);border:1px solid rgba(240,68,82,0.4);color:#FF8A94;font-size:13.5px;line-height:1.5;"></div>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Send Program Request</button>
+      </form>
+
+      <div class="success-state" id="successState">
+        <div class="confirm-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h3 data-c="pfy_x81">Request Received</h3>
+        <p data-c="pfy_x82">Your school program inquiry has been successfully submitted. Our team will review your requirements and contact you to discuss the next steps.</p>
+        <div class="success-ref mono" id="successRef">REQ-000000</div>
+        <div class="success-details">
+          <div class="success-row"><span class="k">School</span><span class="v" id="sdSchool">—</span></div>
+          <div class="success-row"><span class="k">Program Interest</span><span class="v" id="sdProgram">—</span></div>
+          <div class="success-row"><span class="k">Contact</span><span class="v" id="sdContact">—</span></div>
+        </div>
+        <a href="#top" class="btn btn-outline">Back to Practify</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS PLACEHOLDER ===== -->
+<section class="testimonials">
+  <div class="container">
+    <div class="testimonial-placeholder">
+      <h4 data-c="pfy_x83">School Testimonials</h4>
+      <p data-c="pfy_x84">Feedback from our partner schools will be shared here soon.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq reveal">
+  <div class="container">
+    <div class="section-head center">
+      <div data-c="pfy_x85" class="eyebrow">Questions</div>
+      <h2 data-c="pfy_x86">Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-list" id="faqList">
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">What is Practify? <span class="plus">+</span></button><div class="faq-a"><div class="faq-a-inner">Practify is Udaan Nepal's practical-learning service, delivering hands-on STEM programs in robotics, coding, science and mathematics directly to schools.</div></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">Who can participate in Practify programs? <span class="plus">+</span></button><div class="faq-a"><div class="faq-a-inner">Programs are designed for school students across different age groups, configured per school and program.</div></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">Which subjects does Practify cover? <span class="plus">+</span></button><div class="faq-a"><div class="faq-a-inner">Robotics, coding, science practical learning, mathematics practical learning, and broader STEM and project-based activities.</div></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">Does Udaan Nepal conduct programs inside schools? <span class="plus">+</span></button><div class="faq-a"><div class="faq-a-inner">Yes. Practify is a school-based service — programs are typically delivered on your school's premises.</div></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">Can schools request a customized program? <span class="plus">+</span></button><div class="faq-a"><div class="faq-a-inner">Yes. The Custom School Program option lets us design sessions around your specific requirements and objectives.</div></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">How long do Practify programs run? <span class="plus">+</span></button><div class="faq-a"><div class="faq-a-inner">Duration varies by program — from single sessions to multi-day camps — and is agreed with your school in advance.</div></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">What is a Practify camp? <span class="plus">+</span></button><div class="faq-a"><div class="faq-a-inner">A multi-day or week-long intensive practical-learning program, structured around discovery, experimentation, building and presenting.</div></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">What facilities does the school need to provide? <span class="plus">+</span></button><div class="faq-a"><div class="faq-a-inner">This depends on the program and is confirmed with your school as part of planning.</div></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">How many students can participate? <span class="plus">+</span></button><div class="faq-a"><div class="faq-a-inner">Group sizes are configured per program and school — let us know your approximate numbers in the inquiry form.</div></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">How can our school partner with Udaan Nepal? <span class="plus">+</span></button><div class="faq-a"><div class="faq-a-inner">Submit a school inquiry using the form above, and our team will follow up to discuss next steps.</div></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">How are Practify programs priced? <span class="plus">+</span></button><div class="faq-a"><div class="faq-a-inner">Pricing depends on program type, duration and group size, and is shared with your school after we understand your requirements.</div></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">How far in advance should a school contact Udaan Nepal? <span class="plus">+</span></button><div class="faq-a"><div class="faq-a-inner">We recommend reaching out as early as possible, particularly for camps, so we can plan schedules and resources together.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FINAL CTA ===== -->
+<section class="final-cta reveal">
+  <div class="container">
+    <h2 data-c="pfy_x87">Ready to bring practical learning to your school?</h2>
+    <p data-c="pfy_x88">Let's create meaningful hands-on learning experiences for your students.</p>
+    <div class="final-cta-btns">
+      <a href="#inquiry" class="btn btn-primary">Request a School Program</a>
+      <a href="#inquiry" class="btn btn-outline">Contact Udaan Nepal</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand"><div class="brand-mark">U</div><div class="brand-text">Udaan Nepal <span>PRACTIFY</span></div></div>
+        <p>Practical, hands-on STEM learning delivered by Udaan Nepal directly to schools across Nepal.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul><li><a href="index">Home</a></li><li><a href="#learning">Practify</a></li><li><a href="#programs">Programs</a></li><li><a href="#camps">Camps</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h4>Udaan Nepal</h4>
+        <ul><li><a href="courses">My Courses</a></li><li><a href="profile">My Profile</a></li><li><a href="notice">Notice</a></li><li data-feature="group_chat" style="display:none"><a href="group">My Group</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul><li><a href="terms">Terms & Conditions</a></li><li><a href="privacy">Privacy Policy</a></li><li><a href="#inquiry">Contact</a></li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Udaan Nepal Pvt. Ltd. All rights reserved.</div>
+      <div class="mono">PRACTIFY — LEARN BY DOING</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ===== SIDEBAR ===== */
+(function(){
+  const sidebar=document.getElementById('sidebar'), overlay=document.getElementById('overlay'),
+        menuBtn=document.getElementById('menuBtn'), sidebarClose=document.getElementById('sidebarClose');
+  function openS(){sidebar.classList.add('active');overlay.classList.add('active');menuBtn.classList.add('active');menuBtn.setAttribute('aria-expanded','true');sidebar.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+  function closeS(){sidebar.classList.remove('active');overlay.classList.remove('active');menuBtn.classList.remove('active');menuBtn.setAttribute('aria-expanded','false');sidebar.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  menuBtn.addEventListener('click',()=>sidebar.classList.contains('active')?closeS():openS());
+  sidebarClose.addEventListener('click',closeS);
+  overlay.addEventListener('click',closeS);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&sidebar.classList.contains('active'))closeS();});
+})();
+
+/* ===== SCROLL REVEAL ===== */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ===== FAQ ACCORDION ===== */
+document.querySelectorAll('.faq-item').forEach(item=>{
+  const q=item.querySelector('.faq-q'), a=item.querySelector('.faq-a');
+  q.addEventListener('click',()=>{
+    const isOpen=item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(o=>{
+      if(o!==item){o.classList.remove('open');o.querySelector('.faq-q').setAttribute('aria-expanded','false');o.querySelector('.faq-a').style.maxHeight=null;}
+    });
+    item.classList.toggle('open', !isOpen);
+    q.setAttribute('aria-expanded', String(!isOpen));
+    a.style.maxHeight = !isOpen ? a.scrollHeight+'px' : null;
+  });
+});
+
+/* ===== PROGRAM CHIPS ===== */
+document.querySelectorAll('.chip input').forEach(cb=>{
+  cb.addEventListener('change',()=>cb.closest('.chip').classList.toggle('checked',cb.checked));
+});
+
+/* ===== INQUIRY FORM VALIDATION + SUBMIT ===== */
+(function(){
+  const form=document.getElementById('inquiryForm');
+  const submitBtn=document.getElementById('submitBtn');
+  let submitting=false;
+
+  function markError(el){
+    el.closest('.form-group')?.classList.add('has-error');
+    const err=el.closest('.form-group')?.querySelector('.field-error');
+    if(err) err.classList.add('show');
+  }
+  function clearErrors(){
+    form.querySelectorAll('.field-error').forEach(e=>e.classList.remove('show'));
+    form.querySelectorAll('.has-error').forEach(e=>e.classList.remove('has-error'));
+  }
+  function validate(){
+    clearErrors();
+    let valid=true;
+    const req=['schoolName','schoolLocation','contactPerson','designation'];
+    req.forEach(id=>{
+      const el=document.getElementById(id);
+      if(!el.value.trim()){ markError(el); valid=false; }
+    });
+    const email=document.getElementById('email');
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())){ markError(email); valid=false; }
+    const phone=document.getElementById('phone');
+    if(!/^[0-9+\-\s]{7,15}$/.test(phone.value.trim())){ markError(phone); valid=false; }
+    const programChecked = document.querySelectorAll('#programChips input:checked').length>0;
+    if(!programChecked){ document.getElementById('programError').classList.add('show'); valid=false; }
+    return valid;
+  }
+
+  function showSuccess(ref){
+    const programs = Array.from(document.querySelectorAll('#programChips input:checked')).map(c=>c.value).join(', ');
+    document.getElementById('successRef').textContent = ref;
+    document.getElementById('sdSchool').textContent = document.getElementById('schoolName').value || '—';
+    document.getElementById('sdProgram').textContent = programs || '—';
+    document.getElementById('sdContact').textContent = document.getElementById('email').value || '—';
+    document.getElementById('formPanel').classList.add('is-success');
+    document.getElementById('successState').classList.add('show');
+    document.getElementById('formPanel').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    if(submitting) return;
+    document.getElementById('submitError').style.display='none';
+    if(!validate()) return;
+    if(document.getElementById('hpField').value){ showSuccess('REQ-' + Math.floor(100000 + Math.random()*899999)); return; } // spam trap
+
+    submitting=true;
+    submitBtn.disabled=true;
+    submitBtn.textContent='Submitting…';
+
+    const v = id => (document.getElementById(id).value || '').trim() || null;
+    const row = {
+      school_name: v('schoolName'), school_location: v('schoolLocation'),
+      contact_person: v('contactPerson'), designation: v('designation'),
+      email: v('email'), phone: v('phone'),
+      programs: Array.from(document.querySelectorAll('#programChips input:checked')).map(c=>c.value),
+      grade_group: v('gradeGroup'), student_count: v('studentCount'),
+      duration: v('duration'), preferred_dates: v('preferredDates'), notes: v('notes')
+    };
+
+    let result;
+    try { result = await saveSubmission('practify_inquiries', 'REQ-', row); }
+    catch(err){ result = { error: err }; }
+
+    submitting=false;
+    submitBtn.disabled=false;
+    submitBtn.textContent='Send Program Request';
+
+    if(result.error){ console.error(result.error); showSubmitError(SAVE_FAIL_MSG); return; }
+    showSuccess(result.ref);
+  });
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="site-content.js"></script>
+<script>
+// Reuse the singleton client created by site-content.js (avoids duplicate GoTrueClient warning)
+const supabaseClient = window.supabaseClient;
+
+/* ===== SAVE TO SUPABASE (shared helper) ===== */
+async function saveSubmission(table, prefix, row){
+  for(let attempt=0; attempt<4; attempt++){
+    const ref = prefix + Math.floor(100000 + Math.random()*900000);
+    const { error } = await supabaseClient.from(table).insert(Object.assign({ ref: ref }, row));
+    if(!error) return { ref: ref };
+    if(error.code !== '23505') return { error: error };   // 23505 = that reference number already exists, try another
+  }
+  return { error: { message: 'Could not create a reference number.' } };
+}
+function showSubmitError(msg){
+  const box = document.getElementById('submitError');
+  box.textContent = msg;
+  box.style.display = 'block';
+}
+const SAVE_FAIL_MSG = 'Sorry, we could not send your request right now. Please check your internet connection and try again. If it keeps failing, please contact Udaan Nepal directly.';
+document.querySelectorAll('.sidebar-item.logout').forEach(link=>{
+  link.addEventListener('click', async (e)=>{
+    e.preventDefault();
+    await supabaseClient.auth.signOut();
+    window.location.href = 'auth';
+  });
+});
+/* Show admin link for staff */
+(async function(){
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if(!user) return;
+  const { data } = await supabaseClient.from('staff_roles').select('user_id').eq('user_id', user.id).maybeSingle();
+  if(data){ const a = document.getElementById('adminLink'); if(a) a.style.display = 'flex'; }
+})();
+</script>
+</body>
+</html>

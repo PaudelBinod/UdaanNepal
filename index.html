@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://idwbxagsxpkkqwfjftox.supabase.co https://fonts.googleapis.com https://fonts.gstatic.com; media-src 'self' https://idwbxagsxpkkqwfjftox.supabase.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; frame-src 'self' https://www.youtube.com https://youtube.com https://player.vimeo.com;"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Udaan Nepal Pvt. Ltd. — Fuel Your Flight to Success</title>
+<meta name="description" content="Affordable, practical, and locally-grounded education for Nepali students — online courses, innovation fair, robotics programs, and studio booking.">
+<meta property="og:title" content="Udaan Nepal — Fuel Your Flight to Success">
+<meta property="og:description" content="Affordable, practical education for Nepali students. Enroll in courses, join UNIF, book our studio, and more.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://udaannepal.com/">
+<meta property="og:image" content="https://udaannepal.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Udaan Nepal — Fuel Your Flight to Success">
+<meta name="twitter:description" content="Affordable, practical education for Nepali students.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#0B1D3A;
+    --navy-mid:#14294D;
+    --navy-soft:#1D3A66;
+    --cloud:#F7F9FC;
+    --cloud-dim:#EDF1F8;
+    --amber:#F5A623;
+    --gold:#FFD37D;
+    --slate:#3A4556;
+    --slate-soft:#6B7690;
+    --white:#FFFFFF;
+    --line: rgba(11,29,58,0.10);
+    --line-light: rgba(255,255,255,0.14);
+    --shadow-sm: 0 2px 8px rgba(11,29,58,0.06);
+    --shadow-md: 0 12px 32px rgba(11,29,58,0.10);
+    --shadow-lg: 0 24px 60px rgba(11,29,58,0.16);
+    --radius: 18px;
+    --radius-sm: 10px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    color:var(--slate);
+    background:var(--cloud);
+    overflow-x:hidden;
+    line-height:1.6;
+  }
+  h1,h2,h3,h4{font-family:'Sora',sans-serif;color:var(--navy-deep);letter-spacing:-0.02em;}
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .container{max-width:1220px;margin:0 auto;padding:0 24px;}
+  section{position:relative;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--amber);
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:14px;
+    font-weight:500;
+  }
+  .eyebrow::before{
+    content:'';
+    width:7px;height:7px;
+    border-radius:50%;
+    background:var(--amber);
+    box-shadow:0 0 0 4px rgba(245,166,35,0.18);
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 28px;
+    border-radius:100px;
+    font-weight:600;
+    font-size:15px;
+    cursor:pointer;
+    border:none;
+    transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+    font-family:'Inter',sans-serif;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg,var(--amber),#E8901A);
+    color:var(--navy-deep);
+    box-shadow:0 10px 24px rgba(245,166,35,0.32);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(245,166,35,0.42);}
+  .btn-ghost{
+    background:transparent;
+    color:var(--white);
+    border:1.5px solid rgba(255,255,255,0.35);
+  }
+  .btn-ghost:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.6);}
+  .btn-dark{
+    background:var(--navy-deep);
+    color:var(--white);
+  }
+  .btn-dark:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+  .section-reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease, transform .7s ease;}
+  .section-reveal.is-visible{opacity:1;transform:translateY(0);}
+
+  /* ===== NAVBAR ===== */
+  .navbar{
+    position:fixed;top:0;left:0;right:0;z-index:900;
+    background:rgba(11,29,58,0.72);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    transition:background .3s ease, padding .3s ease;
+  }
+  .navbar.scrolled{background:rgba(11,29,58,0.94);}
+  .nav-inner{
+    max-width:1220px;margin:0 auto;padding:16px 24px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-mark{
+    width:38px;height:38px;border-radius:10px;
+    background:linear-gradient(135deg,var(--amber),var(--gold));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Sora',sans-serif;font-weight:800;color:var(--navy-deep);
+    font-size:16px;
+    flex-shrink:0;
+  }
+  .brand-text{color:var(--white);font-family:'Sora',sans-serif;font-weight:700;font-size:18px;}
+  .brand-text span{display:block;font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:10.5px;color:var(--gold);letter-spacing:0.08em;}
+  .nav-links{display:flex;gap:38px;list-style:none;}
+  .nav-links a{
+    color:rgba(255,255,255,0.82);font-size:14.5px;font-weight:500;
+    position:relative;padding:4px 0;transition:color .2s ease;
+  }
+  .nav-links a::after{
+    content:'';position:absolute;left:0;bottom:-4px;width:0;height:2px;
+    background:var(--amber);transition:width .25s ease;
+  }
+  .nav-links a:hover{color:var(--white);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-actions{display:flex;align-items:center;gap:16px;}
+  .hamburger{
+    width:44px;height:44px;border-radius:50%;
+    border:1px solid rgba(255,255,255,0.2);
+    background:rgba(255,255,255,0.06);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;gap:0;flex-direction:column;
+    transition:background .2s ease;
+  }
+  .hamburger:hover{background:rgba(255,255,255,0.14);}
+  .hamburger span{
+    display:block;width:18px;height:2px;background:var(--white);
+    margin:2px 0;border-radius:2px;transition:transform .3s ease, opacity .3s ease;
+  }
+  .hamburger.active span:nth-child(1){transform:translateY(4px) rotate(45deg);}
+  .hamburger.active span:nth-child(2){opacity:0;}
+  .hamburger.active span:nth-child(3){transform:translateY(-4px) rotate(-45deg);}
+
+  @media(max-width:920px){
+    .nav-links{display:none;}
+  }
+
+  /* ===== SIDEBAR DRAWER ===== */
+  .overlay{
+    position:fixed;inset:0;background:rgba(6,14,29,0.55);
+    backdrop-filter:blur(3px);
+    opacity:0;visibility:hidden;transition:opacity .35s ease, visibility .35s ease;
+    z-index:1000;
+  }
+  .overlay.active{opacity:1;visibility:visible;}
+
+  .sidebar{
+    position:fixed;top:0;right:0;height:100%;
+    width:340px;max-width:86vw;
+    background:linear-gradient(180deg,var(--navy-deep) 0%, var(--navy-mid) 100%);
+    z-index:1001;
+    transform:translateX(100%);
+    transition:transform .4s cubic-bezier(.22,.9,.32,1);
+    display:flex;flex-direction:column;
+    box-shadow:-20px 0 60px rgba(0,0,0,0.3);
+  }
+  .sidebar.active{transform:translateX(0);}
+  .sidebar-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:24px 24px 20px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  .sidebar-user{display:flex;align-items:center;gap:12px;}
+  .sidebar-avatar{
+    width:46px;height:46px;border-radius:50%;
+    background:linear-gradient(135deg,var(--amber),var(--gold));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Sora',sans-serif;font-weight:700;color:var(--navy-deep);
+  }
+  .sidebar-user-name{color:var(--white);font-weight:600;font-size:15px;}
+  .sidebar-user-role{color:rgba(255,255,255,0.5);font-size:12px;font-family:'IBM Plex Mono',monospace;}
+  .sidebar-close{
+    width:36px;height:36px;border-radius:50%;
+    border:1px solid rgba(255,255,255,0.18);
+    background:transparent;color:var(--white);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:18px;flex-shrink:0;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .sidebar-close:hover{background:rgba(255,255,255,0.12);transform:rotate(90deg);}
+
+  .sidebar-nav{padding:18px 14px;flex:1;overflow-y:auto;}
+  .sidebar-section-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;
+    text-transform:uppercase;color:rgba(255,255,255,0.35);
+    padding:10px 14px 8px;
+  }
+  .sidebar-item{
+    display:flex;align-items:center;gap:14px;
+    padding:13px 14px;border-radius:12px;
+    color:rgba(255,255,255,0.82);font-size:15px;font-weight:500;
+    cursor:pointer;transition:background .2s ease, color .2s ease, padding-left .2s ease;
+    margin-bottom:2px;
+  }
+  .sidebar-item .icon{
+    width:22px;height:22px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--gold);
+  }
+  .sidebar-item:hover{background:rgba(255,255,255,0.07);padding-left:18px;color:var(--white);}
+  .sidebar-item.active{background:rgba(245,166,35,0.14);color:var(--white);}
+  .sidebar-item.active .icon{color:var(--amber);}
+  .sidebar-divider{height:1px;background:rgba(255,255,255,0.08);margin:14px 10px;}
+  .sidebar-item.logout{color:#FF9B8A;}
+  .sidebar-item.logout .icon{color:#FF9B8A;}
+  .sidebar-item.logout:hover{background:rgba(255,107,80,0.1);}
+  .sidebar-footer{
+    padding:18px 24px 24px;
+    border-top:1px solid rgba(255,255,255,0.08);
+    color:rgba(255,255,255,0.35);font-size:11.5px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    background:radial-gradient(ellipse 90% 60% at 15% 0%, #12294F 0%, var(--navy-deep) 55%, #081428 100%);
+    padding:168px 0 120px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:'';position:absolute;inset:0;
+    background-image:radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px);
+    background-size:44px 44px;
+    opacity:0.06;
+    pointer-events:none;
+  }
+  .hero-grid{
+    display:grid;grid-template-columns:1.05fr 0.95fr;gap:60px;align-items:center;
+    position:relative;z-index:2;
+  }
+  .hero-eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:0.14em;
+    text-transform:uppercase;color:var(--gold);display:inline-flex;align-items:center;gap:8px;
+    margin-bottom:22px;padding:7px 14px 7px 10px;border:1px solid rgba(255,211,125,0.3);
+    border-radius:100px;background:rgba(255,211,125,0.06);
+  }
+  .hero-eyebrow::before{content:'✈';font-size:13px;}
+  .hero h1{
+    font-size:clamp(34px,4.6vw,58px);
+    font-weight:800;color:var(--white);line-height:1.08;margin-bottom:22px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    background:linear-gradient(135deg,var(--gold),var(--amber));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p{
+    color:rgba(255,255,255,0.72);font-size:17px;max-width:480px;margin-bottom:36px;
+  }
+  .hero-ctas{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:52px;}
+  .hero-stats{display:flex;gap:36px;flex-wrap:wrap;}
+  .hero-stat-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,0.4);
+    letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;
+  }
+  .hero-stat-value{font-family:'Sora',sans-serif;font-weight:700;font-size:22px;color:var(--white);}
+
+  .hero-visual{position:relative;}
+  .hero-panel{
+    position:relative;aspect-ratio:4/5;border-radius:24px;
+    background:linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+    border:1px solid rgba(255,255,255,0.14);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,0.35);
+  }
+  .hero-panel-inner{
+    text-align:center;color:rgba(255,255,255,0.4);padding:30px;
+  }
+  .hero-panel-icon{
+    width:64px;height:64px;margin:0 auto 14px;
+    border-radius:16px;background:rgba(255,211,125,0.12);
+    display:flex;align-items:center;justify-content:center;color:var(--gold);
+  }
+  .flight-path{
+    position:absolute;left:-60px;bottom:60px;width:130%;pointer-events:none;z-index:1;
+  }
+  .waypoint-tag{
+    position:absolute;font-family:'IBM Plex Mono',monospace;font-size:10.5px;
+    color:var(--gold);background:rgba(11,29,58,0.7);border:1px solid rgba(255,211,125,0.3);
+    padding:4px 9px;border-radius:100px;letter-spacing:0.05em;backdrop-filter:blur(4px);
+  }
+  .wp-1{top:8%;left:-6%;}
+  .wp-2{bottom:14%;right:-4%;}
+
+
+  /* ===== OUR MEMBERS (scrolling) ===== */
+  .members{padding:100px 0;background:var(--white);overflow:hidden;}
+  .members-head{max-width:560px;margin:0 auto 44px;text-align:center;}
+  .members-head h2{font-size:clamp(28px,3.4vw,38px);margin-bottom:14px;}
+  .members-head p{color:var(--slate-soft);font-size:16px;}
+  .marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);}
+  .marquee-track{display:flex;gap:20px;width:max-content;animation:marqueeMove var(--dur,40s) linear infinite;}
+  .marquee:hover .marquee-track,.marquee.paused .marquee-track{animation-play-state:paused;}
+  @keyframes marqueeMove{to{transform:translateX(calc(-50% - 10px));}}
+  .member-card{flex:none;width:210px;text-align:center;padding:22px 16px 24px;background:var(--cloud);border:1px solid var(--line);border-radius:20px;}
+  .member-photo{width:128px;height:128px;margin:0 auto 14px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,var(--navy),#1d3b6b);display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:'Sora',sans-serif;font-weight:700;font-size:34px;}
+  .member-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .member-card h3{font-size:16.5px;margin-bottom:4px;}
+  .member-role{display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:#B97A0B;text-transform:uppercase;margin-bottom:8px;}
+  .member-card p{font-size:13.5px;color:var(--slate-soft);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+  @media (prefers-reduced-motion:reduce){.marquee{overflow-x:auto;-webkit-mask-image:none;mask-image:none;}.marquee-track{animation:none;}.member-card.dup{display:none;}}
+  .hero-panel video.hero-loop{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+
+  /* ===== TRUST / INTRO ===== */
+  .intro{padding:100px 0 90px;background:var(--cloud);}
+  .intro-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:64px;align-items:start;}
+  .intro h2{font-size:clamp(28px,3.2vw,38px);margin-bottom:20px;line-height:1.2;}
+  .intro-lead{font-size:16.5px;color:var(--slate-soft);}
+  .intro-points{display:grid;gap:22px;}
+  .intro-point{display:flex;gap:16px;align-items:flex-start;padding-bottom:22px;border-bottom:1px solid var(--line);}
+  .intro-point:last-child{border-bottom:none;padding-bottom:0;}
+  .intro-point-num{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--amber);
+    flex-shrink:0;padding-top:3px;
+  }
+  .intro-point h4{font-size:16px;margin-bottom:6px;}
+  .intro-point p{font-size:14.5px;color:var(--slate-soft);}
+
+  /* ===== SERVICES ===== */
+  .services{padding:100px 0 110px;background:var(--cloud-dim);position:relative;}
+  .services-head{max-width:640px;margin-bottom:48px;}
+  .services-foot{max-width:640px;margin:48px auto 0;text-align:center;color:var(--slate-soft);font-size:16.5px;}
+  .services-head h2{font-size:clamp(30px,3.6vw,42px);margin-bottom:16px;}
+  .services-head p{color:var(--slate-soft);font-size:16.5px;}
+  .services-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:30px;
+  }
+  /* Soft "white marble" raised cards: light tint, embossed edges, lift on hover/press */
+  .service-card{
+    --tint:#EEF2F8; --accent:#4F6FAF;
+    position:relative;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;
+    padding:34px 28px 30px;border-radius:26px;
+    background:
+      radial-gradient(120% 70% at 12% 0%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 60%),
+      radial-gradient(90% 60% at 100% 100%, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 70%),
+      linear-gradient(150deg, #FFFFFF 0%, var(--tint) 100%);
+    border:1px solid rgba(255,255,255,.9);
+    box-shadow: 12px 14px 30px rgba(150,165,190,.38), -10px -10px 24px rgba(255,255,255,.95), inset 0 1px 0 rgba(255,255,255,.95);
+    transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+    opacity:0;
+  }
+  /* faint marble veins */
+  .service-card::before{
+    content:'';position:absolute;inset:0;pointer-events:none;opacity:.4;
+    background:
+      linear-gradient(115deg, transparent 38%, rgba(120,140,175,.07) 40%, transparent 42%),
+      linear-gradient(62deg, transparent 58%, rgba(120,140,175,.06) 60%, transparent 63%),
+      linear-gradient(160deg, transparent 20%, rgba(120,140,175,.05) 21.5%, transparent 24%);
+  }
+  .services.is-visible .service-card{opacity:1;animation:cardPop .8s cubic-bezier(.2,.9,.25,1.15) backwards;}
+  .services.is-visible .service-card:nth-child(1){animation-delay:.05s;}
+  .services.is-visible .service-card:nth-child(2){animation-delay:.18s;}
+  .services.is-visible .service-card:nth-child(3){animation-delay:.31s;}
+  .services.is-visible .service-card:nth-child(4){animation-delay:.44s;}
+  .services.is-visible .service-card:nth-child(5){animation-delay:.57s;}
+  @keyframes cardPop{
+    from{opacity:0;transform:translateY(46px) scale(.93);}
+    65%{opacity:1;transform:translateY(-8px) scale(1.012);}
+    to{opacity:1;transform:none;}
+  }
+  .service-card:hover, .service-card:focus-within{
+    transform:translateY(-10px) scale(1.015);
+    box-shadow: 18px 26px 44px rgba(130,148,178,.42), -10px -10px 26px rgba(255,255,255,1), inset 0 1px 0 #fff;
+  }
+  .service-card:active{
+    transform:translateY(-2px) scale(.985);
+    box-shadow: 6px 8px 16px rgba(150,165,190,.4), -5px -5px 12px rgba(255,255,255,.95), inset 3px 3px 8px rgba(150,165,190,.25);
+    transition-duration:.12s;
+  }
+  .service-icon{
+    position:relative;width:60px;height:60px;border-radius:50%;
+    background:linear-gradient(145deg,#FFFFFF,var(--tint));
+    box-shadow: 7px 7px 14px rgba(150,165,190,.40), -6px -6px 12px rgba(255,255,255,.95), inset 0 0 0 1px rgba(255,255,255,.8);
+    display:flex;align-items:center;justify-content:center;color:var(--accent);
+    margin-bottom:22px;flex-shrink:0;
+  }
+  .service-index{
+    position:relative;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);
+    letter-spacing:0.09em;margin-bottom:10px;font-weight:500;
+  }
+  .service-card h3{position:relative;font-size:20px;margin-bottom:10px;color:var(--navy-deep);}
+  .service-card p{position:relative;font-size:14.5px;color:var(--slate-soft);margin-bottom:24px;flex-grow:1;}
+  /* The "button": a raised pill so it clearly looks clickable */
+  .service-link{
+    position:relative;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;
+    padding:11px 14px 11px 20px;border-radius:999px;font-weight:700;font-size:14px;color:var(--navy-deep);
+    background:linear-gradient(145deg,#FFFFFF,#E9EEF6);
+    box-shadow: 5px 5px 11px rgba(150,165,190,.40), -4px -4px 9px rgba(255,255,255,.95);
+    transition:box-shadow .25s ease, transform .25s ease;
+  }
+  .service-link .arrow{
+    display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;
+    background:var(--accent);color:#fff;font-size:14px;line-height:1;transition:transform .25s ease;
+  }
+  .service-card:hover .service-link{box-shadow: 7px 8px 15px rgba(150,165,190,.45), -4px -4px 10px rgba(255,255,255,1);}
+  .service-card:hover .service-link .arrow{transform:translateX(4px);}
+  .service-card:active .service-link{box-shadow: inset 3px 3px 7px rgba(150,165,190,.35), inset -3px -3px 7px rgba(255,255,255,.9);}
+
+  /* Whole card is clickable: the link stretches over the full card */
+  .service-link::after{content:'';position:absolute;inset:-400px -400px -400px -400px;z-index:1;}
+  .service-card:focus-within{outline:3px solid rgba(79,111,175,.45);outline-offset:4px;}
+  .service-link:focus{outline:none;}
+
+  /* Very light tints, just enough to tell the cards apart */
+  .service-card.g-enroll{--tint:#E6EFFD;--accent:#4A72B8;}
+  .service-card.g-unif{--tint:#EEE9FB;--accent:#7360B5;}
+  .service-card.g-unsmp{--tint:#E5F4EC;--accent:#3F8A62;}
+  .service-card.g-practify{--tint:#FCEFE4;--accent:#B9743A;}
+  .service-card.g-studio{--tint:#E9EDF3;--accent:#44526B;}
+  @media (prefers-reduced-motion:reduce){
+    .services.is-visible .service-card{animation:none;}
+    .service-card,.service-card:hover{transition:none;transform:none;}
+  }
+
+  @media(max-width:940px){
+    .services-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:620px){
+    .services-grid{grid-template-columns:1fr;}
+  }
+
+  /* ===== WHY CHOOSE ===== */
+  .why{padding:100px 0;background:var(--white);}
+  .why-grid{display:grid;grid-template-columns:0.8fr 1.2fr;gap:60px;align-items:center;}
+  .why h2{font-size:clamp(28px,3.4vw,38px);margin-bottom:18px;}
+  .why > .container > .why-grid > div:first-child p{color:var(--slate-soft);font-size:16px;}
+  .why-features{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .why-feature{
+    padding:26px 22px;border-radius:var(--radius-sm);
+    background:var(--cloud-dim);
+    border:1px solid var(--line);
+    transition:background .25s ease, transform .25s ease;
+  }
+  .why-feature:hover{background:var(--navy-deep);transform:translateY(-4px);}
+  .why-feature:hover h4, .why-feature:hover p{color:var(--white);}
+  .why-feature:hover p{color:rgba(255,255,255,0.65);}
+  .why-feature-icon{
+    width:40px;height:40px;border-radius:10px;margin-bottom:16px;
+    background:linear-gradient(135deg,var(--amber),var(--gold));
+    display:flex;align-items:center;justify-content:center;color:var(--navy-deep);
+  }
+  .why-feature h4{font-size:15.5px;margin-bottom:8px;transition:color .25s ease;}
+  .why-feature p{font-size:13.5px;color:var(--slate-soft);transition:color .25s ease;}
+
+  @media(max-width:860px){
+    .why-grid{grid-template-columns:1fr;}
+    .why-features{grid-template-columns:1fr 1fr;}
+  }
+
+  /* ===== VIDEO ===== */
+  .video-section{padding:100px 0;background:var(--navy-deep);position:relative;overflow:hidden;}
+  .video-section::before{
+    content:'';position:absolute;inset:0;
+    background-image:radial-gradient(circle, rgba(255,255,255,0.4) 1px, transparent 1px);
+    background-size:40px 40px;opacity:0.05;
+  }
+  .video-head{text-align:center;max-width:600px;margin:0 auto 48px;position:relative;z-index:2;}
+  .video-head h2{color:var(--white);font-size:clamp(28px,3.4vw,38px);margin-bottom:14px;}
+  .video-head p{color:rgba(255,255,255,0.6);font-size:16px;}
+  .video-frame{
+    max-width:900px;margin:0 auto;aspect-ratio:16/9;border-radius:20px;
+    background:linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+    border:1px solid rgba(255,255,255,0.14);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;z-index:2;box-shadow:0 30px 80px rgba(0,0,0,0.4);
+    cursor:pointer;
+  }
+  .play-btn{
+    width:84px;height:84px;border-radius:50%;
+    background:linear-gradient(135deg,var(--amber),var(--gold));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 0 rgba(245,166,35,0.5);
+    animation:pulse 2.4s infinite;
+    transition:transform .25s ease;
+  }
+  .video-frame:hover .play-btn{transform:scale(1.08);}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(245,166,35,0.45);}
+    70%{box-shadow:0 0 0 22px rgba(245,166,35,0);}
+    100%{box-shadow:0 0 0 0 rgba(245,166,35,0);}
+  }
+
+  /* ===== FOUNDERS ===== */
+  .founders{padding:100px 0;background:var(--cloud-dim);}
+  .founders-head{max-width:560px;margin-bottom:52px;}
+  .founders-head h2{font-size:clamp(28px,3.4vw,38px);margin-bottom:14px;}
+  .founders-head p{color:var(--slate-soft);font-size:16px;}
+  .founders-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .founder-card{
+    background:var(--white);border-radius:var(--radius);overflow:hidden;
+    border:1px solid var(--line);display:flex;flex-direction:column;
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .founder-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
+  .founder-photo{
+    aspect-ratio:4/3;background:linear-gradient(150deg,var(--navy-mid),var(--navy-deep));
+    display:flex;align-items:center;justify-content:center;color:rgba(255,211,125,0.5);
+    position:relative;
+  }
+  .founder-photo .initials{
+    font-family:'Sora',sans-serif;font-weight:800;font-size:44px;color:rgba(255,255,255,0.9);
+  }
+  .founder-body{padding:26px 26px 28px;}
+  .founder-body h3{font-size:19px;margin-bottom:4px;}
+  .founder-role{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--amber);
+    letter-spacing:0.04em;margin-bottom:14px;display:block;
+  }
+  .founder-body p{font-size:14.5px;color:var(--slate-soft);}
+
+  @media(max-width:700px){
+    .founders-grid{grid-template-columns:1fr;}
+  }
+
+  /* ===== CONTACT ===== */
+  .contact{padding:100px 0;background:var(--white);}
+  .contact-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:56px;}
+  .contact-info h2{font-size:clamp(28px,3.4vw,36px);margin-bottom:16px;}
+  .contact-info p{color:var(--slate-soft);font-size:15.5px;margin-bottom:32px;}
+  .contact-item{display:flex;gap:16px;align-items:flex-start;margin-bottom:24px;}
+  .contact-icon{
+    width:42px;height:42px;border-radius:12px;flex-shrink:0;
+    background:var(--cloud-dim);display:flex;align-items:center;justify-content:center;color:var(--navy-deep);
+  }
+  .contact-item h4{font-size:14px;margin-bottom:3px;}
+  .contact-item p{font-size:14.5px;color:var(--slate-soft);margin:0;}
+  .social-row{display:flex;gap:12px;margin-top:28px;}
+  .social-icon{
+    width:40px;height:40px;border-radius:50%;background:var(--navy-deep);color:var(--white);
+    display:flex;align-items:center;justify-content:center;transition:background .2s ease, transform .2s ease;
+  }
+  .social-icon:hover{background:var(--amber);transform:translateY(-3px);}
+
+  .contact-form{
+    background:var(--cloud-dim);border-radius:var(--radius);padding:36px;
+    border:1px solid var(--line);
+  }
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+  .form-group{display:flex;flex-direction:column;gap:7px;}
+  .form-group.full{grid-column:1/-1;}
+  .form-group label{font-size:13px;font-weight:600;color:var(--navy-deep);}
+  .form-group input, .form-group textarea{
+    padding:13px 16px;border-radius:10px;border:1px solid var(--line);
+    font-family:'Inter',sans-serif;font-size:14.5px;background:var(--white);
+    transition:border-color .2s ease, box-shadow .2s ease;
+  }
+  .form-group input:focus, .form-group textarea:focus{
+    outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(245,166,35,0.15);
+  }
+  .form-group textarea{resize:vertical;min-height:100px;}
+  .contact-form .btn-primary{width:100%;justify-content:center;margin-top:6px;}
+
+  @media(max-width:860px){
+    .contact-grid{grid-template-columns:1fr;}
+  }
+  @media(max-width:520px){
+    .form-row{grid-template-columns:1fr;}
+  }
+
+  /* ===== FOOTER ===== */
+  .footer{background:#071223;padding:70px 0 30px;color:rgba(255,255,255,0.6);}
+  .footer-grid{
+    display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:40px;margin-bottom:50px;
+  }
+  .footer-brand .brand-text{color:var(--white);}
+  .footer-brand p{margin-top:16px;font-size:14px;color:rgba(255,255,255,0.45);max-width:280px;}
+  .footer-col h4{color:var(--white);font-size:14px;margin-bottom:18px;font-family:'Sora',sans-serif;}
+  .footer-col ul li{margin-bottom:11px;}
+  .footer-col ul li a{font-size:14px;color:rgba(255,255,255,0.55);transition:color .2s ease;}
+  .footer-col ul li a:hover{color:var(--gold);}
+  .footer-bottom{
+    border-top:1px solid rgba(255,255,255,0.08);padding-top:26px;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+    font-size:13px;color:rgba(255,255,255,0.4);
+  }
+  @media(max-width:860px){
+    .footer-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:520px){
+    .footer-grid{grid-template-columns:1fr;}
+  }
+
+  /* Responsive overrides */
+  @media(max-width:980px){
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-visual{max-width:420px;}
+    .intro-grid{grid-template-columns:1fr;gap:40px;}
+  }
+  @media(max-width:640px){
+    .hero{padding:140px 0 80px;}
+    .hero-ctas{flex-direction:column;align-items:stretch;}
+    .hero-ctas .btn{justify-content:center;}
+    .hero-stats{gap:24px;}
+    section{padding-left:0;padding-right:0;}
+    .intro, .services, .why, .video-section, .founders, .members, .contact{padding:70px 0;}
+  }
+
+  ::selection{background:var(--amber);color:var(--navy-deep);}
+  :focus-visible{outline:2px solid var(--amber);outline-offset:3px;}
+</style>
+</head>
+<body data-greeting="1">
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#home" class="brand">
+      <div class="brand-mark">U</div>
+      <div class="brand-text">Udaan Nepal<span>FUEL YOUR FLIGHT TO SUCCESS</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== SIDEBAR OVERLAY ===== -->
+<div class="overlay" id="overlay"></div>
+
+<!-- ===== SIDEBAR DRAWER ===== -->
+<aside class="sidebar" id="sidebar" aria-hidden="true">
+  <div class="sidebar-header">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">U</div>
+      <div>
+        <div class="sidebar-user-name">My Account</div>
+        <div class="sidebar-user-role">Udaan Nepal</div>
+      </div>
+    </div>
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">&times;</button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Menu</div>
+    <a href="profile" class="sidebar-item active">
+      <span class="icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+      </span>
+      My Profile
+    </a>
+    <a href="courses" class="sidebar-item">
+      <span class="icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </span>
+      My Courses
+    </a>
+    <a href="notice" class="sidebar-item">
+      <span class="icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </span>
+      Notice
+    </a>
+    <a href="group" data-feature="group_chat" style="display:none" class="sidebar-item">
+      <span class="icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </span>
+      My Group
+    </a>
+    <div class="sidebar-divider"></div>
+    <a href="auth" class="sidebar-item logout">
+      <span class="icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </span>
+      Log Out
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">UDAAN NEPAL PVT. LTD. &mdash; v1.0</div>
+</aside>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-eyebrow" data-c="home_eyebrow">Now enrolling &mdash; Kathmandu Studio</div>
+      <h1>Fuel your flight<br>to <em>success</em>, powered by Udaan Nepal.</h1>
+      <p data-c="home_hero_text">Affordable, practical, and locally-grounded education for Nepali students &mdash; built by engineers and educators who understand where you're starting from, and where you want to land.</p>
+      <div class="hero-ctas">
+        <a href="#services" class="btn btn-primary">Explore Services →</a>
+        <a href="#contact" class="btn btn-ghost">Contact Us</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div data-c="home_x1" class="hero-stat-label">Programs</div>
+          <div class="hero-stat-value" data-c="home_stat1">05 Active</div>
+        </div>
+        <div>
+          <div data-c="home_x2" class="hero-stat-label">Founded by</div>
+          <div class="hero-stat-value" data-c="home_stat2">Engineers</div>
+        </div>
+        <div>
+          <div data-c="home_x3" class="hero-stat-label">Based in</div>
+          <div class="hero-stat-value" data-c="home_stat3">Nepal 🇳🇵</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-panel">
+        <svg class="flight-path" viewBox="0 0 500 400" fill="none">
+          <path d="M-20 380 C 120 380, 160 200, 260 180 S 420 40, 520 10" stroke="url(#pathGrad)" stroke-width="2.5" stroke-dasharray="6 8" fill="none"/>
+          <defs>
+            <linearGradient id="pathGrad" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0" stop-color="#F5A623" stop-opacity="0.15"/>
+              <stop offset="1" stop-color="#FFD37D" stop-opacity="0.9"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="hero-panel-inner">
+          <div class="hero-panel-icon">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          </div>
+          <div class="mono" style="font-size:12px;letter-spacing:.08em;">UDAAN NEPAL</div>
+        </div>
+        <div data-c="home_x4" class="waypoint-tag wp-1">DEP · Udaan Nepal</div>
+        <div data-c="home_x5" class="waypoint-tag wp-2"> CAREER READY ··</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVICES ===== -->
+<section class="services section-reveal" id="services">
+  <div class="container">
+    <div class="services-head">
+      <div data-c="home_x13" class="eyebrow">What we offer</div>
+      <h2 data-c="home_x14">Five ways to take off with Udaan Nepal</h2>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card g-enroll">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <div class="service-index mono">01 / COURSES</div>
+        <h3 data-c="home_x16">Enroll Course</h3>
+        <p data-c="home_x17">Online courses for school and college students — watch lessons, download notes, and track your progress from anywhere in Nepal.</p>
+        <a href="enroll-course" class="service-link">Learn more <span class="arrow">→</span></a>
+      </div>
+
+      <div class="service-card g-unif">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
+        <div class="service-index mono">02 / EXHIBITION</div>
+        <h3 data-c="home_x18">UNIF</h3>
+        <p data-c="home_x19">The Udaan Nepal Innovation Fair — a science exhibition where students showcase their projects and ideas. Register your project or your school.</p>
+        <a href="unif" class="service-link">Learn more <span class="arrow">→</span></a>
+      </div>
+
+      <div class="service-card g-unsmp">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8M12 18v4"/></svg>
+        </div>
+        <div class="service-index mono">03 / SMART PLAN</div>
+        <h3 data-c="home_x20">UNSMP</h3>
+        <p data-c="home_x21">Udaan Nepal's Student Mentoring & Progress program, tracking academic growth with personalized study roadmaps.</p>
+        <a href="unsmp" class="service-link">Learn more <span class="arrow">→</span></a>
+      </div>
+
+      <div class="service-card g-practify">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        </div>
+        <div class="service-index mono">04 / HANDS-ON</div>
+        <h3 data-c="home_x22">PRACTIFY</h3>
+        <p data-c="home_x23">Applied, project-based learning sessions that turn theory into practical, portfolio-ready skills.</p>
+        <a href="practify" class="service-link">Learn more <span class="arrow">→</span></a>
+      </div>
+
+      <div class="service-card g-studio">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        </div>
+        <div class="service-index mono">05 / STUDIO</div>
+        <h3 data-c="home_x24">Studio Booking</h3>
+        <p data-c="home_x25">Rent our fully-equipped recording studio — smart board, lighting, sound-proofing, and full production support — by the hour.</p>
+        <a href="studio-booking" class="service-link">Book the studio <span class="arrow">→</span></a>
+      </div>
+    </div>
+    <p class="services-foot" data-c="home_x15">From classroom tuition to studio production support — every service is built to move a Nepali student forward, one level at a time.</p>
+  </div>
+</section>
+
+<!-- ===== TRUST / INTRO ===== -->
+<section class="intro section-reveal" id="about">
+  <div class="container intro-grid">
+    <div>
+      <div data-c="home_x6" class="eyebrow">Who we are</div>
+      <h2 data-c="home_about_title">Education built for the Nepali classroom, not imported from somewhere else.</h2>
+      <p class="intro-lead" data-c="home_about_lead">Udaan Nepal Pvt. Ltd. is a private educational institution founded to make quality learning affordable and practical for Nepali students — combining online courses, digital tools, and a purpose-built studio for modern teaching.</p>
+    </div>
+    <div class="intro-points">
+      <div class="intro-point">
+        <span class="intro-point-num">A</span>
+        <div>
+          <h4 data-c="home_x7">Locally grounded</h4>
+          <p data-c="home_x8">Curriculum and teaching methods designed around the real Nepali classroom, not translated foreign material.</p>
+        </div>
+      </div>
+      <div class="intro-point">
+        <span class="intro-point-num">B</span>
+        <div>
+          <h4 data-c="home_x9">Affordable by design</h4>
+          <p data-c="home_x10">Pricing structured so quality education stays within reach of everyday Nepali families.</p>
+        </div>
+      </div>
+      <div class="intro-point">
+        <span class="intro-point-num">C</span>
+        <div>
+          <h4 data-c="home_x11">Built by practitioners</h4>
+          <p data-c="home_x12">Founded and run by engineers and teachers — people who've sat in the same classrooms our students sit in.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY CHOOSE ===== -->
+<section class="why section-reveal">
+  <div class="container why-grid">
+    <div>
+      <div data-c="home_x26" class="eyebrow">Why Udaan Nepal</div>
+      <h2 data-c="home_why_title">Four things every student notices first</h2>
+      <p data-c="home_why_text">We built Udaan Nepal around what was missing in our own education — and fixed it, one program at a time.</p>
+    </div>
+    <div class="why-features">
+      <div class="why-feature">
+        <div class="why-feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h4 data-c="home_x27">Affordable Education</h4>
+        <p data-c="home_x28">Transparent, fair pricing so quality teaching never depends on a family's income.</p>
+      </div>
+      <div class="why-feature">
+        <div class="why-feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <h4 data-c="home_x29">Practical Learning</h4>
+        <p data-c="home_x30">Real exercises and applied projects, not just theory copied from a textbook.</p>
+      </div>
+      <div class="why-feature">
+        <div class="why-feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <h4 data-c="home_x31">Innovation Driven</h4>
+        <p data-c="home_x32">A dedicated studio and digital tools that keep teaching current and engaging.</p>
+      </div>
+      <div class="why-feature">
+        <div class="why-feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <h4 data-c="home_x33">Student-Centered Support</h4>
+        <p data-c="home_x34">Every program is built around individual progress, not a one-size-fits-all pace.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VIDEO ===== -->
+<section class="video-section section-reveal" id="sec-video" style="display:none">
+  <div class="container">
+    <div class="video-head">
+      <div data-c="home_x35" class="eyebrow" style="color:var(--gold);">See it in action</div>
+      <h2 data-c="home_video_title">A short flight through Udaan Nepal</h2>
+      <p data-c="home_x36">Watch how our studio, classrooms, and mentors come together to help students take off.</p>
+    </div>
+    <div class="video-frame">
+      <div class="play-btn">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="#0B1D3A"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOUNDERS ===== -->
+<section class="founders section-reveal">
+  <div class="container">
+    <div class="founders-head">
+      <div data-c="home_x37" class="eyebrow">Leadership</div>
+      <h2 data-c="home_founders_title">Founded by engineers, run for students</h2>
+      <p data-c="home_founders_text">Udaan Nepal was built by people who wanted Nepali education to work better — and decided to do something about it.</p>
+    </div>
+    <div class="founders-grid">
+      <div class="founder-card">
+        <div class="founder-photo"><span class="initials">PM</span></div>
+        <div class="founder-body">
+          <h3 data-c="home_x38">Er. Prashant Mishra</h3>
+          <span data-c="home_x39" class="founder-role">CO-FOUNDER & CEO</span>
+          <p data-c="home_x40">Mechanical engineer and science teacher, leading Udaan Nepal's academic direction and long-term vision.</p>
+        </div>
+      </div>
+      <div class="founder-card">
+        <div class="founder-photo"><span class="initials">BP</span></div>
+        <div class="founder-body">
+          <h3 data-c="home_x41">Er. Binod Paudel</h3>
+          <span data-c="home_x42" class="founder-role">CO-FOUNDER & COO</span>
+          <p data-c="home_x43">Electrical and electronics engineer, overseeing daily operations, systems, and delivery of every program.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== OUR MEMBERS ===== -->
+<section class="members section-reveal" id="sec-members" style="display:none">
+  <div class="container">
+    <div class="members-head">
+      <div data-c="home_x44" class="eyebrow">Our people</div>
+      <h2 data-c="home_members_title">Our Members</h2>
+      <p data-c="home_members_text">The teachers, mentors and team who make Udaan Nepal work every day.</p>
+    </div>
+  </div>
+  <div class="marquee" id="membersMarquee"><div class="marquee-track" id="membersTrack"></div></div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="contact section-reveal" id="contact">
+  <div class="container contact-grid">
+    <div class="contact-info">
+      <div data-c="home_x44" class="eyebrow">Get in touch</div>
+      <h2 data-c="home_x45">Ready for takeoff?</h2>
+      <p data-c="home_x46">Reach out about admissions, the innovation fair, or booking the studio — our team replies within one business day.</p>
+
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div><h4 data-c="home_x47">Phone</h4><p data-c="phone">+977-XXX-XXXXXXX</p></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" opacity="0"/><path d="M22 6 12 13 2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+        </div>
+        <div><h4 data-c="home_x48">Email</h4><p data-c="email">info@udaannepal.com</p></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div><h4 data-c="home_x49">Address</h4><p data-c="address">Kathmandu, Nepal</p></div>
+      </div>
+
+      <div class="social-row">
+        <a href="#" class="social-icon" data-social="facebook" aria-label="Facebook">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M9 8H6v4h3v12h5V12h3.6l.4-4H14V6.3c0-1 .2-1.3 1.2-1.3H19V0h-4.4C11 0 9 2 9 5.7z"/></svg>
+        </a>
+        <a href="#" class="social-icon" data-social="instagram" aria-label="Instagram">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+        </a>
+        <a href="#" class="social-icon" data-social="youtube" aria-label="YouTube">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.6-.5-5.2c-.3-1-1-1.7-2-2C18.9 4.3 12 4.3 12 4.3s-6.9 0-8.5.5c-1 .3-1.7 1-2 2C1 8.4 1 12 1 12s0 3.6.5 5.2c.3 1 1 1.7 2 2 1.6.5 8.5.5 8.5.5s6.9 0 8.5-.5c1-.3 1.7-1 2-2 .5-1.6.5-5.2.5-5.2zM9.5 15.5v-7l6 3.5z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <form class="contact-form" id="homeContactForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fname">Full name</label>
+          <input type="text" id="fname" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="fphone">Phone</label>
+          <input type="tel" id="fphone" placeholder="98XXXXXXXX">
+        </div>
+      </div>
+      <div class="form-group full" style="margin-bottom:16px;">
+        <label for="femail">Email</label>
+        <input type="email" id="femail" placeholder="you@example.com" required>
+      </div>
+      <div class="form-group full" style="margin-bottom:16px;">
+        <label for="fsubject">I'm interested in</label>
+        <input type="text" id="fsubject" placeholder="e.g. Enroll Course, Studio Booking, UNIF">
+      </div>
+      <div class="form-group full" style="margin-bottom:16px;">
+        <label for="fmsg">Message</label>
+        <textarea id="fmsg" placeholder="Tell us a little about what you're looking for..."></textarea>
+      </div>
+      <input type="text" id="fhp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
+      <button type="submit" class="btn btn-primary" id="homeContactBtn">Send Message</button>
+      <p id="homeContactStatus" role="status" style="margin-top:12px;font-size:14px;font-weight:600;min-height:20px;"></p>
+    </form>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand">
+          <div class="brand-mark">U</div>
+          <div class="brand-text">Udaan Nepal</div>
+        </div>
+        <p>Fuel your flight to success. Affordable, practical education built for the Nepali classroom.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="enroll-course">Enroll Course</a></li>
+          <li><a href="unif">UNIF</a></li>
+          <li><a href="unsmp">UNSMP</a></li>
+          <li><a href="studio-booking">Studio Booking</a></li>
+          <li><a href="terms">Terms & Conditions</a></li>
+          <li><a href="privacy">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="#" data-c="phone" data-pre="tel:">+977-XXX-XXXXXXX</a></li>
+          <li><a href="#" data-c="email" data-pre="mailto:">info@udaannepal.com</a></li>
+          <li><a href="#" data-c="address">Kathmandu, Nepal</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Udaan Nepal Pvt. Ltd. All rights reserved.</div>
+      <div class="mono">FUEL YOUR FLIGHT TO SUCCESS</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll state
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Sidebar drawer logic
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const sidebarClose = document.getElementById('sidebarClose');
+
+  function openSidebar(){
+    sidebar.classList.add('active');
+    overlay.classList.add('active');
+    hamburgerBtn.classList.add('active');
+    hamburgerBtn.setAttribute('aria-expanded','true');
+    sidebar.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSidebar(){
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+    hamburgerBtn.classList.remove('active');
+    hamburgerBtn.setAttribute('aria-expanded','false');
+    sidebar.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+  }
+
+  hamburgerBtn.addEventListener('click', () => {
+    sidebar.classList.contains('active') ? closeSidebar() : openSidebar();
+  });
+  sidebarClose.addEventListener('click', closeSidebar);
+  overlay.addEventListener('click', closeSidebar);
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && sidebar.classList.contains('active')) closeSidebar();
+  });
+
+  // Close sidebar when a sidebar link is clicked
+  document.querySelectorAll('.sidebar-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      closeSidebar();
+    });
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.section-reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Video placeholder click
+  /* The promo video link is set in the admin page; the section stays hidden until then */
+  document.addEventListener('un-content', ev => {
+    const u = (ev.detail && ev.detail.content && ev.detail.content.home_video_url) || '';
+    let src = '';
+    let m = /^https:\/\/(?:www\.)?(?:youtube\.com\/watch\?(?:[^#]*&)?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{11})/.exec(u);
+    if(m) src = 'https://www.youtube.com/embed/' + m[1] + '?autoplay=1&rel=0';
+    else { m = /^https:\/\/(?:www\.)?vimeo\.com\/(\d+)/.exec(u); if(m) src = 'https://player.vimeo.com/video/' + m[1] + '?autoplay=1'; }
+    if(!src) return;
+    const sec = document.getElementById('sec-video');
+    if(ev.detail.content.home_video_position === 'top'){ const hero = document.getElementById('home'); if(hero) hero.after(sec); }
+    sec.style.display = '';
+    const frame = document.querySelector('.video-frame');
+    frame.style.cursor = 'pointer';
+    frame.addEventListener('click', () => {
+      const f = document.createElement('iframe'); f.src = src; f.allow = 'autoplay; fullscreen; picture-in-picture'; f.allowFullscreen = true; f.title = 'Udaan Nepal video';
+      f.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;'; frame.style.position = 'relative'; frame.textContent = ''; frame.append(f);
+    }, { once: true });
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="site-content.js"></script>
+<script>
+(function(){
+  var form = document.getElementById('homeContactForm');
+  if(!form) return;
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    var status = document.getElementById('homeContactStatus');
+    var btn = document.getElementById('homeContactBtn');
+    if(document.getElementById('fhp').value){ return; }   // spam trap
+    var phone = document.getElementById('fphone').value.trim();
+    var email = document.getElementById('femail').value.trim();
+    var payload = {
+      source: 'home',
+      name: document.getElementById('fname').value.trim(),
+      phone: phone, email: email,
+      subject: document.getElementById('fsubject').value.trim(),
+      message: document.getElementById('fmsg').value.trim() || '(no message written)'
+    };
+    btn.disabled = true; status.style.color = ''; status.textContent = 'Sending…';
+    var ok = false;
+    try { var r = await window.UN.sendMessage(payload); ok = !r.error; } catch(err){ ok = false; }
+    btn.disabled = false;
+    if(ok){ status.style.color = '#16A34A'; status.textContent = 'Thank you! We received your message and will reply within one business day.'; form.reset(); }
+    else { status.style.color = '#DC2626'; status.textContent = 'Sorry, your message could not be sent. Please try again or call us.'; }
+  });
+})();
+</script>
+<script>
+// Reuse the singleton client created by site-content.js (avoids duplicate GoTrueClient warning)
+const supabaseClient = window.supabaseClient;
+
+// Populate sidebar with real user name and role
+(async function updateSidebarUser(){
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) return; // not logged in — keep defaults
+    const userId = session.user.id;
+    const { data: profile } = await supabaseClient
+      .from('profiles')
+      .select('full_name, role')
+      .eq('id', userId)
+      .single();
+    const name = (profile && profile.full_name) ? profile.full_name : (session.user.email || 'My Account');
+    const role = (profile && profile.role) ? profile.role.charAt(0).toUpperCase() + profile.role.slice(1) : 'Student';
+    const initial = name.trim().charAt(0).toUpperCase() || 'U';
+    const avatarEl = document.querySelector('.sidebar-avatar');
+    const nameEl = document.querySelector('.sidebar-user-name');
+    const roleEl = document.querySelector('.sidebar-user-role');
+    if (avatarEl) avatarEl.textContent = initial;
+    if (nameEl) nameEl.textContent = name;
+    if (roleEl) roleEl.textContent = role;
+  } catch(e) { /* fail silently — sidebar still works with defaults */ }
+})();
+
+document.querySelectorAll('.sidebar-item.logout').forEach(link=>{
+  link.addEventListener('click', async (e)=>{
+    e.preventDefault();
+    await supabaseClient.auth.signOut();
+    window.location.href = 'auth.html';
+  });
+});
+</script>
+</body>
+</html>

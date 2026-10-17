@@ -1,0 +1,2016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin — Udaan Nepal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#17191D; --bg-deep:#101216; --card:#22262C; --card-hover:#2A2F36;
+  --electric:#0066FF; --cyan:#00E5FF; --amber:#F59E0B; --red:#F04452; --green:#22C55E;
+  --text:#F8FAFC; --text2:#CBD5E1; --muted:#94A3B8;
+  --border:rgba(255,255,255,0.08); --border2:rgba(255,255,255,0.16); --r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text);line-height:1.55;min-height:100vh;min-height:100dvh;overflow-x:hidden;}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;letter-spacing:-0.01em;}
+a{color:var(--cyan);text-decoration:none;}
+button,input,select,textarea{font-family:inherit;font-size:14px;}
+button{cursor:pointer;}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:50;background:rgba(16,18,22,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);}
+.top-in{max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px;}
+.brand{font-family:'Poppins',sans-serif;font-weight:700;font-size:16px;flex:1;min-width:0;}
+.brand small{display:block;font-family:'Manrope',sans-serif;font-weight:600;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.top a.btn-ghost,.top button.btn-ghost{font-size:13px;font-weight:700;color:var(--text2);padding:9px 12px;border:1px solid var(--border2);border-radius:10px;background:none;min-height:40px;display:inline-flex;align-items:center;}
+.tabs{max-width:1100px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:0 12px 10px;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex-shrink:0;padding:10px 16px;border-radius:100px;border:1px solid var(--border2);background:none;color:var(--text2);font-weight:700;font-size:13.5px;min-height:42px;display:flex;align-items:center;gap:8px;}
+.tab.on{background:var(--electric);border-color:var(--electric);color:#fff;}
+.badge{background:var(--amber);color:#111;border-radius:100px;font-size:11px;font-weight:800;padding:1px 7px;min-width:20px;text-align:center;}
+
+main{max-width:1100px;margin:0 auto;padding:20px 16px 80px;}
+h2.title{font-size:20px;margin-bottom:4px;}
+p.sub{color:var(--muted);font-size:13.5px;margin-bottom:18px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;}
+.card.tap{cursor:pointer;transition:border-color .2s,transform .2s;}
+.card.tap:hover{border-color:rgba(0,229,255,.35);transform:translateY(-2px);}
+.stat{font-family:'Poppins',sans-serif;font-size:34px;font-weight:700;line-height:1.1;}
+.stat-l{color:var(--text2);font-size:13px;font-weight:600;margin-top:4px;}
+.stat-h{color:var(--muted);font-size:12px;margin-top:6px;}
+.hot .stat{color:var(--amber);}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.chip{padding:8px 14px;border-radius:100px;border:1px solid var(--border2);background:none;color:var(--text2);font-size:13px;font-weight:700;min-height:38px;}
+.chip.on{background:var(--electric);border-color:var(--electric);color:#fff;}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center;}
+.toolbar input[type=search]{flex:1;min-width:180px;}
+
+input[type=text],input[type=search],input[type=number],input[type=email],select,textarea{width:100%;background:var(--bg-deep);border:1px solid var(--border2);border-radius:10px;color:var(--text);padding:11px 12px;min-height:44px;}
+textarea{min-height:90px;resize:vertical;}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--electric);outline-offset:1px;}
+label{display:block;font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:6px;}
+.field{margin-bottom:14px;}
+
+.btn{border:1px solid var(--border2);background:none;color:var(--text);border-radius:10px;padding:11px 16px;font-weight:700;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
+.btn.primary{background:var(--electric);border-color:var(--electric);color:#fff;}
+.btn.good{background:var(--green);border-color:var(--green);color:#06260F;}
+.btn.bad{border-color:rgba(240,68,82,.6);color:#FF8A94;}
+.btn.sm{padding:8px 12px;min-height:38px;font-size:13px;}
+.btn[disabled]{opacity:.5;cursor:not-allowed;}
+.row{display:flex;gap:10px;flex-wrap:wrap;}
+
+.item{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
+.item .main{flex:1;min-width:200px;}
+.item h4{font-size:15px;margin-bottom:2px;word-break:break-word;}
+.meta{color:var(--muted);font-size:12.5px;display:flex;gap:6px 14px;flex-wrap:wrap;}
+.pill{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 10px;border-radius:100px;border:1px solid var(--border2);color:var(--text2);white-space:nowrap;}
+.pill.amber{color:var(--amber);border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.1);}
+.pill.blue{color:#6FA8FF;border-color:rgba(0,102,255,.4);background:rgba(0,102,255,.12);}
+.pill.green{color:var(--green);border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.1);}
+.pill.red{color:#FF8A94;border-color:rgba(240,68,82,.45);background:rgba(240,68,82,.1);}
+.empty{padding:36px 16px;text-align:center;color:var(--muted);border:1px dashed var(--border2);border-radius:var(--r);}
+.note{margin:10px 0;padding:10px 12px;border-radius:10px;font-size:13px;background:rgba(0,229,255,.06);border:1px solid rgba(0,229,255,.22);color:var(--text2);}
+.note.warn{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3);}
+
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(8,9,11,.75);z-index:100;display:flex;align-items:flex-end;justify-content:center;padding:0;}
+.sheet{background:var(--card);border:1px solid var(--border2);border-radius:18px 18px 0 0;width:100%;max-width:640px;max-height:92vh;max-height:92dvh;overflow-y:auto;padding:22px 18px 28px;}
+.sheet h3{font-size:18px;margin-bottom:4px;padding-right:40px;}
+.sheet .x{position:absolute;right:14px;top:14px;}
+.sheet-wrap{position:relative;}
+@media(min-width:700px){.ov{align-items:center;padding:20px;}.sheet{border-radius:18px;}}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:6px 12px;font-size:13.5px;margin:12px 0;}
+.kv dt{color:var(--muted);font-weight:700;}
+.kv dd{color:var(--text);word-break:break-word;white-space:pre-wrap;}
+.lesson{padding:9px 0;border-bottom:1px solid var(--border);font-size:13.5px;}
+.lesson:last-child{border:none;}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#0B3B1E;border:1px solid var(--green);color:#D1FAE5;padding:11px 18px;border-radius:12px;z-index:200;font-weight:700;font-size:13.5px;max-width:90vw;}
+.toast.err{background:#3B0B12;border-color:var(--red);color:#FFD6DA;}
+.center{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;gap:14px;}
+.qr{max-width:220px;border-radius:12px;background:#fff;padding:8px;}
+.rolechip{display:inline-flex;align-items:center;gap:6px;margin:3px 6px 3px 0;}
+.rolechip button{background:none;border:none;color:#FF8A94;font-size:16px;line-height:1;padding:0 2px;min-height:24px;}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">Udaan Nepal Admin<small id="who">Loading…</small></div>
+    <a class="btn-ghost" href="courses">← Site</a>
+    <button class="btn-ghost" id="logout">Log out</button>
+  </div>
+  <div class="tabs" id="tabs"></div>
+</header>
+<main id="panel"><div class="center"><p class="sub">Loading…</p></div></main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="legal-defaults.js"></script>
+<script src="page-text.js"></script>
+<script>
+const sb = supabase.createClient(
+  'https://idwbxagsxpkkqwfjftox.supabase.co',
+  'sb_publishable_ju3GQ5lGipjlLtDRZZXxPg__J7tzqfw'
+);
+
+/* ---------- tiny helpers (everything is built with textContent, never raw HTML) ---------- */
+function h(tag, attrs, ...kids){
+  const e = document.createElement(tag);
+  for(const [k,v] of Object.entries(attrs||{})){
+    if(v==null || v===false) continue;
+    if(k==='class') e.className = v;
+    else if(k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else if(v===true) e.setAttribute(k,'');
+    else e.setAttribute(k, v);
+  }
+  kids.flat(Infinity).forEach(c=>{ if(c==null||c===false) return; e.append(c.nodeType ? c : document.createTextNode(String(c))); });
+  return e;
+}
+const $ = id => document.getElementById(id);
+const rs = n => Number(n) > 0 ? 'Rs ' + Number(n).toLocaleString('en-IN') : 'Free';
+const when = t => t ? new Date(t).toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Kathmandu'}) : '—';
+function toast(msg, bad){
+  const t = h('div',{class:'toast'+(bad?' err':'')}, msg); document.body.append(t);
+  setTimeout(()=>t.remove(), bad?5000:2500);
+}
+function clear(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+
+/* modal sheet */
+function openSheet(title, bodyNodes){
+  const ov = h('div',{class:'ov'});
+  const close = ()=>{ ov.remove(); document.body.style.overflow=''; };
+  const sheet = h('div',{class:'sheet'},
+    h('div',{class:'sheet-wrap'}, h('button',{class:'btn sm x',onclick:close,'aria-label':'Close'},'✕'), h('h3',{},title)),
+    bodyNodes);
+  ov.append(sheet);
+  ov.addEventListener('click', e=>{ if(e.target===ov) close(); });
+  document.body.append(ov); document.body.style.overflow='hidden';
+  return close;
+}
+function askText(title, label, required, okLabel){
+  return new Promise(resolve=>{
+    const ta = h('textarea',{id:'askTa'});
+    const err = h('p',{class:'sub',style:'color:#FF8A94;margin:0 0 10px;min-height:18px;'});
+    let close;
+    const ok = h('button',{class:'btn primary',onclick:()=>{
+      const v = ta.value.trim();
+      if(required && !v){ err.textContent='Please write something here.'; return; }
+      close(); resolve(v);
+    }}, okLabel||'Save');
+    const cancel = h('button',{class:'btn',onclick:()=>{ close(); resolve(null); }},'Cancel');
+    close = openSheet(title, [h('div',{class:'field'}, h('label',{for:'askTa'},label), ta), err, h('div',{class:'row'},ok,cancel)]);
+    setTimeout(()=>ta.focus(),50);
+  });
+}
+function confirmBox(title, text, okLabel, danger){
+  return new Promise(resolve=>{
+    let close;
+    const ok = h('button',{class:'btn '+(danger?'bad':'primary'),onclick:()=>{ close(); resolve(true); }}, okLabel||'Yes');
+    const cancel = h('button',{class:'btn',onclick:()=>{ close(); resolve(false); }},'Cancel');
+    close = openSheet(title, [h('p',{class:'sub',style:'margin-top:8px;'},text), h('div',{class:'row'},ok,cancel)]);
+  });
+}
+async function busy(btn, fn){
+  const label = btn.textContent; btn.disabled = true; btn.textContent = 'Please wait…';
+  try{ await fn(); } finally { btn.disabled = false; btn.textContent = label; }
+}
+
+/* ---------- state ---------- */
+let me = null, roles = new Set(), myName = '';
+const can = r => roles.has('super_admin') || roles.has(r);
+const ROLE_LABEL = { super_admin:'Super admin', finance:'Finance', academic:'Academic', content:'Content', front_desk:'Front desk' };
+let current = 'overview';
+
+const TABS = [
+  { id:'overview',  label:'Overview',      show:()=>true },
+  { id:'courses',   label:'Courses',       show:()=>can('academic'), badge:'pendCourses' },
+  { id:'payments',  label:'Payments',      show:()=>can('finance'),  badge:'pendPayments' },
+  { id:'regs',      label:'Registrations', show:()=>can('front_desk'), badge:'newRegs' },
+  { id:'users',     label:'Users',         show:()=>can('academic'), badge:'pendTeachers' },
+  { id:'categories',label:'Categories',    show:()=>can('academic') },
+  { id:'notices',   label:'Notices',       show:()=>can('content') },
+  { id:'studio',    label:'Studio',        show:()=>can('finance')||can('content')||can('front_desk') },
+  { id:'content',   label:'Site content',  show:()=>can('content') },
+  { id:'settings',  label:'Payment details', show:()=>can('finance') || can('content') },
+  { id:'media',     label:'Pictures',      show:()=>can('content') },
+  { id:'coupons',   label:'Coupons',       show:()=>can('finance')||can('academic') },
+  { id:'messages',  label:'Messages',      show:()=>can('front_desk')||can('super_admin'), badge:'newMessages' },
+  { id:'certificates',label:'Certificates',show:()=>can('academic') },
+  { id:'earnings',   label:'Earnings',      show:()=>can('finance')||can('super_admin') },
+  { id:'reports',   label:'Reports',       show:()=>can('front_desk')||can('finance')||can('academic') },
+  { id:'staff',     label:'Staff',         show:()=>can('super_admin') },
+  { id:'activity',  label:'Activity log',  show:()=>can('super_admin') }
+];
+const badges = {};
+
+function drawTabs(){
+  const box = $('tabs'); clear(box);
+  TABS.filter(t=>t.show()).forEach(t=>{
+    const n = badges[t.badge];
+    box.append(h('button',{class:'tab'+(current===t.id?' on':''),onclick:()=>go(t.id)}, t.label, n>0 ? h('span',{class:'badge'},n) : null));
+  });
+}
+function go(id){ current = id; drawTabs(); render(); window.scrollTo(0,0); }
+async function render(){
+  const p = $('panel'); clear(p); p.append(h('p',{class:'sub'},'Loading…'));
+  const fn = { overview:viewOverview, courses:viewCourses, payments:viewPayments, regs:viewRegs, users:viewUsers, reports:viewReports, categories:viewCategories, media:viewMedia, activity:viewActivity, notices:viewNotices, studio:viewStudio, content:viewContent, settings:viewSettings, staff:viewStaff, coupons:viewCoupons, messages:viewMessages, certificates:viewCertificates, earnings:viewTeacherEarnings }[current];
+  try{ const node = await fn(); clear(p); p.append(node); }
+  catch(e){ clear(p); p.append(h('div',{class:'note warn'},'Something went wrong: ' + (e && e.message ? e.message : e))); }
+}
+
+/* ---------- counts ---------- */
+const FORMS = [
+  { key:'studio_bookings',     label:'Studio bookings' },
+  { key:'unsmp_registrations', label:'UNSMP' },
+  { key:'practify_inquiries',  label:'Practify' },
+  { key:'unif_registrations',  label:'UNIF' },
+  { key:'contact_messages',    label:'Messages' }
+];
+async function count(table, filter){
+  let q = sb.from(table).select('id',{count:'exact',head:true});
+  if(filter) q = filter(q);
+  const { count:c, error } = await q;
+  return error ? 0 : (c||0);
+}
+async function refreshBadges(){
+  if(can('academic')) badges.pendCourses = await count('courses', q=>q.eq('status','pending_review'));
+  if(can('academic')) badges.pendTeachers = await count('profiles', q=>q.eq('role','teacher').eq('approval','pending'));
+  if(can('finance'))  badges.pendPayments = await count('payments', q=>q.eq('status','submitted'));
+  if(can('front_desk')||can('super_admin')) badges.newMessages = await count('contact_messages', q=>q.eq('status','new'));
+  if(can('front_desk')){
+    const c = await Promise.all(FORMS.map(f=>count(f.key, q=>q.eq('status','new'))));
+    badges.newRegs = c.reduce((a,b)=>a+b,0); badges.perForm = c;
+  }
+  drawTabs();
+}
+
+/* ======================= OVERVIEW ======================= */
+async function viewOverview(){
+  await refreshBadges();
+  const wrap = h('div');
+  wrap.append(h('h2',{class:'title'},'Hello, ' + (myName || 'team')), h('p',{class:'sub'},'Your access: ' + [...roles].map(r=>ROLE_LABEL[r]).join(', ') + '. Tap a card to open it.'));
+  const g = h('div',{class:'grid'});
+  const card = (n,l,hint,tab,hot)=> h('div',{class:'card tap'+(hot&&n>0?' hot':''),onclick:()=>go(tab)}, h('div',{class:'stat'},n), h('div',{class:'stat-l'},l), h('div',{class:'stat-h'},hint));
+  if(can('academic')) g.append(card(badges.pendCourses,'Courses waiting for review','Teachers are waiting for you','courses',true));
+  if(can('finance'))  g.append(card(badges.pendPayments,'Payments to check','Check eSewa / Khalti / bank first','payments',true));
+  if(can('front_desk')) FORMS.forEach((f,i)=> g.append(card(badges.perForm[i], 'New ' + f.label, 'Not contacted yet','regs',true)));
+  if(can('academic') || can('finance')){
+    const act = await count('enrollments', q=>q.eq('status','active'));
+    g.append(h('div',{class:'card'}, h('div',{class:'stat'},act), h('div',{class:'stat-l'},'Active enrolments'), h('div',{class:'stat-h'},'Students with course access')));
+  }
+  if(can('academic')){
+    const pub = await count('courses', q=>q.eq('status','published'));
+    g.append(h('div',{class:'card'}, h('div',{class:'stat'},pub), h('div',{class:'stat-l'},'Published courses'), h('div',{class:'stat-h'},'Visible to students')));
+  }
+  wrap.append(g);
+
+  // Quick actions
+  if(can('academic') || can('content')){
+    const qa = h('div',{class:'card',style:'margin:18px 0 0;'});
+    qa.append(h('h4',{style:'margin-bottom:8px;'},'Quick actions'));
+    if(can('academic')){
+      qa.append(h('button',{class:'btn',style:'margin-right:8px;margin-bottom:8px;',onclick:async e=>{
+        await busy(e.currentTarget, async()=>{ await bulkAnnouncement(); });
+      }},'📢 Send announcement to all students'));
+    }
+    wrap.append(qa);
+  }
+
+  wrap.append(h('h3',{style:'margin:22px 0 10px;'},'Numbers'), await dashboardNumbers());
+  return wrap;
+}
+
+/* ======================= COURSES ======================= */
+let courseFilter = 'pending_review';
+const C_STATUS = { draft:['Draft',''], pending_review:['In review','blue'], published:['Published','green'], rejected:['Sent back','red'] };
+async function viewCourses(){
+  const wrap = h('div', {}, h('h2',{class:'title'},'Course review'), h('p',{class:'sub'},'Check quality, then publish or send back with a note. Teachers cannot publish by themselves.'));
+  const chips = h('div',{class:'chips'});
+  [['pending_review','In review'],['published','Published'],['rejected','Sent back'],['draft','Drafts'],['all','All']].forEach(([k,l])=>
+    chips.append(h('button',{class:'chip'+(courseFilter===k?' on':''),onclick:()=>{ courseFilter=k; render(); }}, l)));
+  wrap.append(chips);
+
+  let q = sb.from('courses').select('*').order('created_at',{ascending:false}).limit(300);
+  if(courseFilter!=='all') q = q.eq('status',courseFilter);
+  const { data: courses, error } = await q; if(error) throw error;
+  if(!courses.length){ wrap.append(h('div',{class:'empty'},'Nothing here.')); return wrap; }
+  const ids = courses.map(c=>c.id);
+  const [{data:profs},{data:les}] = await Promise.all([
+    sb.from('profiles').select('id,full_name').in('id',[...new Set(courses.map(c=>c.instructor_id))]),
+    sb.from('lessons').select('course_id').in('course_id',ids)
+  ]);
+  const name = {}; (profs||[]).forEach(p=>name[p.id]=p.full_name);
+  const lc = {}; (les||[]).forEach(l=>lc[l.course_id]=(lc[l.course_id]||0)+1);
+  courses.forEach(c=>{
+    const st = C_STATUS[c.status] || [c.status,''];
+    wrap.append(h('div',{class:'item'},
+      h('div',{class:'main'}, h('h4',{},c.title),
+        h('div',{class:'meta'}, h('span',{},'By ' + (name[c.instructor_id]||'Unknown')), h('span',{},(lc[c.id]||0)+' lessons'), h('span',{},rs(c.price_npr)), h('span',{},when(c.created_at)))),
+      h('span',{class:'pill '+st[1]},st[0]),
+      h('button',{class:'btn sm primary',onclick:()=>openCourse(c, name[c.instructor_id])}, c.status==='pending_review'?'Review':'Open')));
+  });
+  return wrap;
+}
+async function openCourse(c, teacher){
+  const [{data:lessons},{data:mats},{data:coRows}] = await Promise.all([
+    sb.from('lessons').select('id,title,video_url,duration_minutes,order_index').eq('course_id',c.id).order('order_index'),
+    sb.from('materials').select('file_name').eq('course_id',c.id),
+    sb.from('course_instructors').select('user_id,role').eq('course_id',c.id)
+  ]);
+
+  // Build co-instructor section (live-refreshable)
+  const coSection = h('div',{style:'margin-top:18px;'});
+  async function renderCoInstructors(){
+    const { data: coList } = await sb.from('course_instructors').select('user_id,role').eq('course_id',c.id);
+    const ids = (coList||[]).map(r=>r.user_id).filter(Boolean);
+    let coProfs = [];
+    if(ids.length){
+      const { data } = await sb.from('profiles').select('id,full_name').in('id',ids);
+      coProfs = data||[];
+    }
+    const nameMap = {}; coProfs.forEach(p=>nameMap[p.id]=p.full_name);
+    coSection.textContent = '';
+    coSection.append(h('h4',{style:'margin:0 0 8px;font-size:13px;color:#94A3B8;text-transform:uppercase;letter-spacing:.05em;'},'Co-instructors'));
+    if(!(coList||[]).length){
+      coSection.append(h('div',{class:'meta',style:'margin-bottom:8px;'},'None added yet.'));
+    } else {
+      (coList||[]).forEach(row=>{
+        const nm = nameMap[row.user_id] || '(unknown)';
+        const del = h('button',{class:'btn sm bad',style:'padding:3px 10px;font-size:11px;',onclick:async e=>{
+          if(!await confirmBox('Remove co-instructor','Remove '+nm+' as co-instructor?','Remove',true)) return;
+          await busy(e.currentTarget, async()=>{
+            await sb.from('course_instructors').delete().eq('course_id',c.id).eq('user_id',row.user_id);
+            renderCoInstructors();
+          });
+        }},'Remove');
+        coSection.append(h('div',{style:'display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px;color:#F8FAFC;'},
+          h('span',{style:'flex:1;'},nm), del));
+      });
+    }
+    // Add co-instructor row
+    const addBtn = h('button',{class:'btn sm',style:'margin-top:4px;',onclick:async e=>{
+      const { data: teachers } = await sb.from('profiles').select('id,full_name').eq('role','teacher').eq('approval','approved').order('full_name');
+      if(!(teachers||[]).length){ toast('No approved teachers found.',true); return; }
+      const existing = (coList||[]).map(r=>r.user_id);
+      const eligible = (teachers||[]).filter(t=>t.id!==c.instructor_id && !existing.includes(t.id));
+      if(!eligible.length){ toast('All approved teachers are already instructors on this course.',true); return; }
+      // Show picker sheet
+      let pickerClose;
+      const pickerBody = [
+        h('p',{class:'sub',style:'margin-top:8px;'},'Pick a teacher to add as co-instructor:'),
+        h('div',{style:'display:flex;flex-direction:column;gap:6px;margin-top:8px;'},
+          eligible.map(t=>h('button',{class:'btn',style:'text-align:left;justify-content:flex-start;',onclick:async ev=>{
+            await busy(ev.currentTarget, async()=>{
+              const { error } = await sb.from('course_instructors').insert({course_id:c.id, user_id:t.id, role:'co'});
+              if(error){ toast('Could not add: '+error.message,true); return; }
+              pickerClose();
+              renderCoInstructors();
+              toast(t.full_name+' added as co-instructor.');
+            });
+          }},t.full_name)))
+      ];
+      pickerClose = openSheet('Add co-instructor', pickerBody);
+    }},'+ Add co-instructor');
+    coSection.append(addBtn);
+  }
+  await renderCoInstructors();
+
+  const st = C_STATUS[c.status] || [c.status,''];
+  const priceIn = h('input',{type:'number',min:'0',step:'1',value:String(c.price_npr||0),id:'cprice'});
+  const body = [
+    h('div',{class:'meta',style:'margin:6px 0 10px;'}, h('span',{class:'pill '+st[1]},st[0]), h('span',{},'By '+(teacher||'Udaan Nepal')), h('span',{},rs(c.price_npr))),
+    h('dl',{class:'kv'},
+      h('dt',{},'Category'),h('dd',{},c.category||'—'),
+      h('dt',{},'Class / grade'),h('dd',{},c.class_level||'General'),
+      h('dt',{},'Description'),h('dd',{},c.description||'—'),
+      c.review_note ? [h('dt',{},'Last note'),h('dd',{},c.review_note)] : null),
+    h('h4',{style:'margin:14px 0 6px;font-size:14px;'},'Lessons ('+(lessons||[]).length+')  ·  Files ('+(mats||[]).length+')'),
+    (lessons||[]).length ? h('div',{}, lessons.map((l,i)=>h('div',{class:'lesson'}, (i+1)+'. '+l.title, ' ', l.video_url ? h('a',{href:l.video_url,target:'_blank',rel:'noopener noreferrer'},'▶ open video') : h('span',{class:'meta'},'(no video link)')))) : h('div',{class:'note warn'},'No lessons yet.'),
+    h('div',{class:'field',style:'margin-top:16px;'}, h('label',{for:'cprice'},'Price (NPR) — 0 means free'), priceIn),
+    coSection
+  ];
+  const acts = h('div',{class:'row',style:'margin-top:8px;'});
+  let close;
+  const done = (m)=>{ close(); toast(m); render(); refreshBadges(); };
+  const upd = async (patch, msg, btn)=>{ await busy(btn, async()=>{ const {error}=await sb.from('courses').update(patch).eq('id',c.id); if(error){ toast('Could not save: '+error.message,true); return; } done(msg); }); };
+  const savePrice = h('button',{class:'btn',onclick:e=>upd({price_npr:Math.max(0,Math.floor(Number(priceIn.value)||0))},'Price saved',e.currentTarget)},'Save price');
+  acts.append(savePrice);
+
+  // Student progress button
+  acts.append(h('button',{class:'btn',onclick:async e=>{ await busy(e.currentTarget, async()=>{
+    const totalLessons = (lessons||[]).length;
+    const lessonIds = (lessons||[]).map(l=>l.id).filter(Boolean);
+    const [{ data: enrs }, { data: progData }] = await Promise.all([
+      sb.from('enrollments').select('student_id, profiles(full_name)').eq('course_id',c.id).eq('status','active'),
+      lessonIds.length ? sb.from('lesson_progress').select('student_id,lesson_id').in('lesson_id',lessonIds) : Promise.resolve({data:[]})
+    ]);
+    const doneMap = {};
+    progData.forEach(r=>{ doneMap[r.student_id] = (doneMap[r.student_id]||0)+1; });
+    const rows = (enrs||[]).map(e=>({
+      name: (e.profiles&&e.profiles.full_name)||'(no name)',
+      done: doneMap[e.student_id]||0,
+      total: totalLessons,
+      pct: totalLessons>0 ? Math.round(((doneMap[e.student_id]||0)/totalLessons)*100) : 0
+    })).sort((a,b)=>b.pct-a.pct);
+    const progBody = [
+      h('p',{class:'sub',style:'margin-top:8px;'},(rows.length||0)+' enrolled students · '+totalLessons+' lessons'),
+      rows.length ? null : h('div',{class:'empty'},'No students enrolled yet.'),
+      ...rows.map(r=>{
+        const bar = h('div',{style:'height:6px;border-radius:3px;background:rgba(255,255,255,.1);margin-top:4px;overflow:hidden;'},
+          h('div',{style:'height:100%;width:'+r.pct+'%;background:'+(r.pct===100?'#22c55e':'var(--electric)')+';border-radius:3px;transition:width .3s;'}));
+        return h('div',{style:'padding:8px 0;border-bottom:1px solid var(--border);'},
+          h('div',{style:'display:flex;justify-content:space-between;font-size:13.5px;'},
+            h('span',{},r.name), h('span',{style:'color:var(--muted);'},r.done+'/'+r.total+' ('+r.pct+'%)')),
+          bar);
+      })
+    ].filter(Boolean);
+    openSheet('Student progress — '+c.title, progBody);
+  }); }},'Student progress'));
+
+  // Reassign primary instructor button
+  acts.append(h('button',{class:'btn',onclick:async e=>{
+    const btn=e.currentTarget;
+    const { data: teachers } = await sb.from('profiles').select('id,full_name').eq('role','teacher').eq('approval','approved').order('full_name');
+    const options = [{ id: null, full_name: 'Udaan Nepal (no instructor)' }, ...(teachers||[])];
+    let pickerClose;
+    const pickerBody = [
+      h('p',{class:'sub',style:'margin-top:8px;'},'Choose the new primary instructor for this course:'),
+      h('div',{style:'display:flex;flex-direction:column;gap:6px;margin-top:8px;'},
+        options.map(t => h('button',{class:'btn'+(t.id===c.instructor_id?' primary':''),style:'text-align:left;justify-content:flex-start;',onclick:async ev=>{
+          await busy(ev.currentTarget, async()=>{
+            const { error } = await sb.from('courses').update({ instructor_id: t.id }).eq('id', c.id);
+            if(error){ toast('Could not reassign: '+error.message,true); return; }
+            // Optionally post an announcement
+            const annBody = await askText('Post announcement (optional)',
+              'Post an announcement to enrolled students about this change? Leave blank to skip.', false, 'Post & close');
+            if(annBody && annBody.trim()){
+              const { data: { user } } = await sb.auth.getUser();
+              await sb.from('course_announcements').insert({
+                course_id: c.id,
+                author_id: user.id,
+                title: 'Instructor update',
+                body: annBody.trim()
+              });
+            }
+            pickerClose();
+            close();
+            toast('Instructor reassigned to '+(t.full_name||'Udaan Nepal')+'.');
+            render(); refreshBadges();
+          });
+        }}, t.full_name)))
+    ];
+    pickerClose = openSheet('Reassign instructor', pickerBody);
+  }},'Reassign instructor'));
+
+  if(c.status==='pending_review' || c.status==='draft' || c.status==='rejected'){
+    acts.append(h('button',{class:'btn good',onclick:async e=>{
+      if(!(lessons||[]).length && !(await confirmBox('No lessons','This course has no lessons yet. Publish anyway?','Publish'))) return;
+      upd({status:'published',review_note:null},'Course published',e.currentTarget);
+    }},'Publish'));
+  }
+  if(c.status==='pending_review'){
+    acts.append(h('button',{class:'btn bad',onclick:async e=>{
+      const btn=e.currentTarget; const note = await askText('Send back to teacher','What should the teacher fix?',true,'Send back'); if(note==null) return;
+      upd({status:'rejected',review_note:note},'Sent back to teacher',btn);
+    }},'Send back'));
+  }
+  if(c.status==='published'){
+    acts.append(h('button',{class:'btn bad',onclick:async e=>{
+      const btn=e.currentTarget; if(!(await confirmBox('Unpublish course','Students already enrolled keep their enrolment, but new students cannot find it.','Unpublish',true))) return;
+      upd({status:'draft'},'Course unpublished',btn);
+    }},'Unpublish'));
+  }
+  body.push(acts);
+  close = openSheet(c.title, body);
+}
+
+/* ======================= PAYMENTS ======================= */
+let payFilter = 'submitted';
+const P_STATUS = { submitted:['Waiting','amber'], approved:['Approved','green'], rejected:['Rejected','red'], refunded:['Refunded','red'] };
+async function viewPayments(){
+  const wrap = h('div',{}, h('h2',{class:'title'},'Payments'), h('p',{class:'sub'},'Always check that the money really arrived in eSewa, Khalti or the bank before approving. Approving opens the course for the student at once.'));
+  const chips = h('div',{class:'chips'});
+  [['submitted','Waiting'],['approved','Approved'],['rejected','Rejected'],['refunded','Refunded'],['all','All']].forEach(([k,l])=>
+    chips.append(h('button',{class:'chip'+(payFilter===k?' on':''),onclick:()=>{ payFilter=k; render(); }}, l)));
+  wrap.append(
+    h('div',{class:'row',style:'margin-bottom:12px;gap:8px;flex-wrap:wrap;'},
+      h('button',{class:'btn primary',onclick:manualEnrollForm},'Enrol a student by hand'),
+      h('button',{class:'btn',onclick:batchEnrollForm},'Batch enrol from CSV')
+    ), chips);
+  let q = sb.from('payments').select('*').order('submitted_at',{ascending:false}).limit(300);
+  if(payFilter!=='all') q = q.eq('status',payFilter);
+  const { data, error } = await q; if(error) throw error;
+  if(!data.length){ wrap.append(h('div',{class:'empty'},'Nothing here.')); return wrap; }
+  const sids = [...new Set(data.map(p=>p.student_id).filter(Boolean))];
+  const phones = {};
+  if(sids.length){ const {data:pr} = await sb.from('profiles').select('id,phone').in('id',sids); (pr||[]).forEach(p=>phones[p.id]=p.phone); }
+  data.forEach(p=>{
+    const st = P_STATUS[p.status]||[p.status,''];
+    wrap.append(h('div',{class:'item'},
+      h('div',{class:'main'}, h('h4',{},(p.student_name||'Student') + ' — ' + (p.course_title||'Course')),
+        h('div',{class:'meta'}, h('span',{},rs(p.amount_npr)), h('span',{},p.method), p.transaction_ref ? h('span',{},'ID: '+p.transaction_ref) : null, phones[p.student_id] ? h('span',{},'📞 '+phones[p.student_id]) : null, h('span',{},when(p.submitted_at)))),
+      h('span',{class:'pill '+st[1]},st[0]),
+      h('button',{class:'btn sm primary',onclick:()=>openPayment(p, phones[p.student_id])}, p.status==='submitted'?'Check':'Open')));
+  });
+  return wrap;
+}
+function openPayment(p, phone){
+  const body = [
+    h('dl',{class:'kv'},
+      h('dt',{},'Student'),h('dd',{},p.student_name||'—'),
+      phone ? [h('dt',{},'Phone'),h('dd',{},h('a',{href:'tel:'+phone},phone))] : null,
+      h('dt',{},'Course'),h('dd',{},p.course_title||'—'),
+      h('dt',{},'Amount to receive'),h('dd',{},rs(p.amount_npr)),
+      h('dt',{},'Paid through'),h('dd',{},p.method),
+      h('dt',{},'Transaction ID'),h('dd',{},p.transaction_ref||'(none — see screenshot)'),
+      h('dt',{},'Sent'),h('dd',{},when(p.submitted_at)),
+      h('dt',{},'Status'),h('dd',{},(P_STATUS[p.status]||[p.status])[0]),
+      p.note ? [h('dt',{},'Note'),h('dd',{},p.note)] : null,
+      p.status==='refunded' ? [h('dt',{},'Refunded'),h('dd',{},rs(p.refund_amount_npr).replace('Free','Rs 0')+' on '+when(p.refunded_at)),h('dt',{},'Refund reason'),h('dd',{},p.refund_note||'—')] : null)
+  ];
+  let close;
+  if(p.proof_path){
+    body.push(h('button',{class:'btn',onclick:async e=>{
+      const w = window.open('', '_blank');
+      const { data, error } = await sb.storage.from('payment-proofs').createSignedUrl(p.proof_path, 300);
+      if(error){ if(w) w.close(); toast('Could not open screenshot: '+error.message,true); return; }
+      if(w) w.location.href = data.signedUrl; else window.location.href = data.signedUrl;
+    }},'View screenshot'));
+  }
+  if(p.status==='submitted'){
+    const finish = (m)=>{ close(); toast(m); render(); refreshBadges(); };
+    body.push(h('div',{class:'row',style:'margin-top:14px;'},
+      h('button',{class:'btn good',onclick:async e=>{
+        const btn=e.currentTarget;
+        if(!(await confirmBox('Approve payment','Confirm that '+rs(p.amount_npr)+' has arrived. The student gets access to the course immediately.','Approve'))) return;
+        await busy(btn, async()=>{ const {error}=await sb.from('payments').update({status:'approved'}).eq('id',p.id); if(error){ toast('Could not approve: '+error.message,true); return; } finish('Approved — student can now open the course'); });
+      }},'Approve'),
+      h('button',{class:'btn bad',onclick:async e=>{
+        const btn=e.currentTarget; const note = await askText('Reject payment','Reason (the student will see this)',true,'Reject'); if(note==null) return;
+        await busy(btn, async()=>{ const {error}=await sb.from('payments').update({status:'rejected',note}).eq('id',p.id); if(error){ toast('Could not reject: '+error.message,true); return; } finish('Rejected'); });
+      }},'Reject')));
+  }
+  if(p.status==='approved') body.push(h('button',{class:'btn bad',style:'margin-top:14px;',onclick:()=>refundForm(p, ()=>close())},'Refund this payment'));
+  close = openSheet('Payment', body);
+}
+
+/* ======================= REGISTRATIONS ======================= */
+let formIdx = 0, regStatus = 'all', regSearch = '';
+const R_STATUS = ['new','contacted','confirmed','completed','rejected','cancelled'];
+const R_PILL = { new:'amber', contacted:'blue', confirmed:'green', completed:'green', rejected:'red', cancelled:'red' };
+const HIDE = new Set(['id','user_id','staff_note','verification_file']);
+const nice = k => k.replace(/_/g,' ').replace(/^./,m=>m.toUpperCase());
+const titleOf = (r)=> r.full_name || r.contact_person || r.school_name || r.ref || 'Message';
+const subOf = (r)=> [r.phone || r.email, r.school || r.school_name || r.org_name, r.subject, r.booking_date, r.mode].filter(Boolean).join(' · ');
+let regRows = [];
+async function viewRegs(){
+  const wrap = h('div',{}, h('h2',{class:'title'},'Registrations & bookings'), h('p',{class:'sub'},'Everything people send through the website forms. Call them, then update the status so nothing is missed.'));
+  const tabs = h('div',{class:'chips'});
+  FORMS.forEach((f,i)=> tabs.append(h('button',{class:'chip'+(formIdx===i?' on':''),onclick:()=>{ formIdx=i; regStatus='all'; render(); }}, f.label, (badges.perForm&&badges.perForm[i]>0)?' ('+badges.perForm[i]+')':'')));
+  wrap.append(tabs);
+  const f = FORMS[formIdx];
+  const { data, error } = await sb.from(f.key).select('*').order('created_at',{ascending:false}).limit(500);
+  if(error) throw error;
+  regRows = data;
+  const st = h('div',{class:'chips'});
+  ['all',...R_STATUS].forEach(s=> st.append(h('button',{class:'chip'+(regStatus===s?' on':''),onclick:()=>{ regStatus=s; paint(); markChips(); }}, s==='all'?'All':nice(s))));
+  const search = h('input',{type:'search',placeholder:'Search name, phone, school, ref…',value:regSearch});
+  const exportBtn = h('button',{class:'btn sm',onclick:()=>exportCsv(f)},'Download CSV');
+  wrap.append(h('div',{class:'toolbar'},search,exportBtn), st);
+  const list = h('div');
+  wrap.append(list);
+  function markChips(){ [...st.children].forEach((b,i)=> b.classList.toggle('on', (['all',...R_STATUS][i])===regStatus)); }
+  function filtered(){
+    const s = regSearch.trim().toLowerCase();
+    return regRows.filter(r=> (regStatus==='all' || r.status===regStatus) && (!s || JSON.stringify(Object.values(r)).toLowerCase().includes(s)));
+  }
+  function paint(){
+    clear(list); const rows = filtered();
+    if(!rows.length){ list.append(h('div',{class:'empty'}, regRows.length ? 'No match.' : 'Nothing has been sent yet.')); return; }
+    rows.forEach(r=> list.append(h('div',{class:'item'},
+      h('div',{class:'main'}, h('h4',{},titleOf(r)), h('div',{class:'meta'}, r.ref ? h('span',{},r.ref) : null, subOf(r)?h('span',{},subOf(r)):null, h('span',{},when(r.created_at)))),
+      h('span',{class:'pill '+(R_PILL[r.status]||'')},nice(r.status)),
+      h('button',{class:'btn sm primary',onclick:()=>openReg(f,r,paint)},'Open'))));
+  }
+  search.addEventListener('input', ()=>{ regSearch = search.value; paint(); });
+  paint();
+  return wrap;
+}
+function exportCsv(f){
+  const rows = regRows; if(!rows.length){ toast('Nothing to download',true); return; }
+  const cols = Object.keys(rows[0]).filter(k=>!['id','user_id'].includes(k));
+  const cell = v => { if(v==null) return ''; const s = Array.isArray(v) ? v.join('; ') : String(v); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; };
+  const csv = '﻿' + [cols.join(','), ...rows.map(r=>cols.map(c=>cell(r[c])).join(','))].join('\n');
+  const a = h('a',{href:URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),download:f.key+'-'+new Date().toISOString().slice(0,10)+'.csv'});
+  document.body.append(a); a.click(); a.remove();
+}
+function openReg(f, r, repaint){
+  const kv = h('dl',{class:'kv'});
+  Object.keys(r).filter(k=>!HIDE.has(k) && r[k]!=null && r[k]!=='' && !(Array.isArray(r[k])&&!r[k].length)).forEach(k=>{
+    let v = r[k]; if(Array.isArray(v)) v = v.join(', '); if(k==='created_at') v = when(v);
+    const dd = h('dd',{}, v);
+    if((k==='phone'||k==='mentor_phone'||k==='parent_phone') ) { clear(dd); dd.append(h('a',{href:'tel:'+r[k]},r[k])); }
+    if(k==='email') { clear(dd); dd.append(h('a',{href:'mailto:'+r[k]},r[k])); }
+    kv.append(h('dt',{},nice(k)), dd);
+  });
+  const sel = h('select',{id:'rstat'}, R_STATUS.map(s=>h('option',{value:s,selected:s===r.status},nice(s))));
+  const note = h('textarea',{id:'rnote',placeholder:'e.g. Called on Sunday, will pay on arrival'}, r.staff_note||'');
+  let close;
+  const body = [kv];
+  if(r.verification_file){
+    body.push(h('button',{class:'btn sm',style:'margin-bottom:12px;',onclick:async()=>{
+      const w = window.open('','_blank');
+      const {data,error} = await sb.storage.from('booking-verification').createSignedUrl(r.verification_file,300);
+      if(error){ if(w) w.close(); toast('Could not open file: '+error.message,true); return; }
+      if(w) w.location.href = data.signedUrl; else window.location.href = data.signedUrl;
+    }},'View uploaded ID file'));
+  }
+  let priceIn = null;
+  if(f.key==='studio_bookings'){
+    priceIn = h('input',{type:'number',id:'rprice',min:'0',value:r.final_price_npr==null?'':r.final_price_npr,placeholder:'Confirmed price in Rs'});
+    body.push(h('div',{class:'field'}, h('label',{for:'rprice'},'Final price (Rs) — what you confirmed with the customer'), priceIn));
+  }
+  body.push(
+    h('div',{class:'field'}, h('label',{for:'rstat'},'Status'), sel),
+    h('div',{class:'field'}, h('label',{for:'rnote'},'Internal note (only staff see this)'), note),
+    h('button',{class:'btn primary',onclick:async e=>{
+      await busy(e.currentTarget, async()=>{
+        const patch = { status: sel.value, staff_note: note.value.trim() || null };
+        if(priceIn) patch.final_price_npr = priceIn.value === '' ? null : Number(priceIn.value);
+        const {error} = await sb.from(f.key).update(patch).eq('id',r.id);
+        if(error){ toast('Could not save: '+error.message,true); return; }
+        Object.assign(r, patch); close(); toast('Saved'); repaint(); refreshBadges();
+      });
+    }},'Save'));
+  close = openSheet(titleOf(r), body);
+}
+
+
+/* ======================= SITE CONTENT ======================= */
+const CONTACT_FIELDS = [
+  ['email','Email address'],['phone','Phone number'],['address','Address'],
+  ['whatsapp','WhatsApp number with country code, digits only (e.g. 9779812345678) — shows a green chat button'],
+  ['viber','Viber number with country code, digits only — shows a purple chat button'],
+  ['facebook','Facebook page link (starts with https://)'],['instagram','Instagram link'],['youtube','YouTube channel link'],['tiktok','TikTok link'],['linkedin','LinkedIn link']
+];
+const FAQ_Q = ['Who can participate in UNIF?','How do I register?','Is there a registration fee?','What types of projects are accepted?','Can I participate as a team?','What are the judging criteria?','What should participants bring?','When is the project submission deadline?','Where will UNIF take place?'];
+const PROJ = ['Automated Grain Storage System','Autonomous Rescue Rover','Solar Water Purification Unit','MediConnect Nepal App','Micro-Wind Turbine Generator','Interactive Science Lab Simulator'];
+const UNIF_GROUPS = [
+  { title:'Event details', fields:[
+    ['unif_event_date','Event start — used for the countdown (Nepal time)','datetime-local'],
+    ['unif_event_date_text','Date shown to visitors (e.g. 15 Kartik 2083)'],
+    ['unif_venue','Venue'],['unif_time','Time (e.g. 9:00 AM – 5:00 PM)'],
+    ['unif_eligibility','Who can join'],['unif_fee','Registration fee']] },
+  { title:'About UNIF', fields:[['unif_about','Description — it continues right after the bold words "Udaan Nepal Innovation Fair (UNIF)", so start with "is …"','area']] },
+  { title:'Judges & mentors', fields:[1,2,3,4].flatMap(i=>[['unif_judge'+i+'_name','Person '+i+' — name'],['unif_judge'+i+'_org','Person '+i+' — organization']]) },
+  { title:'Statistics', fields:[1,2,3,4].flatMap(i=>[['unif_stat'+i+'_num','Statistic '+i+' — number (digits only)','number'],['unif_stat'+i+'_label','Statistic '+i+' — label']]) },
+  { title:'FAQ answers', fields:FAQ_Q.map((q,i)=>['unif_faq'+(i+1),'Answer to “'+q+'”','area']) }
+];
+function fieldInput(key,label,type,val){
+  const id = 'f_'+key;
+  const inp = type==='area' ? h('textarea',{id,'data-k':key}, val||'') : h('input',{id,'data-k':key,type:type||'text',value:val||''});
+  return h('div',{class:'field'}, h('label',{for:id},label), inp);
+}
+function collect(root){
+  const out = {};
+  root.querySelectorAll('[data-k]').forEach(el=>{ const v = el.value.trim(); if(v) out[el.getAttribute('data-k')] = v; });
+  return out;
+}
+async function saveSetting(key, value, btn){
+  await busy(btn, async()=>{
+    const { error } = await sb.from('site_settings').upsert({ key, value, updated_by: me.id, updated_at: new Date().toISOString() });
+    if(error){ toast('Could not save: '+error.message,true); return; }
+    toast('Saved — the website now shows your changes');
+  });
+}
+async function viewContent(){
+  const { data } = await sb.from('site_settings').select('key,value').in('key',['contact_info','unif_content','unsmp_content']);
+  const get = k => ((data||[]).find(r=>r.key===k)||{}).value || {};
+  const contact = get('contact_info'), unif = get('unif_content');
+  const wrap = h('div',{}, h('h2',{class:'title'},'Site content'), h('p',{class:'sub'},'Change the words on the website without touching any code. Leave a box empty to keep the text that is already written on the page.'));
+
+  wrap.append(await logoCard());
+  wrap.append(await switchesCard());
+  wrap.append(await greetingCard());
+  wrap.append(await homeCard());
+  wrap.append(await heroVideoCard());
+  wrap.append(await pageWordsCard());
+  wrap.append(await mediaListsCard());
+
+  // UNSMP
+  const um = get('unsmp_content');
+  const mBox = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'UNSMP page details'), h('p',{class:'sub'},'Date, time, venue and fee shown on the UNSMP page.'));
+  [['unsmp_date','Date'],['unsmp_time','Time'],['unsmp_venue','Venue'],['unsmp_location','Location / map text'],['unsmp_fee','Fee']].forEach(([k,l])=>mBox.append(fieldInput(k,l,'text',um[k])));
+  mBox.append(h('button',{class:'btn primary',onclick:e=>saveSetting('unsmp_content',collect(mBox),e.currentTarget)},'Save UNSMP details'));
+  wrap.append(mBox);
+
+  // contact
+  const cBox = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:12px;'},'Contact details & social links'),
+    h('p',{class:'sub'},'Shown on the home page and the UNIF page.'));
+  CONTACT_FIELDS.forEach(([k,l])=>cBox.append(fieldInput(k,l,'text',contact[k])));
+  cBox.append(h('button',{class:'btn primary',onclick:e=>saveSetting('contact_info',collect(cBox),e.currentTarget)},'Save contact details'));
+  wrap.append(cBox);
+
+  // UNIF
+  const uBox = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'UNIF page'), h('p',{class:'sub'},'Open a section, change the text, then press the Save button at the bottom.'));
+  UNIF_GROUPS.forEach(g=>{
+    const d = h('details',{style:'border:1px solid var(--border);border-radius:12px;padding:0 14px;margin-bottom:10px;'},
+      h('summary',{style:'cursor:pointer;padding:14px 0;font-weight:700;min-height:44px;'}, g.title));
+    g.fields.forEach(([k,l,t])=>{
+      let v = unif[k];
+      d.append(fieldInput(k,l,t,v));
+    });
+    uBox.append(d);
+  });
+  uBox.append(h('button',{class:'btn primary',onclick:e=>saveSetting('unif_content',collect(uBox),e.currentTarget)},'Save UNIF page'));
+  wrap.append(uBox);
+
+  // testimonials
+  wrap.append(await testimonialsCard());
+  wrap.append(await legalCard());
+  return wrap;
+}
+async function testimonialsCard(){
+  const box = h('div',{class:'card'}, h('h4',{style:'margin-bottom:6px;'},'Testimonials (UNIF page)'),
+    h('p',{class:'sub'},'Only real quotes you have permission to share. If none are published, the section stays hidden.'));
+  const { data, error } = await sb.from('testimonials').select('*').order('sort_order').order('created_at');
+  if(error){ box.append(h('div',{class:'note warn'},'Could not load: '+error.message+' (did you run 5_site_content.sql?)')); return box; }
+  (data||[]).forEach(t=> box.append(h('div',{class:'item',style:'background:var(--bg-deep);'},
+    h('div',{class:'main'}, h('h4',{},t.name), h('div',{class:'meta'},h('span',{},t.role||'—'),h('span',{},'“'+t.quote.slice(0,70)+(t.quote.length>70?'…':'')+'”'))),
+    h('span',{class:'pill '+(t.is_published?'green':'')}, t.is_published?'Shown':'Hidden'),
+    h('button',{class:'btn sm',onclick:()=>editTestimonial(t)},'Edit'))));
+  box.append(h('button',{class:'btn primary',style:'margin-top:8px;',onclick:()=>editTestimonial(null)},'+ Add testimonial'));
+  return box;
+}
+function editTestimonial(t){
+  const name = h('input',{type:'text',id:'tname',maxlength:'120',value:t?t.name:''});
+  const role = h('input',{type:'text',id:'trole',maxlength:'160',value:t?(t.role||''):'',placeholder:'e.g. Principal, ABC School'});
+  const quote = h('textarea',{id:'tquote',maxlength:'600'}, t?t.quote:'');
+  const order = h('input',{type:'number',id:'torder',value:String(t?t.sort_order:0)});
+  const shown = h('select',{id:'tshown'}, h('option',{value:'1',selected:!t||t.is_published},'Shown on the website'), h('option',{value:'0',selected:t&&!t.is_published},'Hidden'));
+  const err = h('p',{class:'sub',style:'color:#FF8A94;min-height:18px;margin:0 0 8px;'});
+  let close;
+  const body = [
+    h('div',{class:'field'},h('label',{for:'tname'},'Name'),name),
+    h('div',{class:'field'},h('label',{for:'trole'},'Role / school'),role),
+    h('div',{class:'field'},h('label',{for:'tquote'},'What they said (max 600 letters)'),quote),
+    h('div',{class:'field'},h('label',{for:'torder'},'Order (smaller number shows first)'),order),
+    h('div',{class:'field'},h('label',{for:'tshown'},'Visibility'),shown), err,
+    h('div',{class:'row'},
+      h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget, async()=>{
+        if(!name.value.trim() || !quote.value.trim()){ err.textContent='Name and quote are required.'; return; }
+        const row = { name:name.value.trim(), role:role.value.trim()||null, quote:quote.value.trim(), sort_order:Math.floor(Number(order.value)||0), is_published:shown.value==='1' };
+        const { error } = t ? await sb.from('testimonials').update(row).eq('id',t.id) : await sb.from('testimonials').insert(row);
+        if(error){ err.textContent='Could not save: '+error.message; return; }
+        close(); toast('Saved'); render();
+      })},'Save'),
+      t ? h('button',{class:'btn bad',onclick:async()=>{
+        if(!(await confirmBox('Delete testimonial','This removes it permanently.','Delete',true))) return;
+        const { error } = await sb.from('testimonials').delete().eq('id',t.id);
+        if(error){ toast('Could not delete: '+error.message,true); return; } close(); toast('Deleted'); render();
+      }},'Delete') : null)
+  ];
+  close = openSheet(t?'Edit testimonial':'Add testimonial', body);
+}
+
+/* ======================= PAYMENT DETAILS (text + QR) ======================= */
+async function viewSettings(){
+  const { data } = await sb.from('site_settings').select('value').eq('key','payment_instructions').maybeSingle();
+  const cur = (data && data.value) || {};
+  let qrUrl = cur.qr_url || null;
+  const wrap = h('div',{}, h('h2',{class:'title'},'Payment details'), h('p',{class:'sub'},'This is what students see when they enroll in a paid course.'));
+  const ta = h('textarea',{id:'pitext',style:'min-height:140px;'}, cur.text || '');
+  const prev = h('div');
+  const drawQr = ()=>{ clear(prev); if(qrUrl) prev.append(h('img',{src:qrUrl,alt:'Payment QR',class:'qr'}), h('div',{},h('button',{class:'btn sm bad',style:'margin-top:8px;',onclick:()=>{ qrUrl=null; drawQr(); }},'Remove QR'))); else prev.append(h('p',{class:'sub'},'No QR uploaded yet.')); };
+  drawQr();
+  const file = h('input',{type:'file',accept:'image/png,image/jpeg,image/webp',id:'qrfile'});
+  const msg = h('p',{class:'sub',style:'min-height:18px;'});
+  file.addEventListener('change', async ()=>{
+    const f = file.files[0]; if(!f) return;
+    if(f.size > 2*1024*1024){ msg.textContent='Picture is larger than 2 MB.'; return; }
+    msg.textContent='Uploading…';
+    const ext = (f.name.split('.').pop()||'png').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,5) || 'png';
+    const path = 'payment-qr-' + Date.now() + '.' + ext;
+    const up = await sb.storage.from('site-assets').upload(path, f, { contentType:f.type });
+    if(up.error){ msg.textContent='Upload failed: '+up.error.message; return; }
+    qrUrl = sb.storage.from('site-assets').getPublicUrl(path).data.publicUrl;
+    msg.textContent='Picture uploaded. Press Save to publish it.'; drawQr();
+  });
+  const save = h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget, async()=>{
+    const value = { text: ta.value.trim(), qr_url: qrUrl };
+    const { error } = await sb.from('site_settings').upsert({ key:'payment_instructions', value, updated_by: me.id, updated_at: new Date().toISOString() });
+    if(error){ toast('Could not save: '+error.message,true); return; }
+    toast('Saved — students will see the new details');
+  })},'Save');
+  wrap.append(
+    h('div',{class:'card'},
+      h('div',{class:'field'}, h('label',{for:'pitext'},'Instructions (numbers, bank name, what to write in the remark)'), ta),
+      h('div',{class:'field'}, h('label',{for:'qrfile'},'Payment QR picture (crop to the QR and account name only)'), file, msg, prev),
+      save));
+  return wrap;
+}
+
+/* ======================= SWITCHES (on/off) ======================= */
+const SWITCH_LIST = [['group_chat','Group chat (My Group)'],['parent_suggest','Parent course-suggestion box'],['quiz','Quiz section']];
+const PROGRAMS = [['unsmp','UNSMP registration'],['unif','UNIF registration']];
+const toLocalInput = iso => { if(!iso) return ''; const d = new Date(iso); if(isNaN(d)) return ''; const p = n => String(n).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'T'+p(d.getHours())+':'+p(d.getMinutes()); };
+async function switchesCard(){
+  const { data } = await sb.from('site_settings').select('key,value').in('key',['features','registration']);
+  const get = k => ((data||[]).find(r=>r.key===k)||{}).value || {};
+  const feat = Object.assign({ group_chat:false, parent_suggest:false, quiz:true }, get('features'));
+  const reg = get('registration');
+  const box = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'Switches'),
+    h('p',{class:'sub'},'Turn parts of the website on or off. Changes show on the website within a minute.'));
+  const fChecks = {};
+  SWITCH_LIST.forEach(([k,l])=>{ const c = h('input',{type:'checkbox',id:'sw_'+k,checked:!!feat[k]}); fChecks[k]=c;
+    box.append(h('div',{class:'field',style:'display:flex;gap:10px;align-items:center;'}, c, h('label',{for:'sw_'+k,style:'margin:0;'},l))); });
+  box.append(h('button',{class:'btn primary',style:'margin-bottom:18px;',onclick:e=>{
+    const v = {}; SWITCH_LIST.forEach(([k])=>{ v[k] = fChecks[k].checked; }); saveSetting('features', v, e.currentTarget);
+  }},'Save switches'));
+  const rIn = {};
+  PROGRAMS.forEach(([p,l])=>{
+    const cur = reg[p] || {};
+    const open = h('input',{type:'checkbox',id:'rg_'+p,checked:cur.open!==false});
+    const dl = h('input',{type:'datetime-local',id:'rgd_'+p,value:toLocalInput(cur.deadline)});
+    const msg = h('input',{type:'text',id:'rgm_'+p,value:cur.message||'',placeholder:'Shown when registration is closed'});
+    rIn[p] = { open, dl, msg };
+    box.append(h('div',{style:'border-top:1px solid var(--border);padding-top:14px;margin-top:6px;'},
+      h('div',{class:'field',style:'display:flex;gap:10px;align-items:center;'}, open, h('label',{for:'rg_'+p,style:'margin:0;font-weight:700;'}, l+' is open')),
+      h('div',{class:'field'}, h('label',{for:'rgd_'+p},'Closes automatically at (optional)'), dl),
+      h('div',{class:'field'}, h('label',{for:'rgm_'+p},'Message when closed'), msg)));
+  });
+  box.append(h('button',{class:'btn primary',onclick:e=>{
+    const v = {}; PROGRAMS.forEach(([p])=>{ const i = rIn[p];
+      v[p] = { open:i.open.checked, deadline: i.dl.value ? new Date(i.dl.value).toISOString() : null, message:i.msg.value.trim() }; });
+    saveSetting('registration', v, e.currentTarget);
+  }},'Save registration switches'));
+  return box;
+}
+
+/* ======================= STUDIO ======================= */
+const WEEKDAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+async function viewStudio(){
+  const wrap = h('div',{}, h('h2',{class:'title'},'Studio'), h('p',{class:'sub'},'Spaces, hourly rates, time slots and days the studio is not available. The booking page reads all of this.'));
+  const canRate = can('finance');
+  const sp = await sb.from('studio_spaces').select('*').order('sort_order').order('name');
+  if(sp.error){ wrap.append(h('div',{class:'note warn'},'Could not load: '+sp.error.message+' (did you run 6_studio_and_switches.sql?)')); return wrap; }
+  const st = await sb.from('site_settings').select('value').eq('key','studio_settings').maybeSingle();
+  const S = Object.assign({ equipment_fee_npr:200, full_day_hours:8, durations:['1','2','3','4','Full day'], slots:[], closed_weekdays:[] }, (st.data&&st.data.value)||{});
+
+  // spaces
+  const sBox = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'Spaces & hourly rates'),
+    h('p',{class:'sub'}, canRate ? 'You can change the hourly rate.' : 'Only the finance team can change hourly rates.'));
+  (sp.data||[]).forEach(r=>{
+    sBox.append(h('div',{class:'item',style:'background:var(--bg-deep);'},
+      h('div',{},h('b',{},r.name),' — ',rs(r.hourly_rate_npr),' per hour',r.is_active?'':' (hidden)'),
+      h('button',{class:'btn sm',onclick:()=>spaceForm(r)},'Edit')));
+  });
+  sBox.append(h('button',{class:'btn primary',onclick:()=>spaceForm(null)},'Add a space'));
+  wrap.append(sBox);
+  function spaceForm(r){
+    const isNew = !r; r = r || { name:'', description:'', capacity:4, features:[], hourly_rate_npr:300, is_active:true, sort_order:(sp.data||[]).length+1 };
+    const name = fieldInput('name','Name','text',r.name), desc = fieldInput('description','Short description','area',r.description),
+      cap = fieldInput('capacity','Maximum people','number',r.capacity), feat = fieldInput('features','Facilities (separate with commas)','text',(r.features||[]).join(', ')),
+      rate = fieldInput('rate','Hourly rate (Rs)','number',r.hourly_rate_npr), sort = fieldInput('sort','Order on page (1 = first)','number',r.sort_order);
+    const rateInp = rate.querySelector('input'); if(!canRate){ rateInp.disabled = true; }
+    const act = h('input',{type:'checkbox',id:'sp_act',checked:!!r.is_active});
+    let close;
+    const save = h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget, async()=>{
+      const row = { name:name.querySelector('input').value.trim(), description:desc.querySelector('textarea').value.trim(),
+        capacity:parseInt(cap.querySelector('input').value,10)||1,
+        features:feat.querySelector('input').value.split(',').map(x=>x.trim()).filter(Boolean),
+        sort_order:parseInt(sort.querySelector('input').value,10)||0, is_active:act.checked, updated_at:new Date().toISOString() };
+      if(!row.name){ toast('Please enter a name',true); return; }
+      if(canRate){ const n = Number(rateInp.value); if(!(n>=0)){ toast('Enter a valid rate',true); return; } row.hourly_rate_npr = n; }
+      const q = isNew ? sb.from('studio_spaces').insert(row) : sb.from('studio_spaces').update(row).eq('id',r.id);
+      const { error } = await q; if(error){ toast('Could not save: '+error.message,true); return; }
+      close(); toast('Saved'); render();
+    })},'Save');
+    const del = isNew ? null : h('button',{class:'btn bad',onclick:async()=>{
+      if(!await confirmBox('Delete this space?','Old bookings keep their text. If you only want to hide it, untick "Show on website" instead.','Delete',true)) return;
+      const { error } = await sb.from('studio_spaces').delete().eq('id',r.id); if(error){ toast('Could not delete: '+error.message,true); return; }
+      close(); toast('Deleted'); render();
+    }},'Delete');
+    close = openSheet(isNew?'Add a space':'Edit space',[name,desc,cap,feat,rate,sort,
+      h('div',{class:'field',style:'display:flex;gap:10px;align-items:center;'},act,h('label',{for:'sp_act',style:'margin:0;'},'Show on website')),
+      h('div',{class:'row'},save,del)]);
+  }
+
+  // settings
+  const setBox = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:12px;'},'Booking settings'));
+  const fee = fieldInput('equipment_fee_npr','Equipment fee per selected item (Rs)','number',S.equipment_fee_npr);
+  const fdh = fieldInput('full_day_hours','Hours counted for "Full day"','number',S.full_day_hours);
+  const dur = fieldInput('durations','Duration choices (commas; use "Full day" for a whole day)','text',(S.durations||[]).join(', '));
+  const slots = fieldInput('slots','Start times (commas, like 09:00 AM, 10:30 AM)','area',(S.slots||[]).join(', '));
+  const eq = fieldInput('equipment','Equipment people can choose (commas). Each chosen item adds the equipment fee. Leave empty to keep the built-in list.','area',(S.equipment||[]).join(', '));
+  const fac = fieldInput('facilities','Facilities people can choose (commas). Leave empty to keep the built-in list.','area',(S.facilities||[]).join(', '));
+  setBox.append(fee,fdh,dur,slots,eq,fac, h('label',{},'Days the studio is closed every week'));
+  const wd = h('div',{class:'chips',style:'margin:8px 0 14px;'});
+  const wdIn = WEEKDAYS.map((n,i)=>{ const c = h('input',{type:'checkbox',id:'wd'+i,checked:(S.closed_weekdays||[]).includes(i)}); wd.append(h('label',{style:'display:flex;gap:6px;align-items:center;margin-right:12px;'},c,n.slice(0,3))); return c; });
+  setBox.append(wd, h('button',{class:'btn primary',onclick:e=>{
+    const parts = s => s.split(',').map(x=>x.trim()).filter(Boolean);
+    const slotList = parts(slots.querySelector('textarea').value);
+    const bad = slotList.find(t=>!/^(0?[1-9]|1[0-2]):[0-5]\d\s?(AM|PM)$/i.test(t));
+    if(bad){ toast('Start time "'+bad+'" is not in the form 09:00 AM',true); return; }
+    const v = { equipment_fee_npr:Number(fee.querySelector('input').value)||0, full_day_hours:parseInt(fdh.querySelector('input').value,10)||8,
+      durations:parts(dur.querySelector('input').value), slots:slotList.map(t=>t.toUpperCase().replace(/^(\d):/,'0$1:').replace(/(\d)(AM|PM)/,'$1 $2')),
+      equipment:parts(eq.querySelector('textarea').value), facilities:parts(fac.querySelector('textarea').value),
+      closed_weekdays:wdIn.map((c,i)=>c.checked?i:null).filter(x=>x!==null) };
+    saveSetting('studio_settings', v, e.currentTarget);
+  }},'Save booking settings'));
+  wrap.append(setBox);
+
+  // blocked dates
+  const bBox = h('div',{class:'card'}, h('h4',{style:'margin-bottom:6px;'},'Blocked dates'),
+    h('p',{class:'sub'},'Holidays, maintenance or private use. Visitors cannot book these days.'));
+  const bl = await sb.from('studio_blocked_dates').select('*').gte('blocked_on', new Date().toISOString().slice(0,10)).order('blocked_on');
+  if(bl.error) bBox.append(h('div',{class:'note warn'},'Could not load: '+bl.error.message));
+  (bl.data||[]).forEach(b=> bBox.append(h('div',{class:'item',style:'background:var(--bg-deep);'},
+    h('div',{},h('b',{},b.blocked_on),' — ',b.space_name||'All spaces',b.reason?' · '+b.reason:''),
+    h('button',{class:'btn sm bad',onclick:async()=>{ const { error } = await sb.from('studio_blocked_dates').delete().eq('id',b.id); if(error){ toast(error.message,true); return; } render(); }},'Remove'))));
+  const bd = h('input',{type:'date',id:'bdate'}), bs = h('select',{id:'bspace'}, h('option',{value:''},'All spaces'), (sp.data||[]).map(r=>h('option',{value:r.name},r.name))), br = h('input',{type:'text',id:'breason',placeholder:'Reason (optional)'});
+  bBox.append(h('div',{class:'field'},h('label',{for:'bdate'},'Date'),bd), h('div',{class:'field'},h('label',{for:'bspace'},'Space'),bs), h('div',{class:'field'},h('label',{for:'breason'},'Reason'),br),
+    h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget, async()=>{
+      if(!bd.value){ toast('Choose a date',true); return; }
+      const { error } = await sb.from('studio_blocked_dates').insert({ blocked_on:bd.value, space_name:bs.value||null, reason:br.value.trim()||null });
+      if(error){ toast('Could not save: '+error.message,true); return; } toast('Date blocked'); render();
+    })},'Block this date'));
+  wrap.append(bBox);
+  return wrap;
+}
+
+/* ======================= NOTICES ======================= */
+const N_CATS = [['event','Event'],['course','Course'],['online-class','Online class'],['unsmp','UNSMP'],['practify','Practify'],['studio','Studio']];
+const N_TYPES = [['general','General notice'],['event','Event (shows date, venue, fee…)'],['course','Course'],['online-class','Online class']];
+const N_STATUS = [['new','New'],['upcoming','Upcoming'],['starting-soon','Starting soon'],['registration-open','Registration open'],['registration-closed','Registration closed'],['completed','Completed'],['important','Important'],['cancelled','Cancelled'],['postponed','Postponed']];
+let neFontOn = false;
+function useNepaliFont(){
+  if(neFontOn) return; neFontOn = true;
+  document.head.append(h('link',{rel:'stylesheet',href:'https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600&display=swap'}),
+    h('style',{}, '[lang="ne"]{font-family:"Noto Sans Devanagari","Mangal",system-ui,sans-serif !important;}'));
+}
+async function viewNotices(){
+  useNepaliFont();
+  const wrap = h('div',{}, h('h2',{class:'title'},'Notices'), h('p',{class:'sub'},'Announcements shown on the Notices page. Add the Nepali boxes to give visitors a नेपाली button. Only “Published” notices are visible to visitors.'));
+  const { data, error } = await sb.from('notices').select('*').order('published_on',{ascending:false}).order('created_at',{ascending:false});
+  if(error){ wrap.append(h('div',{class:'note warn'},'Could not load: '+error.message+' (did you run 7_notices_and_language.sql?)')); return wrap; }
+  wrap.append(h('button',{class:'btn primary',style:'margin-bottom:14px;',onclick:()=>noticeForm(null)},'Write a new notice'));
+  if(!(data||[]).length) wrap.append(h('p',{class:'sub'},'No notices yet. The Notices page stays empty until you publish one.'));
+  (data||[]).forEach(n=> wrap.append(h('div',{class:'item'},
+    h('div',{}, h('h4',{}, n.title), h('p',{class:'sub',style:'margin:2px 0;'}, nice(n.status)+' · '+n.published_on+(n.title_ne?' · नेपाली ✓':'')+' · ', n.is_published?'Published':'Draft (hidden)')),
+    h('button',{class:'btn sm primary',onclick:()=>noticeForm(n)},'Edit'))));
+  return wrap;
+}
+function noticeForm(n){
+  const isNew = !n; n = n || { title:'', title_ne:'', summary:'', summary_ne:'', content:[], content_ne:[], category:'event', service:'Udaan Nepal', type:'general', status:'new', important:false, tags:[], is_published:false };
+  const T = (k,l,type,ne) => { const f = fieldInput('n_'+k,l,type,Array.isArray(n[k]) ? n[k].join(k.startsWith('content')?'\n\n':', ') : n[k]); if(ne) f.querySelectorAll('input,textarea').forEach(e=>e.setAttribute('lang','ne')); return f; };
+  const sel = (id,label,opts,val) => h('div',{class:'field'}, h('label',{for:id},label), h('select',{id}, opts.map(([v,l])=>h('option',{value:v,selected:v===val},l))));
+  const imp = h('input',{type:'checkbox',id:'n_imp',checked:!!n.important}), pub = h('input',{type:'checkbox',id:'n_pub',checked:!!n.is_published});
+  let atts = Array.isArray(n.attachments) ? n.attachments.slice() : [];
+  const attList = h('div'), attMsg = h('p',{class:'sub',style:'min-height:18px;'});
+  const drawAtt = () => { clear(attList); atts.forEach((x,i)=>attList.append(h('div',{class:'item',style:'background:var(--bg-deep);'}, h('span',{},x.name), h('button',{class:'btn sm bad',onclick:()=>{ atts.splice(i,1); drawAtt(); }},'Remove')))); };
+  const attFile = h('input',{type:'file',accept:'.pdf,.doc,.docx,.xls,.xlsx,image/png,image/jpeg,image/webp',onchange:async()=>{
+    const f = attFile.files[0]; if(!f) return;
+    if(f.size > 10*1024*1024){ attMsg.textContent='That file is larger than 10 MB.'; attFile.value=''; return; }
+    attMsg.textContent='Uploading…';
+    const path = Date.now()+'-'+f.name.replace(/[^A-Za-z0-9._-]/g,'_');
+    const up = await sb.storage.from('notice-files').upload(path, f, { contentType:f.type });
+    if(up.error){ attMsg.textContent='Could not upload: '+up.error.message+' (did you run 13_attachments_and_alerts.sql?)'; return; }
+    atts.push({ name:f.name, url:sb.storage.from('notice-files').getPublicUrl(path).data.publicUrl }); attFile.value=''; attMsg.textContent='Added. Remember to press Save.'; drawAtt();
+  }});
+  drawAtt();
+  const attBox = h('div',{class:'field'}, h('label',{},'Files for people to download (PDF, Word, Excel or picture, up to 10 MB each)'), attList, attFile, attMsg);
+  const fields = [
+    T('title','Title (English)','text'), T('summary','Short summary (English, one or two lines)','area'), T('content','Full text (English). Leave a blank line between paragraphs.','area'),
+    T('title_ne','शीर्षक (नेपाली) — optional','text',true), T('summary_ne','छोटो सारांश (नेपाली) — optional','area',true), T('content_ne','पूर्ण विवरण (नेपाली) — optional. अनुच्छेद बीच खाली लाइन राख्नुहोस्।','area',true),
+    sel('n_category','Category',N_CATS,n.category), sel('n_type','Kind of notice',N_TYPES,n.type), T('service','Label shown before the title (e.g. UNSMP, Studio)','text'),
+    sel('n_status','Status',N_STATUS,n.status),
+    h('div',{class:'field',style:'display:flex;gap:10px;align-items:center;'},imp,h('label',{for:'n_imp',style:'margin:0;'},'Important (shown in the highlighted box at the top)')),
+    T('event_date','Date (e.g. 15 Kartik 2083)','text'), T('start_time','Start time','text'), T('end_time','End time','text'), T('venue','Venue','text'), T('location','City / address','text'),
+    T('audience','Who it is for','text'), T('reg_deadline','Registration deadline','text'), T('fee','Fee','text'), T('platform','Platform (online classes)','text'),
+    T('tags','Tags (separate with commas)','text'), T('cta_text','Button text (optional)','text'), T('cta_link','Button link — starts with https:// or a page like unsmp.html (optional)','text'),
+    attBox,
+    h('div',{class:'field',style:'display:flex;gap:10px;align-items:center;'},pub,h('label',{for:'n_pub',style:'margin:0;font-weight:700;'},'Published (visible to visitors)'))
+  ];
+  const v = id => { const e = document.getElementById(id); return e ? e.value.trim() : ''; };
+  const paras = s => s.split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean);
+  const list = s => s.split(',').map(x=>x.trim()).filter(Boolean);
+  let close;
+  const save = h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget, async()=>{
+    const row = { title:v('f_n_title'), title_ne:v('f_n_title_ne')||null, summary:v('f_n_summary'), summary_ne:v('f_n_summary_ne')||null,
+      content:paras(v('f_n_content')), content_ne:paras(v('f_n_content_ne')), category:v('n_category'), type:v('n_type'), service:v('f_n_service')||'Udaan Nepal', status:v('n_status'), important:imp.checked,
+      event_date:v('f_n_event_date')||null, start_time:v('f_n_start_time')||null, end_time:v('f_n_end_time')||null, venue:v('f_n_venue')||null, location:v('f_n_location')||null,
+      audience:v('f_n_audience')||null, reg_deadline:v('f_n_reg_deadline')||null, fee:v('f_n_fee')||null, platform:v('f_n_platform')||null,
+      tags:list(v('f_n_tags')), cta_text:v('f_n_cta_text')||null, cta_link:v('f_n_cta_link')||null, attachments:atts, is_published:pub.checked, updated_on:new Date().toISOString().slice(0,10) };
+    if(!row.title){ toast('Please write a title',true); return; }
+    if(row.cta_link && !/^https:\/\//i.test(row.cta_link) && !/^[a-z0-9_-]+\.html(#[\w-]+)?$/i.test(row.cta_link)){ toast('Button link must start with https:// or be a page like unsmp.html',true); return; }
+    const { error } = await (isNew ? sb.from('notices').insert(row) : sb.from('notices').update(row).eq('id',n.id));
+    if(error){ toast('Could not save: '+error.message,true); return; }
+    close(); toast(row.is_published?'Saved and published':'Saved as draft'); render();
+  })},'Save');
+  const del = isNew ? null : h('button',{class:'btn bad',onclick:async()=>{
+    if(!await confirmBox('Delete this notice?','This cannot be undone. To just hide it, untick “Published” instead.','Delete',true)) return;
+    const { error } = await sb.from('notices').delete().eq('id',n.id); if(error){ toast('Could not delete: '+error.message,true); return; }
+    close(); toast('Deleted'); render();
+  }},'Delete');
+  close = openSheet(isNew?'New notice':'Edit notice',[...fields,h('div',{class:'row'},save,del)]);
+}
+
+/* ======================= LEGAL TEXT ======================= */
+async function legalCard(){
+  const { data } = await sb.from('site_settings').select('key,value').in('key',['terms_content','privacy_content']);
+  const get = k => ((data||[]).find(r=>r.key===k)||{}).value || {};
+  const box = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'Terms & Privacy pages'),
+    h('p',{class:'sub'},'The text is a draft written for Udaan Nepal. Please read it fully and have a lawyer check it before relying on it. Format: “## Heading” for headings, “- ” for bullet points, a blank line between paragraphs.'));
+  [['terms','Terms & Conditions'],['privacy','Privacy Policy']].forEach(([k,l])=>{
+    const cur = get(k+'_content').text || (window.UN_LEGAL||{})[k] || '';
+    const ta = h('textarea',{id:'lg_'+k,style:'min-height:260px;font-size:13px;'}, cur);
+    box.append(h('details',{style:'border:1px solid var(--border);border-radius:12px;padding:0 14px;margin-bottom:10px;'},
+      h('summary',{style:'cursor:pointer;padding:14px 0;font-weight:700;min-height:44px;'}, l),
+      h('div',{class:'field'}, ta),
+      h('button',{class:'btn primary',style:'margin-bottom:14px;',onclick:e=>{
+        const d = new Date(); const updated = d.getDate()+' '+['January','February','March','April','May','June','July','August','September','October','November','December'][d.getMonth()]+' '+d.getFullYear();
+        saveSetting(k+'_content',{ text:ta.value.trim(), updated }, e.currentTarget);
+      }},'Save '+l)));
+  });
+  return box;
+}
+
+/* ======================= USERS ======================= */
+let userFilter = 'all', userSearch = '';
+async function viewUsers(){
+  const wrap = h('div',{}, h('h2',{class:'title'},'Users'), h('p',{class:'sub'},'Everyone who has signed up. New teachers must be approved before they can create courses.'));
+  const { data, error } = await sb.rpc('admin_user_list');
+  if(error){ wrap.append(h('div',{class:'note warn'},'Could not load: '+error.message+' (did you run 8_users_and_teachers.sql?)')); return wrap; }
+  const all = data||[];
+  const pend = all.filter(u=>u.role==='teacher' && u.approval==='pending').length;
+  const chips = h('div',{class:'chips'});
+  [['all','All'],['pending','Waiting for approval'+(pend?' ('+pend+')':'')],['teacher','Teachers'],['student','Students'],['parent','Parents']].forEach(([k,l])=>
+    chips.append(h('button',{class:'chip'+(userFilter===k?' on':''),onclick:()=>{ userFilter=k; paint(); chips.querySelectorAll('.chip').forEach((c,i)=>c.classList.toggle('on',['all','pending','teacher','student','parent'][i]===k)); }},l)));
+  const search = h('input',{type:'search',placeholder:'Search name, email or phone',value:userSearch,style:'margin:10px 0;',oninput:e=>{ userSearch=e.target.value; paint(); }});
+  const list = h('div');
+  if(can('academic')) wrap.append(await invitesCard());
+  wrap.append(chips, search, list);
+
+  /* ── open per-user management sheet ── */
+  async function manageUser(u){
+    const name = u.full_name || '(no name)';
+    const isDeactivated = u.is_active === false;
+
+    // Load enrollments if student
+    let enrollRows = [];
+    if(u.role === 'student'){
+      const { data: enrs } = await sb.from('enrollments')
+        .select('id, course_id, courses(title)')
+        .eq('student_id', u.user_id)
+        .neq('status','removed');
+      enrollRows = enrs || [];
+    }
+
+    const enrollSection = u.role === 'student' ? (()=>{
+      const sec = h('div',{style:'margin-bottom:16px;'});
+      sec.append(h('div',{class:'sub',style:'font-weight:700;margin-bottom:6px;'},'Enrolled courses'));
+      if(!enrollRows.length){
+        sec.append(h('p',{class:'sub'},'Not enrolled in any course.'));
+      } else {
+        enrollRows.forEach(enr=>{
+          const title = (enr.courses && enr.courses.title) || 'Untitled course';
+          const row = h('div',{style:'display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border2);gap:10px;'});
+          const unenrollBtn = h('button',{class:'btn sm bad',onclick:async e=>{ await busy(e.currentTarget, async()=>{
+            if(!await confirmBox('Remove from course?', name+' will lose access to "'+title+'" immediately. No refund is triggered.','Remove',true)) return;
+            const { error } = await sb.from('enrollments').update({status:'removed'}).eq('id',enr.id);
+            if(error){ toast('Could not remove: '+error.message,true); return; }
+            toast('Removed from '+title);
+            enrollRows = enrollRows.filter(r=>r.id!==enr.id);
+            row.remove();
+          }); }},'Remove');
+          row.append(h('span',{},title), unenrollBtn);
+          sec.append(row);
+        });
+      }
+      return sec;
+    })() : null;
+
+    const deactivateBtn = h('button',{class:'btn '+(isDeactivated?'primary':''),style:isDeactivated?'':'border:1px solid var(--amber);color:var(--amber);',
+      onclick:async e=>{ await busy(e.currentTarget, async()=>{
+        const newState = !isDeactivated;
+        const msg = newState ? 'Deactivate '+name+'?\n\nThey will not be able to log in. Their records and course history are kept. You can re-activate them any time.' : 'Re-activate '+name+'?';
+        const label = newState ? 'Deactivate' : 'Re-activate';
+        if(!await confirmBox(label, msg, label, newState)) return;
+        const { error } = await sb.from('profiles').update({is_active: !newState}).eq('id',u.user_id);
+        if(error){ toast('Could not update: '+error.message,true); return; }
+        u.is_active = !newState;
+        toast(newState ? name+' deactivated' : name+' re-activated');
+        closeSheet(); paint();
+      }); }}, isDeactivated ? '✓ Re-activate account' : 'Deactivate account');
+
+    const deleteBtn = h('button',{class:'btn bad',onclick:async e=>{ await busy(e.currentTarget, async()=>{
+      if(!await confirmBox('Permanently delete account?',
+        '⚠️ This cannot be undone.\n\n'+name+'\'s account, login credentials and profile will be permanently removed. Payment records and enrollment history that reference this account may also be affected.\n\nIf you only want to block access, use Deactivate instead.',
+        'Delete permanently', true)) return;
+      // Double confirm for hard delete
+      if(!await confirmBox('Are you absolutely sure?','Type-check: you are about to permanently delete '+name+' ('+u.email+'). This action is irreversible.','Yes, delete permanently',true)) return;
+      const { error } = await sb.rpc('admin_delete_user', { p_user: u.user_id });
+      if(error){ toast('Could not delete: '+error.message,true); return; }
+      toast(name+' deleted');
+      closeSheet();
+      all.splice(all.findIndex(x=>x.user_id===u.user_id),1);
+      paint();
+    }); }},'Delete account permanently');
+
+    const divider = h('hr',{style:'border:none;border-top:1px solid var(--border2);margin:16px 0;'});
+    const dangerLabel = h('div',{class:'sub',style:'font-weight:700;margin-bottom:8px;color:#FF8A94;'},'⚠️ Danger zone');
+    const nodes = enrollSection
+      ? [enrollSection, divider, dangerLabel, h('div',{class:'row'},deactivateBtn,deleteBtn)]
+      : [divider, dangerLabel, h('div',{class:'row'},deactivateBtn,deleteBtn)];
+    closeSheet = openSheet('Manage: '+name, nodes);
+  }
+  let closeSheet = ()=>{};
+
+  function paint(){
+    clear(list);
+    const q = userSearch.trim().toLowerCase();
+    const rows = all.filter(u=>{
+      if(userFilter==='pending' && !(u.role==='teacher' && u.approval==='pending')) return false;
+      if(['teacher','student','parent'].includes(userFilter) && u.role!==userFilter) return false;
+      return !q || [u.full_name,u.email,u.phone].join(' ').toLowerCase().includes(q);
+    });
+    if(!rows.length) list.append(h('p',{class:'sub'},'Nobody matches.'));
+    rows.slice(0,200).forEach(u=>{
+      const isDeactivated = u.is_active === false;
+      const row = h('div',{class:'item',style:isDeactivated?'opacity:0.55;':''},
+        h('div',{}, h('h4',{}, u.full_name || '(no name)', isDeactivated ? h('span',{style:'font-size:11px;color:var(--amber);margin-left:8px;font-weight:700;'},'DEACTIVATED'):''),
+          h('p',{class:'sub',style:'margin:2px 0;'}, nice(u.role)+(u.role==='teacher' ? ' · '+nice(u.approval) : '')+' · ', h('a',{href:'mailto:'+u.email},u.email), u.phone?' · '+u.phone:'', u.school?' · '+u.school:'')));
+      if(u.role==='teacher' && can('academic')){
+        const set = async (st, e) => { await busy(e.currentTarget, async()=>{
+          const { error } = await sb.rpc('admin_set_approval',{ p_user:u.user_id, p_status:st });
+          if(error){ toast('Could not save: '+error.message,true); return; }
+          u.approval = st; toast(st==='approved'?'Teacher approved':'Teacher '+st); paint(); }); };
+        if(u.approval!=='approved') row.append(h('button',{class:'btn sm primary',onclick:e=>set('approved',e)},'Approve'));
+        if(u.approval!=='suspended') row.append(h('button',{class:'btn sm bad',onclick:async e=>{ const b=e.currentTarget; if(await confirmBox('Suspend this teacher?','They will not be able to create new courses until approved again.','Suspend',true)) set('suspended',{currentTarget:b}); }},'Suspend'));
+      }
+      if(can('super_admin') || can('academic')){
+        row.append(h('button',{class:'btn sm',onclick:()=>manageUser(u)},'Manage'));
+      }
+      list.append(row);
+    });
+  }
+  paint();
+  return wrap;
+}
+
+
+/* ---- teacher invitations ---- */
+async function invitesCard(){
+  const box = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'Teacher invitations'),
+    h('p',{class:'sub'},'Teachers cannot sign up on their own. Invite them here, then send them the link (WhatsApp, Viber or email). They must sign up or log in with the same email, then open the link.'));
+  const { data, error } = await sb.rpc('admin_invite_list');
+  if(error){ box.append(h('div',{class:'note warn'},'Could not load: '+error.message+' (did you run 9_teacher_invites.sql?)')); return box; }
+  const linkFor = t => new URL('teacher-invite?token='+t, location.href).href;
+  const showLink = (email, token) => {
+    const url = linkFor(token);
+    const inp = h('input',{type:'text',readonly:true,value:url,onclick:e=>e.target.select()});
+    openSheet('Invitation link',[h('p',{class:'sub'},'Send this link to '+email+'. It works once, only for that email, for 14 days.'), h('div',{class:'field'},inp),
+      h('div',{class:'row'}, h('button',{class:'btn primary',onclick:async e=>{ try{ await navigator.clipboard.writeText(url); toast('Link copied'); }catch(x){ inp.select(); toast('Press and hold the link to copy it'); } }},'Copy link'),
+        h('a',{class:'btn',href:'https://wa.me/?text='+encodeURIComponent('Udaan Nepal teacher invitation: '+url),target:'_blank',rel:'noopener'},'Share on WhatsApp'))]);
+  };
+  box.append(h('button',{class:'btn primary',style:'margin-bottom:12px;',onclick:()=>{
+    const em = fieldInput('inv_email','Teacher\'s email address','email',''), nt = fieldInput('inv_note','Note for yourself (optional, e.g. Maths teacher)','text','');
+    let close;
+    const go = h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget, async()=>{
+      const email = em.querySelector('input').value.trim();
+      const { data:tok, error } = await sb.rpc('admin_create_teacher_invite',{ p_email:email, p_note:nt.querySelector('input').value.trim() });
+      if(error){ toast(error.message,true); return; }
+      close(); showLink(email.toLowerCase(), tok); render();
+    })},'Create invitation');
+    close = openSheet('Invite a teacher',[em,nt,go]);
+  }},'Invite a teacher'));
+  (data||[]).forEach(i=>{
+    const used = !!i.used_at, expired = !used && new Date(i.expires_at) < new Date();
+    const row = h('div',{class:'item',style:'background:var(--bg-deep);'},
+      h('div',{}, h('b',{},i.email), h('div',{class:'sub'}, (used?'Accepted '+when(i.used_at):expired?'Expired':'Waiting · expires '+when(i.expires_at))+(i.note?' · '+i.note:''))));
+    if(!used && !expired) row.append(h('div',{class:'row'}, h('button',{class:'btn sm',onclick:()=>showLink(i.email,i.token)},'Get link'),
+      h('button',{class:'btn sm bad',onclick:async()=>{ const { error } = await sb.rpc('admin_delete_invite',{ p_id:i.id }); if(error){ toast(error.message,true); return; } render(); }},'Cancel')));
+    box.append(row);
+  });
+  return box;
+}
+
+/* ======================= LOGO ======================= */
+async function logoCard(){
+  const { data } = await sb.from('site_settings').select('value').eq('key','site_logo').maybeSingle();
+  let url = (data && data.value && data.value.url) || '';
+  const box = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'Logo'),
+    h('p',{class:'sub'},'Replaces the “U” square beside “Udaan Nepal” at the top and bottom of every page, and the small icon in the browser tab. Use a square picture (PNG with a clear background is best), under 2 MB.'));
+  const prev = h('div',{style:'width:72px;height:72px;border-radius:12px;border:1px dashed var(--border);margin:8px 0;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--bg-deep);font-size:12px;'});
+  const show = () => { clear(prev); if(url) prev.append(h('img',{src:url,alt:'Logo preview',style:'width:100%;height:100%;object-fit:contain;'})); else prev.append('No logo'); };
+  show();
+  const msg = h('p',{class:'sub',style:'min-height:18px;'}, url ? 'A logo is set.' : 'No logo yet — the “U” square shows.');
+  const file = h('input',{type:'file',accept:'image/png,image/jpeg,image/webp'});
+  file.addEventListener('change', async ()=>{
+    const x = file.files[0]; if(!x) return;
+    msg.textContent = 'Uploading…';
+    try{ url = await uploadImage(x,'logo'); show(); msg.textContent = 'Uploaded. Press Save logo to show it on the website.'; }
+    catch(e){ msg.textContent = 'Upload failed: '+(e.message||e); }
+  });
+  box.append(prev, file, msg, h('div',{class:'row'},
+    h('button',{class:'btn primary',onclick:e=>saveSetting('site_logo',{url},e.currentTarget)},'Save logo'),
+    h('button',{class:'btn',onclick:e=>{ url=''; show(); msg.textContent='Logo removed here. Press Save logo to confirm.'; }},'Remove logo')));
+  return box;
+}
+
+/* ======================= HOME INTRO VIDEO (looping) ======================= */
+async function heroVideoCard(){
+  const { data } = await sb.from('site_settings').select('value').eq('key','hero_video').maybeSingle();
+  let url = (data && data.value && data.value.url) || '';
+  const box = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'Home page intro video (plays on a loop)'),
+    h('p',{class:'sub'},'Plays silently on repeat inside the big card at the top of the home page. Best: 10–20 seconds, MP4, no larger than 25 MB (about 5–8 MB looks fine on phones). With no video the card shows the plain icon.'));
+  const prev = h('div',{style:'margin:8px 0;'});
+  const show = () => { clear(prev); if(url){ const v = h('video',{src:url,controls:'',muted:'',loop:'',playsinline:'',style:'max-width:100%;max-height:240px;border-radius:12px;background:#000;'}); v.muted = true; prev.append(v); } else prev.append(h('p',{class:'sub'},'No video yet.')); };
+  show();
+  const msg = h('p',{class:'sub',style:'min-height:18px;'}, url ? 'A video is set.' : '');
+  const file = h('input',{type:'file',accept:'video/mp4,video/webm'});
+  file.addEventListener('change', async ()=>{
+    const f = file.files[0]; if(!f) return;
+    if(!/^video\/(mp4|webm)$/.test(f.type)){ msg.textContent = 'Please choose an MP4 or WebM video.'; return; }
+    if(f.size > 25*1024*1024){ msg.textContent = 'This video is '+(f.size/1048576).toFixed(1)+' MB. Please make it smaller than 25 MB (shorter, or 720p).'; return; }
+    msg.textContent = 'Uploading… please wait, do not close this page.';
+    try{
+      const path = 'hero-'+Date.now()+'.'+(f.type==='video/webm'?'webm':'mp4');
+      const up = await sb.storage.from('site-videos').upload(path, f, { contentType:f.type, cacheControl:'31536000' });
+      if(up.error) throw up.error;
+      url = sb.storage.from('site-videos').getPublicUrl(path).data.publicUrl; show();
+      msg.textContent = 'Uploaded. Press Save video to show it on the website.';
+    }catch(e){ msg.textContent = 'Upload failed: '+(e.message||e); }
+  });
+  box.append(prev, file, msg, h('div',{class:'row'},
+    h('button',{class:'btn primary',onclick:e=>saveSetting('hero_video',{url},e.currentTarget)},'Save video'),
+    h('button',{class:'btn',onclick:()=>{ url=''; show(); msg.textContent='Video removed here. Press Save video to confirm.'; }},'Remove video')));
+  return box;
+}
+
+/* ======================= GREETING BAR ======================= */
+async function greetingCard(){
+  const { data } = await sb.from('site_settings').select('value').eq('key','greeting_banner').maybeSingle();
+  const g = (data&&data.value) || {};
+  const box = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'Greeting / wishes bar'),
+    h('p',{class:'sub'},'A coloured bar at the top of the Home, Notices and Sign-in pages, for festivals, results or special wishes (e.g. “दशैंको शुभकामना”). Visitors can close it.'));
+  const on = h('input',{type:'checkbox',id:'gr_on',checked:g.enabled===true});
+  const ne = fieldInput('text_ne','Message in Nepali','area',g.text_ne); ne.querySelector('textarea').setAttribute('lang','ne');
+  const en = fieldInput('text','Message in English (optional)','area',g.text);
+  const until = fieldInput('until','Show until this date (optional)','date',g.until);
+  box.append(h('div',{class:'field',style:'display:flex;gap:10px;align-items:center;'},on,h('label',{for:'gr_on',style:'margin:0;font-weight:700;'},'Show the bar')),ne,en,until,
+    h('button',{class:'btn primary',onclick:e=>saveSetting('greeting_banner',Object.assign(collect(box),{enabled:on.checked}),e.currentTarget)},'Save'));
+  useNepaliFont();
+  return box;
+}
+
+/* ======================= HOME PAGE ======================= */
+const HOME_FIELDS = [
+  ['home_eyebrow','Small line above the headline (e.g. Now enrolling — Kathmandu Studio)'],
+  ['home_hero_text','Paragraph under the headline','area'],
+  ['home_stat1','Statistic 1 value (e.g. 05 Active)'],['home_stat2','Statistic 2 value (e.g. Engineers)'],['home_stat3','Statistic 3 value (e.g. Nepal)'],
+  ['home_about_title','“Who we are” heading','area'],['home_about_lead','“Who we are” paragraph','area'],
+  ['home_why_title','“Why Udaan Nepal” heading'],['home_why_text','“Why Udaan Nepal” paragraph','area'],
+  ['home_video_title','Video section heading'],
+  ['home_video_url','Promo video link — YouTube or Vimeo (https://…). The video section stays hidden until you add it.'],
+  ['home_founders_title','Leadership heading'],['home_founders_text','Leadership paragraph','area'],
+  ['home_members_title','“Our Members” heading'],['home_members_text','“Our Members” paragraph','area']
+];
+async function homeCard(){
+  const { data } = await sb.from('site_settings').select('key,value').in('key',['home_content','founders']);
+  const get = k => ((data||[]).find(r=>r.key===k)||{}).value || {};
+  const hc = get('home_content');
+  let founders = Array.isArray(get('founders').list) ? get('founders').list.slice() : [];
+  if(!founders.length) founders = [
+    { name:'Er. Prashant Mishra', role:'CO-FOUNDER & CEO', bio:"Mechanical engineer and science teacher, leading Udaan Nepal's academic direction and long-term vision.", photo_url:'' },
+    { name:'Er. Binod Paudel', role:'CO-FOUNDER & COO', bio:'Electrical and electronics engineer, overseeing daily operations, systems, and delivery of every program.', photo_url:'' }];
+  const box = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'Home page'), h('p',{class:'sub'},'Leave a box empty to keep the words already on the page.'));
+  const d = h('details',{style:'border:1px solid var(--border);border-radius:12px;padding:0 14px;margin-bottom:10px;'}, h('summary',{style:'cursor:pointer;padding:14px 0;font-weight:700;min-height:44px;'},'Home page words'));
+  HOME_FIELDS.forEach(([k,l,t])=>{
+    d.append(fieldInput(k,l,t,hc[k]));
+    if(k==='home_video_url'){
+      const sel = h('select',{id:'f_home_video_position','data-k':'home_video_position'}, h('option',{value:''},'Lower on the page (above Leadership)'), h('option',{value:'top'},'Near the top (right after the first screen)'));
+      sel.value = hc.home_video_position==='top' ? 'top' : '';
+      d.append(h('div',{class:'field'}, h('label',{for:'f_home_video_position'},'Where should the video appear?'), sel));
+    }
+  });
+  d.append(h('button',{class:'btn primary',style:'margin-bottom:14px;',onclick:e=>saveSetting('home_content',collect(d),e.currentTarget)},'Save home page words'));
+  box.append(d);
+
+  const fd = h('details',{style:'border:1px solid var(--border);border-radius:12px;padding:0 14px;'}, h('summary',{style:'cursor:pointer;padding:14px 0;font-weight:700;min-height:44px;'},'Leadership / founders cards'));
+  const fl = h('div');
+  const persist = async (btn) => { await busy(btn, async()=>{
+    const { error } = await sb.from('site_settings').upsert({ key:'founders', value:{ list:founders }, updated_by: me.id, updated_at: new Date().toISOString() });
+    if(error){ toast('Could not save: '+error.message,true); return; } toast('Saved — the home page now shows these cards'); }); };
+  const draw = () => {
+    clear(fl);
+    if(!founders.length) fl.append(h('p',{class:'sub'},'Nobody listed.'));
+    founders.forEach((f,i)=> fl.append(h('div',{class:'item',style:'background:var(--bg-deep);'},
+      h('div',{}, h('b',{},f.name), h('div',{class:'sub'},f.role||'')),
+      h('div',{class:'row'}, h('button',{class:'btn sm',disabled:i===0,onclick:()=>{ founders.splice(i-1,0,founders.splice(i,1)[0]); draw(); }},'↑'),
+        h('button',{class:'btn sm',onclick:()=>edit(i)},'Edit'),
+        h('button',{class:'btn sm bad',onclick:()=>{ founders.splice(i,1); draw(); }},'Remove')))));
+  };
+  const edit = (i) => {
+    const f = i==null ? { name:'', role:'', bio:'', photo_url:'' } : founders[i];
+    const n = fieldInput('fd_name','Name (e.g. Er. Binod Paudel)','text',f.name), r = fieldInput('fd_role','Role (e.g. CO-FOUNDER & COO)','text',f.role), b = fieldInput('fd_bio','Short description','area',f.bio);
+    let url = f.photo_url || ''; const msg = h('p',{class:'sub',style:'min-height:18px;'}, url?'A picture is set.':'No picture — initials will show.');
+    const file = h('input',{type:'file',accept:'image/png,image/jpeg,image/webp'});
+    file.addEventListener('change', async ()=>{
+      const x = file.files[0]; if(!x) return;
+      if(x.size > 2*1024*1024){ msg.textContent='Picture is larger than 2 MB.'; return; }
+      msg.textContent='Uploading…';
+      const ext = (x.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,5)||'jpg';
+      const path = 'founder-'+Date.now()+'.'+ext;
+      const up = await sb.storage.from('site-assets').upload(path, x, { contentType:x.type });
+      if(up.error){ msg.textContent='Upload failed: '+up.error.message; return; }
+      url = sb.storage.from('site-assets').getPublicUrl(path).data.publicUrl; msg.textContent='Picture uploaded.';
+    });
+    let close;
+    const ok = h('button',{class:'btn primary',onclick:()=>{
+      const v = collect(h('div',{},n,r,b)); const val = { name:n.querySelector('input').value.trim(), role:r.querySelector('input').value.trim(), bio:b.querySelector('textarea').value.trim(), photo_url:url };
+      if(!val.name){ toast('Please enter a name',true); return; }
+      if(i==null) founders.push(val); else founders[i]=val; close(); draw();
+    }},'Done');
+    close = openSheet(i==null?'Add a person':'Edit person',[n,r,b,h('div',{class:'field'},h('label',{},'Picture (optional, under 2 MB)'),file,msg),ok]);
+  };
+  fd.append(fl, h('div',{class:'row',style:'margin-bottom:14px;'}, h('button',{class:'btn',onclick:()=>edit(null)},'Add a person'), h('button',{class:'btn primary',onclick:e=>persist(e.currentTarget)},'Save cards')));
+  draw(); box.append(fd);
+  return box;
+}
+
+/* ======================= GENERIC LIST EDITOR (projects, sponsors, photos…) ======================= */
+async function uploadImage(file, prefix){
+  if(file.size > 2*1024*1024) throw new Error('Picture is larger than 2 MB.');
+  const ext = (file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,5)||'jpg';
+  const path = prefix+'-'+Date.now()+'-'+Math.floor(Math.random()*1000)+'.'+ext;
+  const up = await sb.storage.from('site-assets').upload(path, file, { contentType:file.type });
+  if(up.error) throw up.error;
+  return sb.storage.from('site-assets').getPublicUrl(path).data.publicUrl;
+}
+/* fields: [key,label,type] with type 'text' | 'area' | 'image' */
+async function listCard(title, settingKey, fields, nameKey, help){
+  const { data } = await sb.from('site_settings').select('value').eq('key',settingKey).maybeSingle();
+  let list = Array.isArray(data && data.value && data.value.list) ? data.value.list.slice() : [];
+  const box = h('details',{style:'border:1px solid var(--border);border-radius:12px;padding:0 14px;margin-bottom:10px;'}, h('summary',{style:'cursor:pointer;padding:14px 0;font-weight:700;min-height:44px;'}, title));
+  if(help) box.append(h('p',{class:'sub'},help));
+  const body = h('div');
+  const draw = () => {
+    clear(body);
+    if(!list.length) body.append(h('p',{class:'sub'},'Nothing added yet.'));
+    list.forEach((x,i)=> body.append(h('div',{class:'item',style:'background:var(--bg-deep);'},
+      h('div',{}, x[fields.find(f=>f[2]==='image')?.[0]] ? h('img',{src:x[fields.find(f=>f[2]==='image')[0]],alt:'',style:'height:40px;border-radius:6px;margin-right:8px;vertical-align:middle;'}) : null, h('b',{}, x[nameKey] || '(no name)')),
+      h('div',{class:'row'},
+        h('button',{class:'btn sm',disabled:i===0,onclick:()=>{ list.splice(i-1,0,list.splice(i,1)[0]); draw(); }},'↑'),
+        h('button',{class:'btn sm',onclick:()=>edit(i)},'Edit'),
+        h('button',{class:'btn sm bad',onclick:()=>{ list.splice(i,1); draw(); }},'Remove')))));
+  };
+  const edit = (i) => {
+    const cur = i==null ? {} : list[i]; const vals = Object.assign({}, cur); const inputs = {}; const nodes = [];
+    fields.forEach(([k,l,t])=>{
+      if(t==='image'){
+        const msg = h('p',{class:'sub',style:'min-height:18px;'}, vals[k] ? 'A picture is set.' : 'No picture yet.');
+        const file = h('input',{type:'file',accept:'image/png,image/jpeg,image/webp'});
+        file.addEventListener('change', async ()=>{ const f = file.files[0]; if(!f) return; msg.textContent='Uploading…';
+          try{ vals[k] = await uploadImage(f, settingKey); msg.textContent='Picture uploaded.'; }catch(e){ msg.textContent='Upload failed: '+(e.message||e); } });
+        nodes.push(h('div',{class:'field'}, h('label',{},l+' (under 2 MB)'), file, msg));
+      } else { const f = fieldInput('li_'+k,l,t,vals[k]); inputs[k] = f.querySelector('input,textarea'); nodes.push(f); }
+    });
+    let close;
+    nodes.push(h('button',{class:'btn primary',onclick:()=>{
+      Object.entries(inputs).forEach(([k,el])=>{ vals[k] = el.value.trim(); });
+      if(!vals[nameKey]){ toast('Please fill in the first box',true); return; }
+      if(i==null) list.push(vals); else list[i] = vals; close(); draw(); }},'Done'));
+    close = openSheet(i==null?'Add':'Edit', nodes);
+  };
+  box.append(body, h('div',{class:'row',style:'margin-bottom:14px;'},
+    h('button',{class:'btn',onclick:()=>edit(null)},'Add one'),
+    h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget, async()=>{
+      const { error } = await sb.from('site_settings').upsert({ key:settingKey, value:{ list }, updated_by: me.id, updated_at:new Date().toISOString() });
+      if(error){ toast('Could not save: '+error.message,true); return; } toast('Saved — the website now shows this'); })},'Save')));
+  draw(); return box;
+}
+
+/* ======================= PAGE WORDS (every heading and paragraph) ======================= */
+async function pageWordsCard(){
+  const pages = window.PAGE_TEXT || [];
+  const { data } = await sb.from('site_settings').select('key,value').in('key', pages.map(p=>p.setting));
+  const cur = k => ((data||[]).find(r=>r.key===k)||{}).value || {};
+  const box = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'Words on every page'),
+    h('p',{class:'sub'},'Pick a page, open a section, and change any heading or paragraph. Only the boxes you change are saved; the rest keep their current wording. To go back to the original, put the original text back.'));
+  const sel = h('select',{id:'pw_page'}, pages.map(p=>h('option',{value:p.id},p.label)));
+  const holder = h('div');
+  const draw = () => {
+    clear(holder);
+    const pg = pages.find(p=>p.id===sel.value); const saved = cur(pg.setting);
+    const groups = {}; pg.items.forEach(it=>{ (groups[it[1]] = groups[it[1]] || []).push(it); });
+    Object.entries(groups).forEach(([g,items])=>{
+      const d = h('details',{style:'border:1px solid var(--border);border-radius:12px;padding:0 14px;margin-bottom:8px;'}, h('summary',{style:'cursor:pointer;padding:12px 0;font-weight:600;min-height:44px;'}, nice(g.replace(/-/g,'_'))+' section ('+items.length+')'));
+      items.forEach(([k,,tag,def])=>{
+        const long = def.length > 70 || tag==='p';
+        const f = fieldInput('pw_'+k, (tag==='p'?'Paragraph':tag.startsWith('h')?'Heading':'Text')+' — original: “'+(def.length>60?def.slice(0,60)+'…':def)+'”', long?'area':'text', saved[k] || def);
+        const inp = f.querySelector('input,textarea'); inp.setAttribute('data-def',def); inp.setAttribute('data-key',k); d.append(f);
+      });
+      holder.append(d);
+    });
+    holder.append(h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget, async()=>{
+      const next = Object.assign({}, saved);   // keep the other saved fields (dates, contact etc.)
+      holder.querySelectorAll('[data-key]').forEach(el=>{ const k = el.getAttribute('data-key'), v = el.value.trim();
+        if(!v || v === el.getAttribute('data-def')) delete next[k]; else next[k] = v; });
+      const { error } = await sb.from('site_settings').upsert({ key:pg.setting, value:next, updated_by: me.id, updated_at:new Date().toISOString() });
+      if(error){ toast('Could not save: '+error.message,true); return; } toast('Saved — the website now shows your changes'); })},'Save this page'));
+  };
+  sel.addEventListener('change', draw); box.append(h('div',{class:'field'}, h('label',{for:'pw_page'},'Page'), sel), holder); draw();
+  return box;
+}
+
+async function mediaListsCard(){
+  const box = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'Photos, projects & sponsors'),
+    h('p',{class:'sub'},'These sections stay hidden on the website until you add real items.'));
+  box.append(
+    await listCard('Our members (scrolling strip on the home page)','members',[['name','Name'],['role','Role / title (e.g. Physics Teacher)'],['details','A short line about them (optional)','area'],['photo_url','Photo','image']],'name','Add people one by one. Use a clear, square-ish face photo under 2 MB. The strip stays hidden on the website until you add at least one person. Use the ↑ button to change the order.'),
+    await listCard('UNIF projects (Featured Innovations + Innovation Wall)','unif_projects',[['title','Project name'],['category','Category (e.g. Robotics, Health)'],['desc','Short description','area'],['innovator','Team / innovator name'],['image_url','Picture','image']],'title','The first six also appear as picture cards.'),
+    await listCard('UNIF sponsors & partners','unif_sponsors',[['name','Name'],['link','Website link (optional, https://…)'],['logo_url','Logo','image']],'name'),
+    await listCard('Studio photos','studio_gallery',[['caption','Caption (optional)'],['url','Photo','image']],'caption','The first photo is large; the next two are smaller.'),
+    await listCard('Practify photos','practify_gallery',[['caption','Caption (optional)'],['url','Photo','image']],'caption'),
+    await listCard('UNSMP photos','unsmp_gallery',[['caption','Caption (optional)'],['url','Photo','image']],'caption'));
+  return box;
+}
+
+/* ======================= MANUAL ENROLMENT ======================= */
+async function manualEnrollForm(){
+  const { data: cs } = await sb.from('courses').select('id,title,price_npr').eq('status','published').order('title');
+  if(!(cs||[]).length){ toast('There are no published courses yet',true); return; }
+  const email = fieldInput('me_email','Student\'s email (the account must already exist)','email','');
+  const course = h('div',{class:'field'}, h('label',{for:'me_course'},'Course'), h('select',{id:'me_course'}, cs.map(c=>h('option',{value:c.id},c.title+' — '+rs(c.price_npr)))));
+  const method = h('div',{class:'field'}, h('label',{for:'me_method'},'How was it paid? (ignored for free courses)'), h('select',{id:'me_method'}, ['cash','esewa','khalti','bank','other'].map(m=>h('option',{value:m},nice(m)))));
+  const ref = fieldInput('me_ref','Receipt / transaction number (optional)','text','');
+  const note = fieldInput('me_note','Note (optional)','text','');
+  let close;
+  const go = h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget, async()=>{
+    const { error } = await sb.rpc('admin_manual_enroll',{ p_email:email.querySelector('input').value.trim(), p_course:$('me_course').value, p_method:$('me_method').value, p_ref:ref.querySelector('input').value.trim(), p_note:note.querySelector('input').value.trim() });
+    if(error){ toast(error.message,true); return; }
+    close(); toast('Student enrolled — the course is open for them'); render();
+  })},'Enrol student');
+  close = openSheet('Enrol a student by hand',[h('p',{class:'sub'},'Use this when a student paid in cash or at the office. For a paid course, the payment is recorded as approved.'),email,course,method,ref,note,go]);
+}
+async function batchEnrollForm(){
+  const { data: cs } = await sb.from('courses').select('id,title,price_npr').eq('status','published').order('title');
+  if(!(cs||[]).length){ toast('There are no published courses yet',true); return; }
+
+  const courseEl = h('div',{class:'field'}, h('label',{for:'bc_course'},'Course to enrol into'),
+    h('select',{id:'bc_course'}, cs.map(c=>h('option',{value:c.id},c.title+' — '+rs(c.price_npr)))));
+  const methodEl = h('div',{class:'field'}, h('label',{for:'bc_method'},'Payment method (for paid courses)'),
+    h('select',{id:'bc_method'}, ['cash','esewa','khalti','bank','other'].map(m=>h('option',{value:m},nice(m)))));
+
+  // CSV / paste area
+  const pasteEl = h('div',{class:'field'},
+    h('label',{},'Student emails — paste one per line, or upload a CSV'),
+    h('textarea',{id:'bc_paste',placeholder:'student1@example.com\nstudent2@example.com\n…',style:'min-height:100px;width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:#F8FAFC;font-family:Manrope,sans-serif;font-size:13px;padding:10px 12px;resize:vertical;box-sizing:border-box;'})
+  );
+
+  // CSV file upload — auto-fills the textarea
+  const fileEl = h('div',{class:'field'},
+    h('label',{},'Or upload a .csv file (one email per row, first column used)'),
+    h('input',{type:'file',accept:'.csv,text/csv'})
+  );
+  fileEl.querySelector('input').addEventListener('change', ()=>{
+    const f = fileEl.querySelector('input').files[0]; if(!f) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const lines = e.target.result.split(/\r?\n/).map(l=>l.split(',')[0].replace(/["\s]/g,'').toLowerCase()).filter(Boolean);
+      document.getElementById('bc_paste').value = lines.join('\n');
+    };
+    reader.readAsText(f);
+  });
+
+  const resultEl = h('div',{style:'margin-top:10px;font-size:13px;min-height:20px;'});
+  let close;
+
+  const go = h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget, async()=>{
+    const raw = document.getElementById('bc_paste').value;
+    const emails = [...new Set(raw.split(/[\n,;]+/).map(s=>s.trim().toLowerCase()).filter(s=>s.includes('@')))];
+    if(!emails.length){ toast('No valid emails found.',true); return; }
+
+    const courseId = document.getElementById('bc_course').value;
+    const method   = document.getElementById('bc_method').value;
+
+    resultEl.textContent = 'Working… 0 / '+emails.length;
+    let ok=0, skip=0, fail=[];
+
+    for(let i=0; i<emails.length; i++){
+      resultEl.textContent = 'Working… '+(i+1)+' / '+emails.length;
+      const { error } = await sb.rpc('admin_manual_enroll',{
+        p_email: emails[i], p_course: courseId, p_method: method, p_ref:'batch-csv', p_note:'Batch enrolled by admin'
+      });
+      if(error){
+        // "already enrolled" is not a real failure
+        if(/already|duplicate|exists/i.test(error.message)) skip++;
+        else fail.push(emails[i]+' ('+error.message+')');
+      } else { ok++; }
+    }
+
+    let summary = ok+' enrolled';
+    if(skip) summary += ', '+skip+' already enrolled (skipped)';
+    if(fail.length) summary += ', '+fail.length+' failed';
+    resultEl.innerHTML = '<b>Done:</b> '+summary+(fail.length ? '<br><span style="color:#FF8A94;font-size:12px;">'+fail.slice(0,5).join('<br>')+(fail.length>5?' …and '+(fail.length-5)+' more':'')+'</span>' : '');
+    if(ok>0){ toast(ok+' student'+(ok>1?'s':'')+' enrolled'); render(); }
+  })},'Enrol all');
+
+  close = openSheet('Batch enrol from CSV', [
+    h('p',{class:'sub',style:'margin-top:8px;'},'Enrol multiple students at once. Each email must belong to an existing account. Already-enrolled students are skipped safely.'),
+    courseEl, methodEl, pasteEl, fileEl, go, resultEl
+  ]);
+}
+
+function refundForm(p, closeParent){
+  const amt = fieldInput('rf_amt','Amount to give back (Rs) — at most '+p.amount_npr,'number',String(p.amount_npr));
+  const why = fieldInput('rf_why','Reason (required)','area','');
+  let close;
+  const go = h('button',{class:'btn bad',onclick:e=>busy(e.currentTarget, async()=>{
+    const { error } = await sb.rpc('admin_refund_payment',{ p_payment:p.id, p_amount:parseInt(amt.querySelector('input').value,10), p_note:why.querySelector('textarea').value.trim() });
+    if(error){ toast(error.message,true); return; }
+    close(); closeParent(); toast('Refund recorded — the student\'s access to this course has ended'); render();
+  })},'Record refund');
+  close = openSheet('Refund',[h('p',{class:'sub'},'This records the refund and ends the student\'s access to the course. Send the money back to the student yourself (eSewa, Khalti, bank or cash).'),amt,why,go]);
+}
+
+/* ======================= CATEGORIES ======================= */
+async function viewCategories(){
+  const wrap = h('div',{}, h('h2',{class:'title'},'Course categories'), h('p',{class:'sub'},'Teachers choose one of these when they create a course. Hidden categories stay on old courses but cannot be picked.'));
+  const { data, error } = await sb.from('course_categories').select('*').order('sort_order').order('name');
+  if(error){ wrap.append(h('div',{class:'note warn'},'Could not load: '+error.message+' (did you run 10_courses_extras.sql?)')); return wrap; }
+  (data||[]).forEach(c=> wrap.append(h('div',{class:'item'},
+    h('div',{}, h('b',{},c.name), c.is_active?'':h('span',{class:'sub'},' (hidden)')),
+    h('div',{class:'row'},
+      h('button',{class:'btn sm',onclick:async()=>{ const { error } = await sb.from('course_categories').update({is_active:!c.is_active}).eq('id',c.id); if(error){ toast(error.message,true); return; } render(); }}, c.is_active?'Hide':'Show'),
+      h('button',{class:'btn sm',onclick:()=>{ const f = fieldInput('cat_name','Name','text',c.name); let close; close = openSheet('Rename',[f,h('button',{class:'btn primary',onclick:async()=>{ const { error } = await sb.from('course_categories').update({name:f.querySelector('input').value.trim()}).eq('id',c.id); if(error){ toast(error.message,true); return; } close(); render(); }},'Save')]); }},'Rename'),
+      h('button',{class:'btn sm bad',onclick:async()=>{ if(!await confirmBox('Delete this category?','Courses already using it keep the name.','Delete',true)) return; const { error } = await sb.from('course_categories').delete().eq('id',c.id); if(error){ toast(error.message,true); return; } render(); }},'Delete')))));
+  const nm = fieldInput('cat_new','New category name','text','');
+  wrap.append(h('div',{class:'card',style:'margin-top:14px;'}, nm, h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget, async()=>{
+    const name = nm.querySelector('input').value.trim(); if(!name){ toast('Please type a name',true); return; }
+    const { error } = await sb.from('course_categories').insert({ name, sort_order:(data||[]).length+1 }); if(error){ toast(error.message,true); return; } render(); })},'Add category')));
+  return wrap;
+}
+
+/* ======================= ACTIVITY LOG ======================= */
+async function viewActivity(){
+  const wrap = h('div',{}, h('h2',{class:'title'},'Activity log'), h('p',{class:'sub'},'The last 200 changes made by staff: who, what and when. Only a super admin can see this.'));
+  const { data, error } = await sb.rpc('admin_audit_list',{ p_limit:200 });
+  if(error){ wrap.append(h('div',{class:'note warn'},'Could not load: '+error.message+' (did you run 11_admin_tools.sql?)')); return wrap; }
+  if(!(data||[]).length) wrap.append(h('div',{class:'empty'},'Nothing recorded yet.'));
+  (data||[]).forEach(a=>{
+    const det = a.detail || {};
+    const text = Object.entries(det).map(([k,v])=> Array.isArray(v) ? k+': '+(v[0]||'—')+' → '+(v[1]||'—') : k+': '+v).join(' · ');
+    wrap.append(h('div',{class:'item'}, h('div',{class:'main'}, h('h4',{}, a.action.replace('.',' · ')), h('div',{class:'meta'}, h('span',{},a.actor_email||'SQL editor / system'), h('span',{},when(a.at))), text ? h('div',{class:'sub'},text) : null)));
+  });
+  return wrap;
+}
+
+/* ======================= MEDIA LIBRARY ======================= */
+async function viewMedia(){
+  const wrap = h('div',{}, h('h2',{class:'title'},'Picture library'), h('p',{class:'sub'},'Every picture uploaded to the website. Copy a picture\'s link to use it somewhere, or delete ones you no longer need.'));
+  const { data, error } = await sb.storage.from('site-assets').list('', { limit:200, sortBy:{ column:'created_at', order:'desc' } });
+  if(error){ wrap.append(h('div',{class:'note warn'},'Could not load: '+error.message)); return wrap; }
+  const files = (data||[]).filter(f=>f.name && f.id);
+  if(!files.length) wrap.append(h('div',{class:'empty'},'No pictures yet.'));
+  const g = h('div',{style:'display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;'});
+  files.forEach(f=>{
+    const url = sb.storage.from('site-assets').getPublicUrl(f.name).data.publicUrl;
+    g.append(h('div',{class:'card'}, h('img',{src:url,alt:'',loading:'lazy',style:'width:100%;height:100px;object-fit:cover;border-radius:8px;margin-bottom:8px;'}),
+      h('div',{class:'sub',style:'word-break:break-all;font-size:11px;'}, f.name),
+      h('div',{class:'row'},
+        h('button',{class:'btn sm',onclick:async()=>{ try{ await navigator.clipboard.writeText(url); toast('Link copied'); }catch(e){ toast(url); } }},'Copy link'),
+        h('button',{class:'btn sm bad',onclick:async()=>{ if(!await confirmBox('Delete this picture?','If a page still uses it, that picture will disappear.','Delete',true)) return; const { error } = await sb.storage.from('site-assets').remove([f.name]); if(error){ toast(error.message,true); return; } render(); }},'Delete'))));
+  });
+  wrap.append(g);
+  return wrap;
+}
+
+/* ======================= DASHBOARD NUMBERS ======================= */
+async function dashboardNumbers(){
+  const { data } = await sb.rpc('admin_dashboard');
+  const d = data || {}; const out = h('div',{class:'grid'});
+  const card = (n,l,hint)=> h('div',{class:'card'}, h('div',{class:'stat'},n), h('div',{class:'stat-l'},l), h('div',{class:'stat-h'},hint||''));
+  const L = [['students','Students','Signed up'],['parents','Parents','Signed up'],['teachers','Teachers','Approved'],['enrollments_30d','New enrolments','Last 30 days'],
+    ['studio_month','Studio requests','This month'],['unsmp_total','UNSMP registrations','All time'],['unif_total','UNIF registrations','All time'],['practify_total','Practify inquiries','All time'],['messages_total','Messages','All time']];
+  L.forEach(([k,l,hh])=>{ if(d[k]!=null) out.append(card(d[k],l,hh)); });
+  if(d.revenue_30d!=null) out.append(card(rs(d.revenue_30d).replace('Free','Rs 0'),'Money received','Last 30 days'), card(rs(d.revenue_total).replace('Free','Rs 0'),'Money received','All time'), card(rs(d.refunded_total).replace('Free','Rs 0'),'Refunded','All time'));
+  return out;
+}
+
+/* Builds the report: returns [[sheetName, rows(array of arrays)], ...]. Same logic is used by the admin page and the daily email. */
+function buildReportSheets(d, label){
+  const fmt = t => t ? new Date(t).toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Kathmandu'}) : '';
+  const j = a => Array.isArray(a) ? a.join(', ') : (a || '');
+  const sheets = [];
+  const add = (name, head, rows, fn) => {
+    const body = (rows||[]).map(fn);
+    sheets.push([name, [head].concat(body.length ? body : [[rows===null ? 'Not available for your role' : 'No new records in this period']])]);
+    return body.length;
+  };
+  const n = {};
+  n.studio = add('Studio bookings', ['Reference','Received','Name','Phone','Email','Booking type','Organisation','Studio space','Date wanted','Time slot','Duration','People','Purposes','Equipment','Facilities','Special requests','Estimated total (Rs)','Final price (Rs)','Status'],
+    d.studio, r => [r.ref,fmt(r.created_at),r.full_name,r.phone,r.email,r.booking_type,r.org_name||'',r.studio_space,r.booking_date,r.time_slot,r.duration,r.people_count,j(r.purposes),j(r.equipment),j(r.facilities),r.special_requests||'',r.estimated_total==null?'':r.estimated_total,r.final_price_npr==null?'':r.final_price_npr,r.status]);
+  n.unsmp = add('UNSMP registrations', ['Reference','Received','Name','Phone','Email','Registered as','Type','School','Grade','Designation','Address','Parent name','Parent phone','Student name','No. of students','No. of teachers','No. of parents','Status'],
+    d.unsmp, r => [r.ref,fmt(r.created_at),r.full_name,r.phone,r.email||'',r.mode,r.participant_type||'',r.school||'',r.grade||'',r.designation||'',r.address||'',r.parent_name||'',r.parent_phone||'',r.student_name||'',r.num_students||'',r.num_teachers||'',r.num_parents||'',r.status]);
+  n.unif = add('UNIF registrations', ['Reference','Received','Name','Phone','Email','Registered as','School','Grade','Designation','Address','Project title','Category','Project summary','Team size','Team members','Mentor','Mentor phone','Special needs','No. of projects','No. of students','No. of teachers','Status'],
+    d.unif, r => [r.ref,fmt(r.created_at),r.full_name,r.phone,r.email||'',r.mode,r.school,r.grade||'',r.designation||'',r.address||'',r.project_title||'',(r.categories&&r.categories.length?j(r.categories):r.category)||'',r.project_summary||'',r.team_size||'',r.team_members||'',r.mentor_name||'',r.mentor_phone||'',r.special_needs||'',r.num_projects||'',r.num_students||'',r.num_teachers||'',r.status]);
+  n.practify = add('Practify inquiries', ['Reference','Received','School','Location','Contact person','Designation','Phone','Email','Programs','Grade group','No. of students','Duration','Preferred dates','Notes','Status'],
+    d.practify, r => [r.ref,fmt(r.created_at),r.school_name,r.school_location,r.contact_person,r.designation,r.phone,r.email,j(r.programs),r.grade_group||'',r.student_count||'',r.duration||'',r.preferred_dates||'',r.notes||'',r.status]);
+  const byEmail = {}; (d.users||[]).forEach(u => { byEmail[String(u.email||'').toLowerCase()] = u; });
+  n.teachers = add('New teachers', ['Joined','Name','Phone','Email','School','Approval','Invitation note'],
+    d.invites, r => { const u = byEmail[String(r.email||'').toLowerCase()] || {}; return [fmt(r.used_at),u.full_name||'',u.phone||'',r.email,u.school||'',u.approval||'',r.note||'']; });
+  n.payments = add('Course payments', ['Submitted','Student','Course','Amount (Rs)','Method','Transaction ID','Status','Reviewed','Note','Refund (Rs)'],
+    d.payments, r => [fmt(r.submitted_at),r.student_name||'',r.course_title||'',r.amount_npr,r.method,r.transaction_ref||'',r.status,fmt(r.reviewed_at),r.note||'',r.refund_amount_npr==null?'':r.refund_amount_npr]);
+  const summary = [['Udaan Nepal report'],[label],[],['What','New records'],
+    ['Studio bookings',n.studio],['UNSMP registrations',n.unsmp],['UNIF registrations',n.unif],['Practify inquiries',n.practify],['New teachers',n.teachers],['Course payments',n.payments]];
+  return { sheets:[['Summary',summary]].concat(sheets), counts:n };
+}
+
+/* ======================= REPORTS ======================= */
+const npDay = () => new Date(Date.now() + 5.75*3600*1000).toISOString().slice(0,10);
+async function fetchReportData(from, to){
+  const s = new Date(from+'T00:00:00+05:45').toISOString(), e = new Date(new Date(to+'T00:00:00+05:45').getTime()+864e5).toISOString();
+  const get = async (tbl,col) => { const { data, error } = await sb.from(tbl).select('*').gte(col,s).lt(col,e).order(col); return error ? null : data; };
+  const d = { studio:await get('studio_bookings','created_at'), unsmp:await get('unsmp_registrations','created_at'), unif:await get('unif_registrations','created_at'),
+              practify:await get('practify_inquiries','created_at'), payments:await get('payments','submitted_at') };
+  const inv = await sb.rpc('admin_invite_list'), usr = await sb.rpc('admin_user_list');
+  d.invites = inv.error ? null : (inv.data||[]).filter(i=>i.used_at && i.used_at>=s && i.used_at<e);
+  d.users = usr.error ? [] : usr.data;
+  return d;
+}
+async function viewReports(){
+  const wrap = h('div',{}, h('h2',{class:'title'},'Reports'), h('p',{class:'sub'},'New studio bookings, UNSMP and UNIF registrations, Practify inquiries, new teachers and course payments for the days you choose. The Excel file has one sheet for each, with phone numbers. A report like this is also emailed to you at 5 pm every day once the daily email is set up.'));
+  const from = fieldInput('rp_from','From','date',npDay()), to = fieldInput('rp_to','To','date',npDay());
+  const out = h('div',{style:'margin-top:14px;'});
+  let last = null, lastLabel = '';
+  const run = async (btn) => busy(btn, async()=>{
+    const f = from.querySelector('input').value, t = to.querySelector('input').value;
+    if(!f || !t || f > t){ toast('Please choose a start date that is not after the end date',true); return; }
+    clear(out); out.append(h('p',{class:'sub'},'Loading…'));
+    const d = await fetchReportData(f,t);
+    lastLabel = f===t ? 'Report for '+f : 'Report from '+f+' to '+t;
+    last = buildReportSheets(d, lastLabel);
+    clear(out);
+    const names = {studio:'Studio bookings',unsmp:'UNSMP registrations',unif:'UNIF registrations',practify:'Practify inquiries',teachers:'New teachers',payments:'Course payments'};
+    const key = { teachers:'invites' };
+    out.append(h('h4',{style:'margin-bottom:8px;'},lastLabel));
+    Object.entries(names).forEach(([k,l])=> out.append(h('div',{class:'item'}, h('b',{},l), h('span',{}, d[key[k]||k]===null ? 'not available for your role' : String(last.counts[k])))));
+    out.append(h('button',{class:'btn primary',style:'margin-top:12px;',onclick:()=>{
+      if(!window.XLSX){ toast('The Excel tool could not load. Check your internet and refresh.',true); return; }
+      const wb = XLSX.utils.book_new();
+      last.sheets.forEach(([n,rows])=>{ const ws = XLSX.utils.aoa_to_sheet(rows); ws['!cols'] = (rows[0]||[]).map(()=>({wch:22})); XLSX.utils.book_append_sheet(wb, ws, n); });
+      XLSX.writeFile(wb, 'udaan-report-'+f+(f===t?'':'-to-'+t)+'.xlsx');
+    }},'Download Excel file'));
+  });
+  wrap.append(h('div',{class:'card'}, from, to, h('div',{class:'row'}, h('button',{class:'btn',onclick:e=>{ from.querySelector('input').value = to.querySelector('input').value = npDay(); run(e.currentTarget); }},"Today's report"), h('button',{class:'btn primary',onclick:e=>run(e.currentTarget)},'Show report')), out));
+  return wrap;
+}
+
+/* ======================= STAFF ======================= */
+async function viewStaff(){
+  const wrap = h('div',{}, h('h2',{class:'title'},'Staff & roles'), h('p',{class:'sub'},'Super admin can do everything. Finance checks payments. Academic reviews courses. Content edits site content. Front desk handles registrations.'));
+  const { data, error } = await sb.rpc('admin_staff_list'); if(error) throw error;
+  const byUser = {};
+  (data||[]).forEach(r=>{ (byUser[r.user_id] = byUser[r.user_id] || { ...r, roles:[] }).roles.push(r.role); });
+  const supers = (data||[]).filter(r=>r.role==='super_admin').length;
+  const list = h('div');
+  Object.values(byUser).forEach(u=>{
+    list.append(h('div',{class:'item'},
+      h('div',{class:'main'}, h('h4',{},u.full_name||u.email), h('div',{class:'meta'},h('span',{},u.email))),
+      h('div',{}, u.roles.map(role=>{
+        const lock = role==='super_admin' && (u.user_id===me.id || supers<=1);
+        return h('span',{class:'pill blue rolechip'}, ROLE_LABEL[role], lock ? null : h('button',{'aria-label':'Remove role',onclick:async()=>{
+          if(!(await confirmBox('Remove role','Remove '+ROLE_LABEL[role]+' from '+(u.full_name||u.email)+'?','Remove',true))) return;
+          const { error } = await sb.from('staff_roles').delete().eq('user_id',u.user_id).eq('role',role);
+          if(error){ toast('Could not remove: '+error.message,true); return; } toast('Removed'); render();
+        }},'×'));
+      }))));
+  });
+  wrap.append(list);
+  const email = h('input',{type:'email',id:'semail',placeholder:'their login email'});
+  const role = h('select',{id:'srole'}, ['finance','academic','content','front_desk','super_admin'].map(r=>h('option',{value:r},ROLE_LABEL[r])));
+  const msg = h('p',{class:'sub',style:'min-height:18px;margin:8px 0 0;'});
+  wrap.append(h('div',{class:'card',style:'margin-top:18px;'}, h('h4',{style:'margin-bottom:10px;'},'Give someone a role'),
+    h('div',{class:'note'},'The person must already have an account on the website (they sign up like any user). Then type the email they used.'),
+    h('div',{class:'field'},h('label',{for:'semail'},'Email'),email),
+    h('div',{class:'field'},h('label',{for:'srole'},'Role'),role),
+    h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget, async()=>{
+      msg.textContent='';
+      if(!email.value.trim()){ msg.textContent='Please type an email.'; return; }
+      const { data, error } = await sb.rpc('admin_grant_role',{ p_email: email.value.trim(), p_role: role.value });
+      if(error){ msg.textContent = error.message; return; }
+      if(data==='not_found'){ msg.textContent='No account found with that email. Ask them to sign up on the website first.'; return; }
+      toast('Role given'); render();
+    })},'Give role'), msg));
+  return wrap;
+}
+
+/* ======================= MESSAGES INBOX ======================= */
+async function viewMessages(){
+  const wrap = h('div',{}, h('h2',{class:'title'},'Messages'), h('p',{class:'sub'},'Contact form messages from the website. Mark them done after you reply.'));
+  const chips = h('div',{class:'chips'});
+  let msgFilter = 'new';
+  const list = h('div');
+  async function paintMessages(){
+    clear(list); list.append(h('p',{class:'sub'},'Loading…'));
+    let q = sb.from('contact_messages').select('*').order('created_at',{ascending:false}).limit(200);
+    if(msgFilter !== 'all') q = q.eq('status', msgFilter);
+    const { data, error } = await q;
+    if(error){ clear(list); list.append(h('div',{class:'note warn'},'Could not load: '+error.message)); return; }
+    clear(list);
+    if(!(data||[]).length){ list.append(h('div',{class:'empty'},'No messages here.')); return; }
+    (data||[]).forEach(m=>{
+      const isNew = m.status === 'new';
+      const pill = isNew ? h('span',{class:'pill amber'},'New') : h('span',{class:'pill green'},'Done');
+      list.append(h('div',{class:'item'},
+        h('div',{class:'main'},
+          h('h4',{},m.full_name + (m.subject ? ' — '+m.subject : '')),
+          h('div',{class:'meta'},
+            m.email ? h('a',{href:'mailto:'+m.email},m.email) : null,
+            m.phone ? h('span',{},'📞 '+m.phone) : null,
+            h('span',{},when(m.created_at)),
+            h('span',{class:'muted'},m.source||'website'))),
+        pill,
+        h('button',{class:'btn sm primary',onclick:()=>openMessage(m, paintMessages)},'Open')));
+    });
+  }
+  [['new','New'],['done','Done'],['all','All']].forEach(([k,l])=>{
+    chips.append(h('button',{class:'chip'+(msgFilter===k?' on':''),onclick:()=>{ msgFilter=k; chips.querySelectorAll('.chip').forEach((c,i)=>c.classList.toggle('on',['new','done','all'][i]===k)); paintMessages(); }},l));
+  });
+  wrap.append(chips, list);
+  await paintMessages();
+  return wrap;
+}
+function openMessage(m, repaint){
+  const noteIn = h('textarea',{placeholder:'Internal note (only visible to staff)…',style:'min-height:70px;'}, m.staff_note||'');
+  const body = [
+    h('dl',{class:'kv'},
+      h('dt',{},'From'),    h('dd',{},m.full_name),
+      m.email ? [h('dt',{},'Email'), h('dd',{},h('a',{href:'mailto:'+m.email},m.email))] : null,
+      m.phone ? [h('dt',{},'Phone'), h('dd',{},h('a',{href:'tel:'+m.phone},m.phone))] : null,
+      h('dt',{},'Subject'), h('dd',{},m.subject||'(none)'),
+      h('dt',{},'Received'),h('dd',{},when(m.created_at)),
+      h('dt',{},'Status'),  h('dd',{},m.status)),
+    h('div',{style:'margin:14px 0;padding:14px;background:var(--bg-deep);border-radius:10px;font-size:14px;white-space:pre-wrap;'},m.message),
+    h('div',{class:'field'}, h('label',{},'Internal note'), noteIn)
+  ];
+  const setStatus = async (status, btn) => {
+    await busy(btn, async()=>{
+      const { error } = await sb.from('contact_messages').update({ status, staff_note: noteIn.value.trim()||null }).eq('id',m.id);
+      if(error){ toast('Could not update: '+error.message,true); return; }
+      m.status = status; m.staff_note = noteIn.value.trim();
+      toast(status==='done' ? 'Marked as done' : 'Marked as new');
+      close(); repaint(); refreshBadges();
+    });
+  };
+  const acts = h('div',{class:'row',style:'margin-top:8px;'});
+  if(m.email) acts.append(h('a',{class:'btn primary',href:'mailto:'+m.email+'?subject=Re: '+(m.subject||'your message to Udaan Nepal')},'Reply by email'));
+  acts.append(h('button',{class:'btn '+(m.status==='done'?'':'good'),onclick:e=>setStatus(m.status==='done'?'new':'done',e.currentTarget)}, m.status==='done' ? 'Mark as new' : 'Mark as done'));
+  body.push(acts);
+  const close = openSheet('Message from '+m.full_name, body);
+}
+
+/* ======================= COUPONS ======================= */
+async function viewCoupons(){
+  const wrap = h('div',{}, h('h2',{class:'title'},'Coupon codes'), h('p',{class:'sub'},'Discount codes students enter when enrolling. Percent takes % off; flat deducts Rs from the price.'));
+  const { data: courses } = await sb.from('courses').select('id,title').eq('status','published').order('title');
+  const list = h('div');
+  async function paintCoupons(){
+    clear(list);
+    const { data, error } = await sb.from('coupon_codes').select('*').order('created_at',{ascending:false});
+    if(error){ list.append(h('div',{class:'note warn'},'Could not load: '+error.message)); return; }
+    if(!(data||[]).length){ list.append(h('div',{class:'empty'},'No coupons yet.')); return; }
+    (data||[]).forEach(cp=>{
+      const discLabel = cp.discount_type==='percent' ? cp.discount_value+'% off' : 'Rs '+cp.discount_value+' off';
+      const usageLabel = cp.max_uses ? cp.uses_count+'/'+cp.max_uses+' used' : cp.uses_count+' used (unlimited)';
+      const status = !cp.is_active ? h('span',{class:'pill red'},'Disabled') :
+        (cp.valid_until && new Date(cp.valid_until)<new Date()) ? h('span',{class:'pill red'},'Expired') :
+        h('span',{class:'pill green'},'Active');
+      list.append(h('div',{class:'item'},
+        h('div',{class:'main'},
+          h('h4',{},cp.code, ' ', h('span',{class:'pill blue'},discLabel)),
+          h('div',{class:'meta'},
+            h('span',{},cp.description||'No description'),
+            h('span',{},usageLabel),
+            cp.valid_until ? h('span',{},'Expires '+when(cp.valid_until)) : null)),
+        status,
+        h('div',{class:'row'},
+          h('button',{class:'btn sm '+(cp.is_active?'bad':'good'),onclick:async e=>{
+            await busy(e.currentTarget,async()=>{
+              await sb.from('coupon_codes').update({is_active:!cp.is_active}).eq('id',cp.id);
+              paintCoupons();
+            });
+          }}, cp.is_active?'Disable':'Enable'),
+          h('button',{class:'btn sm bad',onclick:async()=>{
+            if(!await confirmBox('Delete coupon','Delete code '+cp.code+'? This cannot be undone.','Delete',true)) return;
+            await sb.from('coupon_codes').delete().eq('id',cp.id);
+            paintCoupons();
+          }},'Delete'))));
+    });
+  }
+  function couponForm(){
+    const codeIn = h('input',{type:'text',placeholder:'e.g. EARLY20',style:'text-transform:uppercase;'});
+    codeIn.addEventListener('input',()=>{ codeIn.value=codeIn.value.toUpperCase(); });
+    const descIn = h('input',{type:'text',placeholder:'e.g. Early bird discount'});
+    const typeIn = h('select',{}, h('option',{value:'percent'},'Percent (% off)'), h('option',{value:'flat'},'Flat (Rs off)'));
+    const valIn = h('input',{type:'number',min:'1',placeholder:'e.g. 20'});
+    const maxIn = h('input',{type:'number',min:'1',placeholder:'Leave blank for unlimited'});
+    const untilIn = h('input',{type:'datetime-local'});
+    const courseIn = h('select',{}, h('option',{value:''},'All courses'), (courses||[]).map(c=>h('option',{value:c.id},c.title)));
+    let cz; cz = openSheet('New coupon code',[
+      h('div',{class:'field'}, h('label',{},'Code (students type this)'), codeIn),
+      h('div',{class:'field'}, h('label',{},'Description (internal note)'), descIn),
+      h('div',{class:'row'},
+        h('div',{class:'field',style:'flex:1;'}, h('label',{},'Discount type'), typeIn),
+        h('div',{class:'field',style:'flex:1;'}, h('label',{},'Value'), valIn)),
+      h('div',{class:'field'}, h('label',{},'Max total uses (blank = unlimited)'), maxIn),
+      h('div',{class:'field'}, h('label',{},'Expires at (optional)'), untilIn),
+      h('div',{class:'field'}, h('label',{},'Restrict to course (optional)'), courseIn),
+      h('div',{class:'row'},
+        h('button',{class:'btn primary',onclick:async e=>{ await busy(e.currentTarget, async()=>{
+          const code = codeIn.value.trim().toUpperCase();
+          if(!code){ toast('Enter a code',true); return; }
+          const val = parseInt(valIn.value,10); if(!val||val<1){ toast('Enter a discount value',true); return; }
+          const { error } = await sb.from('coupon_codes').insert({
+            code, description:descIn.value.trim()||null,
+            discount_type:typeIn.value, discount_value:val,
+            max_uses:maxIn.value?parseInt(maxIn.value,10):null,
+            valid_until:untilIn.value?new Date(untilIn.value).toISOString():null,
+            course_id:courseIn.value||null,
+            created_by:me.id
+          });
+          if(error){ toast('Could not create: '+error.message,true); return; }
+          cz(); toast('Coupon created'); paintCoupons();
+        })}},'Create'),
+        h('button',{class:'btn',onclick:()=>cz()},'Cancel'))
+    ]);
+  }
+  wrap.append(h('div',{class:'row',style:'margin-bottom:14px;'}, h('button',{class:'btn primary',onclick:couponForm},'+ New coupon code')));
+  wrap.append(list);
+  await paintCoupons();
+  return wrap;
+}
+
+/* ======================= CERTIFICATES ======================= */
+async function viewCertificates(){
+  const wrap = h('div',{}, h('h2',{class:'title'},'Certificates'), h('p',{class:'sub'},'Students who have completed all lessons in a course and earned a certificate.'));
+  // lesson_progress + enrollments join: find students who finished all lessons per course
+  const { data: courses, error: cErr } = await sb.from('courses').select('id,title').eq('status','published').order('title');
+  if(cErr){ wrap.append(h('div',{class:'note warn'},'Could not load courses: '+cErr.message)); return wrap; }
+  const courseFilter = h('select',{style:'margin-bottom:14px;max-width:340px;',onchange:()=>paintCerts()},
+    h('option',{value:''},'All courses'), (courses||[]).map(c=>h('option',{value:c.id},c.title)));
+  const list = h('div');
+  async function paintCerts(){
+    clear(list); list.append(h('p',{class:'sub'},'Loading…'));
+    // Get all lessons counts per course
+    let cIds = (courses||[]).map(c=>c.id);
+    if(courseFilter.value) cIds = [courseFilter.value];
+    const [{ data: lessonCounts }, { data: progRows }, { data: enrRows }] = await Promise.all([
+      sb.from('lessons').select('id,course_id').in('course_id',cIds),
+      sb.from('lesson_progress').select('student_id,lesson_id'),
+      sb.from('enrollments').select('student_id,course_id,profiles(full_name)').in('course_id',cIds).eq('status','active')
+    ]);
+    const totalPerCourse = {};
+    (lessonCounts||[]).forEach(l=>{ totalPerCourse[l.course_id]=(totalPerCourse[l.course_id]||0)+1; });
+    // Map lesson_id → course_id
+    const lessonToCourse = {};
+    (lessonCounts||[]).forEach(l=>{ lessonToCourse[l.id]=l.course_id; });
+    // Count done per student per course
+    const doneMap = {};
+    (progRows||[]).forEach(r=>{
+      const cid = lessonToCourse[r.lesson_id]; if(!cid) return;
+      const key = r.student_id+'|'+cid;
+      doneMap[key]=(doneMap[key]||0)+1;
+    });
+    // Find completions
+    const completions = [];
+    (enrRows||[]).forEach(e=>{
+      const total = totalPerCourse[e.course_id]||0;
+      if(total===0) return;
+      const done = doneMap[e.student_id+'|'+e.course_id]||0;
+      if(done>=total){
+        const course = (courses||[]).find(c=>c.id===e.course_id);
+        completions.push({ name:(e.profiles&&e.profiles.full_name)||'(no name)', course:course?course.title:'', done, total });
+      }
+    });
+    clear(list);
+    if(!completions.length){ list.append(h('div',{class:'empty'},'No completions yet.')); return; }
+    list.append(h('p',{class:'sub',style:'margin-bottom:8px;'},completions.length+' certificate'+(completions.length===1?'':'s')+ ' earned'));
+    completions.sort((a,b)=>a.name.localeCompare(b.name)).forEach(cp=>{
+      list.append(h('div',{class:'item'},
+        h('div',{class:'main'}, h('h4',{},cp.name), h('div',{class:'meta'}, h('span',{},cp.course), h('span',{},'✓ '+cp.done+'/'+cp.total+' lessons'))),
+        h('span',{class:'pill green'},'Completed')));
+    });
+  }
+  wrap.append(courseFilter, list);
+  await paintCerts();
+  return wrap;
+}
+
+/* ======================= BULK ANNOUNCEMENT ======================= */
+async function bulkAnnouncement(){
+  return new Promise(resolve=>{
+    const titleIn = h('input',{type:'text',placeholder:'e.g. Holiday notice — office closed Saturday'});
+    const bodyIn = h('textarea',{style:'min-height:100px;',placeholder:'Write your message here…'});
+    let cz;
+    const send = async e=>{ await busy(e.currentTarget, async()=>{
+      const title = titleIn.value.trim(), body = bodyIn.value.trim();
+      if(!title||!body){ toast('Please fill in both title and message',true); return; }
+      const { data:{ user } } = await sb.auth.getUser();
+      const { data: pubs } = await sb.from('courses').select('id').eq('status','published');
+      if(!(pubs||[]).length){ toast('No published courses found',true); return; }
+      let ok=0, fail=0;
+      for(const c of (pubs||[])){
+        const { error } = await sb.from('course_announcements').insert({ course_id:c.id, author_id:user.id, title, body });
+        if(error) fail++; else ok++;
+      }
+      cz(); resolve();
+      toast('Announcement sent to '+ok+' course'+(ok===1?'':'s')+(fail?' ('+fail+' failed)':''));
+    }); };
+    cz = openSheet('Send announcement to all students',[
+      h('div',{class:'note',style:'margin-bottom:14px;'},'This posts to every published course. All enrolled students will see it in their course\'s Announcements tab.'),
+      h('div',{class:'field'}, h('label',{},'Title'), titleIn),
+      h('div',{class:'field'}, h('label',{},'Message'), bodyIn),
+      h('div',{class:'row'},
+        h('button',{class:'btn primary',onclick:send},'Send to all courses'),
+        h('button',{class:'btn',onclick:()=>{ cz(); resolve(); }},'Cancel'))
+    ]);
+  });
+}
+
+/* ======================= TEACHER EARNINGS ======================= */
+async function viewTeacherEarnings(){
+  const wrap = h('div',{}, h('h2',{class:'title'},'Teacher earnings'), h('p',{class:'sub'},'Approved payments broken down per course and instructor. Useful for calculating instructor share.'));
+  const [{ data: pays, error }, { data: courseList }] = await Promise.all([
+    sb.from('payments').select('course_id,course_title,amount_npr').eq('status','approved').order('course_title'),
+    sb.from('courses').select('id,title,instructor_id,profiles(full_name)').eq('status','published')
+  ]);
+  if(error){ wrap.append(h('div',{class:'note warn'},'Could not load: '+error.message)); return wrap; }
+  // Build instructor name map from courses
+  const instrMap = {};
+  (courseList||[]).forEach(c=>{ instrMap[c.id] = (c.profiles&&c.profiles.full_name)||'Udaan Nepal'; });
+  // Group payments by course
+  const groups = {};
+  (pays||[]).forEach(p=>{
+    const cid = p.course_id||'unknown';
+    if(!groups[cid]) groups[cid]={ title:p.course_title||'Untitled', instructor:instrMap[cid]||'Udaan Nepal', total:0, count:0 };
+    groups[cid].total += (p.amount_npr||0);
+    groups[cid].count++;
+  });
+  const rows = Object.values(groups).sort((a,b)=>b.total-a.total);
+  if(!rows.length){ wrap.append(h('div',{class:'empty'},'No approved payments yet.')); return wrap; }
+  const grandTotal = rows.reduce((s,r)=>s+r.total,0);
+  wrap.append(h('div',{class:'note',style:'margin-bottom:14px;'},'Total revenue from approved payments: '+rs(grandTotal)));
+  // Group by instructor for summary
+  const instrTotals = {};
+  rows.forEach(r=>{ instrTotals[r.instructor]=(instrTotals[r.instructor]||0)+r.total; });
+  const summaryGrid = h('div',{class:'grid',style:'margin-bottom:18px;'});
+  Object.entries(instrTotals).sort((a,b)=>b[1]-a[1]).forEach(([name,total])=>{
+    summaryGrid.append(h('div',{class:'card'}, h('div',{class:'stat',style:'font-size:22px;color:var(--green);'},rs(total)), h('div',{class:'stat-l'},name), h('div',{class:'stat-h'},'Total earned')));
+  });
+  wrap.append(h('h3',{style:'margin:0 0 10px;font-size:15px;'},'By instructor'), summaryGrid);
+  wrap.append(h('h3',{style:'margin:0 0 10px;font-size:15px;'},'By course'));
+  rows.forEach(r=>{
+    wrap.append(h('div',{class:'item'},
+      h('div',{class:'main'},
+        h('h4',{},r.title),
+        h('div',{class:'meta'}, h('span',{},'Instructor: '+r.instructor), h('span',{},r.count+' payment'+(r.count===1?'':'s')))),
+      h('span',{style:'font-family:Poppins,sans-serif;font-weight:700;font-size:18px;color:var(--green);'},rs(r.total))));
+  });
+  return wrap;
+}
+
+/* ======================= START ======================= */
+function blocked(title, text, link, linkText){
+  const p = $('panel'); clear(p);
+  $('tabs').style.display='none';
+  p.append(h('div',{class:'center'}, h('h2',{},title), h('p',{class:'sub',style:'max-width:420px;'},text), link ? h('a',{class:'btn primary',href:link},linkText) : null));
+}
+(async function init(){
+  $('logout').addEventListener('click', async ()=>{ await sb.auth.signOut(); window.location.href = 'auth.html'; });
+  const { data:{ user } } = await sb.auth.getUser();
+  if(!user){ window.location.href = 'auth.html?redirect=admin.html'; return; }
+  me = user;
+  const [{ data: rows, error }, { data: prof }] = await Promise.all([
+    sb.from('staff_roles').select('role').eq('user_id', user.id),
+    sb.from('profiles').select('full_name').eq('id', user.id).maybeSingle()
+  ]);
+  myName = (prof && prof.full_name) || '';
+  (rows||[]).forEach(r=>roles.add(r.role));
+  if(error || !roles.size){ $('who').textContent = user.email || ''; blocked('No admin access','This page is only for Udaan Nepal staff. If you should have access, ask a super admin to give you a role.','courses','Back to my courses'); return; }
+  $('who').textContent = (myName || user.email) + ' · ' + [...roles].map(r=>ROLE_LABEL[r]).join(', ');
+  await refreshBadges(); drawTabs(); render();
+})();
+</script>
+</body>
+</html>

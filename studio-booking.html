@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio Booking — Udaan Nepal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --color-navy:#060B19;
+  --color-navy-dark:#03060E;
+  --color-navy-light:#0F172A;
+  --color-electric:#0066FF;
+  --color-electric-hover:#0052CC;
+  --color-cyan:#00E5FF;
+  --color-amber:#F59E0B;
+
+  --text-primary:#F3F6FC;
+  --text-secondary:#A6B0C3;
+  --text-muted:#6B7690;
+  --border:rgba(255,255,255,0.08);
+  --border-strong:rgba(255,255,255,0.16);
+
+  --ok:#22C55E;
+  --danger:#F04452;
+
+  --radius:14px;
+  --radius-sm:9px;
+  --shadow-md:0 16px 40px rgba(0,0,0,0.4);
+  --shadow-glow:0 0 0 1px rgba(0,102,255,0.4), 0 0 24px rgba(0,102,255,0.18);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Manrope',sans-serif;
+  background:var(--color-navy);
+  color:var(--text-primary);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;letter-spacing:-0.01em;}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;}
+.container{max-width:1240px;margin:0 auto;padding:0 24px;}
+.mono{font-family:'Manrope',sans-serif;letter-spacing:.06em;}
+section{position:relative;}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:0.001ms !important;transition-duration:0.001ms !important;}
+}
+
+.eyebrow{
+  font-size:12.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--color-cyan);display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;
+}
+.eyebrow::before{content:'';width:16px;height:2px;background:var(--color-cyan);}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:14px 30px;border-radius:10px;font-weight:700;font-size:14.5px;
+  border:none;cursor:pointer;letter-spacing:.03em;text-transform:uppercase;
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.btn-primary{background:var(--color-electric);color:#fff;box-shadow:0 10px 26px rgba(0,102,255,0.35);}
+.btn-primary:hover{background:var(--color-electric-hover);transform:translateY(-2px);}
+.btn-primary:disabled{background:#2A3247;color:var(--text-muted);box-shadow:none;cursor:not-allowed;transform:none;}
+.btn-outline{background:transparent;border:1.5px solid var(--border-strong);color:var(--text-primary);}
+.btn-outline:hover{border-color:var(--color-cyan);color:var(--color-cyan);}
+.btn-ghost{background:rgba(255,255,255,0.04);color:var(--text-primary);border:1px solid var(--border);}
+.btn-ghost:hover{background:rgba(255,255,255,0.08);}
+.btn-sm{padding:10px 18px;font-size:12.5px;}
+:focus-visible{outline:2px solid var(--color-cyan);outline-offset:3px;}
+
+/* ===== HEADER ===== */
+.site-header{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  background:rgba(6,11,25,0.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1240px;margin:0 auto;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-mark{
+  width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--color-electric),var(--color-cyan));
+  display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:800;color:#03060E;font-size:16px;flex-shrink:0;
+}
+.brand-text{font-family:'Poppins',sans-serif;font-weight:700;font-size:16.5px;}
+.brand-text span{display:block;font-size:10px;font-weight:500;color:var(--color-cyan);letter-spacing:.1em;font-family:'Manrope',sans-serif;}
+.menu-btn{
+  width:44px;height:44px;border-radius:9px;border:1px solid var(--border-strong);background:rgba(255,255,255,0.03);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;
+}
+.menu-btn span{width:18px;height:2px;background:var(--text-primary);border-radius:2px;transition:transform .3s ease, opacity .3s ease;}
+.menu-btn.active span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.menu-btn.active span:nth-child(2){opacity:0;}
+.menu-btn.active span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+
+/* ===== SIDEBAR ===== */
+.overlay{position:fixed;inset:0;background:rgba(3,6,14,0.65);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s ease;z-index:1000;}
+.overlay.active{opacity:1;visibility:visible;}
+.sidebar{
+  position:fixed;top:0;right:0;height:100%;width:340px;max-width:88vw;
+  background:var(--color-navy-light);border-left:1px solid var(--border-strong);
+  z-index:1001;transform:translateX(100%);transition:transform .4s cubic-bezier(.22,.9,.32,1);
+  display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,0.5);
+}
+.sidebar.active{transform:translateX(0);}
+.sidebar-head{display:flex;justify-content:space-between;align-items:center;padding:22px 22px 18px;border-bottom:1px solid var(--border);}
+.sidebar-head h4{font-size:14px;font-weight:700;color:var(--text-secondary);letter-spacing:.08em;text-transform:uppercase;}
+.sidebar-close{
+  width:36px;height:36px;border-radius:50%;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);
+  display:flex;align-items:center;justify-content:center;font-size:18px;transition:background .2s ease, transform .2s ease;
+}
+.sidebar-close:hover{background:rgba(255,255,255,0.08);transform:rotate(90deg);}
+.sidebar-nav{padding:14px;flex:1;}
+.sidebar-item{
+  display:flex;align-items:center;gap:14px;padding:13px 14px;border-radius:10px;color:var(--text-secondary);
+  font-size:14.5px;font-weight:600;transition:background .2s ease,color .2s ease, padding-left .2s ease;margin-bottom:2px;
+}
+.sidebar-item .icon{width:20px;height:20px;color:var(--color-cyan);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.sidebar-item:hover, .sidebar-item:focus-visible{background:rgba(0,102,255,0.1);color:var(--text-primary);padding-left:18px;}
+.sidebar-item.logout{color:#FF9B8A;}
+.sidebar-item.logout .icon{color:#FF9B8A;}
+.sidebar-foot{padding:18px 22px 24px;border-top:1px solid var(--border);font-size:11px;color:var(--text-muted);letter-spacing:.06em;}
+
+/* ===== HERO ===== */
+.hero{
+  padding:150px 0 90px;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 80% 60% at 20% 0%, #0F1D3C 0%, var(--color-navy) 60%);
+}
+.hero::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at 82% 30%, rgba(0,229,255,0.10), transparent 45%);
+}
+.hero-inner{position:relative;z-index:2;max-width:760px;}
+.hero h1{font-size:clamp(30px,4.4vw,52px);font-weight:800;line-height:1.08;margin-bottom:14px;}
+.hero-tagline{font-size:clamp(18px,2.1vw,24px);color:var(--color-cyan);font-weight:600;margin-bottom:20px;}
+.hero p{color:var(--text-secondary);font-size:16.5px;max-width:600px;margin-bottom:36px;}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:56px;}
+.hero-media{
+  position:relative;aspect-ratio:21/9;border-radius:var(--radius);
+  background:linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+  border:1px solid var(--border-strong);overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.hero-media::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle, rgba(0,229,255,0.5) 1px, transparent 1px);
+  background-size:38px 38px;opacity:0.08;
+}
+.hero-media-label{
+  position:relative;z-index:2;text-align:center;color:var(--text-muted);
+}
+.hero-media-icon{
+  width:56px;height:56px;margin:0 auto 12px;border-radius:14px;background:rgba(0,102,255,0.14);
+  display:flex;align-items:center;justify-content:center;color:var(--color-cyan);
+}
+.hero-media-tag{
+  position:absolute;top:16px;left:16px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  padding:6px 12px;border-radius:100px;background:rgba(3,6,14,0.7);border:1px solid var(--border-strong);color:var(--color-amber);
+  z-index:3;
+}
+
+/* ===== SECTION HEAD ===== */
+.section-head{max-width:620px;margin-bottom:48px;}
+.section-head h2{font-size:clamp(26px,3.2vw,36px);margin-bottom:14px;}
+.section-head p{color:var(--text-secondary);font-size:15.5px;}
+
+/* ===== SPACES ===== */
+.spaces{padding:100px 0;}
+.spaces-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.space-card{
+  background:var(--color-navy-light);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  display:flex;flex-direction:column;
+}
+.space-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-glow);border-color:rgba(0,102,255,0.4);}
+.space-media{
+  aspect-ratio:4/3;background:linear-gradient(160deg,#111E3B,#0A1428);
+  display:flex;align-items:center;justify-content:center;color:var(--text-muted);position:relative;
+}
+.space-media .icon{width:40px;height:40px;color:var(--color-cyan);opacity:.7;}
+.space-cap{
+  position:absolute;top:12px;right:12px;font-size:11px;font-weight:700;padding:5px 11px;border-radius:100px;
+  background:rgba(3,6,14,0.75);border:1px solid var(--border-strong);color:var(--text-secondary);
+}
+.space-body{padding:24px 22px 26px;flex:1;display:flex;flex-direction:column;}
+.space-body h3{font-size:18.5px;margin-bottom:8px;}
+.space-body p{font-size:14px;color:var(--text-secondary);margin-bottom:16px;}
+.space-facilities{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+.space-facilities span{
+  font-size:11.5px;padding:5px 10px;border-radius:100px;background:rgba(0,229,255,0.08);
+  color:var(--color-cyan);border:1px solid rgba(0,229,255,0.2);
+}
+.space-body .btn{margin-top:auto;width:100%;}
+
+@media(max-width:940px){.spaces-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:620px){.spaces-grid{grid-template-columns:1fr;}}
+
+/* ===== BOOKING ===== */
+.booking{padding:100px 0;background:var(--color-navy-dark);}
+.booking-head{text-align:center;max-width:600px;margin:0 auto 40px;}
+.booking-head h2{font-size:clamp(26px,3.2vw,36px);margin-bottom:12px;}
+.booking-head p{color:var(--text-secondary);font-size:15.5px;}
+
+.steps-progress{
+  display:flex;justify-content:center;gap:6px;max-width:640px;margin:0 auto 44px;
+}
+.step-pill{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;
+}
+.step-pill .dot{
+  width:34px;height:34px;border-radius:50%;background:var(--color-navy-light);border:2px solid var(--border-strong);
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text-muted);
+  transition:all .3s ease;
+}
+.step-pill .label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);text-align:center;}
+.step-pill.active .dot{background:var(--color-electric);border-color:var(--color-electric);color:#fff;box-shadow:0 0 0 5px rgba(0,102,255,0.18);}
+.step-pill.active .label{color:var(--text-primary);}
+.step-pill.done .dot{background:var(--ok);border-color:var(--ok);color:#fff;}
+.step-pill.done .label{color:var(--color-cyan);}
+.step-line{position:absolute;top:17px;left:50%;width:100%;height:2px;background:var(--border-strong);z-index:-1;}
+.step-pill:first-child .step-line{display:none;}
+.step-pill.done .step-line, .step-pill.active .step-line{background:var(--color-electric);}
+
+.booking-panel{
+  max-width:760px;margin:0 auto;background:var(--color-navy-light);border:1px solid var(--border);
+  border-radius:var(--radius);padding:36px 32px;box-shadow:var(--shadow-md);
+}
+.form-step{display:none;animation:fadeIn .35s ease;}
+.form-step.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.form-step h3{font-size:19px;margin-bottom:22px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;}
+.form-group{display:flex;flex-direction:column;gap:7px;margin-bottom:18px;}
+.form-group.full{grid-column:1/-1;}
+.form-group label{font-size:13px;font-weight:700;color:var(--text-secondary);}
+.form-group label .req{color:var(--color-amber);}
+.form-group input[type="text"],.form-group input[type="email"],.form-group input[type="tel"],
+.form-group input[type="number"],.form-group select,.form-group textarea{
+  padding:13px 15px;border-radius:9px;border:1px solid var(--border-strong);background:var(--color-navy-dark);
+  color:var(--text-primary);font-family:inherit;font-size:14.5px;transition:border-color .2s ease, box-shadow .2s ease;
+}
+.form-group input:-webkit-autofill,.form-group input:-webkit-autofill:hover,.form-group input:-webkit-autofill:focus{-webkit-text-fill-color:var(--text-primary);-webkit-box-shadow:0 0 0 1000px var(--color-navy-dark) inset;box-shadow:0 0 0 1000px var(--color-navy-dark) inset;caret-color:var(--text-primary);}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  outline:none;border-color:var(--color-electric);box-shadow:0 0 0 3px rgba(0,102,255,0.18);
+}
+.form-group textarea{resize:vertical;min-height:96px;}
+.field-error{font-size:12.5px;color:var(--danger);display:none;}
+.field-error.show{display:block;}
+.form-group.has-error input, .form-group.has-error select{border-color:var(--danger);}
+
+.radio-row{display:flex;gap:14px;flex-wrap:wrap;}
+.radio-card{
+  flex:1;min-width:150px;padding:14px 16px;border-radius:10px;border:1.5px solid var(--border-strong);
+  background:var(--color-navy-dark);cursor:pointer;transition:border-color .2s ease, background .2s ease;
+  display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;
+}
+.radio-card input{accent-color:var(--color-electric);width:16px;height:16px;}
+.radio-card.checked{border-color:var(--color-electric);background:rgba(0,102,255,0.08);}
+
+.chip-group{display:flex;flex-wrap:wrap;gap:10px;}
+.chip{
+  padding:10px 16px;border-radius:100px;border:1.5px solid var(--border-strong);background:var(--color-navy-dark);
+  font-size:13.5px;font-weight:600;color:var(--text-secondary);cursor:pointer;transition:all .2s ease;
+}
+.chip input{display:none;}
+.chip.checked{border-color:var(--color-electric);background:rgba(0,102,255,0.14);color:var(--text-primary);}
+
+.org-fields{display:none;grid-column:1/-1;}
+.org-fields.show{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px;}
+.org-fields .form-group.full{grid-column:1/-1;}
+
+/* calendar */
+.calendar-wrap{
+  background:var(--color-navy-dark);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:18px;margin-bottom:20px;
+}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.cal-head h4{font-size:14.5px;}
+.cal-nav{display:flex;gap:8px;}
+.cal-nav button{
+  width:30px;height:30px;border-radius:8px;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);
+  display:flex;align-items:center;justify-content:center;
+}
+.cal-nav button:hover{background:rgba(255,255,255,0.06);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;}
+.cal-dow{font-size:11px;color:var(--text-muted);font-weight:700;padding:4px 0;}
+.cal-day{
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:13px;
+  cursor:pointer;color:var(--text-secondary);border:1px solid transparent;transition:all .2s ease;
+}
+.cal-day.empty{cursor:default;}
+.cal-day.today{border-color:var(--border-strong);}
+.cal-day.available:hover{background:rgba(0,102,255,0.14);color:var(--text-primary);}
+.cal-day.selected{background:var(--color-electric);color:#fff;font-weight:700;}
+.cal-day.past{color:var(--text-muted);opacity:.3;cursor:not-allowed;}
+
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--text-muted);}
+.legend span{display:inline-flex;align-items:center;gap:6px;}
+.legend .dot{width:9px;height:9px;border-radius:3px;}
+.legend .dot.avail{background:rgba(0,102,255,0.3);border:1px solid var(--color-electric);}
+.legend .dot.sel{background:var(--color-electric);}
+.legend .dot.booked{background:rgba(255,255,255,0.06);border:1px solid var(--border-strong);}
+
+.slots-title{font-size:13.5px;font-weight:700;color:var(--text-secondary);margin-bottom:12px;}
+.slots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin-bottom:8px;}
+.slot{
+  padding:10px 8px;border-radius:8px;border:1.5px solid var(--border-strong);background:var(--color-navy-dark);
+  font-size:13px;font-weight:600;text-align:center;color:var(--text-secondary);cursor:pointer;transition:all .2s ease;
+}
+.slot.booked{color:var(--text-muted);border-color:var(--border);cursor:not-allowed;text-decoration:line-through;opacity:.5;}
+.slot.selected{background:var(--color-electric);border-color:var(--color-electric);color:#fff;}
+.slot:not(.booked):hover{border-color:var(--color-cyan);}
+.slot-hint{font-size:12px;color:var(--text-muted);margin-top:8px;}
+
+.checkbox-group{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.check-item{
+  display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:9px;border:1px solid var(--border);
+  background:var(--color-navy-dark);font-size:13.5px;cursor:pointer;transition:border-color .2s ease;
+}
+.check-item:hover{border-color:var(--border-strong);}
+.check-item input{accent-color:var(--color-electric);width:16px;height:16px;}
+.group-label{font-size:12.5px;font-weight:700;color:var(--color-cyan);letter-spacing:.06em;text-transform:uppercase;margin:20px 0 10px;}
+.group-label:first-child{margin-top:0;}
+
+.upload-box{
+  border:1.5px dashed var(--border-strong);border-radius:var(--radius-sm);padding:26px;text-align:center;
+  background:var(--color-navy-dark);cursor:pointer;transition:border-color .2s ease;
+}
+.upload-box:hover{border-color:var(--color-cyan);}
+.upload-box p{font-size:13.5px;color:var(--text-secondary);}
+.upload-box .file-name{margin-top:8px;font-size:12.5px;color:var(--color-cyan);}
+.upload-note{font-size:12px;color:var(--text-muted);margin-top:8px;}
+
+/* review */
+.review-block{margin-bottom:22px;}
+.review-block h4{font-size:13px;font-weight:700;color:var(--color-cyan);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;}
+.review-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:14px;}
+.review-row:last-child{border-bottom:none;}
+.review-row .k{color:var(--text-muted);}
+.review-row .v{color:var(--text-primary);font-weight:600;text-align:right;}
+
+.price-box{background:var(--color-navy-dark);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;margin-bottom:22px;}
+.price-row{display:flex;justify-content:space-between;font-size:14px;padding:7px 0;color:var(--text-secondary);}
+.price-row.total{border-top:1px solid var(--border-strong);margin-top:8px;padding-top:14px;font-size:16px;font-weight:800;color:var(--text-primary);}
+.price-note{font-size:12px;color:var(--color-amber);margin-top:10px;}
+
+.terms-list{display:flex;flex-direction:column;gap:12px;margin-bottom:24px;}
+.terms-item{display:flex;align-items:flex-start;gap:12px;font-size:13.5px;color:var(--text-secondary);}
+.terms-item input{accent-color:var(--color-electric);width:17px;height:17px;margin-top:2px;flex-shrink:0;}
+.terms-item a{color:var(--color-cyan);text-decoration:underline;}
+
+.step-actions{display:flex;justify-content:space-between;gap:14px;margin-top:8px;}
+.step-actions .btn{flex:1;}
+
+/* confirmation */
+.confirm-state{text-align:center;padding:20px 0;}
+.confirm-icon{
+  width:70px;height:70px;margin:0 auto 20px;border-radius:50%;background:rgba(34,197,94,0.12);
+  display:flex;align-items:center;justify-content:center;color:var(--ok);border:2px solid rgba(34,197,94,0.3);
+}
+.confirm-state h3{font-size:22px;margin-bottom:10px;}
+.confirm-state > p{color:var(--text-secondary);font-size:14.5px;margin-bottom:26px;max-width:440px;margin-left:auto;margin-right:auto;}
+.confirm-details{background:var(--color-navy-dark);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;text-align:left;margin-bottom:26px;}
+.confirm-ref{
+  display:inline-block;font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;letter-spacing:.05em;
+  color:var(--color-cyan);background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.25);
+  padding:6px 16px;border-radius:100px;margin-bottom:18px;
+}
+.confirm-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+@media(max-width:700px){
+  .booking-panel{padding:26px 20px;}
+  .form-row{grid-template-columns:1fr;}
+  .checkbox-group{grid-template-columns:1fr;}
+  .step-pill .label{display:none;}
+  .step-actions{flex-direction:column-reverse;}
+}
+
+/* ===== WHY ===== */
+.why{padding:100px 0;}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.why-card{
+  background:var(--color-navy-light);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;
+  transition:transform .25s ease, border-color .25s ease;
+}
+.why-card:hover{transform:translateY(-4px);border-color:rgba(0,229,255,0.35);}
+.why-icon{
+  width:44px;height:44px;border-radius:11px;background:rgba(0,102,255,0.12);color:var(--color-cyan);
+  display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+}
+.why-card h4{font-size:16px;margin-bottom:8px;}
+.why-card p{font-size:13.5px;color:var(--text-secondary);}
+@media(max-width:900px){.why-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.why-grid{grid-template-columns:1fr;}}
+
+/* ===== SHOWCASE ===== */
+.showcase{padding:100px 0;background:var(--color-navy-dark);}
+.showcase-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;}
+.showcase-main{
+  aspect-ratio:4/3.2;border-radius:var(--radius);background:linear-gradient(160deg,#101F3F,#0A1428);
+  border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-muted);
+  position:relative;overflow:hidden;
+}
+.showcase-side{display:grid;grid-template-rows:1fr 1fr;gap:18px;}
+.showcase-tile{
+  border-radius:var(--radius);background:linear-gradient(160deg,#0F1C38,#0A1428);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;color:var(--text-muted);position:relative;overflow:hidden;
+  transition:border-color .25s ease;
+}
+.showcase-tile:hover, .showcase-main:hover{border-color:rgba(0,229,255,0.35);}
+.showcase-tile.video::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at center, rgba(0,102,255,0.14), transparent 60%);
+}
+.play-mini{
+  width:52px;height:52px;border-radius:50%;background:var(--color-electric);color:#fff;
+  display:flex;align-items:center;justify-content:center;z-index:2;
+}
+@media(max-width:800px){.showcase-grid{grid-template-columns:1fr;}}
+
+/* ===== FAQ ===== */
+.faq{padding:100px 0;}
+.faq-list{max-width:760px;margin:0 auto;}
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-q{
+  width:100%;background:none;border:none;color:var(--text-primary);text-align:left;
+  padding:20px 4px;font-size:15.5px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:16px;
+}
+.faq-q .plus{transition:transform .3s ease;color:var(--color-cyan);flex-shrink:0;}
+.faq-item.open .faq-q .plus{transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+.faq-a-inner{padding:0 4px 20px;color:var(--text-secondary);font-size:14.5px;}
+
+/* ===== SUPPORT ===== */
+.support{padding:90px 0;background:var(--color-navy-dark);}
+.support-box{
+  max-width:820px;margin:0 auto;background:var(--color-navy-light);border:1px solid var(--border);
+  border-radius:var(--radius);padding:44px;text-align:center;
+}
+.support-box h2{font-size:clamp(22px,2.8vw,30px);margin-bottom:12px;}
+.support-box > p{color:var(--text-secondary);margin-bottom:28px;}
+.support-items{display:flex;justify-content:center;gap:36px;flex-wrap:wrap;margin-bottom:30px;}
+.support-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text-secondary);}
+.support-item .icon{color:var(--color-cyan);}
+
+/* ===== FOOTER ===== */
+.footer{background:var(--color-navy-dark);padding:70px 0 30px;border-top:1px solid var(--border);}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;margin-bottom:44px;}
+.footer-brand p{margin-top:16px;font-size:13.5px;color:var(--text-muted);max-width:280px;}
+.footer-col h4{font-size:13.5px;margin-bottom:16px;color:var(--text-secondary);letter-spacing:.04em;}
+.footer-col ul li{margin-bottom:10px;}
+.footer-col ul li a{font-size:13.5px;color:var(--text-muted);transition:color .2s ease;}
+.footer-col ul li a:hover{color:var(--color-cyan);}
+.footer-bottom{
+  border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;font-size:12.5px;color:var(--text-muted);
+}
+@media(max-width:800px){.footer-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:520px){.footer-grid{grid-template-columns:1fr;}}
+
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index" class="brand">
+      <div class="brand-mark">U</div>
+      <div class="brand-text">Udaan Nepal<span>STUDIO BOOKING</span></div>
+    </a>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="sidebar" id="sidebar" aria-hidden="true">
+  <div class="sidebar-head">
+    <h4>Menu</h4>
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">&times;</button>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="courses" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>My Courses</a>
+    <a href="profile" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></span>My Profile</a>
+    <a href="notice" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>Notice</a>
+    <a href="enroll-course" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>Browse Courses</a>
+    <a href="group" data-feature="group_chat" style="display:none" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>My Group</a>
+    <a href="admin" class="sidebar-item" id="adminLink" style="display:none;"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></span>Admin Panel</a>
+    <a href="auth" class="sidebar-item logout"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Log Out</a>
+  </nav>
+  <div class="sidebar-foot mono">UDAAN NEPAL STUDIO</div>
+</aside>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
+  <div class="container hero-inner">
+    <div data-c="stu_x1" class="eyebrow">Udaan Nepal Studio</div>
+    <h1 data-c="stu_x2">UDAAN NEPAL STUDIO</h1>
+    <div class="hero-tagline">Create. Record. Collaborate.</div>
+    <p data-c="stu_x3">Book Udaan Nepal's production studio for content creation, photography, videography, podcasts, interviews, workshops, and other approved productions — fully equipped and ready for your session.</p>
+    <div class="hero-ctas">
+      <a href="#booking" class="btn btn-primary">Book Your Studio</a>
+      <a href="#spaces" class="btn btn-outline">View Studio</a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="hero-media">
+      
+      <div class="hero-media-label">
+        <div class="hero-media-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        </div>
+        <div class="mono" style="font-size:12px;">Studio hero image / video goes here</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SPACES ===== -->
+<section class="spaces" id="spaces">
+  <div class="container">
+    <div class="section-head">
+      <div data-c="stu_x4" class="eyebrow">Discover the studio</div>
+      <h2 data-c="stu_x5">Choose Your Space</h2>
+      <p data-c="stu_x6">Three purpose-built areas inside Udaan Nepal Studio. Each can be booked independently based on your production needs.</p>
+    </div>
+    <div class="spaces-grid">
+      <div class="space-card">
+        <div class="space-media">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          <span class="space-cap">Up to 6 people</span>
+        </div>
+        <div class="space-body">
+          <h3>Studio Space</h3>
+          <p>A full production room for filming, presenting, and content shoots against a clean set.</p>
+          <div class="space-facilities">
+            <span>Lighting</span><span>Backdrop</span><span>Camera</span>
+          </div>
+          <button class="btn btn-ghost btn-sm select-space" data-space="Studio Space">Select</button>
+        </div>
+      </div>
+      <div class="space-card">
+        <div class="space-media">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+          <span class="space-cap">Up to 4 people</span>
+        </div>
+        <div class="space-body">
+          <h3>Podcast / Recording Space</h3>
+          <p>An acoustically treated room built for podcasts, voice-overs, and audio interviews.</p>
+          <div class="space-facilities">
+            <span>Mic Setup</span><span>Soundproofing</span><span>Headphones</span>
+          </div>
+          <button class="btn btn-ghost btn-sm select-space" data-space="Podcast / Recording Space">Select</button>
+        </div>
+      </div>
+      <div class="space-card">
+        <div class="space-media">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8M12 18v4"/></svg>
+          <span class="space-cap">Up to 10 people</span>
+        </div>
+        <div class="space-body">
+          <h3>Production / Content Space</h3>
+          <p>An open, flexible room for workshops, group content sessions, and small productions.</p>
+          <div class="space-facilities">
+            <span>Smart Board</span><span>Seating</span><span>Wi-Fi</span>
+          </div>
+          <button class="btn btn-ghost btn-sm select-space" data-space="Production / Content Space">Select</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BOOKING ===== -->
+<section class="booking" id="booking">
+  <div class="container">
+    <div class="booking-head">
+      <div data-c="stu_x7" class="eyebrow">Check availability</div>
+      <h2 data-c="stu_x8">Book Your Session</h2>
+      <p data-c="stu_x9">Choose your date, time and requirements.</p>
+    </div>
+
+    <div class="steps-progress" id="stepsProgress">
+      <div class="step-pill active" data-step="1"><div class="step-line"></div><div class="dot">1</div><div data-c="stu_x10" class="label">Your Details</div></div>
+      <div class="step-pill" data-step="2"><div class="step-line"></div><div class="dot">2</div><div data-c="stu_x11" class="label">Booking</div></div>
+      <div class="step-pill" data-step="3"><div class="step-line"></div><div class="dot">3</div><div data-c="stu_x12" class="label">Requirements</div></div>
+      <div class="step-pill" data-step="4"><div class="step-line"></div><div class="dot">4</div><div data-c="stu_x13" class="label">Review</div></div>
+    </div>
+
+    <div class="booking-panel">
+      <form id="bookingForm" novalidate>
+        <input type="text" id="hpField" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
+
+        <!-- STEP 1 -->
+        <div class="form-step active" data-step="1">
+          <h3>Your Details</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fullName">Full Name <span class="req">*</span></label>
+              <input type="text" id="fullName" required>
+              <span class="field-error">Please enter your full name.</span>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address <span class="req">*</span></label>
+              <input type="email" id="email" required>
+              <span class="field-error">Please enter a valid email address.</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone Number <span class="req">*</span></label>
+              <input type="tel" id="phone" required>
+              <span class="field-error">Please enter a valid phone number.</span>
+            </div>
+            <div class="form-group">
+              <label>Booking Type <span class="req">*</span></label>
+              <div class="radio-row">
+                <label class="radio-card" id="rcIndividual"><input type="radio" name="bookingType" value="Individual" checked> Individual</label>
+                <label class="radio-card" id="rcOrg"><input type="radio" name="bookingType" value="Organization"> Organization</label>
+              </div>
+            </div>
+          </div>
+          <div class="org-fields" id="orgFields">
+            <div class="form-group full">
+              <label for="orgName">Organization / Company Name</label>
+              <input type="text" id="orgName">
+            </div>
+            <div class="form-group full">
+              <label for="orgAddress">Address</label>
+              <input type="text" id="orgAddress">
+            </div>
+            <div class="form-group full">
+              <label for="orgPan">PAN / VAT Number (optional)</label>
+              <input type="text" id="orgPan">
+            </div>
+          </div>
+          <div class="step-actions">
+            <div></div>
+            <button type="button" class="btn btn-primary next-step">Continue →</button>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="form-step" data-step="2">
+          <h3>Booking Details</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="studioSelect">Studio / Space <span class="req">*</span></label>
+              <select id="studioSelect" required>
+                <option value="">Select a space</option>
+                <option value="Studio Space">Studio Space</option>
+                <option value="Podcast / Recording Space">Podcast / Recording Space</option>
+                <option value="Production / Content Space">Production / Content Space</option>
+              </select>
+              <span class="field-error">Please select a studio space.</span>
+            </div>
+            <div class="form-group">
+              <label for="peopleCount">Number of People <span class="req">*</span></label>
+              <input type="number" id="peopleCount" min="1" max="20" required>
+              <span class="field-error">Please enter number of people.</span>
+            </div>
+          </div>
+
+          <div class="form-group full">
+            <label>Purpose of Booking <span class="req">*</span></label>
+            <div class="chip-group" id="purposeChips">
+              <label class="chip"><input type="checkbox" value="Photography">Photography</label>
+              <label class="chip"><input type="checkbox" value="Videography">Videography</label>
+              <label class="chip"><input type="checkbox" value="Podcast">Podcast</label>
+              <label class="chip"><input type="checkbox" value="Interview">Interview</label>
+              <label class="chip"><input type="checkbox" value="Content Creation">Content Creation</label>
+              <label class="chip"><input type="checkbox" value="Workshop / Training">Workshop / Training</label>
+              <label class="chip"><input type="checkbox" value="Meeting">Meeting</label>
+              <label class="chip"><input type="checkbox" value="Recording">Recording</label>
+              <label class="chip"><input type="checkbox" value="Other">Other</label>
+            </div>
+            <span class="field-error" id="purposeError">Please select at least one purpose.</span>
+          </div>
+
+          <div class="calendar-wrap">
+            <div class="cal-head">
+              <h4 id="calMonthLabel">Month</h4>
+              <div class="cal-nav">
+                <button type="button" id="calPrev" aria-label="Previous month">‹</button>
+                <button type="button" id="calNext" aria-label="Next month">›</button>
+              </div>
+            </div>
+            <div class="cal-grid" id="calDow"></div>
+            <div class="cal-grid" id="calGrid" style="margin-top:6px;"></div>
+            <div class="legend">
+              <span><i class="dot avail"></i>Available</span>
+              <span><i class="dot sel"></i>Selected</span>
+              <span><i class="dot booked"></i>Unavailable</span>
+            </div>
+          </div>
+          <span class="field-error" id="dateError">Please select a booking date.</span>
+
+          <div style="margin-top:20px;">
+            <div class="slots-title">Available Time Slots</div>
+            <div class="slots-grid" id="slotsGrid"></div>
+            <div class="slot-hint">Select a date above to see available time slots. Booked slots cannot be selected.</div>
+            <span class="field-error" id="slotError">Please select an available time slot.</span>
+          </div>
+
+          <div class="form-row" style="margin-top:20px;">
+            <div class="form-group">
+              <label for="duration">Duration (hours) <span class="req">*</span></label>
+              <select id="duration" required>
+                <option value="">Select duration</option>
+                <option>1</option><option>2</option><option>3</option><option>4</option><option>Full day</option>
+              </select>
+              <span class="field-error">Please select a duration.</span>
+            </div>
+            <div class="form-group">
+              <label for="setupTime">Expected Setup Time (optional)</label>
+              <input type="text" id="setupTime" placeholder="e.g. 15 minutes">
+            </div>
+          </div>
+          <div class="form-group full">
+            <label for="cleanupTime">Expected Cleanup / Pack-down Time (optional)</label>
+            <input type="text" id="cleanupTime" placeholder="e.g. 15 minutes">
+          </div>
+
+          <div class="step-actions">
+            <button type="button" class="btn btn-outline prev-step">← Back</button>
+            <button type="button" class="btn btn-primary next-step">Continue →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="form-step" data-step="3">
+          <h3>Equipment & Requirements</h3>
+
+          <div class="group-label">Equipment</div>
+          <div class="checkbox-group" id="equipGroup">
+            <label class="check-item"><input type="checkbox" value="Camera">Camera</label>
+            <label class="check-item"><input type="checkbox" value="Lighting">Lighting</label>
+            <label class="check-item"><input type="checkbox" value="Microphone">Microphone</label>
+            <label class="check-item"><input type="checkbox" value="Tripod">Tripod</label>
+            <label class="check-item"><input type="checkbox" value="Green Screen">Green Screen</label>
+            <label class="check-item"><input type="checkbox" value="Backdrop">Backdrop</label>
+            <label class="check-item"><input type="checkbox" value="Audio / Recording Equipment">Audio / Recording Equipment</label>
+            <label class="check-item"><input type="checkbox" value="Projector / Display">Projector / Display</label>
+          </div>
+
+          <div class="group-label">Facilities</div>
+          <div class="checkbox-group" id="facilityGroup">
+            <label class="check-item"><input type="checkbox" value="Tables">Tables</label>
+            <label class="check-item"><input type="checkbox" value="Chairs">Chairs</label>
+            <label class="check-item"><input type="checkbox" value="Changing Area">Changing Area</label>
+            <label class="check-item"><input type="checkbox" value="Wi-Fi">Wi-Fi</label>
+            <label class="check-item"><input type="checkbox" value="Other">Other</label>
+          </div>
+
+          <div class="form-group full" style="margin-top:22px;">
+            <label for="specialRequests">Additional Requirements / Special Requests</label>
+            <textarea id="specialRequests" placeholder="Tell us anything else we should prepare for your session..."></textarea>
+          </div>
+
+          <div class="form-group full">
+            <label for="verifyUpload">Identity / Organization Verification (optional)</label>
+            <div class="upload-box" id="uploadBox">
+              <p>Click to upload a JPG, PNG or PDF file</p>
+              <div class="file-name" id="fileName"></div>
+            </div>
+            <input type="file" id="verifyUpload" accept=".jpg,.jpeg,.png,.pdf" class="sr-only">
+            <div class="upload-note">Verification may be requested for organization bookings, high-value equipment use, or first-time bookings, to help us confirm identity and prevent misuse of the studio. It is not required for every booking.</div>
+          </div>
+
+          <div class="step-actions">
+            <button type="button" class="btn btn-outline prev-step">← Back</button>
+            <button type="button" class="btn btn-primary next-step">Continue →</button>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="form-step" data-step="4">
+          <h3>Review & Confirm</h3>
+
+          <div class="review-block">
+            <h4>Customer</h4>
+            <div class="review-row"><span class="k">Full Name</span><span class="v" id="rvName">—</span></div>
+            <div class="review-row"><span class="k">Booking Type</span><span class="v" id="rvType">—</span></div>
+            <div class="review-row"><span class="k">Organization</span><span class="v" id="rvOrg">—</span></div>
+          </div>
+
+          <div class="review-block">
+            <h4>Booking</h4>
+            <div class="review-row"><span class="k">Studio</span><span class="v" id="rvStudio">—</span></div>
+            <div class="review-row"><span class="k">Purpose</span><span class="v" id="rvPurpose">—</span></div>
+            <div class="review-row"><span class="k">Date</span><span class="v" id="rvDate">—</span></div>
+            <div class="review-row"><span class="k">Time</span><span class="v" id="rvTime">—</span></div>
+            <div class="review-row"><span class="k">Duration</span><span class="v" id="rvDuration">—</span></div>
+            <div class="review-row"><span class="k">Number of People</span><span class="v" id="rvPeople">—</span></div>
+          </div>
+
+          <div class="review-block">
+            <h4>Requirements</h4>
+            <div class="review-row"><span class="k">Equipment</span><span class="v" id="rvEquip">—</span></div>
+            <div class="review-row"><span class="k">Facilities</span><span class="v" id="rvFacility">—</span></div>
+            <div class="review-row"><span class="k">Special Requests</span><span class="v" id="rvRequests">—</span></div>
+          </div>
+
+          <div class="group-label">Pricing Summary</div>
+          <div class="price-box">
+            <div class="price-row"><span>Studio Fee</span><span id="prStudio">Rs 0</span></div>
+            <div class="price-row"><span>Equipment Fee</span><span id="prEquip">Rs 0</span></div>
+            <div class="price-row"><span>Additional Services</span><span id="prExtra">Rs 0</span></div>
+            <div class="price-row total"><span>Estimated Total</span><span id="prTotal">Rs 0</span></div>
+            <div class="price-note">Estimated total based on our current hourly rate. Final price is confirmed by Udaan Nepal after review.</div>
+          </div>
+
+          <div class="group-label">Terms & Conditions</div>
+          <div class="terms-list">
+            <label class="terms-item"><input type="checkbox" class="term-check" required>I confirm that the information provided is correct.</label>
+            <label class="terms-item"><input type="checkbox" class="term-check" required>I agree to Udaan Nepal's <a href="terms/#studio" target="_blank" rel="noopener">Studio Terms & Conditions</a>.</label>
+            <label class="terms-item"><input type="checkbox" class="term-check" required>I understand the <a href="terms/#studio" target="_blank" rel="noopener">cancellation and rescheduling policy</a>.</label>
+            <label class="terms-item"><input type="checkbox" class="term-check" required>I agree to comply with <a href="terms/#studio" target="_blank" rel="noopener">Udaan Nepal studio rules</a>.</label>
+            <label class="terms-item"><input type="checkbox" class="term-check" required>I accept responsibility for applicable damage or loss caused during my booking.</label>
+          </div>
+          <span class="field-error" id="termsError">Please accept all terms to continue.</span>
+          <div id="submitError" role="alert" style="display:none;margin:12px 0 4px;padding:10px 14px;border-radius:9px;background:rgba(240,68,82,0.12);border:1px solid rgba(240,68,82,0.4);color:#FF8A94;font-size:13.5px;line-height:1.5;"></div>
+
+          <div class="step-actions">
+            <button type="button" class="btn btn-outline prev-step">← Back</button>
+            <button type="submit" class="btn btn-primary" id="submitBtn">Submit Booking Request</button>
+          </div>
+        </div>
+
+        <!-- CONFIRMATION -->
+        <div class="form-step" data-step="confirm">
+          <div class="confirm-state">
+            <div class="confirm-icon">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h3>Booking Request Received</h3>
+            <p>Your request has been successfully submitted. Udaan Nepal will review availability and confirm your booking shortly.</p>
+            <div class="confirm-ref mono" id="confirmRef">REF-000000</div>
+            <div class="confirm-details">
+              <div class="review-row"><span class="k">Requested Date</span><span class="v" id="cfDate">—</span></div>
+              <div class="review-row"><span class="k">Requested Time</span><span class="v" id="cfTime">—</span></div>
+              <div class="review-row"><span class="k">Studio</span><span class="v" id="cfStudio">—</span></div>
+              <div class="review-row"><span class="k">Contact</span><span class="v" id="cfContact">—</span></div>
+            </div>
+            <div class="confirm-actions">
+              <a href="#top" class="btn btn-outline">Back to Home</a>
+              <button type="button" class="btn btn-primary" id="viewStatusBtn">View Booking Status</button>
+            </div>
+            <div id="statusInfoBox" style="display:none;margin-top:16px;padding:14px 16px;background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.25);border-radius:10px;font-size:13.5px;color:#CBD5E1;line-height:1.6;">
+              Your request has been received and is being reviewed by our team. We will contact you on the phone number you provided once it is confirmed, or if we need to adjust anything.
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY ===== -->
+<section class="why">
+  <div class="container">
+    <div class="section-head">
+      <div data-c="stu_x14" class="eyebrow">Why book with us</div>
+      <h2 data-c="stu_x15">Why Book With Udaan Nepal?</h2>
+      <p data-c="stu_x16">A studio built for real production work, with flexible spaces and equipment you choose.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
+        <h4 data-c="stu_x17">Professional Environment</h4>
+        <p data-c="stu_x18">A dedicated space set up for focused, distraction-free production work.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="9" y1="2" x2="9" y2="6"/><line x1="15" y1="2" x2="15" y2="6"/></svg></div>
+        <h4 data-c="stu_x19">Flexible Booking</h4>
+        <p data-c="stu_x20">Choose the space, date, and duration that fits your session — not a fixed package.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+        <h4 data-c="stu_x21">Production-Ready Facilities</h4>
+        <p data-c="stu_x22">Equipment and layout options built for real content and recording needs.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h4 data-c="stu_x23">Creative Workspace</h4>
+        <p data-c="stu_x24">Room configurations that adapt to photography, video, and audio work alike.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div>
+        <h4 data-c="stu_x25">Reliable Support</h4>
+        <p data-c="stu_x26">Our team reviews and confirms every booking request before your session.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+        <h4 data-c="stu_x27">Multiple Production Uses</h4>
+        <p data-c="stu_x28">From interviews to workshops, one studio built to support several formats.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SHOWCASE ===== -->
+<section class="showcase" id="sec-gallery" style="display:none">
+  <div class="container">
+    <div class="section-head">
+      <div data-c="stu_x29" class="eyebrow">Take a look</div>
+      <h2 data-c="stu_x30">Inside the Studio</h2>
+      <p data-c="stu_x31">A look at the space.</p>
+    </div>
+    <div class="showcase-grid">
+      <div class="showcase-main" id="gal-main">Studio photograph placeholder</div>
+      <div class="showcase-side">
+        <div class="showcase-tile">Production photograph placeholder</div>
+        <div class="showcase-tile video">
+          <div class="play-mini"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><polygon points="6 3 20 12 6 21 6 3"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="section-head" style="margin-left:auto;margin-right:auto;text-align:center;">
+      <div data-c="stu_x32" class="eyebrow" style="justify-content:center;">Questions</div>
+      <h2 data-c="stu_x33">Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-list" id="faqList">
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">How do I book the studio? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Choose a space, pick an available date and time slot, fill in your details and requirements, then submit your request. Our team reviews it from there.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Is my booking confirmed immediately? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">No. Submitting the form sends a booking request. Udaan Nepal reviews availability and requirements before confirming.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">What happens after I submit a booking request? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">You'll receive a booking reference and our team will contact you to confirm your session, pricing, and any additional details.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Can I cancel or reschedule? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes, subject to Udaan Nepal's cancellation and rescheduling policy, which will be shared at confirmation.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">What equipment is available? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Cameras, lighting, microphones, tripods, green screen, backdrops, audio equipment, and display/projector setups, depending on the space you book.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Can I bring my own equipment? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes, you're welcome to bring your own equipment alongside anything you request from the studio.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">How many people can use the studio? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Capacity depends on the space — see each space card above for its approximate limit.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Can organizations book the studio? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes. Select "Organization" as your booking type and provide your organization's details during booking.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">What documents are required? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Basic contact details are required for every booking. Identity or organization verification may be requested in some cases.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">How is payment handled? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Payment details will be confirmed by Udaan Nepal along with your final booking confirmation.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SUPPORT ===== -->
+<section class="support">
+  <div class="container">
+    <div class="support-box">
+      <h2 data-c="stu_x34">Need Help With Your Booking?</h2>
+      <p data-c="stu_x35">Reach out and our team will help you plan your session.</p>
+      <div class="support-items">
+        <div class="support-item"><span class="icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span><span data-c="phone">Contact Udaan Nepal</span></div>
+        <div class="support-item"><span class="icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 6 12 13 2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg></span>studio@udaannepal.com</div>
+        <div class="support-item"><span class="icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>Kathmandu, Nepal</div>
+      </div>
+      <a href="#booking" class="btn btn-primary">Contact Udaan Nepal</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand">
+          <div class="brand-mark">U</div>
+          <div class="brand-text">Udaan Nepal</div>
+        </div>
+        <p>Udaan Nepal's professional digital studio booking platform for creators, students, and organizations across Nepal.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#booking">Studio Booking</a></li>
+          <li><a href="courses">My Courses</a></li>
+          <li><a href="profile">My Profile</a></li>
+          <li><a href="notice">Notice</a></li>
+          <li data-feature="group_chat" style="display:none"><a href="group">My Group</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="terms/#studio" target="_blank" rel="noopener">Terms & Conditions</a></li>
+          <li><a href="terms/#studio" target="_blank" rel="noopener">Cancellation Policy</a></li>
+          <li><a href="#booking">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Udaan Nepal Pvt. Ltd. All rights reserved.</div>
+      <div class="mono">STUDIO BOOKING PLATFORM</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ===================== SIDEBAR ===================== */
+(function(){
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  const menuBtn = document.getElementById('menuBtn');
+  const sidebarClose = document.getElementById('sidebarClose');
+
+  function openSidebar(){
+    sidebar.classList.add('active'); overlay.classList.add('active');
+    menuBtn.classList.add('active'); menuBtn.setAttribute('aria-expanded','true');
+    sidebar.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+  }
+  function closeSidebar(){
+    sidebar.classList.remove('active'); overlay.classList.remove('active');
+    menuBtn.classList.remove('active'); menuBtn.setAttribute('aria-expanded','false');
+    sidebar.setAttribute('aria-hidden','true'); document.body.style.overflow='';
+  }
+  menuBtn.addEventListener('click', () => sidebar.classList.contains('active') ? closeSidebar() : openSidebar());
+  sidebarClose.addEventListener('click', closeSidebar);
+  overlay.addEventListener('click', closeSidebar);
+  document.addEventListener('keydown', e => { if(e.key==='Escape' && sidebar.classList.contains('active')) closeSidebar(); });
+})();
+
+/* ===================== SPACE SELECT -> SCROLL TO BOOKING ===================== */
+function wireSpaceButtons(){
+  document.querySelectorAll('.select-space').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const sel = document.getElementById('studioSelect');
+      sel.value = btn.dataset.space;
+      sel.dispatchEvent(new Event('change'));
+      document.getElementById('booking').scrollIntoView({behavior:'smooth'});
+    });
+  });
+}
+wireSpaceButtons();
+
+/* ===================== BOOKING WIZARD ===================== */
+(function(){
+  const steps = ['1','2','3','4'];
+  let currentStep = 0;
+  const formSteps = document.querySelectorAll('.form-step');
+  const pills = document.querySelectorAll('.step-pill');
+
+  function showStep(idx){
+    formSteps.forEach(s => s.classList.remove('active'));
+    document.querySelector('.form-step[data-step="'+steps[idx]+'"]').classList.add('active');
+    pills.forEach((p,i)=>{
+      p.classList.toggle('active', i===idx);
+      p.classList.toggle('done', i<idx);
+    });
+    document.querySelector('.booking-panel').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  function clearErrors(stepEl){
+    stepEl.querySelectorAll('.field-error').forEach(e=>e.classList.remove('show'));
+    stepEl.querySelectorAll('.has-error').forEach(e=>e.classList.remove('has-error'));
+  }
+
+  function validateStep(idx){
+    const stepEl = document.querySelector('.form-step[data-step="'+steps[idx]+'"]');
+    clearErrors(stepEl);
+    let valid = true;
+
+    if(steps[idx]==='1'){
+      const name = document.getElementById('fullName');
+      const email = document.getElementById('email');
+      const phone = document.getElementById('phone');
+      if(!name.value.trim()){ markError(name); valid=false; }
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())){ markError(email); valid=false; }
+      if(!/^[0-9+\-\s]{7,15}$/.test(phone.value.trim())){ markError(phone); valid=false; }
+    }
+
+    if(steps[idx]==='2'){
+      const studio = document.getElementById('studioSelect');
+      const people = document.getElementById('peopleCount');
+      const duration = document.getElementById('duration');
+      const purposeChecked = document.querySelectorAll('#purposeChips input:checked').length>0;
+      if(!studio.value){ markError(studio); valid=false; }
+      if(!people.value || people.value<1){ markError(people); valid=false; }
+      if(!duration.value){ markError(duration); valid=false; }
+      if(!purposeChecked){ document.getElementById('purposeError').classList.add('show'); valid=false; }
+      if(!selectedDate){ document.getElementById('dateError').classList.add('show'); valid=false; }
+      if(!selectedSlot){ document.getElementById('slotError').classList.add('show'); valid=false; }
+    }
+
+    if(steps[idx]==='4'){
+      const checks = document.querySelectorAll('.term-check');
+      const allChecked = Array.from(checks).every(c=>c.checked);
+      if(!allChecked){ document.getElementById('termsError').classList.add('show'); valid=false; }
+    }
+
+    return valid;
+  }
+
+  function markError(el){
+    el.closest('.form-group')?.classList.add('has-error');
+    const err = el.closest('.form-group')?.querySelector('.field-error');
+    if(err) err.classList.add('show');
+  }
+
+  document.querySelectorAll('.next-step').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(validateStep(currentStep)){
+        currentStep++;
+        if(currentStep===3) populateReview();
+        showStep(currentStep);
+      }
+    });
+  });
+  document.querySelectorAll('.prev-step').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ currentStep--; showStep(currentStep); });
+  });
+
+  /* Organization toggle */
+  const orgFields = document.getElementById('orgFields');
+  document.querySelectorAll('input[name="bookingType"]').forEach(r=>{
+    r.addEventListener('change', ()=>{
+      orgFields.classList.toggle('show', r.value==='Organization' && r.checked);
+      document.getElementById('rcIndividual').classList.toggle('checked', document.querySelector('input[value="Individual"]').checked);
+      document.getElementById('rcOrg').classList.toggle('checked', document.querySelector('input[value="Organization"]').checked);
+    });
+  });
+  document.getElementById('rcIndividual').classList.add('checked');
+
+  /* Chips */
+  document.querySelectorAll('.chip input').forEach(cb=>{
+    cb.addEventListener('change', ()=>{ cb.closest('.chip').classList.toggle('checked', cb.checked); });
+  });
+
+  /* ===== CALENDAR ===== */
+  let calDate = new Date();
+  calDate.setDate(1);
+  let selectedDate = null;
+  let selectedSlot = null;
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  // deterministic pseudo-availability so it's consistent per date
+  /* Studio settings and the calendar come from the database (set in the admin page). */
+  let SETTINGS = { equipment_fee_npr:200, full_day_hours:8, durations:['1','2','3','4','Full day'],
+                   slots:['09:00 AM','10:30 AM','12:00 PM','01:30 PM','03:00 PM','04:30 PM','06:00 PM'], closed_weekdays:[] };
+  let BUSY = [];                 // confirmed bookings and blocked days from studio_availability()
+  const isoDay = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const slotMinutes = t => { const m = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i.exec(String(t).trim()); if(!m) return null; let h = parseInt(m[1],10)%12; if(m[3].toUpperCase()==='PM') h += 12; return h*60+parseInt(m[2],10); };
+  const hoursOf = dur => dur==='Full day' ? SETTINGS.full_day_hours : (parseInt(dur,10) || 1);
+  const chosenSpace = () => document.getElementById('studioSelect').value;
+  function dayRows(d){ const k = isoDay(d), sp = chosenSpace(); return BUSY.filter(r => r.booking_date===k && (!r.space || !sp || r.space===sp)); }
+  function slotTaken(d, time){
+    const start = slotMinutes(time); if(start==null) return false;
+    const need = hoursOf(document.getElementById('duration').value) * 60;
+    return dayRows(d).some(r => {
+      if(r.is_block) return true;
+      const bs = slotMinutes(r.time_slot); if(bs==null) return false;
+      const be = bs + hoursOf(r.duration) * 60;
+      return start < be && bs < start + need;
+    });
+  }
+  function isDateBooked(d){
+    if((SETTINGS.closed_weekdays||[]).includes(d.getDay())) return true;
+    if(dayRows(d).some(r => r.is_block)) return true;
+    return chosenSpace() ? SETTINGS.slots.every(t => slotTaken(d, t)) : false;
+  }
+  function slotsForDate(d){
+    return SETTINGS.slots.map(t => ({ time:t, booked: slotTaken(d, t) }));
+  }
+
+  const dowNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function renderDow(){
+    const el = document.getElementById('calDow');
+    el.innerHTML = dowNames.map(d=>'<div class="cal-dow">'+d+'</div>').join('');
+  }
+
+  function renderCalendar(){
+    document.getElementById('calMonthLabel').textContent = monthNames[calDate.getMonth()]+' '+calDate.getFullYear();
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+    const firstDay = new Date(calDate.getFullYear(), calDate.getMonth(), 1);
+    const startOffset = firstDay.getDay();
+    const daysInMonth = new Date(calDate.getFullYear(), calDate.getMonth()+1, 0).getDate();
+
+    for(let i=0;i<startOffset;i++){
+      grid.insertAdjacentHTML('beforeend','<div class="cal-day empty"></div>');
+    }
+    for(let d=1; d<=daysInMonth; d++){
+      const thisDate = new Date(calDate.getFullYear(), calDate.getMonth(), d);
+      thisDate.setHours(0,0,0,0);
+      const isPast = thisDate < today;
+      const booked = isDateBooked(thisDate);
+      const isToday = thisDate.getTime()===today.getTime();
+      const isSelected = selectedDate && thisDate.getTime()===selectedDate.getTime();
+
+      let cls = 'cal-day';
+      if(isPast) cls += ' past';
+      else if(booked) cls += ' booked';
+      else cls += ' available';
+      if(isToday) cls += ' today';
+      if(isSelected) cls += ' selected';
+
+      const dayEl = document.createElement('div');
+      dayEl.className = cls;
+      dayEl.textContent = d;
+      dayEl.setAttribute('role','button');
+      dayEl.setAttribute('tabindex', (isPast||booked) ? '-1' : '0');
+      dayEl.setAttribute('aria-label', monthNames[calDate.getMonth()]+' '+d+', '+(booked?'unavailable':'available'));
+      if(!isPast && !booked){
+        dayEl.addEventListener('click', ()=>selectDate(thisDate));
+        dayEl.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); selectDate(thisDate);} });
+      }
+      grid.appendChild(dayEl);
+    }
+  }
+
+  function selectDate(d){
+    selectedDate = d;
+    selectedSlot = null;
+    document.getElementById('dateError').classList.remove('show');
+    renderCalendar();
+    renderSlots();
+  }
+
+  function renderSlots(){
+    const grid = document.getElementById('slotsGrid');
+    grid.innerHTML = '';
+    if(!selectedDate) return;
+    slotsForDate(selectedDate).forEach(s=>{
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'slot' + (s.booked?' booked':'') + (selectedSlot===s.time?' selected':'');
+      el.textContent = s.time;
+      el.disabled = s.booked;
+      el.setAttribute('aria-pressed', selectedSlot===s.time ? 'true':'false');
+      el.setAttribute('aria-label', s.time + (s.booked?' — unavailable':' — available'));
+      if(!s.booked){
+        el.addEventListener('click', ()=>{
+          selectedSlot = s.time;
+          document.getElementById('slotError').classList.remove('show');
+          renderSlots();
+        });
+      }
+      grid.appendChild(el);
+    });
+  }
+
+  document.getElementById('calPrev').addEventListener('click', ()=>{
+    calDate.setMonth(calDate.getMonth()-1); renderCalendar();
+  });
+  document.getElementById('calNext').addEventListener('click', ()=>{
+    calDate.setMonth(calDate.getMonth()+1); renderCalendar();
+  });
+
+  renderDow();
+  renderCalendar();
+
+  /* ===== FILE UPLOAD ===== */
+  const uploadBox = document.getElementById('uploadBox');
+  const uploadInput = document.getElementById('verifyUpload');
+  uploadBox.addEventListener('click', ()=>uploadInput.click());
+  uploadInput.addEventListener('change', ()=>{
+    document.getElementById('fileName').textContent = uploadInput.files.length ? uploadInput.files[0].name : '';
+  });
+
+
+  /* Load real spaces, rates, time slots and availability */
+  async function loadStudioData(){
+    try{
+      const from = new Date(); const to = new Date(); to.setDate(to.getDate()+400);
+      const [sp, st, av] = await Promise.all([
+        supabaseClient.from('studio_spaces').select('*').eq('is_active', true).order('sort_order').order('name'),
+        supabaseClient.from('site_settings').select('value').eq('key','studio_settings').maybeSingle(),
+        supabaseClient.rpc('studio_availability', { p_from: isoDay(from), p_to: isoDay(to) })
+      ]);
+      if(st.data && st.data.value) SETTINGS = Object.assign(SETTINGS, st.data.value);
+      EQUIP_RATE = Number(SETTINGS.equipment_fee_npr) || 0;
+      [['equipGroup', SETTINGS.equipment], ['facilityGroup', SETTINGS.facilities]].forEach(([id, items]) => {
+        const g = document.getElementById(id);
+        if(!g || !Array.isArray(items) || !items.length) return;
+        g.textContent = '';
+        items.forEach(name => { const l = document.createElement('label'); l.className = 'check-item'; const i = document.createElement('input'); i.type = 'checkbox'; i.value = name; l.append(i, document.createTextNode(name)); g.append(l); });
+      });
+      BUSY = (av.data || []);
+      if(sp.data && sp.data.length){
+        STUDIO_RATES = {}; sp.data.forEach(r => { STUDIO_RATES[r.name] = r.hourly_rate_npr; });
+        const sel = document.getElementById('studioSelect'); const keep = sel.value;
+        sel.textContent = '';
+        const first = document.createElement('option'); first.value = ''; first.textContent = 'Select a space'; sel.append(first);
+        sp.data.forEach(r => { const o = document.createElement('option'); o.value = r.name; o.textContent = r.name; sel.append(o); });
+        if(keep && STUDIO_RATES[keep]) sel.value = keep;
+        const grid = document.querySelector('.spaces-grid');
+        if(grid){
+          grid.textContent = '';
+          const icon = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
+          sp.data.forEach(r => {
+            const card = document.createElement('div'); card.className = 'space-card';
+            const media = document.createElement('div'); media.className = 'space-media'; media.innerHTML = icon;
+            const cap = document.createElement('span'); cap.className = 'space-cap'; cap.textContent = 'Up to ' + r.capacity + ' people'; media.append(cap);
+            const body = document.createElement('div'); body.className = 'space-body';
+            const h3 = document.createElement('h3'); h3.textContent = r.name;
+            const p = document.createElement('p'); p.textContent = r.description || '';
+            const fac = document.createElement('div'); fac.className = 'space-facilities';
+            (r.features || []).forEach(f => { const sp2 = document.createElement('span'); sp2.textContent = f; fac.append(sp2); });
+            const rate = document.createElement('p'); rate.style.cssText = 'font-weight:700;margin:8px 0;'; rate.textContent = 'Rs ' + Number(r.hourly_rate_npr).toLocaleString('en-IN') + ' per hour';
+            const btn = document.createElement('button'); btn.className = 'btn btn-ghost btn-sm select-space'; btn.dataset.space = r.name; btn.textContent = 'Select';
+            body.append(h3, p, fac, rate, btn); card.append(media, body); grid.append(card);
+          });
+          wireSpaceButtons();
+        }
+      }
+      const dsel = document.getElementById('duration'); const dkeep = dsel.value;
+      dsel.textContent = '';
+      const d0 = document.createElement('option'); d0.value = ''; d0.textContent = 'Select duration'; dsel.append(d0);
+      (SETTINGS.durations || []).forEach(x => { const o = document.createElement('option'); o.textContent = x; dsel.append(o); });
+      if(dkeep && (SETTINGS.durations||[]).includes(dkeep)) dsel.value = dkeep;
+    }catch(e){ console.warn('Studio data not loaded, using built-in defaults', e); }
+    renderCalendar(); renderSlots();
+  }
+  document.getElementById('studioSelect').addEventListener('change', ()=>{ selectedSlot = null; renderCalendar(); renderSlots(); });
+  document.getElementById('duration').addEventListener('change', ()=>{ selectedSlot = null; renderCalendar(); renderSlots(); });
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', loadStudioData); else loadStudioData();
+  /* Studio photos come from the admin page; the section stays hidden until there are real photos */
+  document.addEventListener('un-content', ev => {
+    const list = ((ev.detail && ev.detail.lists && ev.detail.lists.studio_gallery) || []).filter(x => x && /^https:\/\//i.test(x.url || ''));
+    if(!list.length) return;
+    const grid = document.querySelector('#sec-gallery .showcase-grid'); grid.textContent = '';
+    const tile = (x, cls) => { const d = document.createElement('div'); d.className = cls; d.style.cssText = 'position:relative;overflow:hidden;padding:0;'; const im = document.createElement('img'); im.src = x.url; im.alt = x.caption || 'Udaan Nepal Studio'; im.loading = 'lazy'; im.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;'; d.append(im); return d; };
+    grid.append(tile(list[0], 'showcase-main'));
+    if(list.length > 1){ const side = document.createElement('div'); side.className = 'showcase-side'; list.slice(1, 3).forEach(x => side.append(tile(x, 'showcase-tile'))); grid.append(side); } else { grid.style.gridTemplateColumns = '1fr'; }
+    document.getElementById('sec-gallery').style.display = '';
+  });
+
+  /* ===== PRICING ===== */
+  let STUDIO_RATES = {'Studio Space':300,'Podcast / Recording Space':300,'Production / Content Space':300};  // replaced by the rates set in the admin page
+  let EQUIP_RATE = 200;   // per selected equipment item; replaced by the admin setting
+
+  function computePricing(){
+    const studio = document.getElementById('studioSelect').value;
+    const duration = document.getElementById('duration').value;
+    const hours = duration ? hoursOf(duration) : 0;
+    const studioFee = (STUDIO_RATES[studio]||0) * (hours||1);
+    const equipCount = document.querySelectorAll('#equipGroup input:checked').length;
+    const equipFee = equipCount * EQUIP_RATE;
+    const extra = 0;
+    const total = studioFee + equipFee + extra;
+    return {studioFee, equipFee, extra, total};
+  }
+
+  /* ===== REVIEW POPULATION ===== */
+  function populateReview(){
+    const bookingType = document.querySelector('input[name="bookingType"]:checked').value;
+    document.getElementById('rvName').textContent = document.getElementById('fullName').value || '—';
+    document.getElementById('rvType').textContent = bookingType;
+    document.getElementById('rvOrg').textContent = bookingType==='Organization' ? (document.getElementById('orgName').value || '—') : 'N/A';
+
+    document.getElementById('rvStudio').textContent = document.getElementById('studioSelect').value || '—';
+    const purposes = Array.from(document.querySelectorAll('#purposeChips input:checked')).map(c=>c.value).join(', ');
+    document.getElementById('rvPurpose').textContent = purposes || '—';
+    document.getElementById('rvDate').textContent = selectedDate ? selectedDate.toDateString() : '—';
+    document.getElementById('rvTime').textContent = selectedSlot || '—';
+    document.getElementById('rvDuration').textContent = document.getElementById('duration').value || '—';
+    document.getElementById('rvPeople').textContent = document.getElementById('peopleCount').value || '—';
+
+    const equip = Array.from(document.querySelectorAll('#equipGroup input:checked')).map(c=>c.value).join(', ');
+    const facility = Array.from(document.querySelectorAll('#facilityGroup input:checked')).map(c=>c.value).join(', ');
+    document.getElementById('rvEquip').textContent = equip || 'None selected';
+    document.getElementById('rvFacility').textContent = facility || 'None selected';
+    document.getElementById('rvRequests').textContent = document.getElementById('specialRequests').value || 'None';
+
+    const p = computePricing();
+    document.getElementById('prStudio').textContent = 'Rs '+p.studioFee.toLocaleString();
+    document.getElementById('prEquip').textContent = 'Rs '+p.equipFee.toLocaleString();
+    document.getElementById('prExtra').textContent = 'Rs '+p.extra.toLocaleString();
+    document.getElementById('prTotal').textContent = 'Rs '+p.total.toLocaleString();
+  }
+
+  /* ===== SUBMIT ===== */
+  const bookingForm = document.getElementById('bookingForm');
+  const submitBtn = document.getElementById('submitBtn');
+  let submitting = false;
+
+  function showConfirmation(ref){
+    document.getElementById('confirmRef').textContent = ref;
+    document.getElementById('cfDate').textContent = selectedDate ? selectedDate.toDateString() : '—';
+    document.getElementById('cfTime').textContent = selectedSlot || '—';
+    document.getElementById('cfStudio').textContent = document.getElementById('studioSelect').value || '—';
+    document.getElementById('cfContact').textContent = document.getElementById('email').value || '—';
+    formSteps.forEach(s=>s.classList.remove('active'));
+    document.querySelector('.form-step[data-step="confirm"]').classList.add('active');
+    document.getElementById('stepsProgress').style.display='none';
+    document.querySelector('.booking-panel').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  function resetSubmit(){
+    submitting = false;
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Booking Request';
+  }
+
+  bookingForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    if(submitting) return;
+    document.getElementById('submitError').style.display='none';
+    if(!validateStep(3)) return;
+    if(document.getElementById('hpField').value){ showConfirmation('UN-' + Math.floor(100000 + Math.random()*899999)); return; } // spam trap
+
+    submitting = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting…';
+
+    try {
+      // Optional verification file: upload first, so we never save a booking that points to a missing file.
+      let verificationPath = null;
+      const file = document.getElementById('verifyUpload').files[0];
+      if(file){
+        if(file.size > 5*1024*1024){
+          showSubmitError('Your verification file is larger than 5 MB. Please choose a smaller file, or remove it (it is optional).');
+          resetSubmit(); return;
+        }
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+        const folder = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now() + '-' + Math.random().toString(36).slice(2));
+        const path = folder + '/' + safeName;
+        const { error: upErr } = await supabaseClient.storage.from('booking-verification').upload(path, file);
+        if(upErr){
+          console.error(upErr);
+          showSubmitError('Your verification file could not be uploaded. Please try again, or remove the file (it is optional) and submit.');
+          resetSubmit(); return;
+        }
+        verificationPath = path;
+      }
+
+      const v = id => (document.getElementById(id).value || '').trim() || null;
+      const bookingType = document.querySelector('input[name="bookingType"]:checked').value;
+      const isOrg = bookingType === 'Organization';
+      const d = selectedDate;
+      const dateStr = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      const checked = sel => Array.from(document.querySelectorAll(sel + ' input:checked')).map(c=>c.value);
+
+      const row = {
+        full_name: v('fullName'), email: v('email'), phone: v('phone'),
+        booking_type: bookingType,
+        org_name: isOrg ? v('orgName') : null, org_address: isOrg ? v('orgAddress') : null, org_pan: isOrg ? v('orgPan') : null,
+        studio_space: document.getElementById('studioSelect').value,
+        people_count: parseInt(document.getElementById('peopleCount').value, 10),
+        purposes: checked('#purposeChips'),
+        booking_date: dateStr, time_slot: selectedSlot,
+        duration: document.getElementById('duration').value,
+        setup_time: v('setupTime'), cleanup_time: v('cleanupTime'),
+        equipment: checked('#equipGroup'), facilities: checked('#facilityGroup'),
+        special_requests: v('specialRequests'),
+        estimated_total: computePricing().total,
+        verification_file: verificationPath
+      };
+
+      const result = await saveSubmission('studio_bookings', 'UN-', row);
+      if(result.error){ console.error(result.error); showSubmitError(SAVE_FAIL_MSG); resetSubmit(); return; }
+      showConfirmation(result.ref);
+      resetSubmit();
+    } catch(err){
+      console.error(err);
+      showSubmitError(SAVE_FAIL_MSG);
+      resetSubmit();
+    }
+  });
+
+  document.getElementById('viewStatusBtn').addEventListener('click', ()=>{
+    const box = document.getElementById('statusInfoBox');
+    box.style.display = box.style.display === 'none' ? 'block' : 'none';
+  });
+})();
+
+/* ===================== FAQ ACCORDION ===================== */
+document.querySelectorAll('.faq-item').forEach(item=>{
+  const q = item.querySelector('.faq-q');
+  const a = item.querySelector('.faq-a');
+  q.addEventListener('click', ()=>{
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(openItem=>{
+      if(openItem!==item){
+        openItem.classList.remove('open');
+        openItem.querySelector('.faq-q').setAttribute('aria-expanded','false');
+        openItem.querySelector('.faq-a').style.maxHeight = null;
+      }
+    });
+    item.classList.toggle('open', !isOpen);
+    q.setAttribute('aria-expanded', String(!isOpen));
+    a.style.maxHeight = !isOpen ? a.scrollHeight+'px' : null;
+  });
+});
+
+/* ===================== TERMS/POLICY LINKS ===================== */
+document.querySelectorAll('[data-modal]').forEach(link=>{
+  link.addEventListener('click', (e)=>{
+    e.preventDefault();
+    window.open('terms','_blank','noopener');
+  });
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="site-content.js"></script>
+<script>
+// Reuse the singleton client created by site-content.js (avoids duplicate GoTrueClient warning)
+const supabaseClient = window.supabaseClient;
+
+/* ===== SAVE TO SUPABASE (shared helper) ===== */
+async function saveSubmission(table, prefix, row){
+  for(let attempt=0; attempt<4; attempt++){
+    const ref = prefix + Math.floor(100000 + Math.random()*900000);
+    const { error } = await supabaseClient.from(table).insert(Object.assign({ ref: ref }, row));
+    if(!error) return { ref: ref };
+    if(error.code !== '23505') return { error: error };   // 23505 = that reference number already exists, try another
+  }
+  return { error: { message: 'Could not create a reference number.' } };
+}
+function showSubmitError(msg){
+  const box = document.getElementById('submitError');
+  box.textContent = msg;
+  box.style.display = 'block';
+}
+const SAVE_FAIL_MSG = 'Sorry, we could not send your request right now. Please check your internet connection and try again. If it keeps failing, please contact Udaan Nepal directly.';
+document.querySelectorAll('.sidebar-item.logout').forEach(link=>{
+  link.addEventListener('click', async (e)=>{
+    e.preventDefault();
+    await supabaseClient.auth.signOut();
+    window.location.href = 'auth.html';
+  });
+});
+/* Show admin link for staff */
+(async function(){
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if(!user) return;
+  const { data } = await supabaseClient.from('staff_roles').select('user_id').eq('user_id', user.id).maybeSingle();
+  if(data){ const a = document.getElementById('adminLink'); if(a) a.style.display = 'flex'; }
+})();
+</script>
+</body>
+</html>
