@@ -545,10 +545,8 @@
 
     <!-- Logic Script -->
     <script>
-        // Real Supabase project credentials. Note: the `quizzes` table this page
-        // queries (quizzes / quiz_questions / quiz_options) does not exist in the
-        // database yet — see the note in the reply this file was added in. Until
-        // that's built, every quiz falls back to the mock data below.
+        // Quizzes are loaded and graded by the DATABASE (functions quiz_load and quiz_submit).
+        // The browser never receives the correct answers. Only ?demo=1 uses the sample quiz below.
         const SUPABASE_URL = "https://idwbxagsxpkkqwfjftox.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_ju3GQ5lGipjlLtDRZZXxPg__J7tzqfw";
         // Reuse the singleton created by the login gate above (avoids duplicate GoTrueClient warning)
@@ -626,51 +624,24 @@
             if (!demo) {
                 if (!quizId) { showNoQuiz('No quiz selected', 'Open a quiz from inside one of your courses (the lesson page lists the quizzes for that course).'); return; }
 
-                // Load quiz metadata
-                const { data: quizRow, error: quizErr } = await quizDb
-                    .from('quizzes')
-                    .select('id, title, passing_score, time_limit_minutes')
-                    .eq('id', quizId)
-                    .single();
-                if (quizErr || !quizRow) { showNoQuiz('Quiz not available', (quizErr && quizErr.message) || 'This quiz could not be found.'); return; }
-
-                // Load questions
-                const { data: qRows, error: qErr } = await quizDb
-                    .from('quiz_questions')
-                    .select('id, question_text, code_snippet, explanation')
-                    .eq('quiz_id', quizId)
-                    .order('sort_order', { ascending: true });
-                if (qErr) { showNoQuiz('Quiz not available', qErr.message); return; }
-                if (!qRows || !qRows.length) { showNoQuiz('No questions yet', 'This quiz does not have any questions yet. Please check back later.'); return; }
-
-                // Load all options for these questions in one query
-                const questionIds = qRows.map(q => q.id);
-                const { data: oRows, error: oErr } = await quizDb
-                    .from('quiz_options')
-                    .select('id, question_id, option_text, is_correct')
-                    .in('question_id', questionIds)
-                    .order('sort_order', { ascending: true });
-                if (oErr) { showNoQuiz('Quiz not available', oErr.message); return; }
-
-                // Build quiz object
-                const optsByQuestion = {};
-                (oRows || []).forEach(o => {
-                    if (!optsByQuestion[o.question_id]) optsByQuestion[o.question_id] = [];
-                    optsByQuestion[o.question_id].push({ id: o.id, text: o.option_text, isCorrect: o.is_correct });
-                });
+                // Ask the database for this quiz. quiz_load checks that you are allowed to take it
+                // and sends the questions WITHOUT the correct answers.
+                const { data: loaded, error: loadErr } = await quizDb.rpc('quiz_load', { p_quiz: quizId });
+                if (loadErr || !loaded) { showNoQuiz('Quiz not available', (loadErr && loadErr.message) || 'This quiz could not be opened.'); return; }
+                if (!loaded.questions || !loaded.questions.length) { showNoQuiz('No questions yet', 'This quiz does not have any questions yet. Please check back later.'); return; }
 
                 currentQuiz = {
                     server: true,
-                    id: quizRow.id,
-                    title: quizRow.title,
-                    passingScore: quizRow.passing_score || 60,
-                    timeLimitMinutes: quizRow.time_limit_minutes || 15,
-                    questions: qRows.map(q => ({
+                    id: loaded.id,
+                    title: loaded.title,
+                    passingScore: loaded.passing_score || 60,
+                    timeLimitMinutes: loaded.time_limit_minutes || 15,
+                    questions: loaded.questions.map(q => ({
                         id: q.id,
-                        text: q.question_text,
-                        code: q.code_snippet || null,
-                        explanation: q.explanation || '',
-                        options: optsByQuestion[q.id] || []
+                        text: q.text,
+                        code: q.code || null,
+                        explanation: '',
+                        options: (q.options || []).map(o => ({ id: o.id, text: o.text }))
                     }))
                 };
             }
@@ -794,70 +765,103 @@
             }, 1000);
         }
 
-        // Submit & Grade Quiz
-        async function submitQuiz() {
-            clearInterval(timerInterval);
-            // isCorrect is already loaded from the DB (or set in mock data)
-            // No server RPC needed — grade entirely client-side
+        // Submit the quiz. For real quizzes the DATABASE grades it and saves the attempt (quiz_submit).
+        // Only the ?demo=1 sample quiz is graded here in the browser.
+        let submitting = false;
 
-            let correctCount = 0;
+        function gradeDemoLocally() {
+            let correct = 0;
+            const review = [];
+            currentQuiz.questions.forEach(q => {
+                const correctOpt = q.options.find(o => o.isCorrect);
+                const selected = userAnswers[q.id] || null;
+                if (correctOpt && selected === correctOpt.id) correct++;
+                review.push({ question_id: q.id, selected: selected, correct_option: correctOpt ? correctOpt.id : null, explanation: q.explanation || '' });
+            });
+            const total = currentQuiz.questions.length;
+            const score = Math.round((correct / total) * 100);
+            return { score: score, correct: correct, total: total, passed: score >= currentQuiz.passingScore, passing_score: currentQuiz.passingScore, review: review };
+        }
+
+        async function submitQuiz() {
+            if (submitting) return;              // stops a double submit (button click + timer)
+            submitting = true;
+            clearInterval(timerInterval);
+
+            let result;
+            if (currentQuiz.server) {
+                const nextBtn = document.getElementById('nextBtn');
+                nextBtn.disabled = true;
+                const answers = {};
+                Object.keys(userAnswers).forEach(k => { answers[k] = userAnswers[k]; });
+                let res;
+                try { res = await quizDb.rpc('quiz_submit', { p_quiz: currentQuiz.id, p_answers: answers }); }
+                catch (e) { res = { error: e }; }
+                nextBtn.disabled = false;
+                if (res.error || !res.data) {
+                    submitting = false;
+                    showToast('Could not submit your quiz: ' + ((res.error && res.error.message) || 'please check your connection and try again.'), 'err');
+                    if (timerSeconds > 0) startTimer(timerSeconds);
+                    return;
+                }
+                result = res.data;
+            } else {
+                result = gradeDemoLocally();
+            }
+            showResults(result);
+        }
+
+        function showResults(result) {
             const breakdownList = document.getElementById('breakdownList');
             breakdownList.innerHTML = '';
+            const reviewById = {};
+            (result.review || []).forEach(r => { reviewById[r.question_id] = r; });
 
             currentQuiz.questions.forEach((q, idx) => {
-                const selectedOptId = userAnswers[q.id];
-                const correctOpt = q.options.find(o => o.isCorrect) || { id: null, text: '—' };
-                const isCorrect = selectedOptId === correctOpt.id;
-
-                if (isCorrect) correctCount++;
-
-                // Build answer breakdown card
-                const breakdownItem = document.createElement('div');
-                breakdownItem.className = `breakdown-item ${isCorrect ? 'correct' : 'incorrect'}`;
-                
-                const selectedOpt = q.options.find(o => o.id === selectedOptId);
+                const r = reviewById[q.id] || {};
+                const selectedOpt = q.options.find(o => o.id === r.selected);
+                const correctOpt = q.options.find(o => o.id === r.correct_option) || { id: null, text: '—' };
+                const isCorrect = !!selectedOpt && selectedOpt.id === correctOpt.id;
                 const userChoiceText = selectedOpt ? selectedOpt.text : 'Not Answered';
 
+                const breakdownItem = document.createElement('div');
+                breakdownItem.className = `breakdown-item ${isCorrect ? 'correct' : 'incorrect'}`;
                 breakdownItem.innerHTML = `
                     <div style="font-weight: 700; margin-bottom: 6px;">Q${idx + 1}. ${esc(q.text)}</div>
                     <div style="font-size: 0.85rem;"><strong>Your Answer:</strong> ${esc(userChoiceText)} ${isCorrect ? '✓' : '✗'}</div>
                     ${!isCorrect ? `<div style="font-size: 0.85rem; color: var(--green);"><strong>Correct Answer:</strong> ${esc(correctOpt.text)}</div>` : ''}
-                    ${q.explanation ? `<div class="explanation">💡 <strong>Explanation:</strong> ${esc(q.explanation)}</div>` : ''}
+                    ${r.explanation ? `<div class="explanation">💡 <strong>Explanation:</strong> ${esc(r.explanation)}</div>` : ''}
                 `;
                 breakdownList.appendChild(breakdownItem);
             });
 
-            const scorePercent = Math.round((correctCount / currentQuiz.questions.length) * 100);
-            const passed = scorePercent >= currentQuiz.passingScore;
+            const scorePercent = result.score;
+            const passed = !!result.passed;
+            const passingScore = result.passing_score != null ? result.passing_score : currentQuiz.passingScore;
 
-            // Render Results View
             document.getElementById('quizStage').style.display = 'none';
             document.getElementById('resultsCard').style.display = 'block';
 
             document.getElementById('scorePercent').innerText = `${scorePercent}%`;
-            document.getElementById('scoreFraction').innerText = `${correctCount} of ${currentQuiz.questions.length}`;
+            document.getElementById('scoreFraction').innerText = `${result.correct} of ${result.total}`;
 
             const statusBadge = document.getElementById('statusBadge');
             if (passed) {
                 statusBadge.className = 'status-badge passed';
                 statusBadge.innerText = 'PASSED';
                 document.getElementById('resultHeading').innerText = 'Congratulations!';
-                document.getElementById('resultSummary').innerText = `Great job! You met the passing requirement of ${currentQuiz.passingScore}%.`;
+                document.getElementById('resultSummary').innerText = `Great job! You met the passing requirement of ${passingScore}%.`;
             } else {
                 statusBadge.className = 'status-badge failed';
                 statusBadge.innerText = 'NEEDS RETAKE';
                 document.getElementById('resultHeading').innerText = 'Keep Practicing!';
-                document.getElementById('resultSummary').innerText = `You scored ${scorePercent}%. You need at least ${currentQuiz.passingScore}% to pass this assessment.`;
+                document.getElementById('resultSummary').innerText = `You scored ${scorePercent}%. You need at least ${passingScore}% to pass this assessment.`;
             }
-
-            // Save Attempt to Supabase if connected
-            saveAttemptToDatabase(scorePercent, passed);
         }
-
-        async function saveAttemptToDatabase() { /* the database saves the attempt when the quiz is submitted */ }
 
         // Retake Quiz
         function retakeQuiz() {
+            submitting = false;
             userAnswers = {};
             currentIndex = 0;
             document.getElementById('resultsCard').style.display = 'none';

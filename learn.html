@@ -1353,21 +1353,12 @@
         box.append(t, w, a); $('overviewText').insertAdjacentElement('afterend', box);
       });
       supabaseClient
-        .from('quizzes')
-        .select('id, title, time_limit_minutes, passing_score, is_published')
-        .eq('course_id', courseId)
-        .eq('is_published', true)
-        .order('created_at', { ascending: true })
+        .rpc('quiz_list', { p_course: courseId })
         .then(async ({ data: qs }) => {
           if(!qs || !qs.length) return;
-          // Count questions per quiz
-          const quizIds = qs.map(q => q.id);
-          const { data: qCounts } = await supabaseClient
-            .from('quiz_questions')
-            .select('quiz_id')
-            .in('quiz_id', quizIds);
+          // quiz_list only returns quizzes this person is allowed to take, with the question count included
           const countMap = {};
-          (qCounts || []).forEach(r => { countMap[r.quiz_id] = (countMap[r.quiz_id] || 0) + 1; });
+          qs.forEach(r => { countMap[r.id] = Number(r.question_count) || 0; });
 
           const box = document.createElement('div');
           box.style.cssText = 'margin:14px 0;padding:14px 16px;border:1px solid rgba(255,255,255,.14);border-radius:12px;';
