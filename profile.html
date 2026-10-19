@@ -776,7 +776,7 @@ async function loadTeacherStats(){
   list.innerHTML = courses.length ? courses.slice(0,5).map(c=>`
     <div class="course-row">
       <div><h4>${esc(c.title)}</h4><div class="course-stats"><span>${cnt(en,c.id)} Students</span><span>${cnt(ls,c.id)} Lessons</span><span>${cnt(qz,c.id)} Quizzes</span><span>${esc(c.status)}</span></div></div>
-      <a href="courses." class="btn btn-outline">Manage →</a>
+      <a href="courses" class="btn btn-outline">Manage →</a>
     </div>`).join('')
     : `<div class="course-row"><div><h4>No courses yet</h4><div class="course-stats"><span>Create your first course to begin.</span></div></div><a href="courses" class="btn btn-primary">Create course</a></div>`;
 
