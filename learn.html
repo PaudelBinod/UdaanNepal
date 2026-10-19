@@ -1514,7 +1514,7 @@
       const authorIds = [...new Set(threads.map(t => t.author_id).filter(Boolean))];
       let nameMap = {};
       if(authorIds.length){
-        const { data: profs } = await supabaseClient.from('profiles').select('id,full_name,role').in('id', authorIds);
+        const { data: profs } = await supabaseClient.rpc('lesson_comment_authors', { p_lesson: lessonId });
         (profs||[]).forEach(p => { nameMap[p.id] = { name: p.full_name || 'Student', role: p.role }; });
       }
 

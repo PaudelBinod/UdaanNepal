@@ -1274,14 +1274,11 @@ document.getElementById('addChildConfirm').addEventListener('click', async ()=>{
 
   // Find student by reference_id (try normalised form first, then raw stripped)
   let { data: students, error: findErr } = await supabaseClient
-    .from('profiles')
-    .select('id, full_name, role')
-    .eq('reference_id', refId)
-    .eq('role', 'student');
+  .rpc('lookup_student_by_reference', { p_ref: refId });
 
   // Fallback: try without dashes in case DB stored it differently
   if((!students || !students.length) && refId !== raw){
-    const fb = await supabaseClient.from('profiles').select('id, full_name, role').eq('reference_id', raw).eq('role','student');
+    const fb = await supabaseClient.rpc('lookup_student_by_reference', { p_ref: raw });
     if(fb.data && fb.data.length){ students = fb.data; findErr = null; }
   }
 
