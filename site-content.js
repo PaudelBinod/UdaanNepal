@@ -140,6 +140,8 @@
   }
 
   // Greeting / wishes bar (set in admin > Site content). Only on pages whose <body> has data-greeting.
+  // Scrolling text strip. On pages with a fixed header it sits just below the header (over the
+  // empty space above the page content), so nothing on the page is pushed down or jumps.
   function drawGreeting(g) {
     if (!document.body.hasAttribute('data-greeting') || !g || g.enabled !== true) return;
     var ne = (g.text_ne || '').trim(), en = (g.text || '').trim();
@@ -147,14 +149,42 @@
     if (g.until && new Date(g.until + 'T23:59:59').getTime() < Date.now()) return;
     var key = 'un-greet-' + (ne + en).length;
     try { if (sessionStorage.getItem(key)) return; } catch (e) {}
+    if (!document.getElementById('un-greet-css')) {
+      var st = document.createElement('style'); st.id = 'un-greet-css';
+      st.textContent = '@keyframes unGreetMove{to{transform:translateX(-50%)}}' +
+        '.un-greet-track{display:flex;width:max-content;animation:unGreetMove 60s linear infinite}' +
+        '.un-greet:hover .un-greet-track{animation-play-state:paused}' +
+        '@media (prefers-reduced-motion:reduce){.un-greet-track{animation:none}.un-greet-group+.un-greet-group{display:none}.un-greet{overflow-x:auto!important}}';
+      document.head.appendChild(st);
+    }
+    function item() {
+      var s = document.createElement('span'); s.className = 'un-greet-item';
+      s.style.cssText = 'white-space:nowrap;padding-right:64px;';
+      if (ne) { var a = document.createElement('span'); a.lang = 'ne'; a.textContent = ne; s.appendChild(a); }
+      if (ne && en) s.appendChild(document.createTextNode('  •  '));
+      if (en) { var b = document.createElement('span'); b.textContent = en; s.appendChild(b); }
+      return s;
+    }
+    var hdr = document.querySelector('.navbar, .site-header');
+    var fixedHdr = !!hdr && getComputedStyle(hdr).position === 'fixed';
     var bar = document.createElement('div');
-    bar.style.cssText = 'background:linear-gradient(90deg,#F59E0B,#F97316);color:#0A1428;text-align:center;padding:10px 44px 10px 16px;font:600 14px Manrope,sans-serif;position:relative;z-index:50;';
-    if (ne) { var a = document.createElement('div'); a.lang = 'ne'; a.textContent = ne; bar.appendChild(a); }
-    if (en) { var b = document.createElement('div'); b.textContent = en; b.style.cssText = ne ? 'font-size:12px;font-weight:500;opacity:.85;' : ''; bar.appendChild(b); }
+    bar.className = 'un-greet'; bar.setAttribute('role', 'region'); bar.setAttribute('aria-label', 'Greeting');
+    bar.style.cssText = 'background:linear-gradient(90deg,#F59E0B,#F97316);color:#0A1428;overflow:hidden;font:600 14px Manrope,sans-serif;line-height:40px;height:40px;z-index:850;' +
+      (fixedHdr ? 'position:absolute;left:0;right:0;top:' + hdr.offsetHeight + 'px;' : 'position:relative;');
+    var track = document.createElement('div'); track.className = 'un-greet-track';
+    var g1 = document.createElement('div'); g1.className = 'un-greet-group'; g1.style.cssText = 'display:flex;flex:none;';
+    g1.appendChild(item()); track.appendChild(g1); bar.appendChild(track);
     var x = document.createElement('button'); x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label', 'Close');
-    x.style.cssText = 'position:absolute;right:6px;top:50%;transform:translateY(-50%);width:44px;height:44px;background:none;border:0;font-size:24px;cursor:pointer;color:#0A1428;';
+    x.style.cssText = 'position:absolute;right:0;top:0;width:56px;height:40px;padding:0 0 0 12px;background:linear-gradient(90deg,rgba(249,115,22,0),#F97316 45%);border:0;font-size:24px;line-height:40px;cursor:pointer;color:#0A1428;';
     x.onclick = function () { bar.remove(); try { sessionStorage.setItem(key, '1'); } catch (e) {} };
-    bar.appendChild(x); document.body.insertBefore(bar, document.body.firstChild);
+    bar.appendChild(x);
+    document.body.insertBefore(bar, document.body.firstChild);
+    // repeat the message enough times that the loop never shows a gap, then loop two identical copies
+    var iw = g1.firstChild.offsetWidth || 300;
+    for (var i = 1; i < Math.ceil(1920 / iw) + 1; i++) g1.appendChild(item());
+    var g2 = g1.cloneNode(true); g2.setAttribute('aria-hidden', 'true'); track.appendChild(g2);
+    track.style.animationDuration = Math.max(20, Math.round(g1.offsetWidth / 70)) + 's';
+    if (fixedHdr) window.addEventListener('resize', function () { bar.style.top = hdr.offsetHeight + 'px'; });
   }
 
   // Logo (set in admin > Site content). Replaces the "U" square in every header and footer, and the browser-tab icon.

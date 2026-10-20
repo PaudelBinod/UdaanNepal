@@ -501,6 +501,17 @@ async function loadCurrentUser(){
       parentId: r.parent_id,
       parentName: r.profiles && r.profiles.full_name || 'Unknown'
     }));
+
+    // Parents who are already linked (accepted)
+    const { data: linkedParents } = await supabaseClient
+      .from('parent_children')
+      .select('id, parent_id, profiles:parent_id(full_name)')
+      .eq('child_id', user.id)
+      .eq('status', 'active');
+    currentUser.myParents = (linkedParents || []).map(r => ({
+      linkId: r.id,
+      parentName: r.profiles && r.profiles.full_name || 'Parent'
+    }));
   }
 
   // Show admin link if staff
@@ -594,6 +605,11 @@ function studentContent(){
     <div class="section-title" style="margin-top:30px;">My Quizzes</div>
     <div id="myQuizList"><div class="course-row"><div>Loading…</div></div></div>
 
+    <div id="myParentsSection" style="display:none;margin-top:30px;">
+      <div class="section-title">My Parents</div>
+      <div id="myParentsList"></div>
+    </div>
+
     <div id="pendingParentsSection" style="display:none;margin-top:30px;">
       <div class="section-title">Parent Link Requests</div>
       <div id="pendingParentsList"></div>
@@ -628,8 +644,43 @@ async function respondToParentRequest(linkId, action){
   if(error){ showToast('Error: '+error.message, 'err'); return; }
   showToast(action === 'accept' ? 'Parent linked successfully!' : 'Request rejected.', action === 'accept' ? 'ok' : 'err');
   // Remove from pending list and re-render
+  if(action === 'accept'){
+    const req = (currentUser.pendingParentRequests||[]).find(r=>r.linkId===linkId);
+    if(req){ currentUser.myParents = (currentUser.myParents||[]).concat([{ linkId: linkId, parentName: req.parentName }]); }
+  }
   currentUser.pendingParentRequests = (currentUser.pendingParentRequests||[]).filter(r=>r.linkId!==linkId);
   renderPendingParents();
+  renderMyParents();
+}
+
+function renderMyParents(){
+  const sec = document.getElementById('myParentsSection');
+  const list = document.getElementById('myParentsList');
+  if(!sec || !list) return;
+  const parents = currentUser.myParents || [];
+  if(!parents.length){ sec.style.display='none'; return; }
+  sec.style.display = '';
+  list.innerHTML = parents.map(p=>`
+    <div class="course-row">
+      <div>
+        <h4 style="font-size:14px;">${esc(p.parentName)}</h4>
+        <div class="course-stats"><span>Linked as your parent/guardian</span></div>
+      </div>
+      <button class="btn btn-outline" style="font-size:12px;padding:7px 14px;" onclick="unlinkParent('${p.linkId}')">Unlink</button>
+    </div>`).join('');
+}
+
+async function unlinkParent(linkId){
+  if(!confirm('Unlink this parent? They will no longer see your courses or progress.')) return;
+  const { error } = await supabaseClient
+    .from('parent_children')
+    .update({ status: 'removed' })
+    .eq('id', linkId)
+    .eq('child_id', currentUser.id); // safety: only the child can unlink
+  if(error){ showToast('Error: '+error.message, 'err'); return; }
+  showToast('Parent unlinked.', 'ok');
+  currentUser.myParents = (currentUser.myParents||[]).filter(p=>p.linkId!==linkId);
+  renderMyParents();
 }
 
 function renderPendingParents(){
@@ -654,6 +705,7 @@ function renderPendingParents(){
 
 async function loadStudentStats(){
   wireCopyRefBtn();
+  renderMyParents();
   renderPendingParents();
   const uid = currentUser.id;
   const [en, qa] = await Promise.all([
@@ -1040,7 +1092,7 @@ async function fetchAllCourses(){
   if(_allCourses) return _allCourses;
   const { data, error } = await supabaseClient
     .from('courses')
-    .select('id, title, price, is_free')
+    .select('id, title, price_npr')
     .eq('status', 'published')
     .order('title');
   if(error) console.warn('fetchAllCourses error:', error.message);
