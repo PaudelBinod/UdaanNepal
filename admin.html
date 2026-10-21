@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
+<style id="gate">body{visibility:hidden}</style>
 <title>Admin — Udaan Nepal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1991,25 +1992,92 @@ async function viewTeacherEarnings(){
 }
 
 /* ======================= START ======================= */
+/* Anyone who is not signed-in staff sees a plain "Not Found" page, the same as for an address that does not exist.
+   Staff must also pass 2-step login (authenticator app) before any admin screen loads. */
+function reveal(){ const g = document.getElementById('gate'); if(g) g.remove(); }
+function notFound(){
+  document.title = '404 Not Found';
+  document.body.textContent = '';
+  document.body.style.cssText = 'background:#fff;color:#222;';
+  const box = document.createElement('div');
+  box.style.cssText = 'font:16px/1.6 system-ui,Arial,sans-serif;padding:48px 24px;max-width:640px;';
+  const t = document.createElement('h1'); t.textContent = 'Not Found'; t.style.cssText = 'font:600 28px system-ui,Arial,sans-serif;margin:0 0 12px;color:#222;';
+  const p = document.createElement('p'); p.textContent = 'The requested page could not be found.'; p.style.cssText = 'margin:0;color:#444;';
+  box.append(t, p); document.body.append(box);
+  reveal();
+}
 function blocked(title, text, link, linkText){
   const p = $('panel'); clear(p);
   $('tabs').style.display='none';
   p.append(h('div',{class:'center'}, h('h2',{},title), h('p',{class:'sub',style:'max-width:420px;'},text), link ? h('a',{class:'btn primary',href:link},linkText) : null));
 }
+function codeScreen(title, text, extraNodes, onSubmit, btnLabel){
+  const p = $('panel'); clear(p); $('tabs').style.display='none';
+  const code = h('input',{type:'text',id:'mfacode',inputmode:'numeric',autocomplete:'one-time-code',maxlength:'8',placeholder:'6-digit code','aria-label':'6-digit code',style:'text-align:center;letter-spacing:.3em;font-size:20px;max-width:220px;'});
+  const err = h('p',{class:'sub',id:'mfaerr',role:'alert',style:'color:#FF8A94;min-height:20px;margin:0;'});
+  const go = h('button',{class:'btn primary',type:'button',id:'mfago'}, btnLabel);
+  const run = async ()=>{
+    const v = code.value.replace(/\s+/g,'');
+    if(!/^\d{6}$/.test(v)){ err.textContent = 'Enter the 6 digits shown in your authenticator app.'; return; }
+    err.textContent = ''; go.disabled = true;
+    const msg = await onSubmit(v);
+    go.disabled = false;
+    if(msg){ err.textContent = msg; code.value = ''; code.focus(); }
+  };
+  go.addEventListener('click', run);
+  code.addEventListener('keydown', e=>{ if(e.key==='Enter') run(); });
+  p.append(h('div',{class:'center'}, h('h2',{},title), h('p',{class:'sub',style:'max-width:420px;'},text), extraNodes, code, err, go));
+  setTimeout(()=>code.focus(),50);
+}
+/* returns true if this sign-in is already 2-step verified; otherwise shows the code / set-up screen and returns false */
+async function twoStep(){
+  const { data: aal } = await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+  if(aal && aal.currentLevel === 'aal2') return true;
+  const { data: fl, error: fe } = await sb.auth.mfa.listFactors();
+  if(fe){ blocked('Could not check 2-step login', fe.message); return false; }
+  const verified = (fl && fl.totp) || [];
+  if(verified.length){
+    const f = verified[0];
+    codeScreen('2-step login','Open your authenticator app and enter the 6-digit code for Udaan Nepal.', [], async v=>{
+      const ch = await sb.auth.mfa.challenge({ factorId: f.id });
+      if(ch.error) return ch.error.message;
+      const vr = await sb.auth.mfa.verify({ factorId: f.id, challengeId: ch.data.id, code: v });
+      if(vr.error) return 'That code is not right. Wait for the next code and try again.';
+      await start(); return '';
+    }, 'Verify');
+    return false;
+  }
+  /* first time: set up the authenticator app */
+  for(const f of ((fl && fl.all) || [])){ if(f.status !== 'verified') await sb.auth.mfa.unenroll({ factorId: f.id }); }
+  const en = await sb.auth.mfa.enroll({ factorType:'totp', friendlyName:'Udaan Nepal admin '+new Date().toISOString().slice(0,10) });
+  if(en.error){ blocked('2-step login could not be set up', en.error.message + ' (Check that Multi-Factor / TOTP is switched on in Supabase.)'); return false; }
+  const qr = h('img',{alt:'QR code to scan with your authenticator app',style:'width:200px;height:200px;background:#fff;padding:8px;border-radius:12px;'});
+  qr.src = en.data.totp.qr_code;
+  const secret = h('p',{class:'sub',style:'word-break:break-all;max-width:420px;'}, 'Cannot scan? Type this key into the app: ', h('b',{id:'mfasecret'}, en.data.totp.secret));
+  codeScreen('Set up 2-step login','Scan this QR code with Google Authenticator, Microsoft Authenticator or Authy, then type the 6-digit code it shows.', [qr, secret], async v=>{
+    const r = await sb.auth.mfa.challengeAndVerify({ factorId: en.data.id, code: v });
+    if(r.error) return 'That code is not right. Wait for the next code and try again.';
+    await start(); return '';
+  }, 'Turn on 2-step login');
+  return false;
+}
+async function start(){
+  const { data: prof } = await sb.from('profiles').select('full_name').eq('id', me.id).maybeSingle();
+  myName = (prof && prof.full_name) || '';
+  $('who').textContent = (myName || me.email) + ' · ' + [...roles].map(r=>ROLE_LABEL[r]).join(', ');
+  await refreshBadges(); drawTabs(); render();
+}
 (async function init(){
   $('logout').addEventListener('click', async ()=>{ await sb.auth.signOut(); window.location.href = 'auth.html'; });
   const { data:{ user } } = await sb.auth.getUser();
-  if(!user){ window.location.href = 'auth.html?redirect=admin.html'; return; }
+  if(!user){ notFound(); return; }
   me = user;
-  const [{ data: rows, error }, { data: prof }] = await Promise.all([
-    sb.from('staff_roles').select('role').eq('user_id', user.id),
-    sb.from('profiles').select('full_name').eq('id', user.id).maybeSingle()
-  ]);
-  myName = (prof && prof.full_name) || '';
-  (rows||[]).forEach(r=>roles.add(r.role));
-  if(error || !roles.size){ $('who').textContent = user.email || ''; blocked('No admin access','This page is only for Udaan Nepal staff. If you should have access, ask a super admin to give you a role.','courses','Back to my courses'); return; }
-  $('who').textContent = (myName || user.email) + ' · ' + [...roles].map(r=>ROLE_LABEL[r]).join(', ');
-  await refreshBadges(); drawTabs(); render();
+  const { data: rows, error } = await sb.from('staff_roles').select('role').eq('user_id', user.id);
+  if(error || !rows || !rows.length){ notFound(); return; }
+  rows.forEach(r=>roles.add(r.role));
+  reveal();
+  $('who').textContent = user.email || '';
+  if(await twoStep()) await start();
 })();
 </script>
 </body>
