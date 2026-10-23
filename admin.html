@@ -195,6 +195,7 @@ const TABS = [
   { id:'payments',  label:'Payments',      show:()=>can('finance'),  badge:'pendPayments' },
   { id:'regs',      label:'Registrations', show:()=>can('front_desk'), badge:'newRegs' },
   { id:'users',     label:'Users',         show:()=>can('academic'), badge:'pendTeachers' },
+  { id:'schools',   label:'Schools',       show:()=>can('finance')||can('academic') },
   { id:'categories',label:'Categories',    show:()=>can('academic') },
   { id:'notices',   label:'Notices',       show:()=>can('content') },
   { id:'studio',    label:'Studio',        show:()=>can('finance')||can('content')||can('front_desk') },
@@ -221,7 +222,7 @@ function drawTabs(){
 function go(id){ current = id; drawTabs(); render(); window.scrollTo(0,0); }
 async function render(){
   const p = $('panel'); clear(p); p.append(h('p',{class:'sub'},'Loading…'));
-  const fn = { overview:viewOverview, courses:viewCourses, payments:viewPayments, regs:viewRegs, users:viewUsers, reports:viewReports, categories:viewCategories, media:viewMedia, activity:viewActivity, notices:viewNotices, studio:viewStudio, content:viewContent, settings:viewSettings, staff:viewStaff, coupons:viewCoupons, messages:viewMessages, certificates:viewCertificates, earnings:viewTeacherEarnings }[current];
+  const fn = { overview:viewOverview, courses:viewCourses, payments:viewPayments, regs:viewRegs, users:viewUsers, schools:viewSchools, reports:viewReports, categories:viewCategories, media:viewMedia, activity:viewActivity, notices:viewNotices, studio:viewStudio, content:viewContent, settings:viewSettings, staff:viewStaff, coupons:viewCoupons, messages:viewMessages, certificates:viewCertificates, earnings:viewTeacherEarnings }[current];
   try{ const node = await fn(); clear(p); p.append(node); }
   catch(e){ clear(p); p.append(h('div',{class:'note warn'},'Something went wrong: ' + (e && e.message ? e.message : e))); }
 }
@@ -1105,7 +1106,7 @@ async function viewUsers(){
         const msg = newState ? 'Deactivate '+name+'?\n\nThey will not be able to log in. Their records and course history are kept. You can re-activate them any time.' : 'Re-activate '+name+'?';
         const label = newState ? 'Deactivate' : 'Re-activate';
         if(!await confirmBox(label, msg, label, newState)) return;
-        const { error } = await sb.from('profiles').update({is_active: !newState}).eq('id',u.user_id);
+        const { error } = await sb.rpc('admin_set_user_active', { p_user: u.user_id, p_active: !newState });
         if(error){ toast('Could not update: '+error.message,true); return; }
         u.is_active = !newState;
         toast(newState ? name+' deactivated' : name+' re-activated');
@@ -1779,6 +1780,233 @@ function openMessage(m, repaint){
   acts.append(h('button',{class:'btn '+(m.status==='done'?'':'good'),onclick:e=>setStatus(m.status==='done'?'new':'done',e.currentTarget)}, m.status==='done' ? 'Mark as new' : 'Mark as done'));
   body.push(acts);
   const close = openSheet('Message from '+m.full_name, body);
+}
+
+/* ======================= SCHOOLS (bundles, orders, seats) ======================= */
+const ORDER_STATUS = { requested:['Requested','amber'], invoiced:['Invoiced','blue'], paid:['Paid','green'], closed:['Closed',''], cancelled:['Cancelled','red'] };
+const fmtDate = d => d ? new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '—';
+function downloadXlsx(filename, sheets){
+  if(!window.XLSX){ toast('The Excel tool could not load. Check your internet and refresh.',true); return; }
+  const wb = XLSX.utils.book_new();
+  sheets.forEach(([n,rows])=>{ const ws = XLSX.utils.aoa_to_sheet(rows); ws['!cols'] = (rows[0]||[]).map(()=>({wch:22})); XLSX.utils.book_append_sheet(wb, ws, n); });
+  XLSX.writeFile(wb, filename);
+}
+// reads a class list from an Excel/CSV file or pasted text -> [{name,class,section,roll}]
+function parseRoster(grid){
+  const rows = (grid||[]).map(r=>(r||[]).map(c=>String(c==null?'':c).trim())).filter(r=>r.some(Boolean));
+  if(!rows.length) return [];
+  const head = rows[0].map(x=>x.toLowerCase());
+  const has = head.some(x=>/^(name|student|student name|class|section|roll|roll no|roll number)$/.test(x));
+  const idx = (re, d) => { const i = head.findIndex(x=>re.test(x)); return has ? i : d; };
+  const iN = idx(/^(name|student|student name|full name)$/,0), iC = idx(/^(class|grade)$/,1), iS = idx(/^(section|sec)$/,2), iR = idx(/^(roll|roll no|roll no\.|roll number)$/,3);
+  const body = has ? rows.slice(1) : rows;
+  const get = (r,i) => (i>=0 && i<r.length) ? r[i] : '';
+  return body.map(r=>({ name:get(r,iN), class:get(r,iC), section:get(r,iS), roll:get(r,iR) })).filter(x=>x.name||x.class||x.section||x.roll);
+}
+async function viewSchools(){
+  const canMoney = can('finance');
+  const wrap = h('div',{}, h('h2',{class:'title'},'Schools'),
+    h('p',{class:'sub'},'Sell course bundles to schools. A school orders a number of seats; each student gets a one-time code. Seats open only after you mark the order as paid.'));
+  if(!canMoney) wrap.append(h('div',{class:'note'},'You can look at schools, orders and class lists here. Only the finance team can create or change orders.'));
+  else { try{ const { data: n } = await sb.rpc('close_expired_orders'); if(n>0) toast(n+' ended term'+(n>1?'s':'')+' closed automatically'); }catch(e){} }
+
+  const [bR, bcR, sR, oR, courseR] = await Promise.all([
+    sb.from('bundles').select('*').order('created_at',{ascending:false}),
+    sb.from('bundle_courses').select('bundle_id,course_id'),
+    sb.from('schools').select('*').order('name'),
+    sb.from('school_orders').select('*').order('created_at',{ascending:false}),
+    sb.from('courses').select('id,title,price_npr,status').eq('status','published').order('title')
+  ]);
+  const err = bR.error||bcR.error||sR.error||oR.error;
+  if(err){ wrap.append(h('div',{class:'note warn'},'Could not load: '+err.message+' (did you run step7-schools-and-seats.sql?)')); return wrap; }
+  const bundles = bR.data||[], bc = bcR.data||[], schools = sR.data||[], orders = oR.data||[], courses = courseR.data||[];
+  const bName = id => (bundles.find(b=>b.id===id)||{}).name || 'Bundle';
+  const courseTitle = id => (courses.find(c=>c.id===id)||{}).title || 'Course';
+  const reload = () => render();
+
+  /* ---- bundles ---- */
+  const bundleBox = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'Bundles'),
+    h('p',{class:'sub'},'A bundle is a set of published courses sold together, at one price per student. Courses can still be sold on their own.'));
+  function bundleForm(b){
+    const nameIn = h('input',{type:'text',value:b?b.name:'',placeholder:'e.g. Class 7 Bundle'});
+    const descIn = h('input',{type:'text',value:b&&b.description?b.description:'',placeholder:'Short description (optional)'});
+    const clsIn = h('input',{type:'text',value:b&&b.class_level?b.class_level:'',placeholder:'e.g. Class 7 (optional)'});
+    const priceIn = h('input',{type:'number',min:'0',value:b?String(b.price_per_seat_npr):'',placeholder:'Price per student, in Rs'});
+    const have = new Set(b ? bc.filter(x=>x.bundle_id===b.id).map(x=>x.course_id) : []);
+    const boxes = courses.map(c=>{ const cb = h('input',{type:'checkbox',id:'bcc_'+c.id,checked:have.has(c.id)}); return [c, cb]; });
+    const activeCb = h('input',{type:'checkbox',id:'bundle_active',checked:b?b.is_active:true});
+    let close;
+    close = openSheet(b?'Edit bundle':'New bundle',[
+      h('div',{class:'field'},h('label',{},'Bundle name'),nameIn), h('div',{class:'field'},h('label',{},'Description'),descIn),
+      h('div',{class:'field'},h('label',{},'Class / grade'),clsIn), h('div',{class:'field'},h('label',{},'Price per student (Rs)'),priceIn),
+      h('div',{class:'field'},h('label',{},'Courses in this bundle (published courses only)'),
+        courses.length ? boxes.map(([c,cb])=>h('label',{for:'bcc_'+c.id,style:'display:flex;gap:8px;align-items:center;margin:6px 0;'},cb,c.title+' — '+rs(c.price_npr))) : h('p',{class:'sub'},'No published courses yet.')),
+      b ? h('div',{class:'field',style:'display:flex;gap:8px;align-items:center;'},activeCb,h('label',{for:'bundle_active',style:'margin:0;'},'Active (can be ordered)')) : null,
+      b ? h('p',{class:'sub'},'Adding a course gives it to students who already joined. Taking a course out does not remove it from students who already have it.') : null,
+      h('div',{class:'row'},
+        h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget,async()=>{
+          const name = nameIn.value.trim(); const price = parseInt(priceIn.value,10);
+          if(name.length<2){ toast('Enter a bundle name',true); return; }
+          if(isNaN(price)||price<0){ toast('Enter the price per student',true); return; }
+          const row = { name, description:descIn.value.trim()||null, class_level:clsIn.value.trim()||null, price_per_seat_npr:price, is_active: b ? activeCb.checked : true };
+          let id = b && b.id;
+          if(b){ const { error } = await sb.from('bundles').update(row).eq('id',id); if(error){ toast('Could not save: '+error.message,true); return; } }
+          else { const { data, error } = await sb.from('bundles').insert(row).select('id').single(); if(error){ toast('Could not save: '+error.message,true); return; } id = data.id; }
+          const want = new Set(boxes.filter(([c,cb])=>cb.checked).map(([c])=>c.id));
+          const toAdd = [...want].filter(x=>!have.has(x)), toDel = [...have].filter(x=>!want.has(x)&&courses.some(c=>c.id===x));
+          if(toAdd.length){ const { error } = await sb.from('bundle_courses').insert(toAdd.map(cid=>({bundle_id:id,course_id:cid}))); if(error){ toast('Saved, but could not add courses: '+error.message,true); return; } }
+          for(const cid of toDel){ await sb.from('bundle_courses').delete().eq('bundle_id',id).eq('course_id',cid); }
+          close(); toast(b?'Bundle saved':'Bundle created'); reload();
+        })},'Save'),
+        h('button',{class:'btn',onclick:()=>close()},'Cancel'))
+    ]);
+  }
+  bundleBox.append(h('button',{class:'btn primary sm',style:'margin-bottom:12px;',onclick:()=>bundleForm(null)},'+ New bundle'));
+  if(!bundles.length) bundleBox.append(h('div',{class:'empty'},'No bundles yet. Create one, then add a school.'));
+  bundles.forEach(b=>{
+    const cs = bc.filter(x=>x.bundle_id===b.id).map(x=>courseTitle(x.course_id));
+    bundleBox.append(h('div',{class:'item'},
+      h('div',{class:'main'}, h('h4',{},b.name,' ',h('span',{class:'pill '+(b.is_active?'green':'red')},b.is_active?'Active':'Off')),
+        h('div',{class:'meta'}, h('span',{},rs(b.price_per_seat_npr)+' per student'), b.class_level?h('span',{},b.class_level):null, h('span',{},cs.length+' course'+(cs.length===1?'':'s')+(cs.length?': '+cs.join(', '):'')))),
+      h('button',{class:'btn sm',onclick:()=>bundleForm(b)},'Edit')));
+  });
+  wrap.append(bundleBox);
+
+  /* ---- schools ---- */
+  function schoolForm(sc){
+    const f = { name:sc?sc.name:'', pan:sc&&sc.pan||'', contact_name:sc&&sc.contact_name||'', contact_phone:sc&&sc.contact_phone||'', contact_email:sc&&sc.contact_email||'', address:sc&&sc.address||'', notes:sc&&sc.notes||'' };
+    const mk = (k,label,ph) => { const i = h('input',{type:'text',value:f[k],placeholder:ph||''}); return [k,i,h('div',{class:'field'},h('label',{},label),i)]; };
+    const rowsF = [mk('name','School name'),mk('pan','PAN number (for the bill)'),mk('contact_name','Contact person'),mk('contact_phone','Contact phone'),mk('contact_email','Contact email'),mk('address','Address'),mk('notes','Notes (internal)')];
+    let close;
+    close = openSheet(sc?'Edit school':'New school',[ rowsF.map(r=>r[2]),
+      h('div',{class:'row'},
+        h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget,async()=>{
+          const row = {}; rowsF.forEach(([k,i])=>{ row[k] = i.value.trim()||null; });
+          if(!row.name || row.name.length<2){ toast('Enter the school name',true); return; }
+          const q = sc ? sb.from('schools').update(row).eq('id',sc.id) : sb.from('schools').insert(row);
+          const { error } = await q; if(error){ toast('Could not save: '+error.message,true); return; }
+          close(); toast('School saved'); reload();
+        })},'Save'),
+        h('button',{class:'btn',onclick:()=>close()},'Cancel'))]);
+  }
+  function orderForm(sc){
+    const act = bundles.filter(b=>b.is_active);
+    if(!act.length){ toast('Create an active bundle first',true); return; }
+    const bSel = h('select',{}, act.map(b=>h('option',{value:b.id},b.name+' — '+rs(b.price_per_seat_npr))));
+    const seats = h('input',{type:'number',min:'1',placeholder:'Number of students'});
+    const price = h('input',{type:'number',min:'0',placeholder:'Leave blank to use the bundle price'});
+    const st = h('input',{type:'date'}), en = h('input',{type:'date'});
+    let close;
+    close = openSheet('New order for '+sc.name,[
+      h('div',{class:'field'},h('label',{},'Bundle'),bSel), h('div',{class:'field'},h('label',{},'Seats (number of students)'),seats),
+      h('div',{class:'field'},h('label',{},'Price per student in Rs (optional discount)'),price),
+      h('div',{class:'row'},h('div',{class:'field',style:'flex:1;'},h('label',{},'Term starts'),st),h('div',{class:'field',style:'flex:1;'},h('label',{},'Term ends'),en)),
+      h('p',{class:'sub'},'Student codes stop working after the end date, and course access ends with it. Leave dates blank for no end date.'),
+      h('div',{class:'row'},
+        h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget,async()=>{
+          const n = parseInt(seats.value,10); if(!n||n<1){ toast('Enter the number of seats',true); return; }
+          const { data, error } = await sb.rpc('admin_create_school_order',{ p_school:sc.id, p_bundle:bSel.value, p_seats:n, p_price: price.value===''?null:parseInt(price.value,10), p_start:st.value||null, p_end:en.value||null });
+          if(error){ toast('Could not create: '+error.message,true); return; }
+          close(); toast('Order created'); reload();
+        })},'Create order'),
+        h('button',{class:'btn',onclick:()=>close()},'Cancel'))]);
+  }
+  async function orderSheet(o, sc){
+    const { data: roster, error: rErr } = await sb.rpc('admin_school_roster',{ p_order:o.id });
+    if(rErr){ toast('Could not load the class list: '+rErr.message,true); return; }
+    const rows = roster||[]; const used = rows.filter(r=>r.status==='claimed').length;
+    const [lab,cls] = ORDER_STATUS[o.status]||[o.status,''];
+    const money = canMoney;
+    let close = ()=>{};
+    const statusBtn = (status,label,cls2,ask) => h('button',{class:'btn sm '+(cls2||''),onclick:e=>busy(e.currentTarget,async()=>{
+      let invoice = null;
+      if(status==='invoiced'||status==='paid'){ invoice = await askText(status==='invoiced'?'Bill number':'Bill / receipt number','Bill number (optional)',false,'Save'); if(invoice===null) return; }
+      else if(!await confirmBox(label+'?', ask, label, status!=='paid')) return;
+      const { error } = await sb.rpc('admin_set_order_status',{ p_order:o.id, p_status:status, p_invoice:invoice||null, p_note:null });
+      if(error){ toast(error.message,true); return; }
+      close(); toast('Order '+status); reload();
+    })},label);
+    const head = [ h('p',{class:'sub',style:'margin-top:6px;'}, sc.name+' · '+bName(o.bundle_id)),
+      h('dl',{class:'kv'},
+        h('dt',{},'Status'),h('dd',{},h('span',{class:'pill '+cls},lab)),
+        h('dt',{},'Seats'),h('dd',{},rows.length+' of '+o.seats+' created · '+used+' used'),
+        h('dt',{},'Price'),h('dd',{},rs(o.price_per_seat_npr)+' per student · total '+rs(o.total_npr)),
+        h('dt',{},'Term'),h('dd',{},fmtDate(o.term_start)+' to '+fmtDate(o.term_end)),
+        o.invoice_no?[h('dt',{},'Bill no.'),h('dd',{},o.invoice_no)]:null) ];
+    const acts = h('div',{class:'row',style:'margin:10px 0;'});
+    if(money){
+      if(o.status==='requested') acts.append(statusBtn('invoiced','Mark invoiced','',''));
+      if(o.status==='requested'||o.status==='invoiced') acts.append(statusBtn('paid','Mark paid — open the seats','good',''));
+      if(o.status==='paid') acts.append(statusBtn('closed','Close term','bad','Students of this order lose access to the bundle courses now. Their progress is kept.'));
+      if(o.status==='requested'||o.status==='invoiced') acts.append(statusBtn('cancelled','Cancel order','bad','Cancel this order? Nothing has been used.'));
+    }
+    const rosterBox = h('div',{style:'margin-top:12px;'}, h('div',{class:'sub',style:'font-weight:700;margin-bottom:6px;'},'Class list and codes'));
+    if(money && o.status!=='closed' && o.status!=='cancelled' && rows.length<o.seats){
+      const left = o.seats-rows.length;
+      const paste = h('textarea',{placeholder:'Paste from Excel: Name, Class, Section, Roll — one student per line',style:'min-height:90px;'});
+      const file = h('input',{type:'file',accept:'.xlsx,.xls,.csv'});
+      file.addEventListener('change',async()=>{
+        const f = file.files[0]; if(!f) return;
+        if(!window.XLSX){ toast('The Excel tool could not load. Refresh and try again.',true); return; }
+        try{ const wb = XLSX.read(await f.arrayBuffer(),{type:'array'}); const ws = wb.Sheets[wb.SheetNames[0]];
+          const grid = XLSX.utils.sheet_to_json(ws,{header:1,defval:''}); paste.value = grid.map(r=>r.slice(0,4).join('\t')).join('\n'); }
+        catch(x){ toast('Could not read that file',true); }
+      });
+      rosterBox.append(h('p',{class:'sub'},'You can add '+left+' more student'+(left===1?'':'s')+'. Upload an Excel/CSV file with columns Name, Class, Section, Roll, or paste the rows. You can also add blank seats by entering only a number below.'),
+        h('div',{class:'field'},h('label',{},'Excel or CSV file'),file), h('div',{class:'field'},h('label',{},'…or paste here'),paste),
+        h('div',{class:'row'},
+          h('button',{class:'btn sm',onclick:()=>downloadXlsx('class-list-template.xlsx',[['Class list',[['Name','Class','Section','Roll'],['Example Student','7','A','1']]]])},'Download blank template'),
+          h('button',{class:'btn primary sm',onclick:e=>busy(e.currentTarget,async()=>{
+            const grid = paste.value.split(/\r?\n/).filter(l=>l.trim()).map(l=>l.includes('\t')?l.split('\t'):l.split(','));
+            let list;
+            if(/^\s*\d+\s*$/.test(paste.value)){
+              const n = parseInt(paste.value,10);
+              if(n>left){ toast('That is '+n+' students but only '+left+' seat(s) are left on this order.',true); return; }
+              list = Array.from({length:n},()=>({}));
+            } else list = parseRoster(grid);
+            if(!list.length){ toast('No students found. Paste rows or choose a file.',true); return; }
+            if(list.length>left){ toast('That is '+list.length+' students but only '+left+' seat(s) are left on this order.',true); return; }
+            const { data, error } = await sb.rpc('admin_add_seats',{ p_order:o.id, p_rows:list });
+            if(error){ toast(error.message,true); return; }
+            close(); toast(data+' seat'+(data===1?'':'s')+' created'); reload();
+          })},'Create seats and codes')));
+    }
+    if(rows.length){
+      rosterBox.append(h('div',{class:'row',style:'margin:8px 0;'}, h('button',{class:'btn sm primary',onclick:()=>downloadXlsx('seat-codes-'+sc.name.replace(/[^A-Za-z0-9]+/g,'-')+'.xlsx',[['Seat codes',[['Name','Class','Section','Roll','Code','Status','Joined as','Email']].concat(rows.map(r=>[r.student_name||'',r.class_name||'',r.section||'',r.roll_no||'',r.code,r.status==='claimed'?'Used':'Not used yet',r.claimed_name||'',r.claimed_email||'']))]])},'Download codes (Excel)')));
+      const tb = h('div',{style:'max-height:260px;overflow:auto;border:1px solid var(--border2);border-radius:10px;padding:6px 10px;'});
+      rows.slice(0,300).forEach(r=>{
+        tb.append(h('div',{style:'display:flex;gap:8px;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border2);flex-wrap:wrap;'},
+          h('div',{}, h('div',{style:'font-weight:700;'},r.student_name||'(no name)'), h('div',{class:'meta'},[r.class_name?'Class '+r.class_name:null,r.section?'Sec '+r.section:null,r.roll_no?'Roll '+r.roll_no:null].filter(Boolean).join(' · ')||'—')),
+          h('div',{style:'text-align:right;'}, h('div',{style:'font-family:monospace;letter-spacing:.06em;'},r.code), h('span',{class:'pill '+(r.status==='claimed'?'green':'')},r.status==='claimed'?'Used'+(r.claimed_name?' · '+r.claimed_name:''):'Not used')),
+          (money && r.status==='claimed') ? h('button',{class:'btn sm bad',onclick:e=>busy(e.currentTarget,async()=>{
+            if(!await confirmBox('Release this seat?',(r.claimed_name||'This student')+' loses the bundle courses now and the code is replaced with a new one, so the seat can go to another student.','Release',true)) return;
+            const { error } = await sb.rpc('admin_release_seat',{ p_seat:r.seat_id }); if(error){ toast(error.message,true); return; }
+            close(); toast('Seat released'); reload();
+          })},'Release') : null));
+      });
+      rosterBox.append(tb);
+      if(rows.length>300) rosterBox.append(h('p',{class:'sub'},'Showing the first 300. The Excel download has everyone.'));
+    } else rosterBox.append(h('p',{class:'sub'},'No seats created yet.'));
+    close = openSheet('Order — '+sc.name, [head, acts, rosterBox]);
+  }
+  const schoolBox = h('div',{class:'card'}, h('h4',{style:'margin-bottom:6px;'},'Schools and orders'));
+  if(canMoney) schoolBox.append(h('button',{class:'btn primary sm',style:'margin-bottom:12px;',onclick:()=>schoolForm(null)},'+ New school'));
+  if(!schools.length) schoolBox.append(h('div',{class:'empty'},'No schools yet.'));
+  schools.forEach(sc=>{
+    const os = orders.filter(o=>o.school_id===sc.id);
+    const card = h('div',{class:'item',style:'flex-direction:column;align-items:stretch;'},
+      h('div',{style:'display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;'},
+        h('div',{class:'main'}, h('h4',{},sc.name), h('div',{class:'meta'}, sc.pan?h('span',{},'PAN '+sc.pan):null, sc.contact_name?h('span',{},sc.contact_name):null, sc.contact_phone?h('span',{},sc.contact_phone):null)),
+        canMoney ? h('div',{class:'row'}, h('button',{class:'btn sm',onclick:()=>schoolForm(sc)},'Edit'), h('button',{class:'btn sm primary',onclick:()=>orderForm(sc)},'+ New order')) : null));
+    if(!os.length) card.append(h('div',{class:'meta',style:'margin-top:6px;'},'No orders yet.'));
+    os.forEach(o=>{ const [lab,cls] = ORDER_STATUS[o.status]||[o.status,'']; 
+      card.append(h('div',{style:'display:flex;gap:10px;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--border2);margin-top:8px;flex-wrap:wrap;'},
+        h('div',{}, h('div',{style:'font-weight:700;'},bName(o.bundle_id)+' · '+o.seats+' seat'+(o.seats===1?'':'s')), h('div',{class:'meta'},h('span',{},rs(o.total_npr)+' total'),h('span',{},fmtDate(o.term_start)+' to '+fmtDate(o.term_end)))),
+        h('div',{class:'row'}, h('span',{class:'pill '+cls},lab), h('button',{class:'btn sm',onclick:()=>orderSheet(o,sc)},'Open')))); });
+    schoolBox.append(card);
+  });
+  wrap.append(schoolBox);
+  return wrap;
 }
 
 /* ======================= COUPONS ======================= */

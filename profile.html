@@ -599,6 +599,20 @@ function studentContent(){
       <div class="stat-box"><div class="num" id="stAvg">–</div><div class="label">Quiz Average</div></div>
     </div>
 
+    <div class="section-title">My School</div>
+    <div id="mySchoolList"></div>
+    <div class="course-row" style="margin-bottom:30px;">
+      <div style="flex:1;min-width:220px;">
+        <h4 style="font-size:14px;">Have a code from your school?</h4>
+        <div class="course-stats"><span>Enter it to unlock the courses your school arranged for you.</span></div>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+          <input id="schoolCodeInput" type="text" maxlength="16" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Your school code" aria-label="School code" style="flex:1;min-width:170px;padding:11px 14px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-deep);color:var(--text-primary);font-family:inherit;font-size:13.5px;letter-spacing:.06em;text-transform:uppercase;" onkeydown="if(event.key==='Enter'){joinSchool();}">
+          <button class="btn btn-primary" id="schoolCodeBtn" type="button" onclick="joinSchool()">Join</button>
+        </div>
+        <div id="schoolCodeMsg" style="display:none;font-size:13px;margin-top:8px;"></div>
+      </div>
+    </div>
+
     <div class="section-title">My Courses</div>
     <div id="myCourseList"><div class="course-row"><div>Loading…</div></div></div>
 
@@ -628,7 +642,8 @@ function studentContent(){
 
 function wireCopyRefBtn(){
   const btn = document.getElementById('copyRefBtn');
-  if(!btn) return;
+  if(!btn || btn.dataset.wired) return;
+  btn.dataset.wired = '1';
   btn.addEventListener('click', ()=>{
     const id = (document.getElementById('refIdText')||{}).textContent || '';
     navigator.clipboard.writeText(id).then(()=>showToast('Reference ID copied!','ok')).catch(()=>showToast('Could not copy.','err'));
@@ -703,10 +718,42 @@ function renderPendingParents(){
     </div>`).join('');
 }
 
+async function loadMySchool(){
+  const box = document.getElementById('mySchoolList');
+  if(!box) return;
+  const { data } = await supabaseClient.rpc('my_school_memberships');
+  const today = new Date().toISOString().slice(0,10);
+  const fmt = d => new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  box.innerHTML = (data||[]).map(m=>{
+    const ended = m.order_status==='closed' || (m.term_end && m.term_end < today);
+    const line = [m.bundle_name, m.class_name ? 'Class '+m.class_name : '', m.section ? 'Section '+m.section : ''].filter(Boolean).join(' · ');
+    const when = ended ? 'Access ended' : (m.term_end ? 'Access until '+fmt(m.term_end) : 'Active');
+    return `<div class="course-row"><div><h4 style="font-size:14px;">${esc(m.school_name)}</h4><div class="course-stats"><span>${esc(line)}</span><span>${esc(when)}</span></div></div></div>`;
+  }).join('');
+}
+
+async function joinSchool(){
+  const inp = document.getElementById('schoolCodeInput'), btn = document.getElementById('schoolCodeBtn'), msg = document.getElementById('schoolCodeMsg');
+  if(!inp || !btn || !msg) return;
+  const show = (t, ok)=>{ msg.style.display=''; msg.style.color = ok ? '#22C55E' : 'var(--red)'; msg.textContent = t; };
+  const code = inp.value.trim();
+  if(code.replace(/[^A-Za-z0-9]/g,'').length < 6){ show('Enter the code your school gave you.', false); return; }
+  btn.disabled = true; btn.textContent = 'Checking…';
+  const { data, error } = await supabaseClient.rpc('claim_seat_code', { p_code: code });
+  btn.disabled = false; btn.textContent = 'Join';
+  if(error){ show('Could not check the code: '+error.message, false); return; }
+  if(!data || !data.ok){ show((data && data.error) || 'That code did not work.', false); return; }
+  inp.value = '';
+  show('You have joined '+data.school+'. '+data.courses+' course'+(data.courses===1?'':'s')+' unlocked.', true);
+  showToast('Joined '+data.school, 'ok');
+  loadStudentStats();
+}
+
 async function loadStudentStats(){
   wireCopyRefBtn();
   renderMyParents();
   renderPendingParents();
+  loadMySchool();
   const uid = currentUser.id;
   const [en, qa] = await Promise.all([
     supabaseClient.from('enrollments').select('course_id, courses(id,title)').eq('student_id', uid),
