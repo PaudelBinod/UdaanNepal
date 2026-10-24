@@ -848,26 +848,10 @@ function teacherContent(){
     <div class="section-title">My Courses</div>
     <div id="tcList"><div class="course-row"><div>Loading…</div></div></div>
 
-    <div class="section-title" style="margin-top:30px;">Upload Quiz Questions from Excel</div>
-    <div class="card" style="padding:22px;margin-bottom:16px;">
-      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:16px;">
-        Upload an Excel file to add questions to any of your quizzes. Each row in the file becomes one question.
-        <a id="dlTemplateBtn" href="#" style="color:var(--cyan);font-weight:700;margin-left:6px;">Download Template ↓</a>
-      </p>
-      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;">
-        <div style="flex:1;min-width:180px;">
-          <label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:6px;">Select Quiz</label>
-          <select id="uploadQuizSelect" style="width:100%;padding:10px 12px;background:var(--bg-deep);border:1px solid var(--border-strong);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13.5px;">
-            <option value="">— Choose a quiz —</option>
-          </select>
-        </div>
-        <div style="flex:1;min-width:180px;">
-          <label style="font-size:12px;color:var(--text-muted);display:block;margin-bottom:6px;">Excel File (.xlsx)</label>
-          <input type="file" id="quizExcelInput" accept=".xlsx,.xls" style="width:100%;padding:9px 12px;background:var(--bg-deep);border:1px solid var(--border-strong);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;cursor:pointer;">
-        </div>
-        <button id="uploadQuestionsBtn" class="btn btn-primary" style="padding:10px 20px;white-space:nowrap;">Upload Questions</button>
-      </div>
-      <div id="uploadProgress" style="display:none;margin-top:14px;font-size:13px;color:var(--text-muted);"></div>
+    <div class="section-title" style="margin-top:30px;">Quiz Questions</div>
+    <div class="card" style="padding:18px;margin-bottom:16px;">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin:0 0 12px;">Quizzes, their lesson checks and the Excel upload of questions are now all in one place: <strong>My Courses → Manage → Quizzes</strong>.</p>
+      <a href="courses" class="btn btn-primary">Open My Courses →</a>
     </div>
 
     <div class="section-title" style="margin-top:30px;">Teaching Actions</div>
@@ -903,20 +887,6 @@ async function loadTeacherStats(){
     </div>`).join('')
     : `<div class="course-row"><div><h4>No courses yet</h4><div class="course-stats"><span>Create your first course to begin.</span></div></div><a href="courses" class="btn btn-primary">Create course</a></div>`;
 
-  // Populate quiz select dropdown for Excel upload
-  const quizSel = document.getElementById('uploadQuizSelect');
-  if(quizSel && qz.length){
-    // Re-fetch quizzes with id and title
-    const { data: quizRows } = await supabaseClient.from('quizzes').select('id,title,course_id').in('course_id', ids);
-    (quizRows||[]).forEach(q=>{
-      const course = courses.find(c=>c.id===q.course_id);
-      const opt = document.createElement('option');
-      opt.value = q.id;
-      opt.textContent = `${esc(q.title)}${course?' — '+esc(course.title):''}`;
-      quizSel.appendChild(opt);
-    });
-  }
-  initExcelUpload();
 }
 
 function childInitials(name){
@@ -1032,129 +1002,6 @@ function renderRoleContent(){
 }
 
 document.addEventListener('un-content', ()=>{ if(currentRole==='parent') renderRoleContent(); });
-
-/* ===== TEACHER EXCEL UPLOAD ===== */
-function initExcelUpload(){
-  const uploadBtn = document.getElementById('uploadQuestionsBtn');
-  const fileInput = document.getElementById('quizExcelInput');
-  const quizSel   = document.getElementById('uploadQuizSelect');
-  const progress  = document.getElementById('uploadProgress');
-  const dlBtn     = document.getElementById('dlTemplateBtn');
-
-  if(!uploadBtn) return;
-
-  // Download template — open GitHub raw or direct link
-  if(dlBtn) dlBtn.addEventListener('click', e=>{
-    e.preventDefault();
-    // Generate a minimal template on the fly via data URI isn't feasible without SheetJS
-    // Instead direct to the uploaded template asset URL (set after first deploy)
-    // For now open instructions
-    showToast('Download the template from your profile page after the next deploy.', 'info');
-  });
-
-  uploadBtn.addEventListener('click', async ()=>{
-    const quizId = quizSel && quizSel.value;
-    const file   = fileInput && fileInput.files[0];
-
-    if(!quizId){ showToast('Please select a quiz first.', 'err'); return; }
-    if(!file){   showToast('Please choose an Excel file.', 'err'); return; }
-    if(!file.name.match(/\.xlsx?$/i)){ showToast('File must be .xlsx or .xls', 'err'); return; }
-
-    uploadBtn.disabled = true;
-    uploadBtn.textContent = 'Reading file…';
-    progress.style.display = '';
-    progress.textContent = 'Parsing Excel file…';
-
-    try {
-      // Load SheetJS dynamically
-      if(!window.XLSX){
-        await new Promise((res,rej)=>{
-          const s = document.createElement('script');
-          s.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
-          s.onload = res; s.onerror = ()=>rej(new Error('Could not load Excel parser'));
-          document.head.appendChild(s);
-        });
-      }
-
-      const buf  = await file.arrayBuffer();
-      const wb   = XLSX.read(buf, { type: 'array' });
-      // Look for "Quiz Questions" sheet, fallback to first sheet
-      const sheetName = wb.SheetNames.includes('Quiz Questions') ? 'Quiz Questions' : wb.SheetNames[0];
-      const ws   = wb.Sheets[sheetName];
-      const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-
-      // Find header row (first row with "Question" in col 0)
-      let dataStart = 1;
-      for(let i=0;i<Math.min(rows.length,5);i++){
-        if(String(rows[i][0]).toLowerCase().includes('question')){ dataStart=i+1; break; }
-      }
-
-      const questions = [];
-      for(let i=dataStart; i<rows.length; i++){
-        const r = rows[i];
-        const qText = String(r[0]||'').trim();
-        if(!qText) continue; // skip blank rows
-        const optA = String(r[1]||'').trim();
-        const optB = String(r[2]||'').trim();
-        const optC = String(r[3]||'').trim();
-        const optD = String(r[4]||'').trim();
-        const correct = String(r[5]||'').trim().toUpperCase();
-        const explanation = String(r[6]||'').trim();
-        const code = String(r[7]||'').trim();
-
-        if(!optA||!optB){ progress.textContent=`Row ${i+1}: skipped (needs at least 2 options)`; continue; }
-        if(!['A','B','C','D'].includes(correct)){ progress.textContent=`Row ${i+1}: skipped (Correct Answer must be A, B, C or D)`; continue; }
-
-        questions.push({ qText, options:[optA,optB,optC,optD], correct, explanation, code });
-      }
-
-      if(!questions.length){ showToast('No valid questions found in the file.', 'err'); uploadBtn.disabled=false; uploadBtn.textContent='Upload Questions'; return; }
-
-      progress.textContent = `Uploading ${questions.length} questions…`;
-
-      // Insert questions one by one (or batch)
-      let inserted = 0, failed = 0;
-      for(const q of questions){
-        // Insert question row
-        const { data: qRow, error: qErr } = await supabaseClient
-          .from('quiz_questions')
-          .insert({ quiz_id: quizId, question_text: q.qText, code_snippet: q.code||null, explanation: q.explanation||null })
-          .select('id').single();
-        if(qErr||!qRow){
-          failed++;
-          // Show the actual error on first failure so we can debug
-          if(failed===1) progress.textContent = `Question insert error: ${qErr ? qErr.message+' (code:'+qErr.code+')' : 'no row returned'}`;
-          continue;
-        }
-
-        // Build options array
-        const optLabels = ['A','B','C','D'];
-        const opts = q.options.map((option_text,idx)=>({
-          question_id: qRow.id,
-          option_text,
-          is_correct: optLabels[idx]===q.correct
-        })).filter(o=>o.option_text); // drop empty options
-
-        const { error: oErr } = await supabaseClient.from('quiz_options').insert(opts);
-        if(oErr){
-          failed++;
-          if(failed===1) progress.textContent = `Options insert error: ${oErr.message} (code:${oErr.code})`;
-        } else { inserted++; }
-        progress.textContent = inserted>0 ? `Uploaded ${inserted} of ${questions.length}…` : progress.textContent;
-      }
-
-      showToast(`Done! ${inserted} question${inserted!==1?'s':''} added.${failed?' '+failed+' failed.':''}`, inserted?'ok':'err');
-      progress.textContent = `✓ ${inserted} question${inserted!==1?'s':''} uploaded successfully.${failed?' '+failed+' row(s) had errors.':''}`;
-    } catch(err){
-      showToast('Upload failed: '+(err.message||'unknown error'), 'err');
-      progress.textContent = 'Error: '+(err.message||'unknown error');
-    }
-
-    uploadBtn.disabled = false;
-    uploadBtn.textContent = 'Upload Questions';
-    fileInput.value = '';
-  });
-}
 
 /* ===== PARENT FEATURE LOGIC ===== */
 let _allCourses = null; // cache of public courses for parent modals

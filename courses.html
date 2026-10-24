@@ -865,6 +865,109 @@ async function openManageModal(id){
 }
 
 
+/* ======================= EXCEL IMPORT OF QUIZ QUESTIONS ======================= */
+// One row of the file = one question: Question | Option A | B | C | D | Correct Answer | Explanation | Code
+const XLSX_URLS = ['https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js', 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js'];
+const QUESTION_COLUMNS = ['Question','Option A','Option B','Option C','Option D','Correct Answer (A, B, C or D)','Explanation (optional)','Code or extra text (optional)'];
+const OPTION_LETTERS = ['A','B','C','D'];
+const MAX_EXCEL_QUESTIONS = 300;
+let xlsxLoading = null;
+function loadSheetJs(){
+  if(window.XLSX) return Promise.resolve();
+  if(xlsxLoading) return xlsxLoading;
+  xlsxLoading = (async () => {
+    for(const url of XLSX_URLS){
+      try {
+        await new Promise((res, rej) => { const s = document.createElement('script'); s.src = url; s.onload = res; s.onerror = () => { s.remove(); rej(new Error('load')); }; document.head.appendChild(s); });
+        if(window.XLSX) return;
+      } catch(e) { /* try the next address */ }
+    }
+    throw new Error('The Excel reader could not load. Check your internet connection and try again.');
+  })();
+  xlsxLoading.catch(() => { xlsxLoading = null; });
+  return xlsxLoading;
+}
+async function downloadQuestionTemplate(){
+  try { await loadSheetJs(); } catch(e) { showToast(e.message, 'err'); return; }
+  const rows = [QUESTION_COLUMNS,
+    ['What is 2 + 2?','3','4','5','6','B','Adding 2 and 2 gives 4.',''],
+    ['Which word is a verb?','Table','Run','Blue','','B','A verb tells what someone does.','']];
+  const help = [['How to fill this file'], [''],
+    ['One row is one question. Keep the first row (the headings).'],
+    ['Option A and Option B are needed. Option C and Option D are optional.'],
+    ['Correct Answer: type the letter of the right option: A, B, C or D.'],
+    ['Explanation and Code are optional. The explanation is shown to students after they try the quiz.'],
+    ['Delete the two example rows before you upload, or they will be added as questions too.']];
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(rows); ws['!cols'] = [{wch:42},{wch:20},{wch:20},{wch:20},{wch:20},{wch:18},{wch:36},{wch:30}];
+  XLSX.utils.book_append_sheet(wb, ws, 'Quiz Questions');
+  const hs = XLSX.utils.aoa_to_sheet(help); hs['!cols'] = [{wch:100}];
+  XLSX.utils.book_append_sheet(wb, hs, 'How to fill');
+  XLSX.writeFile(wb, 'quiz-questions-template.xlsx');
+}
+function parseAnswerLetter(v){ const m = String(v == null ? '' : v).trim().match(/^([A-Da-d])\s*[.)]?$/); return m ? m[1].toUpperCase() : null; }
+// reads the file and sorts rows into good questions and rows with a mistake (nothing is saved here)
+async function readQuestionsFromExcel(file){
+  if(!/\.xlsx?$/i.test(file.name)) throw new Error('The file must be an Excel file (.xlsx or .xls).');
+  if(file.size > 5 * 1024 * 1024) throw new Error('That file is too large (over 5 MB). Please split it into smaller files.');
+  await loadSheetJs();
+  let wb;
+  const buf = await file.arrayBuffer(), head = new Uint8Array(buf.slice(0, 4));
+  const isXlsx = head[0] === 0x50 && head[1] === 0x4B, isXls = head[0] === 0xD0 && head[1] === 0xCF;   // .xlsx is a zip file, .xls is the older Excel format
+  if(!isXlsx && !isXls) throw new Error('That does not look like a real Excel file. Please open it in Excel, save it as .xlsx and try again.');
+  try { wb = XLSX.read(buf, { type: 'array' }); } catch(e) { throw new Error('That file could not be read. Please save it as .xlsx and try again.'); }
+  const sheetName = wb.SheetNames.includes('Quiz Questions') ? 'Quiz Questions' : wb.SheetNames[0];
+  const ws = sheetName && wb.Sheets[sheetName];
+  if(!ws) throw new Error('The file has no sheets.');
+  const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '', blankrows: true });
+  const firstRow = ws['!ref'] ? XLSX.utils.decode_range(ws['!ref']).s.r : 0;
+  const cell = (r, i) => String(r[i] == null ? '' : r[i]).trim();
+  const questions = [], problems = [];
+  let first = true;
+  rows.forEach((r, i) => {
+    if(!r.some(x => String(x == null ? '' : x).trim() !== '')) return;            // blank row
+    const rowNo = firstRow + i + 1;
+    if(first){
+      first = false;
+      // the first filled row is the headings, unless it is already a complete question
+      const looksLikeHeading = /question|^q$|^s\.?n\.?$|^no\.?$/i.test(cell(r,0)) || /option|choice/i.test(cell(r,1)) || /correct|answer/i.test(cell(r,5));
+      if(!parseAnswerLetter(r[5]) && looksLikeHeading) return;
+    }
+    const text = cell(r,0), opts = [1,2,3,4].map(k => cell(r,k)), letter = parseAnswerLetter(r[5]);
+    const explanation = cell(r,6), code = cell(r,7);
+    if(!text){ problems.push('Row ' + rowNo + ': the question is empty.'); return; }
+    if(opts.filter(Boolean).length < 2){ problems.push('Row ' + rowNo + ': needs at least two answer options.'); return; }
+    if(!letter){ problems.push('Row ' + rowNo + ': Correct Answer must be A, B, C or D.'); return; }
+    if(!opts[OPTION_LETTERS.indexOf(letter)]){ problems.push('Row ' + rowNo + ': the correct answer ' + letter + ' has no text.'); return; }
+    if(text.length > 1000 || explanation.length > 1000 || code.length > 4000 || opts.some(o => o.length > 400)){ problems.push('Row ' + rowNo + ': some text is too long (question or explanation over 1000 characters, an option over 400).'); return; }
+    questions.push({ row: rowNo, text, options: opts, correct: OPTION_LETTERS.indexOf(letter), explanation, code });
+  });
+  if(questions.length > MAX_EXCEL_QUESTIONS) throw new Error('Too many questions in one file (the limit is ' + MAX_EXCEL_QUESTIONS + '). Please split it into smaller files.');
+  return { questions, problems };
+}
+function problemText(problems){ return problems.slice(0, 8).join('\n') + (problems.length > 8 ? '\n…and ' + (problems.length - 8) + ' more.' : ''); }
+// saves the questions in groups; if anything fails, the groups already saved are removed again so nothing is left half done
+async function saveExcelQuestions(quizId, questions, lastOrder, onProgress){
+  const made = [];
+  const undo = async () => { if(made.length) await supabaseClient.from('quiz_questions').delete().in('id', made); };
+  for(let s = 0; s < questions.length; s += 50){
+    const chunk = questions.slice(s, s + 50);
+    const qRows = chunk.map((q, k) => ({ quiz_id: quizId, question_text: q.text, code_snippet: q.code || null, explanation: q.explanation || null, sort_order: lastOrder + s + k + 1 }));
+    const { data: made1, error } = await supabaseClient.from('quiz_questions').insert(qRows).select('id, sort_order');
+    if(error || !made1 || made1.length !== qRows.length){ if(made1) made.push(...made1.map(x => x.id)); await undo(); return { added: 0, error: (error && error.message) || 'The questions could not be saved.' }; }
+    made.push(...made1.map(x => x.id));
+    const idBySort = {}; made1.forEach(x => { idBySort[x.sort_order] = x.id; });
+    const oRows = [];
+    chunk.forEach((q, k) => { const qid = idBySort[lastOrder + s + k + 1]; q.options.forEach((t, idx) => { if(t) oRows.push({ question_id: qid, option_text: t, is_correct: idx === q.correct, sort_order: idx + 1 }); }); });
+    const { error: oe } = await supabaseClient.from('quiz_options').insert(oRows);
+    if(oe){ await undo(); return { added: 0, error: oe.message }; }
+    if(onProgress) onProgress(Math.min(s + chunk.length, questions.length), questions.length);
+  }
+  return { added: questions.length };
+}
+const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+
+
 /* ======================= QUIZZES (teacher) ======================= */
 async function renderManageQuizzes(courseId, openQuizId){
   const box = document.getElementById('mmQuizzes');
@@ -924,22 +1027,47 @@ async function renderManageQuizzes(courseId, openQuizId){
     '<div class="form-group"><label for="nqTime">Time limit (minutes)</label><input type="number" id="nqTime" min="1" max="240" value="15"></div>' +
     (canTie ? '<div class="form-group"><label for="nqLesson">Lesson check for (optional)</label><select id="nqLesson"><option value="">— Not tied to a lesson (normal course quiz) —</option>' +
       lessons.map((l, i) => '<option value="' + esc(l.id) + '">' + (i + 1) + '. ' + esc(l.title) + '</option>').join('') + '</select>' +
-      '<div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Pick a lesson to make this the check for that lesson. Students try it at the end of the lesson and see a level (Below basic, Basic, Proficient, High) instead of pass or fail. A lesson can have one check.</div></div>' : '');
+      '<div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Pick a lesson to make this the check for that lesson. Students try it at the end of the lesson and see a level (Below basic, Basic, Proficient, High) instead of pass or fail. A lesson can have one check.</div></div>' : '') +
+    '<div class="form-group"><label for="nqFile">Questions from Excel <span class="opt">(optional)</span></label><input type="file" id="nqFile" accept=".xlsx,.xls">' +
+      '<div style="font-size:12px;color:var(--text-muted);">One row is one question. You can also add questions later, from the quiz itself. <a href="#" id="nqTpl" style="color:var(--cyan);font-weight:700;">Download the template</a></div><div id="nqStatus" style="font-size:13px;color:var(--red);white-space:pre-line;"></div></div>';
   box.append(f);
+  f.querySelector('#nqTpl').addEventListener('click', e => { e.preventDefault(); downloadQuestionTemplate(); });
   const add = mk('button', '', '+ Create quiz'); add.className = 'btn btn-primary btn-sm';
   add.addEventListener('click', async () => {
     const title = document.getElementById('nqTitle').value.trim(); if(!title){ showToast('Please enter a quiz title.', 'info'); return; }
     const row = { course_id: courseId, title, passing_score: parseInt(document.getElementById('nqPass').value,10) || 60, time_limit_minutes: parseInt(document.getElementById('nqTime').value,10) || 15 };
     const lessonPick = document.getElementById('nqLesson');
     if(lessonPick && lessonPick.value) row.lesson_id = lessonPick.value;
+    const file = document.getElementById('nqFile').files[0];
+    const nqStatus = document.getElementById('nqStatus'); nqStatus.textContent = '';
+    add.disabled = true;
+    let read = null;
+    if(file){
+      // read the Excel file BEFORE creating anything, so a bad file never leaves an empty quiz behind
+      add.textContent = 'Reading the file…';
+      try { read = await readQuestionsFromExcel(file); } catch(e) { nqStatus.textContent = e.message; showToast(e.message, 'err'); add.disabled = false; add.textContent = '+ Create quiz'; return; }
+      if(!read.questions.length){ nqStatus.textContent = 'No valid questions were found in the file, so the quiz was not created.' + (read.problems.length ? '\n' + problemText(read.problems) : ''); showToast('No valid questions found, so the quiz was not created.', 'err'); add.disabled = false; add.textContent = '+ Create quiz'; return; }
+      if(read.problems.length && !confirm('Create "' + title + '" with ' + plural(read.questions.length, 'question') + '?\n\n' + plural(read.problems.length, 'row') + ' will be skipped:\n' + problemText(read.problems))){ add.disabled = false; add.textContent = '+ Create quiz'; return; }
+    }
+    add.textContent = 'Creating…';
     const { data, error } = await supabaseClient.from('quizzes').insert(row).select().single();
-    if(error){ showToast('Could not create: ' + tieError(error.message), 'err'); return; }
-    await renderManageQuizzes(courseId); editQuiz(courseId, data);
+    if(error){ showToast('Could not create: ' + tieError(error.message), 'err'); add.disabled = false; add.textContent = '+ Create quiz'; return; }
+    let notice = '';
+    if(read){
+      add.textContent = 'Adding questions…';
+      const res = await saveExcelQuestions(data.id, read.questions, 0, (n, t) => { add.textContent = 'Adding questions… ' + n + ' of ' + t; });
+      if(res.error){ showToast('The quiz was created, but its questions could not be added: ' + res.error + ' Try again with Upload questions inside the quiz.', 'err'); }
+      else {
+        notice = plural(res.added, 'question') + ' added from Excel. The quiz is a draft: check the questions, then press Publish.' + (read.problems.length ? '\n' + plural(read.problems.length, 'row') + ' skipped:\n' + problemText(read.problems) : '');
+        showToast('Quiz created with ' + plural(res.added, 'question') + '.', 'ok');
+      }
+    }
+    await renderManageQuizzes(courseId); editQuiz(courseId, data, notice);
   });
   box.append(add);
 }
 
-async function editQuiz(courseId, quiz){
+async function editQuiz(courseId, quiz, notice){
   const box = document.getElementById('mmQuizzes');
   const mk = (tag, css, text) => { const e = document.createElement(tag); if(css) e.style.cssText = css; if(text != null) e.textContent = text; return e; };
   const { data: qs } = await supabaseClient.from('quiz_questions').select('*, quiz_options(*)').eq('quiz_id', quiz.id).order('sort_order');
@@ -947,6 +1075,7 @@ async function editQuiz(courseId, quiz){
   box.textContent = '';
   const back = mk('button','margin-bottom:12px;','← All quizzes'); back.className = 'btn btn-ghost btn-sm'; back.addEventListener('click', () => renderManageQuizzes(courseId)); box.append(back);
   box.append(mk('h4','margin-bottom:10px;', quiz.title));
+  if(notice) box.append(mk('div','white-space:pre-line;font-size:13px;padding:10px 12px;margin-bottom:12px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-deep);', notice));
   if(!questions.length) box.append(mk('p','font-size:13px;color:var(--text-muted);','No questions yet.'));
   questions.forEach((q, i) => {
     const row = mk('div','padding:10px 0;border-top:1px solid var(--border);');
@@ -956,7 +1085,30 @@ async function editQuiz(courseId, quiz){
     del.addEventListener('click', async () => { if(!confirm('Delete this question?')) return; const { error } = await supabaseClient.from('quiz_questions').delete().eq('id', q.id); if(error){ showToast(error.message, 'err'); return; } editQuiz(courseId, quiz); });
     row.append(del); box.append(row);
   });
-  const g = mk('div','margin-top:18px;','Add a question'); g.className = 'group-label'; box.append(g);
+  const xg = mk('div','margin-top:18px;','Upload questions from Excel'); xg.className = 'group-label'; box.append(xg);
+  box.append(mk('p','font-size:13px;color:var(--text-muted);margin-bottom:8px;','One row is one question: Question, Option A to D, the Correct Answer letter, then an optional Explanation and Code. Rows with a mistake are listed and skipped.'));
+  const xfile = document.createElement('input'); xfile.type = 'file'; xfile.accept = '.xlsx,.xls'; xfile.id = 'xqFile';
+  const xwrap = mk('div',''); xwrap.className = 'form-group'; xwrap.append(xfile);
+  const xrow = mk('div','display:flex;gap:8px;flex-wrap:wrap;align-items:center;');
+  const xgo = mk('button','','Upload questions'); xgo.className = 'btn btn-primary btn-sm';
+  const xtpl = mk('button','','Download the template'); xtpl.className = 'btn btn-ghost btn-sm'; xtpl.addEventListener('click', downloadQuestionTemplate);
+  const xstat = mk('div','font-size:13px;color:var(--text-muted);margin-top:8px;white-space:pre-line;');
+  xrow.append(xgo, xtpl); box.append(xwrap, xrow, xstat);
+  xgo.addEventListener('click', async () => {
+    const file = xfile.files[0]; if(!file){ showToast('Please choose an Excel file first.', 'info'); return; }
+    xgo.disabled = true; xstat.textContent = 'Reading the file…';
+    try {
+      const read = await readQuestionsFromExcel(file);
+      if(!read.questions.length){ xstat.textContent = 'No valid questions found.' + (read.problems.length ? '\n' + problemText(read.problems) : ''); showToast('No valid questions found in the file.', 'err'); xgo.disabled = false; return; }
+      if((read.problems.length || questions.length) && !confirm('Add ' + plural(read.questions.length, 'question') + ' to "' + quiz.title + '"?' + (questions.length ? '\nThis quiz already has ' + plural(questions.length, 'question') + '. The new ones are added after them.' : '') + (read.problems.length ? '\n\n' + plural(read.problems.length, 'row') + ' will be skipped:\n' + problemText(read.problems) : ''))){ xstat.textContent = ''; xgo.disabled = false; return; }
+      const lastOrder = questions.reduce((m, q) => Math.max(m, Number(q.sort_order) || 0), 0);
+      const res = await saveExcelQuestions(quiz.id, read.questions, lastOrder, (n, t) => { xstat.textContent = 'Added ' + n + ' of ' + t + '…'; });
+      if(res.error){ xstat.textContent = 'Could not add the questions: ' + res.error + '\nNothing was added.'; showToast('Could not add the questions. Nothing was added.', 'err'); xgo.disabled = false; return; }
+      showToast(plural(res.added, 'question') + ' added.', 'ok');
+      editQuiz(courseId, quiz, plural(res.added, 'question') + ' added from Excel.' + (read.problems.length ? '\n' + plural(read.problems.length, 'row') + ' skipped:\n' + problemText(read.problems) : ''));
+    } catch(e) { xstat.textContent = e.message || 'Something went wrong.'; showToast(e.message || 'Something went wrong.', 'err'); xgo.disabled = false; }
+  });
+  const g = mk('div','margin-top:18px;','Or add one question by hand'); g.className = 'group-label'; box.append(g);
   const form = document.createElement('div');
   form.innerHTML = '<div class="form-group"><label for="nqText">Question</label><textarea id="nqText" maxlength="1000"></textarea></div>' +
     '<div class="form-group"><label for="nqCode">Code or extra text <span class="opt">(optional)</span></label><textarea id="nqCode" maxlength="4000"></textarea></div>' +
