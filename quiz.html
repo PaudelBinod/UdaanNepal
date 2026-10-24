@@ -367,6 +367,10 @@
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
+        .status-badge.lvl-high { background: rgba(16,185,129,.15); color: #10B981; border: 1px solid rgba(16,185,129,.4); }
+        .status-badge.lvl-proficient { background: rgba(96,165,250,.15); color: #60A5FA; border: 1px solid rgba(96,165,250,.4); }
+        .status-badge.lvl-basic { background: rgba(245,158,11,.15); color: #F59E0B; border: 1px solid rgba(245,158,11,.4); }
+        .status-badge.lvl-below { background: rgba(248,113,113,.15); color: #F87171; border: 1px solid rgba(248,113,113,.4); }
         .status-badge.failed {
             background: rgba(240, 68, 82, 0.15);
             color: var(--red);
@@ -632,6 +636,8 @@
 
                 currentQuiz = {
                     server: true,
+                    lessonId: loaded.lesson_id || null,
+                    courseId: loaded.course_id || null,
                     id: loaded.id,
                     title: loaded.title,
                     passingScore: loaded.passing_score || 60,
@@ -670,6 +676,12 @@
         // Render Metadata
         function renderQuizMeta() {
             document.getElementById('quizTitle').innerText = currentQuiz.title;
+            // send the student back to the right course (and lesson, for a lesson check)
+            if (currentQuiz.courseId) {
+                const back = 'learn?course=' + encodeURIComponent(currentQuiz.courseId) + (currentQuiz.lessonId ? '&lesson=' + encodeURIComponent(currentQuiz.lessonId) : '');
+                const a1 = document.querySelector('.back-btn'); if (a1) a1.setAttribute('href', back);
+                const a2 = document.querySelector('#resultsCard a.btn-primary'); if (a2) a2.setAttribute('href', back);
+            }
         }
 
 
@@ -846,7 +858,20 @@
             document.getElementById('scoreFraction').innerText = `${result.correct} of ${result.total}`;
 
             const statusBadge = document.getElementById('statusBadge');
-            if (passed) {
+            if (result.lesson_id && result.level) {
+                // a lesson check: show a level, not pass or fail
+                const cls = { 'High': 'lvl-high', 'Proficient': 'lvl-proficient', 'Basic': 'lvl-basic', 'Below basic': 'lvl-below' }[result.level] || 'lvl-basic';
+                const head = { 'High': 'Excellent work!', 'Proficient': 'Well done!', 'Basic': 'Good try!', 'Below basic': 'Keep practising!' }[result.level] || 'Done!';
+                const retry = document.querySelector('#resultsCard .btn-secondary'); if (retry) retry.innerText = 'Try again';
+                const goBack = document.querySelector('#resultsCard a.btn-primary'); if (goBack) goBack.innerText = 'Back to the lesson →';
+                statusBadge.className = 'status-badge ' + cls;
+                statusBadge.innerText = result.level.toUpperCase();
+                document.getElementById('resultHeading').innerText = head;
+                let line = `You scored ${scorePercent}%.`;
+                if (result.attempt_no > 1 && result.first_score != null) line += ` This was try ${result.attempt_no}. Your first try was ${result.first_score}%.`;
+                line += result.level === 'Below basic' ? ' Look at the answers below, watch the lesson again and try once more.' : ' You can go back to the lesson and mark it complete.';
+                document.getElementById('resultSummary').innerText = line;
+            } else if (passed) {
                 statusBadge.className = 'status-badge passed';
                 statusBadge.innerText = 'PASSED';
                 document.getElementById('resultHeading').innerText = 'Congratulations!';

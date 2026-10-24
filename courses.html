@@ -868,17 +868,44 @@ async function openManageModal(id){
 /* ======================= QUIZZES (teacher) ======================= */
 async function renderManageQuizzes(courseId, openQuizId){
   const box = document.getElementById('mmQuizzes');
-  const { data: quizzes, error } = await supabaseClient.from('quizzes').select('*').eq('course_id', courseId).order('created_at');
+  const [{ data: quizzes, error }, lessonRes, colRes] = await Promise.all([
+    supabaseClient.from('quizzes').select('*').eq('course_id', courseId).order('created_at'),
+    supabaseClient.from('lessons').select('id,title,order_index').eq('course_id', courseId).order('order_index'),
+    supabaseClient.from('quizzes').select('lesson_id').eq('course_id', courseId).limit(1)
+  ]);
   if(error){ box.innerHTML = '<p style="font-size:13px;color:var(--red);">Quizzes are not ready yet (' + esc(error.message) + ').</p>'; return; }
   const list = quizzes || [];
+  // lesson checks only work once the Step 8 database update is in (the lesson_id column exists)
+  const lessons = (lessonRes && lessonRes.data) || [];
+  const canTie = !(colRes && colRes.error) && lessons.length > 0;
+  const lessonLabel = id => { const i = lessons.findIndex(l => l.id === id); return i < 0 ? '' : 'Lesson ' + (i + 1) + ': ' + lessons[i].title; };
+  const tieError = m => /quizzes_one_check_per_lesson|duplicate key/i.test(m || '') ? 'That lesson already has a check. Move or delete the other one first.' : (m || 'Could not save.');
   box.textContent = '';
   const mk = (tag, css, text) => { const e = document.createElement(tag); if(css) e.style.cssText = css; if(text != null) e.textContent = text; return e; };
   if(!list.length) box.append(mk('p','font-size:13px;color:var(--text-muted);margin-bottom:14px;','No quizzes yet. Students in this course can take a quiz once you publish it.'));
   list.forEach(q => {
     const row = mk('div','padding:10px 0;border-top:1px solid var(--border);');
     row.append(mk('div','font-weight:700;', q.title + (q.is_published ? '' : ' (draft)')));
-    const meta = mk('div','font-size:12.5px;color:var(--text-muted);margin-bottom:6px;', q.time_limit_minutes + ' min · pass mark ' + q.passing_score + '%');
+    const meta = mk('div','font-size:12.5px;color:var(--text-muted);margin-bottom:6px;', q.time_limit_minutes + ' min · pass mark ' + q.passing_score + '%' + (q.lesson_id && lessonLabel(q.lesson_id) ? ' · Check for ' + lessonLabel(q.lesson_id) : ''));
     row.append(meta);
+    if(canTie){
+      const wrap = mk('div','margin-bottom:8px;');
+      const lab = mk('label','display:block;font-size:12px;color:var(--text-muted);margin-bottom:3px;','Lesson check for:');
+      const sel = document.createElement('select');
+      sel.style.cssText = 'width:100%;max-width:340px;padding:8px 10px;border-radius:8px;border:1px solid var(--border-strong);background:var(--bg-deep);color:var(--text-primary);font-size:13px;';
+      const none = document.createElement('option'); none.value = ''; none.textContent = '— Not tied to a lesson (normal course quiz) —'; sel.append(none);
+      lessons.forEach((l, i) => { const o = document.createElement('option'); o.value = l.id; o.textContent = (i + 1) + '. ' + l.title; sel.append(o); });
+      sel.value = q.lesson_id || '';
+      sel.addEventListener('change', async () => {
+        sel.disabled = true;
+        const { error: ue } = await supabaseClient.from('quizzes').update({ lesson_id: sel.value || null }).eq('id', q.id);
+        sel.disabled = false;
+        if(ue){ showToast(tieError(ue.message), 'err'); sel.value = q.lesson_id || ''; return; }
+        showToast(sel.value ? 'Saved. Students must try this check before they can complete that lesson.' : 'Saved. This is now a normal course quiz.', 'ok');
+        renderManageQuizzes(courseId);
+      });
+      wrap.append(lab, sel); row.append(wrap);
+    }
     const btns = mk('div','display:flex;gap:8px;flex-wrap:wrap;');
     const b = (label, fn, danger) => { const x = mk('button', danger ? 'color:var(--red);' : '', label); x.className = 'btn btn-ghost btn-sm'; x.addEventListener('click', fn); return x; };
     btns.append(
@@ -894,13 +921,19 @@ async function renderManageQuizzes(courseId, openQuizId){
   const f = document.createElement('div');
   f.innerHTML = '<div class="form-group"><label for="nqTitle">Quiz title</label><input type="text" id="nqTitle" maxlength="160"></div>' +
     '<div class="form-group"><label for="nqPass">Pass mark (%)</label><input type="number" id="nqPass" min="1" max="100" value="60"></div>' +
-    '<div class="form-group"><label for="nqTime">Time limit (minutes)</label><input type="number" id="nqTime" min="1" max="240" value="15"></div>';
+    '<div class="form-group"><label for="nqTime">Time limit (minutes)</label><input type="number" id="nqTime" min="1" max="240" value="15"></div>' +
+    (canTie ? '<div class="form-group"><label for="nqLesson">Lesson check for (optional)</label><select id="nqLesson"><option value="">— Not tied to a lesson (normal course quiz) —</option>' +
+      lessons.map((l, i) => '<option value="' + esc(l.id) + '">' + (i + 1) + '. ' + esc(l.title) + '</option>').join('') + '</select>' +
+      '<div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Pick a lesson to make this the check for that lesson. Students try it at the end of the lesson and see a level (Below basic, Basic, Proficient, High) instead of pass or fail. A lesson can have one check.</div></div>' : '');
   box.append(f);
   const add = mk('button', '', '+ Create quiz'); add.className = 'btn btn-primary btn-sm';
   add.addEventListener('click', async () => {
     const title = document.getElementById('nqTitle').value.trim(); if(!title){ showToast('Please enter a quiz title.', 'info'); return; }
-    const { data, error } = await supabaseClient.from('quizzes').insert({ course_id: courseId, title, passing_score: parseInt(document.getElementById('nqPass').value,10) || 60, time_limit_minutes: parseInt(document.getElementById('nqTime').value,10) || 15 }).select().single();
-    if(error){ showToast('Could not create: ' + error.message, 'err'); return; }
+    const row = { course_id: courseId, title, passing_score: parseInt(document.getElementById('nqPass').value,10) || 60, time_limit_minutes: parseInt(document.getElementById('nqTime').value,10) || 15 };
+    const lessonPick = document.getElementById('nqLesson');
+    if(lessonPick && lessonPick.value) row.lesson_id = lessonPick.value;
+    const { data, error } = await supabaseClient.from('quizzes').insert(row).select().single();
+    if(error){ showToast('Could not create: ' + tieError(error.message), 'err'); return; }
     await renderManageQuizzes(courseId); editQuiz(courseId, data);
   });
   box.append(add);

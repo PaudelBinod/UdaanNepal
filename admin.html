@@ -1803,6 +1803,51 @@ function parseRoster(grid){
   const get = (r,i) => (i>=0 && i<r.length) ? r[i] : '';
   return body.map(r=>({ name:get(r,iN), class:get(r,iC), section:get(r,iS), roll:get(r,iR) })).filter(x=>x.name||x.class||x.section||x.roll);
 }
+// builds the three sheets of the CAS Excel file from the two database answers
+function casSheets(S, L, today){
+  const courses = S.courses || [], rows = S.rows || [], lv = S.levels || {};
+  const head = ['Name','Class','Section','Roll','Joined as','Email'];
+  courses.forEach(c=>{ ['Lessons done','Checks done','First-try %','First-try level','Best %','Best level','Needs support'].forEach(x=>head.push(c.title+' — '+x)); });
+  ['Practical / Project (teacher enters)','Observation & behaviour (teacher enters)','Final marks (teacher enters)','Remarks (teacher)'].forEach(x=>head.push(x));
+  const num = v => (v===null||v===undefined) ? '' : v;
+  let joined = 0, support = 0;
+  const sum = rows.map(r=>{
+    const isJoined = r.status==='claimed'; if(isJoined) joined++;
+    const row = [r.student_name||r.joined_name||'', r.class_name||'', r.section||'', r.roll_no||'', isJoined ? (r.joined_name||'') : 'Not joined yet', isJoined ? (r.joined_email||'') : ''];
+    let flagged = false;
+    courses.forEach(c=>{
+      const x = isJoined ? (r.courses||[]).find(y=>y.course_id===c.id) : null;
+      if(!x){ row.push('','','','','','',''); return; }
+      if(x.needs_support) flagged = true;
+      row.push(x.lessons_done+' of '+x.lessons_total, x.checks_total ? x.checks_done+' of '+x.checks_total : 'No checks', num(x.first_avg), x.level_first || (x.checks_total ? 'Not started' : ''), num(x.best_avg), x.level_best || (x.checks_total ? 'Not started' : ''), x.needs_support ? 'Yes' : '');
+    });
+    if(flagged) support++;
+    row.push('','','','');
+    return row;
+  });
+  const seatIdx = {}; rows.forEach((r,i)=>{ seatIdx[r.seat_id]=i; });
+  const courseIdx = {}; courses.forEach((c,i)=>{ courseIdx[c.id]=i; });
+  const cTitle = {}; courses.forEach(c=>{ cTitle[c.id]=c.title; });
+  const det = (L||[]).slice().sort((a,b)=> (seatIdx[a.seat_id]-seatIdx[b.seat_id]) || (courseIdx[a.course_id]-courseIdx[b.course_id]) || (a.lesson_no-b.lesson_no)).map(d=>{
+    const r = rows[seatIdx[d.seat_id]] || {};
+    return [r.student_name||r.joined_name||'', r.class_name||'', r.section||'', r.roll_no||'', cTitle[d.course_id]||'', d.lesson_no, d.lesson_title||'', d.completed?'Yes':'No', d.attempts, num(d.first_score), d.level_first||(d.attempts?'':'Not tried'), num(d.best_score), d.level_best||(d.attempts?'':'Not tried'), num(d.last_score)];
+  });
+  const how = [
+    ['CAS sheet — how to read this'], [''],
+    ['School', S.school||''], ['Bundle', S.bundle||''], ['Term', fmtDate(S.term_start)+' to '+fmtDate(S.term_end)], ['Prepared on', today],
+    ['Students joined', joined+' of '+rows.length+' seats'], ['Students needing support', String(support)], [''],
+    ['Levels (cut-offs are set by the Udaan Nepal academic team)'],
+    ['High', lv.high+'% and above'], ['Proficient', lv.proficient+'% to '+(lv.high-1)+'%'], ['Basic', lv.basic+'% to '+(lv.proficient-1)+'%'], ['Below basic', 'Below '+lv.basic+'%'], [''],
+    ['Lessons done','Lessons the student has marked complete. A lesson that has a check can only be marked complete after the student has tried the check.'],
+    ['Checks done','End-of-lesson checks the student has tried at least once.'],
+    ['First-try %','Average of the FIRST try on each check the student has tried. It shows what the student understood before seeing any answers.'],
+    ['Best %','Average of the BEST try on each check. Students may try again and see the answers after every try, so this also shows effort and improvement.'],
+    ['Levels','Worked out from those averages, over the checks the student has tried. Read them together with "Checks done".'],
+    ['Needs support','Yes when a check has been tried 3 or more times and the best score is still Below basic.'],
+    ['Teacher columns','Practical or project work, observation and behaviour, and final marks are not recorded by Udaan Nepal. The school teacher fills these in.']
+  ];
+  return [['CAS summary',[head].concat(sum)], ['Lesson details',[['Name','Class','Section','Roll','Course','Lesson no.','Lesson','Completed','Tries','First try %','First-try level','Best %','Best level','Last try %']].concat(det)], ['How to read',how]];
+}
 async function viewSchools(){
   const canMoney = can('finance');
   const wrap = h('div',{}, h('h2',{class:'title'},'Schools'),
@@ -1871,6 +1916,29 @@ async function viewSchools(){
       h('button',{class:'btn sm',onclick:()=>bundleForm(b)},'Edit')));
   });
   wrap.append(bundleBox);
+
+  /* ---- CAS levels ---- */
+  try {
+    const { data: cas, error: casErr } = await sb.from('cas_settings').select('*').maybeSingle();
+    if(!casErr && cas){
+      const canEdit = can('academic');
+      const casBox = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'CAS levels'),
+        h('p',{class:'sub'},'A lesson-check score becomes a level: a score at or above a cut-off gets that level, and anything under Basic is "Below basic". These numbers apply to every school.'));
+      const mkIn = (v) => h('input',{type:'number',min:'1',max:'100',value:String(v),disabled:!canEdit,style:'max-width:110px;'});
+      const hi = mkIn(cas.level_high), pr = mkIn(cas.level_proficient), ba = mkIn(cas.level_basic);
+      casBox.append(h('div',{class:'row',style:'gap:14px;flex-wrap:wrap;align-items:flex-end;'},
+        h('div',{class:'field'},h('label',{},'High from (%)'),hi), h('div',{class:'field'},h('label',{},'Proficient from (%)'),pr), h('div',{class:'field'},h('label',{},'Basic from (%)'),ba),
+        canEdit ? h('button',{class:'btn primary sm',style:'margin-bottom:14px;',onclick:e=>busy(e.currentTarget,async()=>{
+          const H = parseInt(hi.value,10), P = parseInt(pr.value,10), B = parseInt(ba.value,10);
+          if(isNaN(H)||isNaN(P)||isNaN(B)||!(B>=1 && B<P && P<H && H<=100)){ toast('The cut-offs must go up in order: Basic lower than Proficient lower than High, between 1 and 100.',true); return; }
+          const { error } = await sb.rpc('admin_set_cas_levels',{ p_high:H, p_proficient:P, p_basic:B });
+          if(error){ toast(error.message,true); return; }
+          toast('Level cut-offs saved'); reload();
+        })},'Save') : null));
+      if(!canEdit) casBox.append(h('p',{class:'sub'},'Only academic staff can change these numbers.'));
+      wrap.append(casBox);
+    }
+  } catch(e) { /* the Step 8 database update is not in yet */ }
 
   /* ---- schools ---- */
   function schoolForm(sc){
@@ -1972,7 +2040,15 @@ async function viewSchools(){
           })},'Create seats and codes')));
     }
     if(rows.length){
-      rosterBox.append(h('div',{class:'row',style:'margin:8px 0;'}, h('button',{class:'btn sm primary',onclick:()=>downloadXlsx('seat-codes-'+sc.name.replace(/[^A-Za-z0-9]+/g,'-')+'.xlsx',[['Seat codes',[['Name','Class','Section','Roll','Code','Status','Joined as','Email']].concat(rows.map(r=>[r.student_name||'',r.class_name||'',r.section||'',r.roll_no||'',r.code,r.status==='claimed'?'Used':'Not used yet',r.claimed_name||'',r.claimed_email||'']))]])},'Download codes (Excel)')));
+      const casBtn = rows.some(r=>r.status==='claimed') ? h('button',{class:'btn sm',onclick:e=>busy(e.currentTarget,async()=>{
+        const [sR, lR] = await Promise.all([ sb.rpc('admin_cas_sheet',{ p_order:o.id }), sb.rpc('admin_cas_lessons',{ p_order:o.id }) ]);
+        if(sR.error){ toast('Could not build the CAS sheet: '+sR.error.message+' (did you run step8-lesson-checks-and-cas.sql?)',true); return; }
+        if(lR.error){ toast('Could not build the lesson details: '+lR.error.message,true); return; }
+        const today = new Date().toISOString().slice(0,10);
+        const slug = t => String(t||'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'');
+        downloadXlsx('cas-sheet-'+slug(sc.name)+'-'+slug(bName(o.bundle_id))+'-'+today+'.xlsx', casSheets(sR.data, lR.data, today));
+      })},'Download CAS sheet (Excel)') : null;
+      rosterBox.append(h('div',{class:'row',style:'margin:8px 0;'}, casBtn, h('button',{class:'btn sm primary',onclick:()=>downloadXlsx('seat-codes-'+sc.name.replace(/[^A-Za-z0-9]+/g,'-')+'.xlsx',[['Seat codes',[['Name','Class','Section','Roll','Code','Status','Joined as','Email']].concat(rows.map(r=>[r.student_name||'',r.class_name||'',r.section||'',r.roll_no||'',r.code,r.status==='claimed'?'Used':'Not used yet',r.claimed_name||'',r.claimed_email||'']))]])},'Download codes (Excel)')));
       const tb = h('div',{style:'max-height:260px;overflow:auto;border:1px solid var(--border2);border-radius:10px;padding:6px 10px;'});
       rows.slice(0,300).forEach(r=>{
         tb.append(h('div',{style:'display:flex;gap:8px;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border2);flex-wrap:wrap;'},

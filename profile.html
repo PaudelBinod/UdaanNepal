@@ -613,6 +613,11 @@ function studentContent(){
       </div>
     </div>
 
+    <div id="myProgressWrap" style="display:none;">
+      <div class="section-title">My Progress</div>
+      <div id="myProgressList" style="margin-bottom:30px;"></div>
+    </div>
+
     <div class="section-title">My Courses</div>
     <div id="myCourseList"><div class="course-row"><div>Loading…</div></div></div>
 
@@ -718,6 +723,24 @@ function renderPendingParents(){
     </div>`).join('');
 }
 
+const LEVEL_COLOURS = { 'High': '#22C55E', 'Proficient': '#60A5FA', 'Basic': '#F59E0B', 'Below basic': '#F87171' };
+async function loadMyProgress(){
+  const wrap = document.getElementById('myProgressWrap'), box = document.getElementById('myProgressList');
+  if(!wrap || !box) return;
+  const { data, error } = await supabaseClient.rpc('my_cas_progress');
+  const rows = (!error && Array.isArray(data)) ? data : [];
+  wrap.style.display = rows.length ? '' : 'none';
+  const pill = l => l ? `<span style="display:inline-block;padding:2px 10px;border-radius:999px;font-weight:700;font-size:12px;border:1px solid currentColor;color:${LEVEL_COLOURS[l]||'inherit'}">${esc(l)}</span>` : '';
+  box.innerHTML = rows.map(c => {
+    const checks = c.checks_total ? `Checks ${c.checks_done} of ${c.checks_total}` : 'No lesson checks yet';
+    let level = '';
+    if(c.checks_done){
+      level = `<span>Level ${pill(c.level_best)}</span>` + (c.level_first && c.level_first !== c.level_best ? `<span>First try ${pill(c.level_first)}</span>` : '');
+    }
+    return `<div class="course-row"><div><h4 style="font-size:14px;">${esc(c.title)}</h4><div class="course-stats"><span>Lessons ${c.lessons_done} of ${c.lessons_total}</span><span>${checks}</span>${level}</div></div></div>`;
+  }).join('');
+}
+
 async function loadMySchool(){
   const box = document.getElementById('mySchoolList');
   if(!box) return;
@@ -754,6 +777,7 @@ async function loadStudentStats(){
   renderMyParents();
   renderPendingParents();
   loadMySchool();
+  loadMyProgress();
   const uid = currentUser.id;
   const [en, qa] = await Promise.all([
     supabaseClient.from('enrollments').select('course_id, courses(id,title)').eq('student_id', uid),

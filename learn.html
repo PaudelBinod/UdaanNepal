@@ -223,6 +223,28 @@
             border: 1px solid rgba(16, 185, 129, 0.4);
         }
 
+        .btn-complete.locked { opacity: .65; }
+
+        /* Lesson check (end-of-lesson quiz) */
+        .lesson-check {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--amber);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+        }
+        .lesson-check h3 { font-size: 1rem; margin-bottom: 4px; }
+        .lesson-check .lc-sub { font-size: .85rem; opacity: .8; margin-bottom: 10px; }
+        .lesson-check .lc-row { display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+        .lesson-check .lc-status { font-size: .88rem; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .lesson-check .lc-level { display: inline-block; padding: 3px 10px; border-radius: 999px; font-weight: 700; font-size: .78rem; border: 1px solid currentColor; }
+        .lesson-check .lc-go {
+            padding: 9px 18px; border-radius: 10px; background: var(--amber); color: #000;
+            font-weight: 700; text-decoration: none; white-space: nowrap;
+        }
+        .lesson-check .lc-msg { font-size: .85rem; margin-top: 8px; opacity: .9; }
+
         /* Instructor Profile Section */
         .instructor-card {
             background: var(--card);
@@ -872,6 +894,8 @@
                     </div>
                 </div>
 
+                <div class="lesson-check" id="lessonCheckBox" hidden></div>
+
                 <div class="instructor-card">
                     <div class="instructor-left">
                         <div class="instructor-avatar" id="instrAvatar">UN</div>
@@ -1052,6 +1076,7 @@
     let materials = [];
     let currentLesson = null;
     let canTrackProgress = false;   // true only for enrolled students
+    let checksByLesson = {};        // lesson id -> the lesson check (quiz) and this student's tries
 
     function showState(title, text, linkHref, linkText){
       $('classroomBody').style.display = 'none';
@@ -1132,6 +1157,47 @@
       wrap.appendChild(box);
     }
 
+    // true when this lesson has a lesson check that the student has not tried yet (and has not already finished the lesson)
+    function needsLessonCheck(lessonId){
+      const ck = checksByLesson[lessonId];
+      return !!(canTrackProgress && ck && Number(ck.attempts) === 0 && !doneIds.has(lessonId));
+    }
+
+    const LEVEL_COLOURS = { 'High': '#10B981', 'Proficient': '#60A5FA', 'Basic': '#F59E0B', 'Below basic': '#F87171' };
+
+    function renderLessonCheck(){
+      const box = $('lessonCheckBox');
+      box.textContent = '';
+      const ck = currentLesson && checksByLesson[currentLesson.id];
+      if(!ck){ box.hidden = true; return; }
+      box.hidden = false;
+      const mk = (tag, cls, text) => { const e = document.createElement(tag); if(cls) e.className = cls; if(text != null) e.textContent = text; return e; };
+      const n = Number(ck.questions) || 0, tries = Number(ck.attempts) || 0;
+      box.append(mk('h3', '', 'Check what you learned'));
+      box.append(mk('div', 'lc-sub', n + ' question' + (n === 1 ? '' : 's') + '. You can try as many times as you like.'));
+      const row = mk('div', 'lc-row');
+      const status = mk('div', 'lc-status');
+      if(!tries){
+        status.append(mk('span', '', canTrackProgress ? 'Not tried yet.' : 'Teacher preview.'));
+      } else {
+        status.append(mk('span', '', 'Tried ' + tries + (tries === 1 ? ' time' : ' times') + ' · First try ' + ck.first_score + '% · Best ' + ck.best_score + '%'));
+        const pill = mk('span', 'lc-level', ck.level_best || '');
+        pill.style.color = LEVEL_COLOURS[ck.level_best] || 'inherit';
+        status.append(pill);
+      }
+      const go = mk('a', 'lc-go', !canTrackProgress ? 'Preview the check' : (tries ? 'Try again' : 'Start the check'));
+      go.href = 'quiz?quiz_id=' + encodeURIComponent(ck.quiz_id);
+      row.append(status, go);
+      box.append(row);
+      if(canTrackProgress){
+        let msg = '';
+        if(!tries) msg = 'Try the check, then mark this lesson complete.';
+        else if(ck.level_best === 'Below basic') msg = 'Keep practising. Watch the lesson again and try once more.';
+        else msg = doneIds.has(currentLesson.id) ? '' : 'Well done! You can now mark this lesson complete.';
+        if(msg) box.append(mk('div', 'lc-msg', msg));
+      }
+    }
+
     function updateProgressUI(){
       const total = lessons.length;
       const done = lessons.filter(l => doneIds.has(l.id)).length;
@@ -1144,8 +1210,10 @@
       });
       if(currentLesson){
         const isDone = doneIds.has(currentLesson.id);
+        const needsCheck = needsLessonCheck(currentLesson.id);
         $('completeBtn').classList.toggle('completed', isDone);
-        $('completeBtnText').textContent = isDone ? 'Completed' : 'Mark as Complete';
+        $('completeBtn').classList.toggle('locked', needsCheck);
+        $('completeBtnText').textContent = isDone ? 'Completed' : (needsCheck ? 'Try the check first' : 'Mark as Complete');
       }
       checkCourseCompletion();
     }
@@ -1191,6 +1259,7 @@
       $('prevBtn').hidden = idx <= 0;
       $('completeBtn').hidden = !canTrackProgress;
       try { $('studentNotes').value = localStorage.getItem('note_' + currentLesson.id) || ''; } catch(e){ $('studentNotes').value = ''; }
+      renderLessonCheck();
       updateProgressUI();
       const u = new URL(window.location.href);
       u.searchParams.set('lesson', id);
@@ -1205,6 +1274,11 @@
 
     async function toggleComplete(){
       if(!currentLesson || !canTrackProgress) return;
+      if(needsLessonCheck(currentLesson.id)){
+        showToast('Please try the lesson check below first, then mark this lesson complete.', 'info');
+        const lc = $('lessonCheckBox'); if(lc && lc.scrollIntoView) lc.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
       const btn = $('completeBtn');
       btn.disabled = true;
       const id = currentLesson.id;
@@ -1218,6 +1292,7 @@
       }
       btn.disabled = false;
       if(error){ showToast('Could not save your progress: ' + error.message, 'err'); return; }
+      renderLessonCheck();
       updateProgressUI();
     }
 
@@ -1328,6 +1403,12 @@
       lessons = lessonRes.data || [];
       doneIds = new Set((progRes.data || []).map(p => p.lesson_id));
       materials = matRes.data || [];
+      // lesson checks (quizzes tied to a lesson). If the database update is not in yet this simply returns nothing.
+      checksByLesson = {};
+      try {
+        const { data: ck, error: ckErr } = await supabaseClient.rpc('my_lesson_checks', { p_course: courseId });
+        if(!ckErr && Array.isArray(ck)) ck.forEach(c => { checksByLesson[c.lesson_id] = c; });
+      } catch(e) { /* no checks available */ }
 
       // Instructor name — falls back to 'Udaan Nepal' when no instructor is assigned
       const instr = instrRes.data;
@@ -1401,6 +1482,7 @@
     /* ---- Page interactions ---- */
     $('sidebarHeader').addEventListener('click', () => $('curriculumSidebar').classList.toggle('expanded'));
     $('completeBtn').addEventListener('click', toggleComplete);
+    window.addEventListener('pageshow', e => { if(e.persisted) location.reload(); });
     $('lessonsBtn').addEventListener('click', () => $('curriculumSidebar').classList.add('expanded'));
     $('prevBtn').addEventListener('click', () => {
       const i = lessons.findIndex(l => currentLesson && l.id === currentLesson.id);
@@ -1803,15 +1885,19 @@
       ctx.fillText(line, x, cy);
     }
 
-    document.getElementById('certDownloadBtn').addEventListener('click', downloadCertificate);
-    document.getElementById('compCloseBtn').addEventListener('click', () => {
-      document.getElementById('completionModal').classList.remove('show');
-    });
-    // Also allow re-opening from progress pill area if already complete
-    document.getElementById('progressPill').addEventListener('click', () => {
-      if(completionShown || (lessons.length && lessons.every(l => doneIds.has(l.id)))){
-        showCompletionModal();
-      }
+    // The course-complete pop-up is written further down this page, after this script, so its buttons
+    // only exist once the whole page has loaded. Attaching earlier failed and left them dead.
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('certDownloadBtn').addEventListener('click', downloadCertificate);
+      document.getElementById('compCloseBtn').addEventListener('click', () => {
+        document.getElementById('completionModal').classList.remove('show');
+      });
+      // Also allow re-opening from progress pill area if already complete
+      document.getElementById('progressPill').addEventListener('click', () => {
+        if(completionShown || (lessons.length && lessons.every(l => doneIds.has(l.id)))){
+          showCompletionModal();
+        }
+      });
     });
 
     </script>
