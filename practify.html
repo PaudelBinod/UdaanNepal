@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="theme.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Practify by Udaan Nepal — Turning Classrooms Into Laboratories</title>
@@ -272,6 +273,11 @@ section{position:relative;}
 .success-state{display:none;text-align:center;padding:10px 0;}
 .success-state.show{display:block;}
 .form-panel.is-success .form-body{display:none;}
+.form-panel.is-closed .form-body{display:none;}
+.closed-box{display:none;text-align:center;padding:28px 18px;border:1px dashed var(--border-strong);border-radius:var(--radius);}
+.form-panel.is-closed .closed-box{display:block;}
+.closed-box h3{font-size:21px;margin-bottom:8px;}
+.closed-box p{color:var(--text-secondary);font-size:14px;line-height:1.6;}
 .confirm-icon{width:66px;height:66px;margin:0 auto 18px;border-radius:50%;background:rgba(34,197,94,0.12);display:flex;align-items:center;justify-content:center;color:var(--ok);border:2px solid rgba(34,197,94,0.3);}
 .success-state h3{font-size:21px;margin-bottom:8px;}
 .success-state>p{color:var(--text-secondary);font-size:14px;margin-bottom:22px;}
@@ -320,6 +326,7 @@ section{position:relative;}
 @media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:520px){.footer-grid{grid-template-columns:1fr;}}
 </style>
+<link rel="stylesheet" href="theme.css">
 </head>
 <body>
 
@@ -673,6 +680,10 @@ section{position:relative;}
     </div>
 
     <div class="form-panel" id="formPanel">
+      <div class="closed-box" id="closedBox" role="status">
+        <h3>Inquiries are closed</h3>
+        <p id="closedMsg">Practify school inquiries are not being accepted right now. Please check back soon, or contact Udaan Nepal directly.</p>
+      </div>
       <form id="inquiryForm" class="form-body" novalidate>
         <input type="text" id="hpField" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
         <div class="group-label">School Information</div>
@@ -922,7 +933,13 @@ document.querySelectorAll('.chip input').forEach(cb=>{
     submitBtn.disabled=false;
     submitBtn.textContent='Send Program Request';
 
-    if(result.error){ console.error(result.error); showSubmitError(SAVE_FAIL_MSG); return; }
+    if(result.error){
+      console.error(result.error);
+      // the database refuses new inquiries while the admin switch is off (a row-security error)
+      var closedNow = result.error.code === '42501' || /row-level security|row level security/i.test(result.error.message || '');
+      if(closedNow){ window.showPractifyClosed && window.showPractifyClosed(); return; }
+      showSubmitError(SAVE_FAIL_MSG); return;
+    }
     showSuccess(result.ref);
   });
 })();
@@ -930,6 +947,24 @@ document.querySelectorAll('.chip input').forEach(cb=>{
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="site-content.js"></script>
+<script>
+/* Practify inquiries can be switched off from the admin page (setting 'registration' -> practify).
+   The database enforces it too; this only shows a clear message instead of the form. */
+window.showPractifyClosed = function(message){
+  var panel = document.getElementById('formPanel');
+  if(!panel) return;
+  if(message){ var m = document.getElementById('closedMsg'); if(m) m.textContent = message; }
+  panel.classList.add('is-closed');
+  panel.classList.remove('is-success');
+};
+function applyPractifyState(){
+  var st = window.UN && window.UN.registrationState ? window.UN.registrationState('practify') : { open: true };
+  if(st.open) return;
+  window.showPractifyClosed(st.message);
+}
+document.addEventListener('un-content', applyPractifyState);
+if(window.UN && window.UN.registration) applyPractifyState();   // settings may already have loaded
+</script>
 <script>
 // Reuse the singleton client created by site-content.js (avoids duplicate GoTrueClient warning)
 const supabaseClient = window.supabaseClient;

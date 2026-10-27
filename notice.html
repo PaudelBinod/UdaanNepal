@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="theme.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notice & Updates — Udaan Nepal</title>
@@ -258,6 +259,7 @@ section{position:relative;}
 @media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:520px){.footer-grid{grid-template-columns:1fr;}}
 </style>
+<link rel="stylesheet" href="theme.css">
 </head>
 <body data-greeting="1">
 
@@ -296,7 +298,7 @@ section{position:relative;}
 <!-- ===== HERO ===== -->
 <section class="hero" id="top">
   <div class="container">
-    <h1>Notice & Updates</h1>
+    <h1 data-c="ntc_x1">Notice & Updates</h1>
     <div class="search-bar">
       <span class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
       <input type="text" id="searchInput" placeholder="Search events, courses, classes, announcements..." aria-label="Search notices">
@@ -355,16 +357,16 @@ section{position:relative;}
     </div>
 
     <div class="for-you" id="forYouSection" style="display:none;">
-      <div class="for-you-head"><h3>For You</h3></div>
+      <div class="for-you-head"><h3 data-c="ntc_x2">For You</h3></div>
       <div class="for-you-list" id="forYouList"></div>
     </div>
 
-    <div class="notices-head"><h3>All Udaan Nepal Notices</h3></div>
+    <div class="notices-head"><h3 data-c="ntc_x3">All Udaan Nepal Notices</h3></div>
     <div class="notice-feed" id="noticeGrid"></div>
 
     <div class="empty-state" id="emptyState">
-      <h4>No Notices Found</h4>
-      <p>Try changing your search or selecting another category.</p>
+      <h4 data-c="ntc_x4">No Notices Found</h4>
+      <p data-c="ntc_x5">Try changing your search or selecting another category.</p>
       <button class="btn btn-outline" id="clearFiltersBtn">Clear Filters</button>
     </div>
 

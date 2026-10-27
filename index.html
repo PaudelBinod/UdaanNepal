@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="theme.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Udaan Nepal Pvt. Ltd. — Fuel Your Flight to Success</title>
@@ -628,6 +629,7 @@
   ::selection{background:var(--amber);color:var(--navy-deep);}
   :focus-visible{outline:2px solid var(--amber);outline-offset:3px;}
 </style>
+<link rel="stylesheet" href="theme.css">
 </head>
 <body data-greeting="1">
 
@@ -645,6 +647,7 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-actions">
+      <span data-theme-slot></span>
       <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>

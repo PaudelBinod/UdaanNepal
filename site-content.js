@@ -219,7 +219,7 @@
   };
 
   Promise.all([
-    sb.from('site_settings').select('key,value').in('key', ['contact_info', 'unif_content', 'unsmp_content', 'features', 'registration', 'home_content', 'founders', 'practify_content', 'studio_page', 'unif_projects', 'unif_sponsors', 'studio_gallery', 'practify_gallery', 'unsmp_gallery', 'greeting_banner', 'site_logo', 'hero_video', 'members']),
+    sb.from('site_settings').select('key,value').in('key', ['contact_info', 'unif_content', 'unsmp_content', 'features', 'registration', 'home_content', 'founders', 'practify_content', 'studio_page', 'courses_page', 'auth_page', 'notices_page', 'unif_projects', 'unif_sponsors', 'studio_gallery', 'practify_gallery', 'unsmp_gallery', 'greeting_banner', 'site_logo', 'hero_video', 'members']),
     sb.from('testimonials').select('name,role,quote').eq('is_published', true).order('sort_order').order('created_at')
   ]).then(function (res) {
     var logo = {}, c = {}, features = { group_chat: false, parent_suggest: false, quiz: true }, registration = {}, founders = [], lists = {}, greeting = {}, heroVideo = {}, members = [];

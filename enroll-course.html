@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="theme.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Find Your Next Course — Udaan Nepal</title>
@@ -185,6 +186,7 @@ section{position:relative;}
   .filter-select{flex:1;min-width:0;}
 }
 </style>
+<link rel="stylesheet" href="theme.css">
 </head>
 <body>
 
@@ -222,7 +224,7 @@ section{position:relative;}
 <!-- ===== DISCOVERY INTRO ===== -->
 <section class="discovery">
   <div class="container">
-    <h1>Find Your Next Course</h1>
+    <h1 data-c="enr_x1">Find Your Next Course</h1>
 
     <div class="search-wrap">
       <div class="search-bar">
@@ -285,7 +287,7 @@ section{position:relative;}
   <section class="course-section" id="enrolledSection">
     <div class="container">
       <div class="section-head">
-        <h2>Enrolled Courses</h2>
+        <h2 data-c="enr_x2">Enrolled Courses</h2>
       </div>
       <div class="course-grid" id="enrolledGrid"></div>
       <p id="enrolledEmpty" style="display:none;color:var(--text-secondary);font-size:15px;margin:4px 0 0;">You have not enrolled in any course yet. Pick one below to get started.</p>
@@ -295,7 +297,7 @@ section{position:relative;}
   <section class="course-section">
     <div class="container">
       <div class="section-head">
-        <h2>Recently Added</h2>
+        <h2 data-c="enr_x3">Recently Added</h2>
         <a href="#" class="view-all" data-viewall="newest">View All →</a>
       </div>
       <div class="course-grid" id="newestGrid"></div>
@@ -305,9 +307,9 @@ section{position:relative;}
   <section class="course-section">
     <div class="container">
       <div class="section-head">
-        <h2>Recommended for You</h2>
+        <h2 data-c="enr_x4">Recommended for You</h2>
       </div>
-      <p class="section-sub">Courses selected based on your learning interests.</p>
+      <p data-c="enr_x5" class="section-sub">Courses selected based on your learning interests.</p>
       <div class="course-grid" id="recommendedGrid"></div>
     </div>
   </section>
@@ -315,7 +317,7 @@ section{position:relative;}
   <section class="course-section">
     <div class="container">
       <div class="section-head">
-        <h2>Explore by Subject</h2>
+        <h2 data-c="enr_x6">Explore by Subject</h2>
       </div>
       <div class="category-grid" id="categoryGrid"></div>
     </div>

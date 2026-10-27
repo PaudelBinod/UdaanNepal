@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="theme.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classroom | Udaan Nepal</title>
@@ -31,6 +32,7 @@
             --radius: 14px;
             --radius-sm: 9px;
             --sidebar-width: 360px;
+            --lvl-high:#10B981; --lvl-prof:#60A5FA; --lvl-basic:#F59E0B; --lvl-below:#F87171;
         }
 
         * {
@@ -849,6 +851,7 @@
         /* confetti canvas */
         #confettiCanvas { position:fixed; inset:0; pointer-events:none; z-index:10000; }
     </style>
+<link rel="stylesheet" href="theme.css">
 </head>
 <body>
 
@@ -858,6 +861,7 @@
             <span class="course-title" id="courseTitleTop">Loading…</span>
         </div>
         <div class="header-right">
+            <span data-theme-slot></span>
             <span class="progress-pill" id="progressPill">—</span>
             <a id="adminLink" href="admin" style="display:none;text-decoration:none;color:var(--cyan);font-size:12px;font-weight:700;padding:5px 10px;border:1px solid rgba(0,229,255,0.3);border-radius:7px;align-items:center;gap:5px;margin-left:8px;">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg>
@@ -1163,7 +1167,7 @@
       return !!(canTrackProgress && ck && Number(ck.attempts) === 0 && !doneIds.has(lessonId));
     }
 
-    const LEVEL_COLOURS = { 'High': '#10B981', 'Proficient': '#60A5FA', 'Basic': '#F59E0B', 'Below basic': '#F87171' };
+    const LEVEL_COLOURS = { 'High': 'var(--lvl-high)', 'Proficient': 'var(--lvl-prof)', 'Basic': 'var(--lvl-basic)', 'Below basic': 'var(--lvl-below)' };
 
     function renderLessonCheck(){
       const box = $('lessonCheckBox');

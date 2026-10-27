@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="theme.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Courses — Udaan Nepal</title>
@@ -205,7 +206,15 @@ section{position:relative;}
   border-color:var(--border-strong);
   caret-color:var(--text-primary);
 }
+
+/* Course overview box in the manage window (the page used these names but had no styles for them) */
+.info-panel{border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;background:var(--card);}
+.info-panel-title{font-weight:700;font-size:13px;margin-bottom:6px;}
+.info-row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:8px 0;border-top:1px solid var(--border);font-size:13px;}
+.info-row .k{color:var(--text-muted);flex:none;}
+.info-row .v{font-weight:600;text-align:right;min-width:0;overflow-wrap:anywhere;}
 </style>
+<link rel="stylesheet" href="theme.css">
 </head>
 <body>
 
@@ -298,7 +307,7 @@ section{position:relative;}
     <form id="createForm">
       <div class="form-group"><label for="ccTitle">Course Title</label><input type="text" id="ccTitle" required></div>
       <div class="form-group"><label for="ccDesc">Short Description</label><textarea id="ccDesc"></textarea></div>
-      <div class="form-group"><label for="ccCategory">Category</label><input type="text" id="ccCategory" placeholder="e.g. Programming, Office Skills"></div>
+      <div class="form-group"><label for="ccCategory">Category <span class="opt">(required)</span></label><input type="text" id="ccCategory" placeholder="Loading categories…" required></div>
       <div class="form-group">
         <label for="ccLanguage">Teaching language</label>
         <select id="ccLanguage"><option value="English">English</option><option value="Nepali">Nepali (नेपाली)</option><option value="Both">Both English and Nepali</option></select>
@@ -315,7 +324,7 @@ section{position:relative;}
           <option>Bachelors</option><option>Masters</option>
         </select>
       </div>
-      <div class="form-group"><label for="ccPrice">Price (NPR)</label><input type="number" id="ccPrice" min="0" max="1000000" step="1" value="0" inputmode="numeric"><div style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">Enter 0 for a free course. Paid courses open for a student only after Udaan Nepal confirms their payment.</div></div>
+      <div class="form-group"><label for="ccPrice">Your proposed price (NPR) <span class="opt">(optional now)</span></label><input type="number" id="ccPrice" min="0" max="1000000" step="1" placeholder="e.g. 1500" inputmode="numeric"><div style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">Suggest a price; enter 0 to suggest a free course. The finance team decides the final price, and the course can only be published after finance approves it. You must propose a price before you submit the course for review.</div></div>
       <p class="modal-sub" style="margin:0 0 16px;">New courses start as a draft. When you are ready, submit it for review — the Udaan Nepal academic team approves it before students can see it.</p>
       <button type="submit" class="btn btn-primary">Create Course</button>
     </form>
@@ -440,8 +449,16 @@ function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g, ch=>({'&':'&amp
 function rs(n){ return n>0 ? 'Rs '+Number(n).toLocaleString('en-IN') : 'Free'; }
 const COURSE_STATUS = {
   draft:['Draft','tag-draft'], pending_review:['In review','tag-review'],
-  published:['Published','tag-published'], rejected:['Needs changes','tag-rejected']
+  published:['Published','tag-published'], rejected:['Needs changes','tag-rejected'], archived:['Archived','tag-draft']
 };
+/* the price is written by the finance team; teachers only propose one */
+function priceLine(c){
+  const ps = c.priceStatus || 'approved';
+  if(ps==='approved') return rs(c.price);
+  if(ps==='proposed') return 'Price waiting for finance (you proposed ' + (c.proposedPrice>0 ? rs(c.proposedPrice) : 'Rs 0') + ')';
+  if(ps==='returned') return 'Price returned by finance';
+  return 'No price proposed yet';
+}
 
 async function fetchProfileNames(ids){
   const unique = [...new Set(ids)].filter(Boolean);
@@ -535,6 +552,7 @@ async function fetchTeacherCourses(){
   const enrollCounts = await fetchEnrollmentCounts(ids);
   return (courses||[]).map(c=>({
     id:c.id, title:c.title, status:c.status, classLevel: c.class_level, price:c.price_npr||0, reviewNote:c.review_note||'',
+    courseCode:c.course_code||'', priceStatus:c.price_status||'approved', proposedPrice:c.proposed_price_npr, priceNote:c.price_note||'',
     students: enrollCounts[c.id]||0, lessons: lessonCounts[c.id]||0, quizzes:0
   }));
 }
@@ -723,10 +741,12 @@ async function renderTeacher(){
       <div>
         <div class="course-row-title">
           <h4>${esc(c.title)}</h4>
+          ${c.courseCode ? `<span class="course-status-tag tag-notstarted">${esc(c.courseCode)}</span>` : ''}
           <span class="course-status-tag ${st[1]}">${st[0]}</span>
           ${c.classLevel ? `<span class="course-status-tag tag-notstarted">${esc(c.classLevel)}</span>` : ''}
         </div>
-        <div class="course-stats"><span>${c.students} Students</span><span>${c.lessons} Lessons</span><span>${esc(rs(c.price))}</span></div>
+        <div class="course-stats"><span>${c.students} Students</span><span>${c.lessons} Lessons</span><span>${esc(priceLine(c))}</span></div>
+        ${c.priceStatus==='returned' ? `<div class="review-note"><b>The finance team returned your price:</b> ${esc(c.priceNote||'No note was left.')} Open the course and propose a new price.</div>` : ''}
         ${c.status==='rejected' ? `<div class="review-note"><b>The academic team asked for changes:</b> ${esc(c.reviewNote||'No note was left.')}</div>` : ''}
       </div>
       <button class="btn btn-outline" data-manage="${c.id}">Manage Course →</button>
@@ -775,7 +795,9 @@ async function openManageModal(id){
       <div class="info-row"><span class="k">Class / Grade</span><span class="v">${esc(fullCourse?.class_level||'General / Skill Course')}</span></div>
       <div class="info-row"><span class="k">Level</span><span class="v">${esc(fullCourse?.level||'—')}</span></div>
       <div class="info-row"><span class="k">Status</span><span class="v">${esc((COURSE_STATUS[fullCourse?.status]||COURSE_STATUS.draft)[0])}</span></div>
-      <div class="info-row"><span class="k">Price</span><span class="v">${esc(rs(fullCourse?.price_npr||0))}</span></div>
+      <div class="info-row"><span class="k">Course ID</span><span class="v">${esc(fullCourse?.course_code||'—')}</span></div>
+      <div class="info-row"><span class="k">Price students pay</span><span class="v">${esc((fullCourse?.price_status||'approved')==='approved' || fullCourse?.price_approved_at ? rs(fullCourse?.price_npr||0) : 'Not set yet')}</span></div>
+      <div class="info-row"><span class="k">Price status</span><span class="v">${esc(priceLine({priceStatus:fullCourse?.price_status, price:fullCourse?.price_npr||0, proposedPrice:fullCourse?.proposed_price_npr}))}</span></div>
     </div>
     <p style="font-size:13.5px;color:var(--text-secondary);">${esc(fullCourse?.description||'No description added yet.')}</p>
   `;
@@ -791,13 +813,16 @@ async function openManageModal(id){
     draft: 'This course is a draft — only you can see it. When it is ready, submit it for review. The Udaan Nepal academic team checks the quality and then publishes it.',
     rejected: 'The academic team asked for changes' + (fullCourse?.review_note ? ': ' + fullCourse.review_note : '.') + ' Update the course and submit it again.',
     pending_review: 'This course is waiting for the academic team to review it. You can still add lessons. Withdraw it if you want to keep editing privately.',
-    published: 'This course is live. To unpublish it or change its price, please contact the Udaan Nepal academic team.'
+    published: 'This course is live. To unpublish it, please contact the Udaan Nepal academic team. Its price is set by the finance team.',
+    archived: 'This course was archived by the academic team. It is hidden from the course list and nobody new can join it. Students who already joined keep their access.'
   }[st] || '';
-  const editable = st !== 'published';
+  const editable = st !== 'published' && st !== 'archived';
+  const psNow = fullCourse?.price_status || 'approved';
   document.getElementById('mmSettings').innerHTML = `
     <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:16px;">${esc(msg)}</p>
-    ${editable ? `<div class="form-group"><label for="mmPrice">Price (NPR) — 0 means free</label><input type="number" id="mmPrice" min="0" max="1000000" step="1" value="${Number(fullCourse?.price_npr||0)}" inputmode="numeric"></div>
-    <button class="btn btn-outline btn-sm" id="savePriceBtn" style="margin-bottom:18px;">Save price</button>` : ''}
+    ${psNow==='returned' ? `<div class="review-note" style="margin-bottom:14px;"><b>The finance team returned your price:</b> ${esc(fullCourse?.price_note||'No note was left.')} Propose a new price below.</div>` : ''}
+    ${editable ? `<div class="form-group"><label for="mmPrice">Your proposed price (NPR) — 0 means free</label><input type="number" id="mmPrice" min="0" max="1000000" step="1" value="${fullCourse?.proposed_price_npr==null ? '' : Number(fullCourse.proposed_price_npr)}" placeholder="e.g. 1500" inputmode="numeric"><div style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">The finance team approves the final price. The course can only be published after the price is approved.</div></div>
+    <button class="btn btn-outline btn-sm" id="savePriceBtn" style="margin-bottom:18px;">Save proposal</button>` : `<p style="font-size:12.5px;color:var(--text-muted);margin-bottom:16px;">Only the finance team can change this price.</p>`}
     <div class="group-label">Course picture</div>
     <div id="thumbBox" style="margin-bottom:16px;">${fullCourse?.thumbnail_url ? `<img src="${esc(fullCourse.thumbnail_url)}" alt="" style="width:160px;height:90px;object-fit:cover;border-radius:10px;display:block;margin-bottom:8px;">` : '<p style="font-size:13px;color:var(--text-muted);margin-bottom:8px;">No picture yet.</p>'}
       <input type="file" id="thumbFile" accept="image/png,image/jpeg,image/webp"><div id="thumbMsg" style="font-size:12.5px;color:var(--text-muted);min-height:16px;margin-top:4px;">Wide pictures work best (under 2 MB).</div></div>
@@ -818,10 +843,13 @@ async function openManageModal(id){
   }
   const savePriceBtn = document.getElementById('savePriceBtn');
   if(savePriceBtn) savePriceBtn.addEventListener('click', async ()=>{
-    const price = Math.max(0, Math.floor(Number(document.getElementById('mmPrice').value) || 0));
-    const { error } = await supabaseClient.from('courses').update({ price_npr: price }).eq('id', id);
-    if(error){ settingsErr('Could not save price: ' + error.message); return; }
-    settingsErr(''); savePriceBtn.textContent = 'Saved ✓'; setTimeout(()=>{ savePriceBtn.textContent='Save price'; }, 1500);
+    const raw = document.getElementById('mmPrice').value.trim();
+    if(raw === ''){ settingsErr('Enter the price you propose (0 means free).'); return; }
+    const price = Math.max(0, Math.floor(Number(raw) || 0));
+    const { error } = await supabaseClient.from('courses').update({ proposed_price_npr: price }).eq('id', id);
+    if(error){ settingsErr('Could not save: ' + error.message); return; }
+    if(fullCourse){ fullCourse.price_status = 'proposed'; fullCourse.proposed_price_npr = price; fullCourse.price_note = null; }
+    settingsErr(''); savePriceBtn.textContent = 'Sent to finance ✓'; setTimeout(()=>{ savePriceBtn.textContent='Save proposal'; }, 1800);
   });
   supabaseClient.from('course_live').select('*').eq('course_id', id).maybeSingle().then(({ data: lv })=>{
     if(lv){ document.getElementById('liveLink').value = lv.meet_link || ''; document.getElementById('liveWhen').value = lv.schedule || ''; }
@@ -854,6 +882,7 @@ async function openManageModal(id){
   if(submitBtn) submitBtn.addEventListener('click', ()=>{
     const freshCount = (TEACHER_COURSES.find(c=>c.id===id)||{}).lessons;
     if(!freshCount){ settingsErr('Add at least one lesson before submitting for review.'); return; }
+    if((fullCourse?.price_status || 'approved') === 'not_set' || (fullCourse?.price_status === 'returned')){ settingsErr('Propose a price (and press Save proposal) before you submit the course for review.'); return; }
     setStatus('pending_review');
   });
   const withdrawBtn = document.getElementById('withdrawBtn');
@@ -1397,8 +1426,9 @@ document.getElementById('mmClose').addEventListener('click', ()=>document.getEle
 (async function(){
   try{
     const { data } = await supabaseClient.from('course_categories').select('name').eq('is_active', true).order('sort_order').order('name');
-    if(!data || !data.length) return;
-    const old = document.getElementById('ccCategory'); const sel = document.createElement('select'); sel.id = 'ccCategory';
+    if(!data || !data.length){ document.getElementById('ccCategory').placeholder = 'No categories yet — ask the academic team to add one'; return; }
+    const old = document.getElementById('ccCategory'); const sel = document.createElement('select'); sel.id = 'ccCategory'; sel.required = true;
+    const ph = document.createElement('option'); ph.value = ''; ph.textContent = 'Choose a category…'; sel.append(ph);
     data.forEach(c=>{ const o = document.createElement('option'); o.value = c.name; o.textContent = c.name; sel.append(o); });
     old.replaceWith(sel);
   }catch(e){}
@@ -1411,14 +1441,16 @@ document.getElementById('createForm').addEventListener('submit', async e=>{
   const description = document.getElementById('ccDesc').value.trim();
   const category = document.getElementById('ccCategory').value.trim();
   const classLevel = document.getElementById('ccClass').value || null;
-  const price = Math.max(0, Math.floor(Number(document.getElementById('ccPrice').value) || 0));
+  if(!category){ showToast('Please choose a category for the course.', 'err'); return; }
+  const rawPrice = document.getElementById('ccPrice').value.trim();
+  const proposed = rawPrice === '' ? null : Math.max(0, Math.floor(Number(rawPrice) || 0));
 
   const submitBtn = e.target.querySelector('button[type="submit"]');
   submitBtn.disabled = true;
   submitBtn.textContent = 'Creating...';
 
   const { error } = await supabaseClient.from('courses').insert({
-    title, description, category, class_level: classLevel, price_npr: price, language: document.getElementById('ccLanguage').value, instructor_id: currentUserId, status: 'draft'
+    title, description, category, class_level: classLevel, proposed_price_npr: proposed, language: document.getElementById('ccLanguage').value, instructor_id: currentUserId, status: 'draft'
   });
 
   submitBtn.disabled = false;
