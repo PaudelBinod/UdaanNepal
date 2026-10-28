@@ -4,6 +4,12 @@
 
 html[data-theme="light"]{color-scheme:light;}
 
+
+/* ---- arrow signs: a bold ">" or "<" instead of the thin arrow characters (all pages, both themes) ---- */
+.ar,.arrow,.cycle-arrow,.exp-arrow,.action-arrow{font-family:inherit;font-weight:900;font-style:normal;}
+.ar{display:inline-block;line-height:1;margin:0 .05em;transform:scale(1.12,1.05);}
+.arrow,.cycle-arrow,.exp-arrow,.action-arrow{display:inline-block;}
+
 /* ---- the switch button ---- */
 .un-theme-btn{position:fixed;left:14px;bottom:14px;z-index:9990;width:40px;height:40px;border-radius:50%;
   display:inline-flex;align-items:center;justify-content:center;padding:0;cursor:pointer;
@@ -57,7 +63,8 @@ html[data-theme="light"]:not([data-page="index"]) body{background:var(--bg);colo
 :is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .btn-ghost:hover,:is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .sidebar-close:hover,:is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .modal-close:hover,:is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .detail-close:hover{background:rgba(15,23,42,.08);}
 :is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .btn-primary:disabled{background:#CBD5E1;color:#64748B;}
 :is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .overlay,:is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .modal-overlay,:is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .detail-overlay{background:rgba(15,23,42,.5);}
-:is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .sidebar{box-shadow:-20px 0 60px rgba(15,23,42,.2);}
+:is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .sidebar{box-shadow:none;}
+:is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .sidebar.active{box-shadow:-20px 0 60px rgba(15,23,42,.2);}
 :is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .sidebar-item:hover,:is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .sidebar-item:focus-visible{background:rgba(0,102,255,.08);}
 :is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .sidebar-item.active{background:rgba(0,102,255,.12);}
 :is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .sidebar-item.logout,:is(html[data-theme="light"][data-page="courses"],html[data-theme="light"][data-page="notice"]) .sidebar-item.logout .icon{color:#C62839;}
@@ -70,7 +77,8 @@ html[data-theme="light"]:not([data-page="index"]) body{background:var(--bg);colo
 :is(html[data-theme="light"][data-page="unsmp"],html[data-theme="light"][data-page="practify"],html[data-theme="light"][data-page="studio-booking"],html[data-theme="light"][data-page="enroll-course"]) .btn-ghost:hover,:is(html[data-theme="light"][data-page="unsmp"],html[data-theme="light"][data-page="practify"],html[data-theme="light"][data-page="studio-booking"],html[data-theme="light"][data-page="enroll-course"]) .sidebar-close:hover,:is(html[data-theme="light"][data-page="unsmp"],html[data-theme="light"][data-page="practify"],html[data-theme="light"][data-page="studio-booking"],html[data-theme="light"][data-page="enroll-course"]) .cal-nav button:hover{background:rgba(15,23,42,.08);}
 :is(html[data-theme="light"][data-page="unsmp"],html[data-theme="light"][data-page="practify"],html[data-theme="light"][data-page="studio-booking"],html[data-theme="light"][data-page="enroll-course"]) .btn-primary:disabled{background:#CBD5E1;color:#64748B;}
 :is(html[data-theme="light"][data-page="unsmp"],html[data-theme="light"][data-page="practify"],html[data-theme="light"][data-page="studio-booking"],html[data-theme="light"][data-page="enroll-course"]) .overlay{background:rgba(15,23,42,.5);}
-:is(html[data-theme="light"][data-page="unsmp"],html[data-theme="light"][data-page="practify"],html[data-theme="light"][data-page="studio-booking"],html[data-theme="light"][data-page="enroll-course"]) .sidebar{box-shadow:-20px 0 60px rgba(15,23,42,.2);}
+:is(html[data-theme="light"][data-page="unsmp"],html[data-theme="light"][data-page="practify"],html[data-theme="light"][data-page="studio-booking"],html[data-theme="light"][data-page="enroll-course"]) .sidebar{box-shadow:none;}
+:is(html[data-theme="light"][data-page="unsmp"],html[data-theme="light"][data-page="practify"],html[data-theme="light"][data-page="studio-booking"],html[data-theme="light"][data-page="enroll-course"]) .sidebar.active{box-shadow:-20px 0 60px rgba(15,23,42,.2);}
 :is(html[data-theme="light"][data-page="unsmp"],html[data-theme="light"][data-page="practify"],html[data-theme="light"][data-page="studio-booking"],html[data-theme="light"][data-page="enroll-course"]) .sidebar-item.logout,:is(html[data-theme="light"][data-page="unsmp"],html[data-theme="light"][data-page="practify"],html[data-theme="light"][data-page="studio-booking"],html[data-theme="light"][data-page="enroll-course"]) .sidebar-item.logout .icon{color:#C62839;}
 :is(html[data-theme="light"][data-page="unsmp"],html[data-theme="light"][data-page="practify"],html[data-theme="light"][data-page="studio-booking"],html[data-theme="light"][data-page="enroll-course"]) .hero{background:radial-gradient(ellipse 80% 60% at 20% 0%,#DCE8FB 0%,var(--color-navy) 60%);}
 :is(html[data-theme="light"][data-page="unsmp"],html[data-theme="light"][data-page="practify"],html[data-theme="light"][data-page="studio-booking"],html[data-theme="light"][data-page="enroll-course"]) .hero::before{background-image:linear-gradient(rgba(15,23,42,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(15,23,42,.045) 1px,transparent 1px);}
@@ -376,6 +384,9 @@ html[data-theme="light"][data-page="unif"] input[type="text"]::placeholder,html[
 html[data-theme="light"][data-page="unif"] select option{background-color:#FFFFFF;color:#0F172A;}
 html[data-theme="light"][data-page="unif"] input:-webkit-autofill,html[data-theme="light"][data-page="unif"] input:-webkit-autofill:hover,html[data-theme="light"][data-page="unif"] input:-webkit-autofill:focus{
   -webkit-text-fill-color:#0F172A;-webkit-box-shadow:0 0 0 1000px #FFFFFF inset;box-shadow:0 0 0 1000px #FFFFFF inset;caret-color:#0F172A;}
+
+/* heading badge (UNIF in a round outline) */
+html[data-theme="light"][data-page="unif"] .unif-badge{color:#0369A1;border-color:#0369A1;}
 
 /* ===== theme-parts/unsmp.css ===== */
 /* UNSMP page: light look beyond the shared family-b file */

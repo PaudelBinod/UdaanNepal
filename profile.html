@@ -259,17 +259,17 @@ button{font-family:inherit;cursor:pointer;}
     <a class="account-row" href="notice" style="text-decoration:none;color:inherit;">
       <div class="action-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
       <div class="action-body"><div class="action-title">Notices &amp; announcements</div></div>
-      <div class="action-arrow">→</div>
+      <div class="action-arrow">&gt;</div>
     </a>
     <div class="account-row" id="pwRow" tabindex="0" role="button">
       <div class="action-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
       <div class="action-body"><div class="action-title">Change Password</div></div>
-      <div class="action-arrow">→</div>
+      <div class="action-arrow">&gt;</div>
     </div>
     <div class="account-row danger" id="logoutRow" tabindex="0" role="button">
       <div class="action-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
       <div class="action-body"><div class="action-title">Log Out</div></div>
-      <div class="action-arrow">→</div>
+      <div class="action-arrow">&gt;</div>
     </div>
   </div>
 
@@ -796,7 +796,7 @@ async function loadStudentStats(){
   list.innerHTML = rows.length ? rows.map(r=>`
     <div class="course-row">
       <div><h4>${esc(r.courses && r.courses.title || 'Course')}</h4></div>
-      <a href="learn?course=${encodeURIComponent(r.course_id)}" class="btn btn-outline">Open →</a>
+      <a href="learn?course=${encodeURIComponent(r.course_id)}" class="btn btn-outline">Open <span class="ar" aria-hidden="true">&gt;</span></a>
     </div>`).join('')
     : `<div class="course-row"><div><h4>No courses yet</h4><div class="course-stats"><span>Pick a course to get started.</span></div></div><a href="enroll-course" class="btn btn-primary">Browse courses</a></div>`;
 
@@ -811,7 +811,7 @@ async function loadStudentStats(){
   ql.innerHTML = quizzes.length ? quizzes.map(q=>`
     <div class="course-row">
       <div><h4>${esc(q.title)}</h4><div class="course-stats"><span>${esc(q.course)}</span><span>${q.question_count} questions</span><span>${q.best_score!=null ? 'Best score: '+q.best_score+'%' : 'Not attempted'}</span></div></div>
-      <a href="quiz?quiz_id=${encodeURIComponent(q.id)}" class="btn btn-outline">${q.best_score!=null?'Try again':'Start'} →</a>
+      <a href="quiz?quiz_id=${encodeURIComponent(q.id)}" class="btn btn-outline">${q.best_score!=null?'Try again':'Start'} <span class="ar" aria-hidden="true">&gt;</span></a>
     </div>`).join('')
     : `<div class="course-row"><div><h4>No quizzes yet</h4><div class="course-stats"><span>Quizzes from your courses will appear here.</span></div></div></div>`;
 
@@ -832,7 +832,7 @@ async function loadStudentStats(){
           <h4>${esc(s.courses && s.courses.title || 'Course')}</h4>
           <div class="course-stats"><span>Suggested by ${esc(s.profiles && s.profiles.full_name || 'Parent')}</span></div>
         </div>
-        <a href="enroll-course?course=${encodeURIComponent(s.courses && s.courses.id || '')}" class="btn btn-outline">Enroll →</a>
+        <a href="enroll-course?course=${encodeURIComponent(s.courses && s.courses.id || '')}" class="btn btn-outline">Enroll <span class="ar" aria-hidden="true">&gt;</span></a>
       </div>`).join('');
   }
 }
@@ -852,8 +852,8 @@ function teacherContent(){
 
     <div class="section-title" style="margin-top:30px;">Quiz Questions</div>
     <div class="card" style="padding:18px;margin-bottom:16px;">
-      <p style="font-size:13.5px;color:var(--text-secondary);margin:0 0 12px;">Quizzes, their lesson checks and the Excel upload of questions are now all in one place: <strong>My Courses → Manage → Quizzes</strong>.</p>
-      <a href="courses" class="btn btn-primary">Open My Courses →</a>
+      <p style="font-size:13.5px;color:var(--text-secondary);margin:0 0 12px;">Quizzes, their lesson checks and the Excel upload of questions are now all in one place: <strong>My Courses <span class="ar" aria-hidden="true">&gt;</span> Manage <span class="ar" aria-hidden="true">&gt;</span> Quizzes</strong>.</p>
+      <a href="courses" class="btn btn-primary">Open My Courses <span class="ar" aria-hidden="true">&gt;</span></a>
     </div>
 
     <div class="section-title" style="margin-top:30px;">Teaching Actions</div>
@@ -885,7 +885,7 @@ async function loadTeacherStats(){
   list.innerHTML = courses.length ? courses.slice(0,5).map(c=>`
     <div class="course-row">
       <div><h4>${esc(c.title)}</h4><div class="course-stats"><span>${cnt(en,c.id)} Students</span><span>${cnt(ls,c.id)} Lessons</span><span>${cnt(qz,c.id)} Quizzes</span><span>${esc(c.status)}</span></div></div>
-      <a href="courses" class="btn btn-outline">Manage →</a>
+      <a href="courses" class="btn btn-outline">Manage <span class="ar" aria-hidden="true">&gt;</span></a>
     </div>`).join('')
     : `<div class="course-row"><div><h4>No courses yet</h4><div class="course-stats"><span>Create your first course to begin.</span></div></div><a href="courses" class="btn btn-primary">Create course</a></div>`;
 
@@ -989,7 +989,7 @@ function actionRow(iconKey, title, desc, href){
   <${tag}${hrefAttr} class="action-row" tabindex="0" role="button" aria-label="${title}">
     <div class="action-icon">${icons[iconKey]||''}</div>
     <div class="action-body"><div class="action-title">${title}</div><div class="action-desc">${desc}</div></div>
-    <div class="action-arrow">→</div>
+    <div class="action-arrow">&gt;</div>
   </${tag}>`;
 }
 

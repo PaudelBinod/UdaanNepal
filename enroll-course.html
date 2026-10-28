@@ -144,6 +144,39 @@ section{position:relative;}
 .course-card .btn{width:100%;margin-top:auto;}
 .btn-enrolled{background:rgba(0,229,255,0.12);color:var(--color-cyan);border:1px solid rgba(0,229,255,0.3);}
 
+/* ===== EXPLORE + SKILL-BASED SPLIT ===== */
+.split{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:32px;align-items:start;}
+.split-side{border-left:1px solid var(--border);padding-left:28px;}
+.course-grid.explore-grid{grid-template-columns:repeat(3,1fr);}
+.side-list{display:flex;flex-direction:column;gap:16px;}
+.side-list .course-card{flex-direction:row;}
+.side-list .course-thumb{aspect-ratio:auto;width:104px;flex:none;min-height:100%;}
+.side-list .course-thumb .ic{width:28px;height:28px;}
+.side-list .badge-new{display:none;}
+.side-list .badge-corner{top:6px;right:6px;left:auto;font-size:9px;padding:3px 7px;}
+.side-list .course-body{padding:12px 14px 14px;min-width:0;}
+.side-list .course-desc{margin-bottom:10px;}
+.side-list .course-meta{margin-bottom:10px;}
+.more-wrap{display:flex;justify-content:center;margin-top:22px;}
+.more-btn{min-width:180px;}
+.split-empty{font-size:14px;color:var(--text-secondary);padding:22px;border:1px dashed var(--border-strong);border-radius:var(--radius);text-align:center;grid-column:1/-1;}
+@media(max-width:1080px){.course-grid.explore-grid{grid-template-columns:repeat(2,1fr);}.split{grid-template-columns:minmax(0,1fr) 300px;gap:24px;}.split-side{padding-left:22px;}}
+@media(max-width:860px){
+  .split{grid-template-columns:1fr;gap:34px;}
+  .split-side{border-left:0;padding-left:0;border-top:1px solid var(--border);padding-top:30px;}
+}
+@media(max-width:620px){
+  /* on a phone both lists become compact rows (picture on the left), so the page does not get very long */
+  .course-grid.explore-grid{display:flex;flex-direction:column;gap:16px;overflow:visible;padding-bottom:0;}
+  .course-grid.explore-grid .course-card{min-width:0;flex-direction:row;}
+  .explore-grid .course-thumb,.side-list .course-thumb{aspect-ratio:auto;width:92px;flex:none;min-height:100%;}
+  .explore-grid .course-thumb .ic{width:26px;height:26px;}
+  .explore-grid .badge-new{display:none;}
+  .explore-grid .badge-corner{top:6px;right:6px;font-size:9px;padding:3px 7px;}
+  .explore-grid .course-body{padding:12px 14px 14px;min-width:0;}
+  .explore-grid .course-desc,.explore-grid .course-meta{margin-bottom:10px;}
+}
+
 /* ===== CATEGORY BLOCKS ===== */
 .category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
 @media(max-width:900px){.category-grid{grid-template-columns:repeat(2,1fr);}}
@@ -215,7 +248,6 @@ section{position:relative;}
     <a href="profile" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></span>My Profile</a>
     <a href="notice" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>Notice</a>
     <a href="group" data-feature="group_chat" style="display:none" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>My Group</a>
-    <a href="admin" class="sidebar-item" id="adminLink" style="display:none;"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></span>Admin Panel</a>
     <a href="#" class="sidebar-item logout" id="logoutLink"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Log Out</a>
   </nav>
   <div class="sidebar-foot">UDAAN NEPAL · COURSE CATALOG</div>
@@ -294,36 +326,22 @@ section{position:relative;}
     </div>
   </section>
 
-  <section class="course-section">
+  <section class="course-section" id="splitSection">
     <div class="container">
-      <div class="section-head">
-        <h2 data-c="enr_x3">Recently Added</h2>
-        <a href="#" class="view-all" data-viewall="newest">View All →</a>
+      <div class="split">
+        <div class="split-main">
+          <div class="section-head"><h2 data-c="enr_x3">Explore Courses</h2></div>
+          <div class="course-grid explore-grid" id="exploreGrid"></div>
+          <div class="more-wrap"><button type="button" class="btn btn-outline more-btn" id="exploreMore" style="display:none;">Show more</button></div>
+        </div>
+        <aside class="split-side" aria-label="Skill-based courses">
+          <div class="section-head"><h2 data-c="enr_x4">Skill-Based Courses</h2></div>
+          <div class="side-list" id="skillGrid"></div>
+          <div class="more-wrap"><button type="button" class="btn btn-outline more-btn" id="skillMore" style="display:none;">Show more</button></div>
+        </aside>
       </div>
-      <div class="course-grid" id="newestGrid"></div>
     </div>
   </section>
-
-  <section class="course-section">
-    <div class="container">
-      <div class="section-head">
-        <h2 data-c="enr_x4">Recommended for You</h2>
-      </div>
-      <p data-c="enr_x5" class="section-sub">Courses selected based on your learning interests.</p>
-      <div class="course-grid" id="recommendedGrid"></div>
-    </div>
-  </section>
-
-  <section class="course-section">
-    <div class="container">
-      <div class="section-head">
-        <h2 data-c="enr_x6">Explore by Subject</h2>
-      </div>
-      <div class="category-grid" id="categoryGrid"></div>
-    </div>
-  </section>
-
-  <div id="levelSections"></div>
 
 </div>
 
@@ -407,13 +425,6 @@ document.getElementById('logoutLink').addEventListener('click', async (e)=>{
   await supabaseClient.auth.signOut();
   window.location.href = 'auth.html';
 });
-/* Show admin link for staff */
-(async function(){
-  const { data: { user } } = await supabaseClient.auth.getUser();
-  if(!user) return;
-  const { data } = await supabaseClient.from('staff_roles').select('user_id').eq('user_id', user.id).maybeSingle();
-  if(data){ const a = document.getElementById('adminLink'); if(a) a.style.display = 'flex'; }
-})();
 </script>
 <script>
 /* =========================================================
@@ -490,6 +501,17 @@ async function loadCourses(){
   }));
 
   populateCategoryFilter();
+}
+
+/* Skill-based categories: academic staff tick "Skill-based" on a category in the admin Categories tab */
+let SKILL_CATEGORIES = new Set();
+async function loadSkillCategories(){
+  try {
+    const res = await supabaseClient.from('course_categories').select('name,is_skill_based').eq('is_active', true);
+    if(res.error) throw res.error;
+    SKILL_CATEGORIES = new Set((res.data||[]).filter(r=>r.is_skill_based).map(r=>r.name));
+  } catch(e){ SKILL_CATEGORIES = new Set(); }   // the flag does not exist yet: every course counts as a school course
+  ALL_COURSES.forEach(c=>{ c.skill = SKILL_CATEGORIES.has(c.category); });
 }
 
 function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
@@ -607,7 +629,7 @@ function CategoryCard(name, count){
     <div class="ic-wrap">${CATEGORY_ICONS[name]||DEFAULT_ICON}</div>
     <h4>${esc(name)}</h4>
     <p>${count} course${count===1?'':'s'} available</p>
-    <span class="count">Browse →</span>
+    <span class="count">Browse <span class="ar" aria-hidden="true">&gt;</span></span>
   </div>`;
 }
 
@@ -653,75 +675,45 @@ function applyFilters(courses){
 /* =========================================================
    RENDER: CURATED HOME STATE
 ========================================================= */
+const SHOW = { explore:6, skill:3 };           // how many cards are shown first, and how many each "Show more" adds
+let shown = { explore:SHOW.explore, skill:SHOW.skill };
+
 function renderCurated(){
   document.getElementById('curatedSections').style.display = 'block';
   document.getElementById('searchResultsSection').style.display = 'none';
-
-  const filteredBase = ALL_COURSES.filter(c=> matchesLevel(c) && (state.category==='all' || c.category===state.category));
 
   // Courses this student is already enrolled in (not narrowed by the filters)
   const mine = ALL_COURSES.filter(c=>enrolledCourseIds.includes(c.id));
   CourseGrid('enrolledGrid', mine);
   document.getElementById('enrolledEmpty').style.display = mine.length ? 'none' : 'block';
 
-  const newest = [...filteredBase].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)).slice(0,8);
-  CourseGrid('newestGrid', newest);
-
-  // Recommended for You — demo rule until real personalization exists: newest + popular blend
-  const recommended = [...filteredBase].sort((a,b)=>b.enrolled_students-a.enrolled_students).slice(0,8).reverse();
-  CourseGrid('recommendedGrid', recommended);
-
-  const categories = [...new Set(ALL_COURSES.map(c=>c.category))];
-  document.getElementById('categoryGrid').innerHTML = categories.map(cat=>{
-    const count = ALL_COURSES.filter(c=>c.category===cat).length;
-    return CategoryCard(cat, count);
-  }).join('');
-  document.querySelectorAll('.category-block').forEach(block=>{
-    const activate = ()=>{
-      state.category = block.dataset.category;
-      document.getElementById('categoryFilter').value = state.category;
-      renderCurated();
-      document.querySelector('.filter-row').scrollIntoView({behavior:'smooth', block:'start'});
-    };
-    block.addEventListener('click', activate);
-    block.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); activate(); } });
-  });
-
-  // Level-based sections — built from whichever classes actually have published courses
-  const levelWrap = document.getElementById('levelSections');
-  levelWrap.innerHTML = '';
-  const realLevels = [...new Set(ALL_COURSES.map(c=>c.level).filter(Boolean))];
-  const hasGeneral = ALL_COURSES.some(c=>!c.level);
-  const sections = [...realLevels, ...(hasGeneral ? ['__general__'] : [])];
-
-  sections.forEach(lvl=>{
-    const matches = lvl==='__general__' ? ALL_COURSES.filter(c=>!c.level) : ALL_COURSES.filter(c=>c.level===lvl);
-    if(matches.length===0) return;
-    const label = lvl==='__general__' ? 'Skill & Professional Courses' : lvl+' Courses';
-    const sectionId = 'level-'+(lvl==='__general__'?'general':lvl.replace(/\s|\+|-/g,''));
-    levelWrap.insertAdjacentHTML('beforeend', `
-      <section class="course-section">
-        <div class="container">
-          <div class="section-head">
-            <h2>${label}</h2>
-            <a href="#" class="view-all" data-viewall-level="${lvl}">View All →</a>
-          </div>
-          <div class="course-grid" id="${sectionId}"></div>
-        </div>
-      </section>`);
-    CourseGrid(sectionId, matches.slice(0,8));
-  });
-
-  document.querySelectorAll('[data-viewall-level]').forEach(link=>{
-    link.addEventListener('click', e=>{
-      e.preventDefault();
-      state.level = link.dataset.viewallLevel;
-      document.getElementById('levelFilter').value = state.level;
-      renderCurated();
-      window.scrollTo({top:0, behavior:'smooth'});
-    });
-  });
+  shown = { explore:SHOW.explore, skill:SHOW.skill };
+  paintSplit();
 }
+
+function paintSplit(){
+  const list = applyFilters(ALL_COURSES);                       // the filters above still apply
+  const explore = list.filter(c=>!c.skill), skills = list.filter(c=>c.skill);
+  const filtered = state.level!=='all' || state.category!=='all' || state.language!=='all';
+
+  const exEl = document.getElementById('exploreGrid');
+  if(explore.length){ CourseGrid('exploreGrid', explore.slice(0, shown.explore)); }
+  else { exEl.innerHTML = '<div class="split-empty">'+(filtered ? 'No courses match these filters.' : 'No courses yet. Please check back soon.')+'</div>'; }
+
+  const skEl = document.getElementById('skillGrid');
+  if(skills.length){ CourseGrid('skillGrid', skills.slice(0, shown.skill)); }
+  else { skEl.innerHTML = '<div class="split-empty">'+(filtered ? 'No skill-based courses match these filters.' : 'Skill-based courses will appear here.')+'</div>'; }
+
+  const more = (btnId, total, count, step)=>{
+    const btn = document.getElementById(btnId), left = total - count;
+    btn.style.display = left > 0 ? '' : 'none';
+    btn.textContent = 'Show more (' + left + ' more)';
+  };
+  more('exploreMore', explore.length, shown.explore, SHOW.explore);
+  more('skillMore', skills.length, shown.skill, SHOW.skill);
+}
+document.getElementById('exploreMore').addEventListener('click', ()=>{ shown.explore += SHOW.explore; paintSplit(); });
+document.getElementById('skillMore').addEventListener('click', ()=>{ shown.skill += SHOW.skill; paintSplit(); });
 
 /* =========================================================
    RENDER: SEARCH RESULTS STATE
@@ -802,6 +794,7 @@ document.querySelectorAll('[data-viewall]').forEach(link=>{
   const ok = await requireLogin();
   if(!ok) return;
   await loadCourses();
+  await loadSkillCategories();
   renderCurated();
 })();
 </script>
@@ -846,7 +839,7 @@ document.querySelectorAll('[data-viewall]').forEach(link=>{
     if(!el) return;
     if(_activeCoupon){
       const final = calcFinal(_originalPrice, _activeCoupon);
-      el.innerHTML = '<span style="text-decoration:line-through;color:#94A3B8;font-size:13px;">Rs ' + Number(_originalPrice).toLocaleString('en-IN') + '</span>  →  ' +
+      el.innerHTML = '<span style="text-decoration:line-through;color:#94A3B8;font-size:13px;">Rs ' + Number(_originalPrice).toLocaleString('en-IN') + '</span>  <span class="ar" aria-hidden="true">&gt;</span>  ' +
         (final > 0 ? '<span style="color:#22c55e;">Rs ' + Number(final).toLocaleString('en-IN') + '</span>' : '<span style="color:#22c55e;">Free</span>');
     } else {
       el.textContent = '';

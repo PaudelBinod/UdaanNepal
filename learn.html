@@ -857,16 +857,12 @@
 
     <header class="header">
         <div class="header-left">
-            <a href="courses" class="back-btn">← My Courses</a>
+            <a href="courses" class="back-btn"><span class="ar" aria-hidden="true">&lt;</span> My Courses</a>
             <span class="course-title" id="courseTitleTop">Loading…</span>
         </div>
         <div class="header-right">
             <span data-theme-slot></span>
             <span class="progress-pill" id="progressPill">—</span>
-            <a id="adminLink" href="admin" style="display:none;text-decoration:none;color:var(--cyan);font-size:12px;font-weight:700;padding:5px 10px;border:1px solid rgba(0,229,255,0.3);border-radius:7px;align-items:center;gap:5px;margin-left:8px;">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg>
-              Admin
-            </a>
         </div>
     </header>
 
@@ -892,9 +888,9 @@
                     </div>
                     <div class="action-buttons">
                         <button class="btn-lessons" id="lessonsBtn">☰ All Lessons</button>
-                        <button class="btn-next" id="prevBtn" hidden>← Previous</button>
+                        <button class="btn-next" id="prevBtn" hidden><span class="ar" aria-hidden="true">&lt;</span> Previous</button>
                         <button class="btn-complete" id="completeBtn"><span>✓</span> <span id="completeBtnText">Mark as Complete</span></button>
-                        <button class="btn-next" id="nextBtn" hidden>Next →</button>
+                        <button class="btn-next" id="nextBtn" hidden>Next <span class="ar" aria-hidden="true">&gt;</span></button>
                     </div>
                 </div>
 
@@ -965,7 +961,7 @@
                 <section class="suggested-section" id="suggestedSection" style="display:none;">
                     <div class="section-heading">
                         <span>More Courses to Explore</span>
-                        <a href="enroll-course" style="font-size:0.85rem;color:var(--cyan);text-decoration:none;">View All →</a>
+                        <a href="enroll-course" style="font-size:0.85rem;color:var(--cyan);text-decoration:none;">View All <span class="ar" aria-hidden="true">&gt;</span></a>
                     </div>
                     <div class="courses-grid" id="suggestedGrid"></div>
                 </section>
@@ -1378,8 +1374,6 @@
       const isCoInstructor = !!coRow;
       const isInstructor = isOwner || isCoInstructor || isAdmin;
 
-      // Show admin panel link for staff
-      if(isAdmin){ const aLink=document.getElementById('adminLink'); if(aLink) aLink.style.display='inline-flex'; }
       const enrolled = !!enr && enr.status === 'active';
 
       if(enr && enr.status !== 'active' && !isInstructor){

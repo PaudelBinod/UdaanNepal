@@ -44,19 +44,21 @@
   }
 
   function chatButtons(c) {
-    var wa = digits(c.whatsapp), vb = digits(c.viber);
-    if (!wa && !vb) return;
-    var box = document.createElement('div');
-    box.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:900;display:flex;flex-direction:column;gap:10px;';
-    function btn(label, href, bg, icon) {
-      var a = document.createElement('a');
-      a.href = href; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.setAttribute('aria-label', label);
-      a.style.cssText = 'width:54px;height:54px;border-radius:50%;background:' + bg + ';color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.35);font:800 13px Manrope,sans-serif;text-decoration:none;';
-      a.textContent = icon; box.appendChild(a);
-    }
-    if (wa) btn('Chat on WhatsApp', 'https://wa.me/' + wa, '#25D366', 'WA');
-    if (vb) btn('Chat on Viber', 'viber://chat?number=%2B' + vb, '#7360F2', 'Vb');
-    document.body.appendChild(box);
+    var wa = digits(c.whatsapp);
+    if (!wa) return;
+    var a = document.createElement('a');
+    a.href = 'https://wa.me/' + wa; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.setAttribute('aria-label', 'Chat on WhatsApp');
+    a.className = 'un-wa-btn';
+    a.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:900;width:54px;height:54px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.35);text-decoration:none;';
+    // a plain green chat-bubble icon (drawn here); if the official logo file is added to the site as whatsapp-logo.svg it is used instead
+    a.innerHTML = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4.5h14a2.5 2.5 0 0 1 2.5 2.5v8a2.5 2.5 0 0 1-2.5 2.5h-3.2L11.5 21v-3.5H5A2.5 2.5 0 0 1 2.5 15V7A2.5 2.5 0 0 1 5 4.5Z" fill="#fff"/><circle cx="8" cy="11" r="1.3" fill="#25D366"/><circle cx="12" cy="11" r="1.3" fill="#25D366"/><circle cx="16" cy="11" r="1.3" fill="#25D366"/></svg>';
+    document.body.appendChild(a);
+    try {
+      fetch('whatsapp-logo.svg', { method: 'HEAD' }).then(function (r) {
+        var t = (r.headers.get('content-type') || '').toLowerCase();
+        if (r.ok && t.indexOf('svg') > -1) { a.innerHTML = '<img src="whatsapp-logo.svg" alt="" width="34" height="34" style="display:block;">'; }
+      }).catch(function () {});
+    } catch (e) {}
   }
 
   // Looping intro video inside the big card on the home page (set in admin > Site content)

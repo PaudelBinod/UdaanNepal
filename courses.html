@@ -245,7 +245,6 @@ section{position:relative;}
     <a href="profile" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></span>My Profile</a>
     <a href="notice" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>Notice</a>
     <a href="group" data-feature="group_chat" style="display:none" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>My Group</a>
-    <a href="admin" class="sidebar-item" id="adminLink" style="display:none;"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></span>Admin Panel</a>
     <a href="auth" class="sidebar-item logout"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Log Out</a>
   </nav>
   <div class="sidebar-foot">UDAAN NEPAL · MY COURSES</div>
@@ -415,9 +414,6 @@ async function loadRealRole(){
     return null;
   }
   currentUserId = user.id;
-  supabaseClient.from('staff_roles').select('role').eq('user_id', user.id).limit(1).then(r=>{
-    if(r && r.data && r.data.length){ const a = document.getElementById('adminLink'); if(a) a.style.display = 'flex'; }
-  }, ()=>{});
   const { data: profile } = await supabaseClient
     .from('profiles')
     .select('role')
@@ -600,7 +596,7 @@ async function renderStudent(){
       const lbl = c.pay==='submitted' ? ['Payment under review','tag-review'] : c.pay==='rejected' ? ['Payment rejected','tag-rejected'] : ['Payment due','tag-pay'];
       const cta = c.pay==='submitted'
         ? '<button class="btn btn-outline" disabled>Waiting for approval…</button>'
-        : `<button class="btn btn-primary" data-pay="${esc(c.id)}">${c.pay==='rejected'?'Resubmit payment':'Pay '+esc(rs(c.price))} →</button>`;
+        : `<button class="btn btn-primary" data-pay="${esc(c.id)}">${c.pay==='rejected'?'Resubmit payment':'Pay '+esc(rs(c.price))} <span class="ar" aria-hidden="true">&gt;</span></button>`;
       const note = c.pay==='rejected' ? `<div class="review-note">Your last payment was not accepted${c.payNote?': '+esc(c.payNote):'.'} Please check the details and send it again.</div>` : '';
       const hint = c.pay==='submitted' ? 'We received your payment details. You will get access as soon as Udaan Nepal confirms them.' : 'This is a paid course. It opens as soon as your payment is confirmed.';
       return `
@@ -635,7 +631,7 @@ async function renderStudent(){
         <div class="course-sub">${esc(c.instructor)} · ${esc(c.level)}</div>
         <div class="progress-track"><div class="progress-fill" style="width:${c.progress}%;"></div></div>
         <div class="progress-label">${c.progress}% completed</div>
-        <button class="btn btn-primary" data-open-course="${c.id}">${ctaLabel} →</button>
+        <button class="btn btn-primary" data-open-course="${c.id}">${ctaLabel} <span class="ar" aria-hidden="true">&gt;</span></button>
       </div>
     </div>`;
   }).join('') : '';
@@ -674,7 +670,7 @@ async function renderStudent(){
 
     <div class="section-title" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;">
       <span>Browse More Courses</span>
-      <a href="enroll-course" style="font-size:12.5px;color:var(--cyan);font-weight:700;text-transform:none;letter-spacing:0;">Open Full Catalog →</a>
+      <a href="enroll-course" style="font-size:12.5px;color:var(--cyan);font-weight:700;text-transform:none;letter-spacing:0;">Open Full Catalog <span class="ar" aria-hidden="true">&gt;</span></a>
     </div>
     <div class="course-grid">${catalogHtml}</div>
   `;
@@ -749,7 +745,7 @@ async function renderTeacher(){
         ${c.priceStatus==='returned' ? `<div class="review-note"><b>The finance team returned your price:</b> ${esc(c.priceNote||'No note was left.')} Open the course and propose a new price.</div>` : ''}
         ${c.status==='rejected' ? `<div class="review-note"><b>The academic team asked for changes:</b> ${esc(c.reviewNote||'No note was left.')}</div>` : ''}
       </div>
-      <button class="btn btn-outline" data-manage="${c.id}">Manage Course →</button>
+      <button class="btn btn-outline" data-manage="${c.id}">Manage Course <span class="ar" aria-hidden="true">&gt;</span></button>
     </div>`;
   }).join('');
 
@@ -1102,7 +1098,7 @@ async function editQuiz(courseId, quiz, notice){
   const { data: qs } = await supabaseClient.from('quiz_questions').select('*, quiz_options(*)').eq('quiz_id', quiz.id).order('sort_order');
   const questions = qs || [];
   box.textContent = '';
-  const back = mk('button','margin-bottom:12px;','← All quizzes'); back.className = 'btn btn-ghost btn-sm'; back.addEventListener('click', () => renderManageQuizzes(courseId)); box.append(back);
+  const back = mk('button','margin-bottom:12px;','< All quizzes'); back.className = 'btn btn-ghost btn-sm'; back.addEventListener('click', () => renderManageQuizzes(courseId)); box.append(back);
   box.append(mk('h4','margin-bottom:10px;', quiz.title));
   if(notice) box.append(mk('div','white-space:pre-line;font-size:13px;padding:10px 12px;margin-bottom:12px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-deep);', notice));
   if(!questions.length) box.append(mk('p','font-size:13px;color:var(--text-muted);','No questions yet.'));

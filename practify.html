@@ -356,7 +356,6 @@ section{position:relative;}
     <a href="notice" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>Notice</a>
     <a href="enroll-course" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>Browse Courses</a>
     <a href="group" data-feature="group_chat" style="display:none" class="sidebar-item"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>My Group</a>
-    <a href="admin" class="sidebar-item" id="adminLink" style="display:none;"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></span>Admin Panel</a>
     <a href="auth" class="sidebar-item logout"><span class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Log Out</a>
   </nav>
   <div class="sidebar-foot mono">UDAAN NEPAL · PRACTIFY</div>
@@ -407,10 +406,10 @@ section{position:relative;}
       <p data-c="pfy_x6">Traditional learning can sometimes remain theoretical. Practify helps students understand concepts by experiencing them.</p>
     </div>
     <div class="cycle">
-      <div class="cycle-step"><div class="cycle-pill">Learn</div></div><span class="cycle-arrow">→</span>
-      <div class="cycle-step"><div class="cycle-pill">Experiment</div></div><span class="cycle-arrow">→</span>
-      <div class="cycle-step"><div class="cycle-pill">Build</div></div><span class="cycle-arrow">→</span>
-      <div class="cycle-step"><div class="cycle-pill">Test</div></div><span class="cycle-arrow">→</span>
+      <div class="cycle-step"><div class="cycle-pill">Learn</div></div><span class="cycle-arrow">&gt;</span>
+      <div class="cycle-step"><div class="cycle-pill">Experiment</div></div><span class="cycle-arrow">&gt;</span>
+      <div class="cycle-step"><div class="cycle-pill">Build</div></div><span class="cycle-arrow">&gt;</span>
+      <div class="cycle-step"><div class="cycle-pill">Test</div></div><span class="cycle-arrow">&gt;</span>
       <div class="cycle-step"><div class="cycle-pill">Understand</div></div>
     </div>
     <div class="why-grid">
@@ -469,7 +468,7 @@ section{position:relative;}
         <div class="learn-body">
           <span class="tag">Science Practical</span>
           <h3 data-c="pfy_x19">Science Practical</h3>
-          <div class="learn-cycle">Question → Experiment → Observe → Analyse → Understand</div>
+          <div class="learn-cycle">Question <span class="ar" aria-hidden="true">&gt;</span> Experiment <span class="ar" aria-hidden="true">&gt;</span> Observe <span class="ar" aria-hidden="true">&gt;</span> Analyse <span class="ar" aria-hidden="true">&gt;</span> Understand</div>
           <div class="learn-topics"><span>Experiments</span><span>Measurement</span><span>Hypothesis Testing</span></div>
           <a href="#inquiry" class="btn btn-ghost btn-sm">Explore Science</a>
         </div>
@@ -992,13 +991,6 @@ document.querySelectorAll('.sidebar-item.logout').forEach(link=>{
     window.location.href = 'auth';
   });
 });
-/* Show admin link for staff */
-(async function(){
-  const { data: { user } } = await supabaseClient.auth.getUser();
-  if(!user) return;
-  const { data } = await supabaseClient.from('staff_roles').select('user_id').eq('user_id', user.id).maybeSingle();
-  if(data){ const a = document.getElementById('adminLink'); if(a) a.style.display = 'flex'; }
-})();
 </script>
 </body>
 </html>

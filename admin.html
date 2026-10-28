@@ -144,7 +144,7 @@ label{display:block;font-size:12.5px;font-weight:700;color:var(--text2);margin-b
     <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer" hidden><span class="burger" aria-hidden="true"></span></button>
     <div class="brand">Udaan Nepal Admin<small id="who">Loading…</small></div>
     <span data-theme-slot></span>
-    <a class="btn-ghost site-link" href="index.html">← Site</a>
+    <a class="btn-ghost site-link" href="index.html"><span class="ar" aria-hidden="true">&lt;</span> Site</a>
     <button class="btn-ghost" id="logout">Log out</button>
   </div>
   <div class="crumbbar" id="tabs" style="display:none"><span id="crumb"></span></div>
@@ -285,7 +285,7 @@ function drawTabs(){
    runs with the super admin's own power. */
 function drawFoot(){
   const foot = $('drawerFoot'); clear(foot);
-  foot.append(h('a',{class:'item-btn',href:'index.html',style:'margin-top:8px;border-top:1px solid var(--border);'},h('span',{},'← Back to the website')));
+  foot.append(h('a',{class:'item-btn',href:'index.html',style:'margin-top:8px;border-top:1px solid var(--border);'},h('span',{},'< Back to the website')));
   if(!roles.has('super_admin')) return;
   foot.append(h('div',{class:'drawer-sec'},'Switch role (preview only)'),
     h('div',{class:'drawer-note'},'See the menu and screens as another team sees them. Buttons still work with your super admin power, so this does not test permissions.'));
@@ -296,7 +296,7 @@ function drawBanner(){
   if(!viewAs){ b.hidden = true; return; }
   b.hidden = false;
   b.append(h('span',{},'Viewing as '+ROLE_LABEL[viewAs]+' — this only changes what you see. Buttons still work with your super admin power.'),
-    h('button',{class:'btn sm',type:'button',onclick:()=>setViewAs(null)},'← Back to my own view'));
+    h('button',{class:'btn sm',type:'button',onclick:()=>setViewAs(null)},'< Back to my own view'));
 }
 function setViewAs(id){
   viewAs = id; closeDrawer(false); drawBanner();
@@ -640,13 +640,14 @@ async function openCourse(c, teacher){
     const totalLessons = (lessons||[]).length;
     const lessonIds = (lessons||[]).map(l=>l.id).filter(Boolean);
     const [{ data: enrs }, { data: progData }] = await Promise.all([
-      sb.from('enrollments').select('student_id, profiles(full_name)').eq('course_id',c.id).eq('status','active'),
+      sb.from('enrollments').select('student_id').eq('course_id',c.id).eq('status','active'),
       lessonIds.length ? sb.from('lesson_progress').select('student_id,lesson_id').in('lesson_id',lessonIds) : Promise.resolve({data:[]})
     ]);
     const doneMap = {};
     progData.forEach(r=>{ doneMap[r.student_id] = (doneMap[r.student_id]||0)+1; });
+    const nameOf = await studentNames((enrs||[]).map(e=>e.student_id));
     const rows = (enrs||[]).map(e=>({
-      name: (e.profiles&&e.profiles.full_name)||'(no name)',
+      name: nameOf[e.student_id]||'(no name)',
       done: doneMap[e.student_id]||0,
       total: totalLessons,
       pct: totalLessons>0 ? Math.round(((doneMap[e.student_id]||0)/totalLessons)*100) : 0
@@ -931,7 +932,6 @@ function openReg(f, r, repaint){
 const CONTACT_FIELDS = [
   ['email','Email address'],['phone','Phone number'],['address','Address'],
   ['whatsapp','WhatsApp number with country code, digits only (e.g. 9779812345678) — shows a green chat button'],
-  ['viber','Viber number with country code, digits only — shows a purple chat button'],
   ['facebook','Facebook page link (starts with https://)'],['instagram','Instagram link'],['youtube','YouTube channel link'],['tiktok','TikTok link'],['linkedin','LinkedIn link']
 ];
 const FAQ_Q = ['Who can participate in UNIF?','How do I register?','Is there a registration fee?','What types of projects are accepted?','Can I participate as a team?','What are the judging criteria?','What should participants bring?','When is the project submission deadline?','Where will UNIF take place?'];
@@ -974,13 +974,13 @@ function mergeInto(saved, root){
 }
 /* a field for a page setting; amounts (fee, price...) are written by the finance team only, so they are read-only here */
 function settingField(k,l,t,val){
-  const f = fieldInput(k,isFeeKey(k) ? l+' — written by the finance team (Payments → Fees)' : l,t,val);
+  const f = fieldInput(k,isFeeKey(k) ? l+' — written by the finance team (Payments > Fees)' : l,t,val);
   if(isFeeKey(k)) f.querySelectorAll('input,textarea').forEach(e=>{ e.disabled = true; });
   return f;
 }
 async function viewContent(){
   const wrap = h('div',{}, h('h2',{class:'title'},'Site contents'),
-    h('p',{class:'sub'},'Pick a page, then change its words, pictures and details. Leave a box empty, or put the original words back, to keep the wording already on the page. Amounts and fees are written by the finance team (Payments → Fees), not here.'));
+    h('p',{class:'sub'},'Pick a page, then change its words, pictures and details. Leave a box empty, or put the original words back, to keep the wording already on the page. Amounts and fees are written by the finance team (Payments > Fees), not here.'));
   const chips = h('div',{class:'chips'});
   CONTENT_PAGES.forEach(([k,l])=> chips.append(h('button',{class:'chip'+(contentPage===k?' on':''),type:'button',onclick:()=>{ contentPage = k; render(); }}, l)));
   wrap.append(chips);
@@ -1896,12 +1896,13 @@ function refundForm(p, closeParent){
 
 /* ======================= CATEGORIES ======================= */
 async function viewCategories(){
-  const wrap = h('div',{}, h('h2',{class:'title'},'Course categories'), h('p',{class:'sub'},'Teachers choose one of these when they create a course. Hidden categories stay on old courses but cannot be picked.'));
+  const wrap = h('div',{}, h('h2',{class:'title'},'Course categories'), h('p',{class:'sub'},'Teachers choose one of these when they create a course. Hidden categories stay on old courses but cannot be picked. A category marked skill-based shows its courses in the Skill-based column of the course page; all other categories show in Explore courses.'));
   const { data, error } = await sb.from('course_categories').select('*').order('sort_order').order('name');
   if(error){ wrap.append(h('div',{class:'note warn'},'Could not load: '+error.message+' (did you run 10_courses_extras.sql?)')); return wrap; }
   (data||[]).forEach(c=> wrap.append(h('div',{class:'item'},
-    h('div',{}, h('b',{},c.name), c.is_active?'':h('span',{class:'sub'},' (hidden)')),
+    h('div',{}, h('b',{},c.name), c.is_active?'':h('span',{class:'sub'},' (hidden)'), c.is_skill_based ? h('span',{class:'pill green',style:'margin-left:8px;'},'Skill-based') : null),
     h('div',{class:'row'},
+      ('is_skill_based' in c) ? h('button',{class:'btn sm',title:'Skill-based categories are listed in the Skill-based column on the course page',onclick:async()=>{ const { error } = await sb.from('course_categories').update({is_skill_based:!c.is_skill_based}).eq('id',c.id); if(error){ toast(error.message,true); return; } toast(c.is_skill_based?'Not skill-based any more':'Marked as skill-based'); render(); }}, c.is_skill_based?'Unmark skill-based':'Mark skill-based') : null,
       h('button',{class:'btn sm',onclick:async()=>{ const { error } = await sb.from('course_categories').update({is_active:!c.is_active}).eq('id',c.id); if(error){ toast(error.message,true); return; } render(); }}, c.is_active?'Hide':'Show'),
       h('button',{class:'btn sm',onclick:()=>{ const f = fieldInput('cat_name','Name','text',c.name); let close; close = openSheet('Rename',[f,h('button',{class:'btn primary',onclick:async()=>{ const { error } = await sb.from('course_categories').update({name:f.querySelector('input').value.trim()}).eq('id',c.id); if(error){ toast(error.message,true); return; } close(); render(); }},'Save')]); }},'Rename'),
       h('button',{class:'btn sm bad',onclick:async()=>{ if(!await confirmBox('Delete this category?','Courses already using it keep the name.','Delete',true)) return; const { error } = await sb.from('course_categories').delete().eq('id',c.id); if(error){ toast(error.message,true); return; } render(); }},'Delete')))));
@@ -2413,21 +2414,28 @@ async function viewSchools(){
     } else rosterBox.append(h('p',{class:'sub'},'No seats created yet.'));
     close = openSheet('Order — '+sc.name, [head, acts, rosterBox]);
   }
-  const schoolBox = h('div',{class:'card'}, h('h4',{style:'margin-bottom:6px;'},'Schools and orders'));
+  /* the orders of one school open in their own box, so this page lists schools only */
+  function ordersSheet(sc){
+    const os = orders.filter(o=>o.school_id===sc.id);
+    let closeBox = ()=>{};
+    const rowsEl = os.length ? os.map(o=>{ const [lab,cls] = ORDER_STATUS[o.status]||[o.status,''];
+      return h('div',{class:'item',style:'align-items:center;gap:10px;flex-wrap:wrap;'},
+        h('div',{class:'main'}, h('h4',{},bName(o.bundle_id)+' · '+o.seats+' seat'+(o.seats===1?'':'s')),
+          h('div',{class:'meta'},h('span',{},rs(o.total_npr)+' total'),h('span',{},fmtDate(o.term_start)+' to '+fmtDate(o.term_end)))),
+        h('div',{class:'row'}, h('span',{class:'pill '+cls},lab), h('button',{class:'btn sm',onclick:()=>{ closeBox(); orderSheet(o,sc); }},'Open')));
+    }) : [h('div',{class:'empty'},'No orders yet for this school.')];
+    closeBox = openSheet('Orders — '+sc.name, [ h('p',{class:'sub'},os.length+' order'+(os.length===1?'':'s')+', newest first.'), ...rowsEl ]);
+  }
+  const schoolBox = h('div',{class:'card'}, h('h4',{style:'margin-bottom:6px;'},'Schools'));
   if(canMoney) schoolBox.append(h('button',{class:'btn primary sm',style:'margin-bottom:12px;',onclick:()=>schoolForm(null)},'+ New school'));
   if(!schools.length) schoolBox.append(h('div',{class:'empty'},'No schools yet.'));
-  schools.forEach(sc=>{
-    const os = orders.filter(o=>o.school_id===sc.id);
-    const card = h('div',{class:'item',style:'flex-direction:column;align-items:stretch;'},
-      h('div',{style:'display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;'},
-        h('div',{class:'main'}, h('h4',{},sc.name), h('div',{class:'meta'}, sc.pan?h('span',{},'PAN '+sc.pan):null, sc.contact_name?h('span',{},sc.contact_name):null, sc.contact_phone?h('span',{},sc.contact_phone):null)),
-        canMoney ? h('div',{class:'row'}, h('button',{class:'btn sm',onclick:()=>schoolForm(sc)},'Edit'), h('button',{class:'btn sm primary',onclick:()=>orderForm(sc)},'+ New order')) : null));
-    if(!os.length) card.append(h('div',{class:'meta',style:'margin-top:6px;'},'No orders yet.'));
-    os.forEach(o=>{ const [lab,cls] = ORDER_STATUS[o.status]||[o.status,'']; 
-      card.append(h('div',{style:'display:flex;gap:10px;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--border2);margin-top:8px;flex-wrap:wrap;'},
-        h('div',{}, h('div',{style:'font-weight:700;'},bName(o.bundle_id)+' · '+o.seats+' seat'+(o.seats===1?'':'s')), h('div',{class:'meta'},h('span',{},rs(o.total_npr)+' total'),h('span',{},fmtDate(o.term_start)+' to '+fmtDate(o.term_end)))),
-        h('div',{class:'row'}, h('span',{class:'pill '+cls},lab), h('button',{class:'btn sm',onclick:()=>orderSheet(o,sc)},'Open')))); });
-    schoolBox.append(card);
+  schools.forEach((sc,i)=>{
+    schoolBox.append(h('div',{class:'item',style:'align-items:center;gap:10px;flex-wrap:wrap;'},
+      h('div',{class:'main'}, h('h4',{},(i+1)+'. '+sc.name), h('div',{class:'meta'}, sc.pan?h('span',{},'PAN '+sc.pan):null, sc.contact_name?h('span',{},sc.contact_name):null, sc.contact_phone?h('span',{},sc.contact_phone):null)),
+      h('div',{class:'row'},
+        canMoney ? h('button',{class:'btn sm',onclick:()=>schoolForm(sc)},'Edit') : null,
+        h('button',{class:'btn sm',onclick:()=>ordersSheet(sc)},'Previous orders'),
+        canMoney ? h('button',{class:'btn sm primary',onclick:()=>orderForm(sc)},'+ New order') : null)));
   });
   wrap.append(schoolBox);
   return wrap;
@@ -2516,6 +2524,15 @@ async function viewCoupons(){
 }
 
 /* ======================= CERTIFICATES ======================= */
+/* names of students: enrollments.student_id points to the login account, so the names are looked up from profiles by id */
+async function studentNames(ids){
+  const uniq = [...new Set((ids||[]).filter(Boolean))], out = {};
+  for(let i=0;i<uniq.length;i+=200){
+    const { data } = await sb.from('profiles').select('id,full_name').in('id',uniq.slice(i,i+200));
+    (data||[]).forEach(p=>{ out[p.id]=p.full_name; });
+  }
+  return out;
+}
 async function viewCertificates(){
   const wrap = h('div',{}, h('h2',{class:'title'},'Certificates'), h('p',{class:'sub'},'Students who have completed all lessons in a course and earned a certificate.'));
   // lesson_progress + enrollments join: find students who finished all lessons per course
@@ -2532,8 +2549,9 @@ async function viewCertificates(){
     const [{ data: lessonCounts }, { data: progRows }, { data: enrRows }] = await Promise.all([
       sb.from('lessons').select('id,course_id').in('course_id',cIds),
       sb.from('lesson_progress').select('student_id,lesson_id'),
-      sb.from('enrollments').select('student_id,course_id,profiles(full_name)').in('course_id',cIds).eq('status','active')
+      sb.from('enrollments').select('student_id,course_id').in('course_id',cIds).eq('status','active')
     ]);
+    const nameOf = await studentNames((enrRows||[]).map(e=>e.student_id));
     const totalPerCourse = {};
     (lessonCounts||[]).forEach(l=>{ totalPerCourse[l.course_id]=(totalPerCourse[l.course_id]||0)+1; });
     // Map lesson_id → course_id
@@ -2554,7 +2572,7 @@ async function viewCertificates(){
       const done = doneMap[e.student_id+'|'+e.course_id]||0;
       if(done>=total){
         const course = (courses||[]).find(c=>c.id===e.course_id);
-        completions.push({ name:(e.profiles&&e.profiles.full_name)||'(no name)', course:course?course.title:'', done, total });
+        completions.push({ name:nameOf[e.student_id]||'(no name)', course:course?course.title:'', done, total });
       }
     });
     clear(list);

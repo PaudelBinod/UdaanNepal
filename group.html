@@ -22,7 +22,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{height:calc(100vh 
 </head>
 <body>
 <div class="app">
-<header class="top"><button onclick="back()" aria-label="Back">←</button><div class="title">My Group</div><button class="notify" onclick="modal('notifications')" aria-label="Notifications">🔔<i class="count">3</i></button></header>
+<header class="top"><button onclick="back()" aria-label="Back"><span class="ar" aria-hidden="true">&lt;</span></button><div class="title">My Group</div><button class="notify" onclick="modal('notifications')" aria-label="Notifications">🔔<i class="count">3</i></button></header>
 <main class="main" id="main">
 <section class="groups">
 <div class="search"><div class="searchbox"><span>⌕</span><input id="search" placeholder="Search groups..." aria-label="Search groups"></div></div>
@@ -32,7 +32,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}.app{height:calc(100vh 
 <section class="chat">
 <div class="empty" id="empty"><div class="emptyicon">💬</div><h2>Select a group to start chatting</h2><p>Your academic conversations, doubts and group discussions will appear here.</p></div>
 <div class="chatview" id="chatview">
-<div class="chathead"><button class="top mobileback" onclick="closeChat()">←</button><div class="avatar" id="cavatar"></div><div class="chatname"><strong id="cname"></strong><span id="cmembers"></span></div><button class="top" style="width:40px;height:40px;padding:0" onclick="groupInfo()">⋮</button></div>
+<div class="chathead"><button class="top mobileback" onclick="closeChat()"><span class="ar" aria-hidden="true">&lt;</span></button><div class="avatar" id="cavatar"></div><div class="chatname"><strong id="cname"></strong><span id="cmembers"></span></div><button class="top" style="width:40px;height:40px;padding:0" onclick="groupInfo()">⋮</button></div>
 <div class="messages" id="messages"></div>
 <div class="composer"><button class="attach" onclick="toast('Attachment picker ready for backend upload')" aria-label="Attach">📎</button><input id="input" placeholder="Type a message..." aria-label="Message"><button class="send" onclick="send()">➤</button></div>
 </div></section>

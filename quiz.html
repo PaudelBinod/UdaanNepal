@@ -428,7 +428,7 @@
     <!-- Header Navigation -->
     <header class="header">
         <div class="header-left">
-            <a href="learn" class="back-btn">← Back to Lesson</a>
+            <a href="learn" class="back-btn"><span class="ar" aria-hidden="true">&lt;</span> Back to Lesson</a>
             <span class="quiz-title" id="quizTitle">Loading Quiz...</span>
         </div>
         <div class="header-right">
@@ -436,10 +436,6 @@
             <div class="timer-badge">
                 <span>⏱</span> <span id="timerDisplay">15:00</span>
             </div>
-            <a id="adminLink" href="admin" style="display:none;text-decoration:none;color:var(--cyan);font-size:12px;font-weight:700;padding:5px 10px;border:1px solid rgba(0,229,255,0.3);border-radius:7px;align-items:center;gap:5px;margin-left:8px;">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg>
-              Admin
-            </a>
         </div>
     </header>
 
@@ -466,7 +462,7 @@
             <!-- Action Controls -->
             <div class="controls">
                 <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()" disabled>Previous</button>
-                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next Question <span class="ar" aria-hidden="true">&gt;</span></button>
             </div>
         </div>
 
@@ -482,7 +478,7 @@
 
             <div class="controls" style="justify-content: center; gap: 16px; margin-top: 24px;">
                 <button class="btn btn-secondary" onclick="retakeQuiz()">Retake Quiz</button>
-                <a href="learn" class="btn btn-primary" style="text-decoration: none;">Continue Learning →</a>
+                <a href="learn" class="btn btn-primary" style="text-decoration: none;">Continue Learning <span class="ar" aria-hidden="true">&gt;</span></a>
             </div>
 
             <!-- Itemized Answer Review -->
@@ -508,8 +504,6 @@
       }
       const { data: { user } } = await (window._quizSb || {auth:{getUser:async()=>({data:{user:null}})}}).auth.getUser();
       if(!user){ window.location.href = 'auth.html?redirect=quiz'; }
-      // Show admin link for staff
-      if(user){ const sb=window._quizSb||supabaseClient; sb.from('staff_roles').select('role').eq('user_id',user.id).limit(1).then(r=>{ if(r&&r.data&&r.data.length){const a=document.getElementById('adminLink');if(a)a.style.display='inline-flex';} }); }
     })();
     </script>
 
@@ -733,7 +727,7 @@
                 nextBtn.className = 'btn btn-submit';
                 nextBtn.onclick = submitQuiz;
             } else {
-                nextBtn.innerText = 'Next Question →';
+                nextBtn.innerHTML = 'Next Question '+'<span class="ar" aria-hidden="true">&gt;</span>';
                 nextBtn.className = 'btn btn-primary';
                 nextBtn.onclick = nextQuestion;
             }
@@ -866,7 +860,7 @@
                 const cls = { 'High': 'lvl-high', 'Proficient': 'lvl-proficient', 'Basic': 'lvl-basic', 'Below basic': 'lvl-below' }[result.level] || 'lvl-basic';
                 const head = { 'High': 'Excellent work!', 'Proficient': 'Well done!', 'Basic': 'Good try!', 'Below basic': 'Keep practising!' }[result.level] || 'Done!';
                 const retry = document.querySelector('#resultsCard .btn-secondary'); if (retry) retry.innerText = 'Try again';
-                const goBack = document.querySelector('#resultsCard a.btn-primary'); if (goBack) goBack.innerText = 'Back to the lesson →';
+                const goBack = document.querySelector('#resultsCard a.btn-primary'); if (goBack) goBack.innerHTML = 'Back to the lesson '+'<span class="ar" aria-hidden="true">&gt;</span>';
                 statusBadge.className = 'status-badge ' + cls;
                 statusBadge.innerText = result.level.toUpperCase();
                 document.getElementById('resultHeading').innerText = head;
