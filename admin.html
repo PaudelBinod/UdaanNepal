@@ -246,7 +246,7 @@ const TABS = [
   { id:'regs',       label:'Registrations', show:()=>can('front_desk')||can('finance'), badge:()=>can('front_desk') ? (badges.newRegs||0) : (can('finance') ? (badges.noPrice||0) : 0) },
   { id:'payments',   label:'Payments',      show:()=>can('finance'),  badge:'pendPayments' },
   { id:'notices',    label:'Notices',       show:()=>can('content')||can('finance') },
-  { id:'schools',    label:'Schools',       show:()=>can('finance')||can('academic') },
+  { id:'schools',    label:'Schools',       show:()=>can('finance')||can('academic'), badge:'schoolReq' },
   { id:'users',      label:'Users',         show:()=>can('academic'), badge:'pendTeachers' },
   { id:'categories', label:'Categories',    show:()=>can('academic') },
   { id:'coupons',    label:'Coupons',       show:()=>can('finance')||can('academic') },
@@ -285,7 +285,7 @@ function drawTabs(){
    runs with the super admin's own power. */
 function drawFoot(){
   const foot = $('drawerFoot'); clear(foot);
-  foot.append(h('a',{class:'item-btn',href:'index.html',style:'margin-top:8px;border-top:1px solid var(--border);'},h('span',{},'< Back to the website')));
+  foot.append(h('a',{class:'item-btn',href:'index.html',onclick:dropPass,style:'margin-top:8px;border-top:1px solid var(--border);'},h('span',{},'< Back to the website')));
   if(!roles.has('super_admin')) return;
   foot.append(h('div',{class:'drawer-sec'},'Switch role (preview only)'),
     h('div',{class:'drawer-note'},'See the menu and screens as another team sees them. Buttons still work with your super admin power, so this does not test permissions.'));
@@ -332,6 +332,10 @@ async function refreshBadges(){
     badges.pendPayments = await count('payments', q=>q.eq('status','submitted'));
     badges.pendPrices = await count('courses', q=>q.eq('price_status','proposed'));
     badges.noPrice = await count('studio_bookings', q=>q.is('final_price_npr',null).in('status',['new','contacted','confirmed']));
+  }
+  if(can('finance')||can('academic')){
+    try{ const { data:n, error } = await sb.rpc('admin_school_requests_count'); badges.schoolReq = error ? 0 : (Number(n)||0); }
+    catch(e){ badges.schoolReq = 0; }   /* the School admin database update is not in yet */
   }
   if(can('front_desk')||can('super_admin')) badges.newMessages = await count('contact_messages', q=>q.eq('status','new'));
   if(can('front_desk')){
@@ -448,6 +452,7 @@ async function viewDashboard(){
     g.append(card(badges.pendPrices||0,'Course prices to approve','Teachers have proposed a price',()=>{ courseFilter='price_waiting'; go('courses'); },true));
     g.append(card(badges.noPrice||0,'Studio requests without a price','Set the final price for the customer',()=>{ formIdx=0; regStatus='all'; go('regs'); },true));
   }
+  if(can('finance')||can('academic')) g.append(card(badges.schoolReq||0,'School requests','Seat changes, extra seats and new orders from schools',()=>go('schools'),true));
   if(can('front_desk')) FORMS.forEach((f,i)=> g.append(card((badges.perForm||[])[i]||0, 'New ' + f.label, 'Not contacted yet',()=>{ formIdx=i; regStatus='all'; go('regs'); },true)));
   if(can('academic') || can('finance')){
     const act = await count('enrollments', q=>q.eq('status','active'));
@@ -1437,7 +1442,7 @@ async function viewUsers(){
       const { data: enrs } = await sb.from('enrollments')
         .select('id, course_id, courses(title)')
         .eq('student_id', u.user_id)
-        .neq('status','removed');
+        .neq('status','removed').neq('status','rejected');
       enrollRows = enrs || [];
     }
 
@@ -1452,7 +1457,7 @@ async function viewUsers(){
           const row = h('div',{style:'display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border2);gap:10px;'});
           const unenrollBtn = h('button',{class:'btn sm bad',onclick:async e=>{ await busy(e.currentTarget, async()=>{
             if(!await confirmBox('Remove from course?', name+' will lose access to "'+title+'" immediately. No refund is triggered.','Remove',true)) return;
-            const { error } = await sb.from('enrollments').update({status:'removed'}).eq('id',enr.id);
+            const { error } = await sb.rpc('admin_remove_enrollment',{ p_enrollment:enr.id });
             if(error){ toast('Could not remove: '+error.message,true); return; }
             toast('Removed from '+title);
             enrollRows = enrollRows.filter(r=>r.id!==enr.id);
@@ -2217,6 +2222,8 @@ async function viewSchools(){
   const bName = id => (bundles.find(b=>b.id===id)||{}).name || 'Bundle';
   const courseTitle = id => (courses.find(c=>c.id===id)||{}).title || 'Course';
   const reload = () => render();
+  const fmtTs = t => t ? new Date(t).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '—';
+  const reqHolder = h('div'); wrap.append(reqHolder);
 
   /* ---- bundles ---- */
   const bundleBox = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'Bundles'),
@@ -2329,9 +2336,9 @@ async function viewSchools(){
         h('button',{class:'btn',onclick:()=>close()},'Cancel'))]);
   }
   async function orderSheet(o, sc){
-    const { data: roster, error: rErr } = await sb.rpc('admin_school_roster',{ p_order:o.id });
+    const { data: roster, error: rErr } = await sb.rpc('admin_school_seats',{ p_order:o.id });
     if(rErr){ toast('Could not load the class list: '+rErr.message,true); return; }
-    const rows = roster||[]; const used = rows.filter(r=>r.status==='claimed').length;
+    const rows = roster||[]; const used = rows.filter(r=>r.status==='claimed').length; const onList = rows.filter(r=>r.status!=='vacant').length; const emptySeats = rows.length-onList;
     const [lab,cls] = ORDER_STATUS[o.status]||[o.status,''];
     const money = canMoney;
     let close = ()=>{};
@@ -2346,12 +2353,13 @@ async function viewSchools(){
     const head = [ h('p',{class:'sub',style:'margin-top:6px;'}, sc.name+' · '+bName(o.bundle_id)),
       h('dl',{class:'kv'},
         h('dt',{},'Status'),h('dd',{},h('span',{class:'pill '+cls},lab)),
-        h('dt',{},'Seats'),h('dd',{},rows.length+' of '+o.seats+' created · '+used+' used'),
+        h('dt',{},'Seats'),h('dd',{},o.seats+' ordered · '+onList+' on the class list · '+used+' joined'+(emptySeats?' · '+emptySeats+' empty':'')),
         h('dt',{},'Price'),h('dd',{},rs(o.price_per_seat_npr)+' per student · total '+rs(o.total_npr)),
         h('dt',{},'Term'),h('dd',{},fmtDate(o.term_start)+' to '+fmtDate(o.term_end)),
         o.invoice_no?[h('dt',{},'Bill no.'),h('dd',{},o.invoice_no)]:null) ];
     const acts = h('div',{class:'row',style:'margin:10px 0;'});
     if(money){
+      if(o.status==='requested'||o.status==='invoiced') acts.append(h('button',{class:'btn sm',onclick:()=>editOrderForm(o,sc,()=>close())},'Edit order'));
       if(o.status==='requested') acts.append(statusBtn('invoiced','Mark invoiced','',''));
       if(o.status==='requested'||o.status==='invoiced') acts.append(statusBtn('paid','Mark paid — open the seats','good',''));
       if(o.status==='paid') acts.append(statusBtn('closed','Close term','bad','Students of this order lose access to the bundle courses now. Their progress is kept.'));
@@ -2389,6 +2397,7 @@ async function viewSchools(){
           })},'Create seats and codes')));
     }
     if(rows.length){
+      const STAT = { listed:['Waiting for payment','amber'], open:['Not used yet',''], claimed:['Joined','green'], vacant:['Empty seat',''] };
       const casBtn = rows.some(r=>r.status==='claimed') ? h('button',{class:'btn sm',onclick:e=>busy(e.currentTarget,async()=>{
         const [sR, lR] = await Promise.all([ sb.rpc('admin_cas_sheet',{ p_order:o.id }), sb.rpc('admin_cas_lessons',{ p_order:o.id }) ]);
         if(sR.error){ toast('Could not build the CAS sheet: '+sR.error.message+' (did you run step8-lesson-checks-and-cas.sql?)',true); return; }
@@ -2397,14 +2406,22 @@ async function viewSchools(){
         const slug = t => String(t||'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'');
         downloadXlsx('cas-sheet-'+slug(sc.name)+'-'+slug(bName(o.bundle_id))+'-'+today+'.xlsx', casSheets(sR.data, lR.data, today));
       })},'Download CAS sheet (Excel)') : null;
-      rosterBox.append(h('div',{class:'row',style:'margin:8px 0;'}, casBtn, h('button',{class:'btn sm primary',onclick:()=>downloadXlsx('seat-codes-'+sc.name.replace(/[^A-Za-z0-9]+/g,'-')+'.xlsx',[['Seat codes',[['Name','Class','Section','Roll','Code','Status','Joined as','Email']].concat(rows.map(r=>[r.student_name||'',r.class_name||'',r.section||'',r.roll_no||'',r.code,r.status==='claimed'?'Used':'Not used yet',r.claimed_name||'',r.claimed_email||'']))]])},'Download codes (Excel)')));
+      rosterBox.append(h('div',{class:'row',style:'margin:8px 0;'}, casBtn, h('button',{class:'btn sm primary',onclick:()=>downloadXlsx('seat-codes-'+sc.name.replace(/[^A-Za-z0-9]+/g,'-')+'.xlsx',[['Seat codes',[['Name','Class','Section','Roll','Admission no.','Reference ID','Code','Status','Account name','Account email']].concat(rows.filter(r=>r.status!=='vacant').map(r=>[r.student_name||'',r.class_name||'',r.section||'',r.roll_no||'',r.admission_no||'',r.reference_id||'',r.code||'',(STAT[r.status]||[r.status])[0],r.account_name||'',r.account_email||'']))]])},'Download codes (Excel)')));
+      const live = ['requested','invoiced','paid'].includes(o.status);
+      const rowCss = 'display:flex;gap:8px;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border2);flex-wrap:wrap;';
       const tb = h('div',{style:'max-height:260px;overflow:auto;border:1px solid var(--border2);border-radius:10px;padding:6px 10px;'});
       rows.slice(0,300).forEach(r=>{
-        tb.append(h('div',{style:'display:flex;gap:8px;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border2);flex-wrap:wrap;'},
-          h('div',{}, h('div',{style:'font-weight:700;'},r.student_name||'(no name)'), h('div',{class:'meta'},[r.class_name?'Class '+r.class_name:null,r.section?'Sec '+r.section:null,r.roll_no?'Roll '+r.roll_no:null].filter(Boolean).join(' · ')||'—')),
-          h('div',{style:'text-align:right;'}, h('div',{style:'font-family:monospace;letter-spacing:.06em;'},r.code), h('span',{class:'pill '+(r.status==='claimed'?'green':'')},r.status==='claimed'?'Used'+(r.claimed_name?' · '+r.claimed_name:''):'Not used')),
-          (money && r.status==='claimed') ? h('button',{class:'btn sm bad',onclick:e=>busy(e.currentTarget,async()=>{
-            if(!await confirmBox('Release this seat?',(r.claimed_name||'This student')+' loses the bundle courses now and the code is replaced with a new one, so the seat can go to another student.','Release',true)) return;
+        if(r.status==='vacant'){ tb.append(h('div',{style:rowCss}, h('span',{class:'meta'},'Empty seat — the school can give it to a new student'), h('span',{class:'pill'},'Empty'))); return; }
+        const [sl,sk] = STAT[r.status]||[r.status,''];
+        const canRel = money && live && (r.reference_id ? true : r.status==='claimed');
+        tb.append(h('div',{style:rowCss},
+          h('div',{}, h('div',{style:'font-weight:700;'},r.student_name||'(no name)'),
+            h('div',{class:'meta'},[r.class_name?'Class '+r.class_name:null,r.section?'Sec '+r.section:null,r.roll_no?'Roll '+r.roll_no:null,r.reference_id?'ID '+r.reference_id:null,r.name_flag?'name confirmed by the school':null].filter(Boolean).join(' · ')||'—'),
+            r.account_name ? h('div',{class:'meta'},'Account: '+r.account_name+(r.account_email?' · '+r.account_email:'')) : null),
+          h('div',{style:'text-align:right;'}, r.code ? h('div',{style:'font-family:monospace;letter-spacing:.06em;'},r.code) : null, h('span',{class:'pill '+sk},sl)),
+          canRel ? h('button',{class:'btn sm bad',onclick:e=>busy(e.currentTarget,async()=>{
+            const who = r.account_name || r.student_name || 'This student';
+            if(!await confirmBox('Release this seat?', r.reference_id ? (who+' loses the bundle courses now if already joined, and the seat becomes empty for the school to use again.') : (who+' loses the bundle courses now and the code is replaced with a new one, so the seat can go to another student.'),'Release',true)) return;
             const { error } = await sb.rpc('admin_release_seat',{ p_seat:r.seat_id }); if(error){ toast(error.message,true); return; }
             close(); toast('Seat released'); reload();
           })},'Release') : null));
@@ -2426,6 +2443,163 @@ async function viewSchools(){
     }) : [h('div',{class:'empty'},'No orders yet for this school.')];
     closeBox = openSheet('Orders — '+sc.name, [ h('p',{class:'sub'},os.length+' order'+(os.length===1?'':'s')+', newest first.'), ...rowsEl ]);
   }
+  /* ---- finance can correct an order until it is paid ---- */
+  function editOrderForm(o, sc, closeSheet){
+    const seats = h('input',{type:'number',min:'1',value:String(o.seats)});
+    const price = h('input',{type:'number',min:'0',value:String(o.price_per_seat_npr)});
+    const st = h('input',{type:'date',value:o.term_start||''}), en = h('input',{type:'date',value:o.term_end||''});
+    let close;
+    close = openSheet('Edit order — '+sc.name,[
+      h('p',{class:'sub'},'You can change an order until it is paid. The school never sees the price. Seats cannot be fewer than the students already on its class list.'),
+      h('div',{class:'field'},h('label',{},'Seats (number of students)'),seats),
+      h('div',{class:'field'},h('label',{},'Price per student (Rs)'),price),
+      h('div',{class:'row'},h('div',{class:'field',style:'flex:1;'},h('label',{},'Term starts'),st),h('div',{class:'field',style:'flex:1;'},h('label',{},'Term ends'),en)),
+      h('div',{class:'row'},
+        h('button',{class:'btn primary',onclick:e=>busy(e.currentTarget,async()=>{
+          const n = parseInt(seats.value,10), pr = parseInt(price.value,10);
+          if(!n||n<1){ toast('Enter the number of seats',true); return; }
+          if(isNaN(pr)||pr<0){ toast('Enter the price per student',true); return; }
+          const { error } = await sb.rpc('finance_edit_order',{ p_order:o.id, p_seats:n, p_price:pr, p_start:st.value||null, p_end:en.value||null });
+          if(error){ toast(error.message,true); return; }
+          close(); if(closeSheet) closeSheet(); toast('Order saved'); reload();
+        })},'Save'),
+        h('button',{class:'btn',onclick:()=>close()},'Cancel'))]);
+  }
+
+  /* ---- what the schools asked for on their own page ---- */
+  async function requestsBox(){
+    const box = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'School requests'),
+      h('p',{class:'sub'},'What schools ask for on their School admin page. A seat a school has already changed twice needs your approval for the next change. Approved extra seats become a new order, waiting for the bill.'));
+    const { data, error } = await sb.rpc('admin_school_requests');
+    if(error){ box.append(h('div',{class:'note warn'},'Could not load: '+error.message+' (did you run step11-school-admin.sql?)')); return box; }
+    const reqs = data.requests||[], waiting = data.orders_waiting||[], money = !!data.can_money;
+    const pending = reqs.filter(q=>q.status==='pending'), done = reqs.filter(q=>q.status!=='pending').slice(0,8);
+    if(!pending.length && !waiting.length) box.append(h('div',{class:'empty'},'Nothing is waiting for you.'));
+    if(waiting.length){
+      box.append(h('div',{class:'sub',style:'font-weight:700;margin:10px 0 6px;'},'New orders from schools — waiting for the bill'));
+      waiting.forEach(w=>{
+        const o = orders.find(x=>x.id===w.order_id), sch = schools.find(x=>x.id===w.school_id);
+        box.append(h('div',{class:'item',style:'align-items:center;gap:10px;flex-wrap:wrap;'},
+          h('div',{class:'main'}, h('h4',{},w.school+' · '+w.bundle), h('div',{class:'meta'},h('span',{},w.seats+' seat'+(w.seats===1?'':'s')),h('span',{},'asked on '+fmtTs(w.created_at)))),
+          (o&&sch) ? h('button',{class:'btn sm primary',onclick:()=>orderSheet(o,sch)},'Open order') : null));
+      });
+    }
+    async function answer(q, action, btn){
+      let note = null;
+      if(action==='decline'){ note = await askText('Decline this request','Reason for the school (optional)',false,'Decline'); if(note===null) return; }
+      else {
+        const text = q.kind==='extra_seats'
+          ? 'This creates a new order for '+q.seats+' extra seat'+(q.seats===1?'':'s')+' (same bundle, term and price). It then waits for the bill.'
+          : (q.release ? (q.current_name||'The student')+' loses access now and the seat becomes empty.' : (q.current_name||'The old student')+' loses access now. '+(q.new_name||'The new student')+' takes the seat (a new code is made if the order is already paid).');
+        if(!await confirmBox('Approve this request?',text,'Approve',false)) return;
+      }
+      await busy(btn, async()=>{
+        const { error } = await sb.rpc('admin_handle_request',{ p_request:q.id, p_action:action, p_note:note||null });
+        if(error){ toast(error.message,true); return; }
+        toast(action==='approve'?'Approved':'Declined'); reload();
+      });
+    }
+    if(pending.length){
+      box.append(h('div',{class:'sub',style:'font-weight:700;margin:12px 0 6px;'},'Waiting for your answer'));
+      pending.forEach(q=>{
+        const title = q.kind==='extra_seats'
+          ? q.school+' asks for '+q.seats+' extra seat'+(q.seats===1?'':'s')
+          : q.school+': '+(q.release?'release ':'replace ')+(q.current_name||'a student')+(q.current_class?' (Class '+q.current_class+')':'');
+        const meta = q.kind==='extra_seats'
+          ? [q.bundle, q.order_seats?('order of '+q.order_seats+' seats'):null, q.note?('Note: '+q.note):null]
+          : [q.release?null:('New student: '+(q.new_name||'—')+(q.new_ref?' · '+q.new_ref:'')), (q.changes_used!=null?('Seat changed '+q.changes_used+' time'+(q.changes_used===1?'':'s')+' already'):null), q.bundle];
+        const canAnswer = q.kind!=='extra_seats' || money;
+        box.append(h('div',{class:'item',style:'align-items:center;gap:10px;flex-wrap:wrap;'},
+          h('div',{class:'main'}, h('h4',{},title), h('div',{class:'meta'}, meta.filter(Boolean).map(x=>h('span',{},x)), h('span',{},'asked on '+fmtTs(q.created_at)))),
+          canAnswer ? h('div',{class:'row'},
+            h('button',{class:'btn sm primary',onclick:e=>answer(q,'approve',e.currentTarget)},'Approve'),
+            h('button',{class:'btn sm bad',onclick:e=>answer(q,'decline',e.currentTarget)},'Decline'))
+          : h('span',{class:'pill amber'},'The finance team answers this')));
+      });
+    }
+    if(done.length){
+      const det = h('details',{style:'margin-top:12px;'}, h('summary',{class:'sub',style:'cursor:pointer;'},'Recently answered ('+done.length+')'));
+      done.forEach(q=>{
+        const t = q.kind==='extra_seats' ? q.school+': '+q.seats+' extra seat'+(q.seats===1?'':'s') : q.school+': '+(q.release?'release ':'replace ')+(q.current_name||'a student');
+        det.append(h('div',{class:'meta',style:'display:flex;gap:8px;align-items:center;padding:5px 0;flex-wrap:wrap;'}, h('span',{class:'pill '+(q.status==='approved'?'green':'red')},q.status==='approved'?'Approved':'Declined'), h('span',{},t), q.handled_note?h('span',{},'— '+q.handled_note):null, h('span',{},fmtTs(q.handled_at))));
+      });
+      box.append(det);
+    }
+    return box;
+  }
+
+  /* ---- Invite school: the person who runs a school's own page ---- */
+  async function inviteBox(){
+    const box = h('div',{class:'card',style:'margin-bottom:16px;'}, h('h4',{style:'margin-bottom:6px;'},'Invite school'),
+      h('p',{class:'sub'},'Give a school its own School admin page, where it orders seats, uploads the class list, hands out codes and prints report cards. Choose the school, type the email of the person who will run it, and send that person the link. Each school has one administrator. The link works once, for 7 days, and only with that email address.'));
+    if(!schools.length){ box.append(h('div',{class:'empty'},'Add a school first (see the Schools list below).')); return box; }
+    const infos = await Promise.all(schools.map(sc=>sb.rpc('admin_school_admin_info',{ p_school:sc.id }).then(r=>({ sc, r }))));
+    const bad = infos.find(x=>x.r.error);
+    if(bad){ box.append(h('div',{class:'note warn'},'Could not load: '+bad.r.error.message+' (did you run step11-school-admin.sql?)')); return box; }
+    const isSuper = !!(infos[0].r.data && infos[0].r.data.can_manage);
+    const linkFor = t => new URL('school-invite?token='+t, location.href).href;
+    const showLink = (sc, email, token) => {
+      const url = linkFor(token);
+      const inp = h('input',{type:'text',readonly:true,value:url,onclick:e=>e.target.select(),'aria-label':'Invitation link'});
+      const body = 'Hello,\n\nUdaan Nepal has set up a School admin page for '+sc.name+'. Open this link and log in (if you have no account yet, sign up first with this same email address and choose Parent). Your account will then be linked to '+sc.name+':\n\n'+url+'\n\nThe link works once, for 7 days, and only with this email address.\n\nUdaan Nepal';
+      openSheet('Invitation link — '+sc.name,[
+        h('p',{class:'sub'},'Send this link to '+email+'. It works once, for 7 days, and only with that email address. It is shown only now; if you lose it, make a new one.'),
+        h('div',{class:'field'},inp),
+        h('div',{class:'row'},
+          h('button',{class:'btn primary',onclick:async()=>{ try{ await navigator.clipboard.writeText(url); toast('Link copied'); }catch(x){ inp.select(); toast('Press and hold the link to copy it'); } }},'Copy link'),
+          h('a',{class:'btn',href:'mailto:'+encodeURI(email)+'?subject='+encodeURIComponent('Udaan Nepal — School admin invitation for '+sc.name)+'&body='+encodeURIComponent(body)},'Send by email'),
+          h('a',{class:'btn',href:'https://wa.me/?text='+encodeURIComponent('Udaan Nepal School admin invitation for '+sc.name+': '+url),target:'_blank',rel:'noopener'},'Share on WhatsApp'))]);
+    };
+    async function makeInvite(sc, email){
+      const { data:tok, error } = await sb.rpc('admin_create_school_admin_invite',{ p_school:sc.id, p_email:email });
+      if(error){ toast(error.message,true); return false; }
+      showLink(sc, email.toLowerCase(), tok); reload(); return true;
+    }
+    if(isSuper){
+      const free = infos.filter(x=>!x.r.data.admin);
+      const sel = h('select',{id:'inv_school','aria-label':'School'}, infos.map(x=>h('option',{value:x.sc.id,disabled:!!x.r.data.admin}, x.sc.name+(x.r.data.admin?' (has an administrator)':''))));
+      const firstFree = free[0]; if(firstFree) sel.value = firstFree.sc.id;
+      const em = h('input',{type:'email',id:'inv_school_email',placeholder:'Email of the school administrator',autocomplete:'off','aria-label':'Email of the school administrator'});
+      box.append(h('div',{class:'row',style:'align-items:flex-end;gap:10px;margin:8px 0 14px;'},
+        h('div',{class:'field',style:'flex:1;min-width:180px;margin:0;'},h('label',{for:'inv_school'},'School'),sel),
+        h('div',{class:'field',style:'flex:1;min-width:220px;margin:0;'},h('label',{for:'inv_school_email'},'Email address'),em),
+        h('button',{class:'btn primary',id:'inv_school_go',disabled:!free.length,onclick:e=>busy(e.currentTarget,async()=>{
+          const sc = schools.find(x=>x.id===sel.value); const email = em.value.trim();
+          if(!sc){ toast('Choose a school',true); return; }
+          if(!email){ toast('Type the email address',true); return; }
+          await makeInvite(sc, email);
+        })},'Create invitation link')));
+      if(!free.length) box.append(h('p',{class:'sub'},'Every school already has an administrator or a pending invitation. To change one, use the buttons below.'));
+    } else box.append(h('div',{class:'note'},'Only the super admin can invite or remove a school administrator. You can see who runs each school below.'));
+    box.append(h('div',{class:'sub',style:'font-weight:700;margin:6px 0;'},'Who runs each school'));
+    infos.forEach(({sc, r})=>{
+      const a = r.data.admin, inv = r.data.invite;
+      let status;
+      if(a) status = [h('span',{class:'pill '+(a.active===false?'red':'green')},a.active===false?'Administrator (switched off)':'Administrator'), h('span',{},a.name||'—'), h('span',{},a.email), h('span',{},'since '+fmtTs(a.since))];
+      else if(inv) status = [h('span',{class:'pill '+(inv.expired?'red':'amber')},inv.expired?'Invitation expired':'Invitation sent'), h('span',{},inv.email), h('span',{},(inv.expired?'expired ':'expires ')+fmtTs(inv.expires_at))];
+      else status = [h('span',{class:'pill'},'No administrator yet')];
+      const acts = h('div',{class:'row'});
+      if(isSuper){
+        if(a) acts.append(h('button',{class:'btn sm bad',onclick:e=>busy(e.currentTarget,async()=>{
+          if(!await confirmBox('Remove the administrator?', (a.name||a.email)+' will no longer be able to open the School admin page for '+sc.name+'. Orders, class lists and codes stay as they are. You can invite someone else afterwards.','Remove',true)) return;
+          const { error } = await sb.rpc('admin_remove_school_admin',{ p_school:sc.id }); if(error){ toast(error.message,true); return; }
+          toast('Administrator removed'); reload();
+        })},'Remove administrator'));
+        else if(inv){
+          acts.append(h('button',{class:'btn sm primary',onclick:e=>busy(e.currentTarget,async()=>{ await makeInvite(sc, inv.email); })},'New link'),
+            h('button',{class:'btn sm bad',onclick:e=>busy(e.currentTarget,async()=>{
+              if(!await confirmBox('Cancel the invitation?','The link sent to '+inv.email+' stops working.','Cancel invitation',true)) return;
+              const { error } = await sb.rpc('admin_remove_school_admin',{ p_school:sc.id }); if(error){ toast(error.message,true); return; }
+              toast('Invitation cancelled'); reload();
+            })},'Cancel invitation'));
+        } else acts.append(h('button',{class:'btn sm primary',onclick:()=>{ const s2 = document.getElementById('inv_school'); if(s2){ s2.value = sc.id; } const e2 = document.getElementById('inv_school_email'); if(e2){ e2.scrollIntoView({block:'center'}); e2.focus(); } }},'Invite…'));
+      }
+      box.append(h('div',{class:'item',style:'align-items:center;gap:10px;flex-wrap:wrap;'},
+        h('div',{class:'main'}, h('h4',{},sc.name), h('div',{class:'meta'},status)), acts));
+    });
+    return box;
+  }
+  const inviteHolder = h('div'); wrap.append(inviteHolder);
   const schoolBox = h('div',{class:'card'}, h('h4',{style:'margin-bottom:6px;'},'Schools'));
   if(canMoney) schoolBox.append(h('button',{class:'btn primary sm',style:'margin-bottom:12px;',onclick:()=>schoolForm(null)},'+ New school'));
   if(!schools.length) schoolBox.append(h('div',{class:'empty'},'No schools yet.'));
@@ -2438,6 +2612,8 @@ async function viewSchools(){
         canMoney ? h('button',{class:'btn sm primary',onclick:()=>orderForm(sc)},'+ New order') : null)));
   });
   wrap.append(schoolBox);
+  try{ reqHolder.append(await requestsBox()); }catch(e){ reqHolder.append(h('div',{class:'note warn'},'Could not load school requests: '+(e&&e.message?e.message:e))); }
+  try{ inviteHolder.append(await inviteBox()); }catch(e){ inviteHolder.append(h('div',{class:'note warn'},'Could not load the invitations: '+(e&&e.message?e.message:e))); }
   return wrap;
 }
 
@@ -2745,9 +2921,17 @@ function wireMenu(){
   $('drawerClose').addEventListener('click', ()=>closeDrawer(true));
   document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(true); });
 }
+/* The admin panel opens only from the Admin button on My Profile (profile.html), which leaves a pass for this tab.
+   No other page links here. The pass is taken away when you leave for the website or log out. This only decides where
+   you may enter from; who may do what is still decided by your login, the 2-step code and the database rules. */
+const PASS_KEY = 'un_admin_entry';
+function hasPass(){ try{ return sessionStorage.getItem(PASS_KEY) === '1'; }catch(e){ return false; } }
+function dropPass(){ try{ sessionStorage.removeItem(PASS_KEY); }catch(e){} }
 (async function init(){
+  if(!hasPass()){ window.location.replace('profile'); return; }
   wireMenu();
-  $('logout').addEventListener('click', async ()=>{ await sb.auth.signOut(); window.location.href = 'auth.html'; });
+  document.querySelectorAll('a.site-link').forEach(a=>a.addEventListener('click', dropPass));
+  $('logout').addEventListener('click', async ()=>{ dropPass(); await sb.auth.signOut(); window.location.href = 'auth.html'; });
   const { data:{ user } } = await sb.auth.getUser();
   if(!user){ notFound(); return; }
   me = user;

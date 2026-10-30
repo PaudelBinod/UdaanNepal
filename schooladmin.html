@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="theme.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>School Admin — Udaan Nepal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#17191D; --bg-deep:#101216; --card:#22262C; --card-hover:#2A2F36;
+  --electric:#0066FF; --electric-hover:#0052CC; --cyan:#00E5FF; --amber:#F59E0B; --red:#F04452; --green:#22C55E;
+  --text-primary:#F8FAFC; --text-secondary:#CBD5E1; --text-muted:#94A3B8;
+  --border:rgba(255,255,255,0.08); --border-strong:rgba(255,255,255,0.16);
+  --radius:14px; --radius-sm:9px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.55;min-height:100vh;}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;letter-spacing:-0.01em;}
+a{color:inherit;text-decoration:none;}
+button,input,select,textarea{font-family:inherit;}
+button{cursor:pointer;}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important;}}
+
+.topbar{position:sticky;top:0;z-index:200;background:rgba(23,25,29,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;max-width:1100px;margin:0 auto;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px 8px 11px;border-radius:100px;border:1px solid var(--border-strong);background:var(--card);color:var(--text-primary);font-size:13px;font-weight:700;white-space:nowrap;}
+.back-btn:hover{border-color:var(--cyan);}
+.top-title{flex:1;min-width:0;text-align:center;font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.top-title small{display:block;font-family:'Manrope',sans-serif;font-weight:600;font-size:11px;color:var(--text-muted);}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 16px 90px;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;min-height:42px;border-radius:9px;font-weight:700;font-size:13px;border:1px solid transparent;transition:background .15s ease;}
+.btn.sm{padding:7px 12px;min-height:34px;font-size:12.5px;}
+.btn-primary{background:var(--electric);color:#fff;}
+.btn-primary:hover{background:var(--electric-hover);}
+.btn-outline{background:transparent;border-color:var(--border-strong);color:var(--text-primary);}
+.btn-outline:hover{border-color:var(--cyan);}
+.btn-danger{background:rgba(240,68,82,0.12);color:var(--red);border-color:rgba(240,68,82,0.3);}
+.btn[disabled]{opacity:.5;cursor:not-allowed;}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+
+h2.page-title{font-size:20px;margin:4px 0 4px;}
+.sub{font-size:13px;color:var(--text-muted);}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px;}
+.card h3{font-size:15px;margin-bottom:6px;}
+.section-title{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin:22px 0 10px;}
+.note{background:rgba(0,102,255,0.08);border:1px solid rgba(0,102,255,0.25);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:var(--text-secondary);margin:10px 0;}
+.note.warn{background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.35);}
+.note.bad{background:rgba(240,68,82,0.1);border-color:rgba(240,68,82,0.35);}
+.empty{padding:22px;text-align:center;color:var(--text-muted);font-size:13.5px;border:1px dashed var(--border-strong);border-radius:var(--radius-sm);}
+
+.pill{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.04em;padding:3px 10px;border-radius:100px;border:1px solid var(--border-strong);color:var(--text-secondary);white-space:nowrap;}
+.pill.green{background:rgba(34,197,94,0.12);color:#4ADE80;border-color:rgba(34,197,94,0.35);}
+.pill.amber{background:rgba(245,158,11,0.12);color:var(--amber);border-color:rgba(245,158,11,0.35);}
+.pill.red{background:rgba(240,68,82,0.12);color:var(--red);border-color:rgba(240,68,82,0.35);}
+.pill.blue{background:rgba(0,102,255,0.14);color:#6FA8FF;border-color:rgba(0,102,255,0.35);}
+
+.order-card{display:flex;flex-direction:column;gap:10px;}
+.order-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;}
+.order-top h3{font-size:16px;margin:0;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.stat{background:var(--bg-deep);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 10px;text-align:center;}
+.stat b{display:block;font-family:'Poppins',sans-serif;font-size:19px;}
+.stat span{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted);}
+@media(max-width:520px){.stats{grid-template-columns:repeat(2,1fr);}}
+.bar{height:7px;border-radius:100px;background:var(--bg-deep);overflow:hidden;}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--electric),var(--cyan));}
+
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin:14px 0 4px;}
+.tab{padding:9px 16px;border-radius:100px;border:1px solid var(--border-strong);background:var(--card);color:var(--text-secondary);font-size:13px;font-weight:700;white-space:nowrap;}
+.tab.on{background:var(--electric);border-color:var(--electric);color:#fff;}
+
+.srow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 0;border-bottom:1px solid var(--border);}
+.srow:last-child{border-bottom:none;}
+.srow .who{flex:1;min-width:200px;}
+.srow .who b{display:block;font-size:14.5px;}
+.srow .meta{font-size:12px;color:var(--text-muted);display:flex;gap:4px 12px;flex-wrap:wrap;}
+.srow .acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.srow.vac .who b{color:var(--text-muted);font-weight:600;}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.05em;}
+
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted);margin-bottom:5px;}
+.field input,.field select,.field textarea{width:100%;padding:11px 12px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-deep);color:var(--text-primary);font-size:14px;}
+.field textarea{min-height:90px;resize:vertical;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.two{grid-template-columns:1fr;}}
+
+.res{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.res:last-child{border-bottom:none;}
+.res .ic{flex:none;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;}
+.res.accepted .ic{background:rgba(34,197,94,0.18);color:#4ADE80;}
+.res.confirm .ic{background:rgba(245,158,11,0.18);color:var(--amber);}
+.res.rejected .ic,.res.duplicate .ic,.res.no_room .ic{background:rgba(240,68,82,0.18);color:var(--red);}
+.res .msg{color:var(--text-muted);font-size:12px;}
+.res label{display:flex;gap:6px;align-items:center;font-size:12.5px;margin-top:5px;color:var(--text-secondary);}
+
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:flex;align-items:flex-end;justify-content:center;}
+.sheet{background:var(--card);border:1px solid var(--border-strong);border-radius:18px 18px 0 0;width:100%;max-width:560px;max-height:92vh;overflow:auto;padding:18px 18px 26px;}
+@media(min-width:700px){.overlay{align-items:center;}.sheet{border-radius:18px;}}
+.sheet h3{font-size:17px;margin-bottom:10px;}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0E7C3A;color:#fff;padding:11px 18px;border-radius:10px;font-weight:700;font-size:13.5px;z-index:900;max-width:92vw;box-shadow:0 8px 24px rgba(0,0,0,.4);}
+.toast.err{background:#B42334;}
+
+.big-code{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:800;letter-spacing:.12em;font-size:15px;}
+
+/* ---------- print: slips and report cards ---------- */
+#printRoot{display:none;}
+@media print{
+  html,body{background:#fff !important;color:#000 !important;}
+  body > *:not(#printRoot){display:none !important;}
+  #printRoot{display:block !important;color:#000;background:#fff;font-family:Arial,Helvetica,sans-serif;font-size:12px;}
+  @page{size:A4;margin:12mm;}
+}
+#printRoot .rc{page-break-after:always;break-after:page;padding:2mm 1mm;}
+#printRoot .rc:last-child{page-break-after:auto;break-after:auto;}
+#printRoot .rc h1{font-size:20px;margin:0;font-family:Arial,Helvetica,sans-serif;}
+#printRoot .rc .brand{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #0066FF;padding-bottom:6px;margin-bottom:10px;}
+#printRoot .rc .brand b{font-size:15px;color:#0066FF;}
+#printRoot .rc .who{display:grid;grid-template-columns:1fr 1fr;gap:3px 18px;margin:8px 0 12px;font-size:12px;}
+#printRoot .rc .who div span{color:#555;}
+#printRoot table{width:100%;border-collapse:collapse;font-size:11.5px;}
+#printRoot th,#printRoot td{border:1px solid #888;padding:5px 6px;text-align:left;vertical-align:top;}
+#printRoot th{background:#EEF2F8;font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;}
+#printRoot td.n{text-align:center;}
+#printRoot .rc .remark{font-size:11px;color:#333;border-top:none;}
+#printRoot .rc .legend{margin-top:12px;font-size:10.5px;color:#333;line-height:1.5;}
+#printRoot .rc .foot{margin-top:14px;padding-top:6px;border-top:1px solid #999;font-size:10px;color:#444;}
+#printRoot .rc .prov{font-size:10px;font-weight:700;color:#8A5300;}
+#printRoot .slips{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+#printRoot .slip{border:1px dashed #666;padding:8mm 7mm;break-inside:avoid;page-break-inside:avoid;min-height:62mm;}
+#printRoot .slip .t{font-weight:700;font-size:11px;color:#0066FF;letter-spacing:.04em;text-transform:uppercase;}
+#printRoot .slip .nm{font-size:15px;font-weight:700;margin:3px 0 2px;}
+#printRoot .slip .cl{font-size:11px;color:#444;margin-bottom:6px;}
+#printRoot .slip .cd{font-family:'Courier New',monospace;font-size:20px;font-weight:700;letter-spacing:.14em;border:2px solid #000;padding:5px 8px;display:inline-block;margin:3px 0 6px;}
+#printRoot .slip ol{margin:4px 0 0 16px;font-size:10.5px;line-height:1.45;}
+#printRoot .slip .own{font-size:10px;color:#444;margin-top:5px;}
+</style>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<div class="topbar"><div class="topbar-inner">
+  <a class="back-btn" href="profile" id="backBtn"><span class="ar">&lt;</span> My Profile</a>
+  <div class="top-title" id="topTitle">School admin<small>Udaan Nepal</small></div>
+  <span data-theme-slot></span>
+</div></div>
+<div class="wrap" id="app"><div class="empty">Loading…</div></div>
+<div id="printRoot" aria-hidden="true"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+const sb = supabase.createClient(
+  'https://idwbxagsxpkkqwfjftox.supabase.co',
+  'sb_publishable_ju3GQ5lGipjlLtDRZZXxPg__J7tzqfw'
+);
+
+/* ---------------- small helpers ---------------- */
+function h(tag, attrs, ...kids){
+  const el = document.createElement(tag);
+  for(const k in (attrs||{})){
+    const v = attrs[k];
+    if(v === null || v === undefined || v === false) continue;
+    if(k === 'class') el.className = v;
+    else if(k.slice(0,2) === 'on' && typeof v === 'function') el.addEventListener(k.slice(2), v);
+    else if(k === 'value') el.value = v;
+    else if(k === 'checked') el.checked = !!v;
+    else if(k === 'disabled') el.disabled = !!v;
+    else el.setAttribute(k, v === true ? '' : v);
+  }
+  (function add(list){
+    list.forEach(c=>{
+      if(c === null || c === undefined || c === false) return;
+      if(Array.isArray(c)) add(c); else el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+    });
+  })(kids);
+  return el;
+}
+const $app = document.getElementById('app');
+function clear(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+let toastTimer = null;
+function toast(msg, isErr){
+  const old = document.querySelector('.toast'); if(old) old.remove();
+  const t = h('div', {class:'toast'+(isErr?' err':''), role:'status'}, msg);
+  document.body.append(t); clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.remove(), isErr ? 6500 : 3200);
+}
+function openSheet(title, kids){
+  const ov = h('div', {class:'overlay'});
+  const sheet = h('div', {class:'sheet', role:'dialog', 'aria-label':title}, h('h3', {}, title), kids);
+  ov.append(sheet);
+  const close = () => ov.remove();
+  ov.addEventListener('click', e => { if(e.target === ov) close(); });
+  document.body.append(ov);
+  return close;
+}
+async function busy(btn, fn){
+  if(btn.disabled) return; btn.disabled = true;
+  try{ await fn(); } finally { btn.disabled = false; }
+}
+function fmtDate(d){
+  if(!d) return '—';
+  const x = new Date(String(d).slice(0,10) + 'T00:00:00');
+  if(isNaN(x)) return '—';
+  return x.toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'});
+}
+function plural(n, one, many){ return n + ' ' + (n === 1 ? one : (many || one + 's')); }
+function slug(t){ return String(t||'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+function numKey(s){ const m = String(s||'').replace(/\D/g,''); return m ? Number(m) : Infinity; }
+
+/* what the school sees instead of our internal order status */
+const ORDER_LABEL = {
+  requested:['Waiting for Udaan Nepal','amber'], invoiced:['Bill sent — waiting for payment','amber'],
+  paid:['Active','green'], closed:['Term ended',''], cancelled:['Cancelled','red']
+};
+const SEAT_LABEL = {
+  listed:['Accepted — code after payment','amber'], open:['Code ready','blue'], claimed:['Joined','green'], vacant:['Empty seat','']
+};
+const LEVEL_NOTE = 'High = 80% or more · Proficient = 60% or more · Basic = 40% or more · Below basic = under 40% (the cut-offs set by Udaan Nepal)';
+
+/* ---------------- state ---------------- */
+let OV = null;            // school_overview()
+let CUR = null;           // {id, tab}
+let SEATS = null;         // school_seats_list() of the current order
+let REPORT = null;        // school_report_cards() of the current order (or {error})
+
+async function rpc(name, args){
+  const r = await sb.rpc(name, args || {});
+  if(r.error) throw new Error(r.error.message || 'Something went wrong');
+  return r.data;
+}
+
+/* ---------------- start ---------------- */
+/* This page opens only from the "School admin" button on My Profile, which leaves a pass for this tab. No other page links here.
+   The pass is dropped when you go back to My Profile or log out. Who may do what is still decided by your login and the database. */
+const PASS_KEY = 'un_school_entry';
+function hasPass(){ try{ return sessionStorage.getItem(PASS_KEY) === '1'; }catch(e){ return false; } }
+function dropPass(){ try{ sessionStorage.removeItem(PASS_KEY); }catch(e){} }
+async function start(){
+  if(!hasPass()){ location.replace('profile'); return; }
+  document.getElementById('backBtn').addEventListener('click', dropPass);
+  const { data:{ user } } = await sb.auth.getUser();
+  if(!user){ dropPass(); location.replace('auth.html?redirect=profile'); return; }
+  try{
+    OV = await rpc('school_overview');
+  }catch(e){
+    clear($app);
+    $app.append(h('div', {class:'card'}, h('h2', {class:'page-title'}, 'This page is for school administrators'),
+      h('p', {class:'sub'}, 'Your account is not linked to a school. If Udaan Nepal sent you an invitation link, open that link again while you are logged in.'),
+      h('div', {class:'row', style:'margin-top:12px;'}, h('a', {class:'btn btn-primary', href:'profile'}, 'Back to My Profile'))));
+    return;
+  }
+  document.getElementById('topTitle').replaceChildren(OV.school, h('small', {}, 'School admin · Udaan Nepal'));
+  route();
+}
+window.addEventListener('hashchange', route);
+
+function route(){
+  const m = location.hash.match(/^#order\/([0-9a-f-]{36})(?:\/(\w+))?/i);
+  if(m){ openOrder(m[1], m[2] || 'list'); } else { CUR = null; renderHome(); }
+}
+function go(hash){ if(location.hash === hash) route(); else location.hash = hash; }
+async function refreshOverview(){ OV = await rpc('school_overview'); }
+
+/* ---------------- home ---------------- */
+function orderStats(o){
+  const free = Math.max(o.seats - o.filled, 0);
+  return h('div', {class:'stats'},
+    h('div', {class:'stat'}, h('b', {}, o.seats), h('span', {}, 'Seats')),
+    h('div', {class:'stat'}, h('b', {}, o.filled), h('span', {}, 'Students')),
+    h('div', {class:'stat'}, h('b', {}, o.joined), h('span', {}, 'Joined')),
+    h('div', {class:'stat'}, h('b', {}, free), h('span', {}, 'Free')));
+}
+function renderHome(){
+  document.title = 'School Admin — Udaan Nepal';
+  clear($app);
+  $app.append(
+    h('h2', {class:'page-title'}, OV.school),
+    h('p', {class:'sub'}, 'Order seats for your students, upload your class lists, hand out codes and print report cards.'),
+    h('div', {class:'row', style:'margin:14px 0 4px;'},
+      h('button', {class:'btn btn-primary', onclick:orderForm}, '+ Order seats')));
+  $app.append(h('div', {class:'section-title'}, 'Your orders'));
+  if(!OV.orders.length){
+    $app.append(h('div', {class:'empty'}, 'No orders yet. Press "Order seats" to ask Udaan Nepal for seats. You never see prices here; Udaan Nepal sends you the bill.'));
+  }
+  OV.orders.forEach(o=>{
+    const [lab, cls] = ORDER_LABEL[o.status] || [o.status, ''];
+    const card = h('div', {class:'card order-card'},
+      h('div', {class:'order-top'},
+        h('div', {}, h('h3', {}, o.bundle), h('div', {class:'sub'}, [o.class_level, 'Term: ' + fmtDate(o.term_start) + ' to ' + fmtDate(o.term_end)].filter(Boolean).join(' · '))),
+        h('span', {class:'pill '+cls}, lab)),
+      orderStats(o),
+      h('div', {class:'bar', 'aria-hidden':'true'}, h('i', {style:'width:'+Math.min(100, o.seats ? Math.round(100*o.filled/o.seats) : 0)+'%'})),
+      h('div', {class:'sub'}, (o.courses.length ? 'Courses: ' + o.courses.join(', ') : 'No courses in this bundle yet')),
+      h('div', {class:'row'},
+        h('a', {class:'btn btn-primary sm', href:'#order/'+o.id+'/list'}, 'Class list'),
+        (o.status === 'paid' || o.status === 'closed') ? h('a', {class:'btn btn-outline sm', href:'#order/'+o.id+'/codes'}, 'Codes and slips') : null,
+        (o.status === 'paid' || o.status === 'closed') ? h('a', {class:'btn btn-outline sm', href:'#order/'+o.id+'/report'}, 'Report cards') : null));
+    $app.append(card);
+  });
+  $app.append(h('div', {class:'section-title'}, 'Your requests to Udaan Nepal'));
+  if(!OV.requests.length) $app.append(h('div', {class:'empty'}, 'Nothing yet. Requests for extra seats or for extra changes appear here with their answer.'));
+  else $app.append(h('div', {class:'card'}, OV.requests.map(requestRow)));
+}
+function requestRow(q){
+  const lab = q.status === 'pending' ? ['Waiting','amber'] : q.status === 'approved' ? ['Approved','green'] : ['Declined','red'];
+  const what = q.kind === 'extra_seats'
+    ? 'Extra seats: ' + q.seats
+    : (q.release ? 'Release ' : 'Replace ') + (q.student || 'a student') + (q.new_name ? ' with ' + q.new_name : '');
+  return h('div', {class:'srow'},
+    h('div', {class:'who'}, h('b', {}, what), h('div', {class:'meta'}, h('span', {}, 'Asked on ' + fmtDate(q.created_at)), q.handled_note ? h('span', {}, 'Udaan Nepal: ' + q.handled_note) : null)),
+    h('span', {class:'pill '+lab[1]}, lab[0]));
+}
+
+/* ---------------- order seats ---------------- */
+async function orderForm(){
+  let bundles;
+  try{ bundles = await rpc('school_bundles'); }catch(e){ toast(e.message, true); return; }
+  if(!bundles.length){ toast('There are no bundles to order right now. Please call Udaan Nepal.', true); return; }
+  const sel = h('select', {id:'ob'}, bundles.map(b=>h('option', {value:b.id}, b.name + (b.class_level ? ' — ' + b.class_level : ''))));
+  const info = h('div', {class:'note'});
+  const showInfo = () => { const b = bundles.find(x=>x.id === sel.value); info.textContent = b ? ((b.description ? b.description + ' ' : '') + 'Courses: ' + (b.courses.join(', ') || 'none yet')) : ''; };
+  sel.addEventListener('change', showInfo); showInfo();
+  const seats = h('input', {type:'number', min:'1', max:'5000', inputmode:'numeric', placeholder:'e.g. 40', id:'os'});
+  const st = h('input', {type:'date', id:'ost'}), en = h('input', {type:'date', id:'oen'});
+  const note = h('textarea', {placeholder:'Anything Udaan Nepal should know (optional)', id:'on', maxlength:'300'});
+  let close;
+  close = openSheet('Order seats', [
+    h('div', {class:'field'}, h('label', {for:'ob'}, 'Bundle'), sel), info,
+    h('div', {class:'field'}, h('label', {for:'os'}, 'Number of students'), seats),
+    h('div', {class:'two'}, h('div', {class:'field'}, h('label', {for:'ost'}, 'Term starts (optional)'), st), h('div', {class:'field'}, h('label', {for:'oen'}, 'Term ends (optional)'), en)),
+    h('div', {class:'field'}, h('label', {for:'on'}, 'Note'), note),
+    h('p', {class:'sub'}, 'Udaan Nepal will check your request and send you the bill. Student codes are made after the payment is confirmed. You can upload your class list while you wait.'),
+    h('div', {class:'row', style:'margin-top:12px;'},
+      h('button', {class:'btn btn-primary', id:'orderSend', onclick:e=>busy(e.currentTarget, async()=>{
+        const n = parseInt(seats.value, 10);
+        if(!n || n < 1){ toast('Enter the number of students', true); return; }
+        try{
+          await rpc('school_request_order', { p_bundle:sel.value, p_seats:n, p_start:st.value || null, p_end:en.value || null, p_note:note.value.trim() || null });
+        }catch(err){ toast(err.message, true); return; }
+        close(); toast('Request sent to Udaan Nepal');
+        await refreshOverview(); renderHome();
+      })}, 'Send request'),
+      h('button', {class:'btn btn-outline', onclick:()=>close()}, 'Cancel'))
+  ]);
+}
+
+/* ---------------- one order ---------------- */
+async function openOrder(id, tab){
+  const o = OV.orders.find(x=>x.id === id);
+  if(!o){ location.hash = ''; return; }
+  CUR = { id, tab };
+  document.title = o.bundle + ' — School Admin';
+  clear($app); $app.append(h('div', {class:'empty'}, 'Loading…'));
+  try{
+    SEATS = await rpc('school_seats_list', { p_order:id });
+  }catch(e){ clear($app); $app.append(h('div', {class:'note bad'}, e.message), h('a', {class:'btn btn-outline', href:'#'}, 'Back')); return; }
+  REPORT = null;
+  if(tab === 'report' && (o.status === 'paid' || o.status === 'closed')){
+    try{ REPORT = await rpc('school_report_cards', { p_order:id }); }catch(e){ REPORT = { error:e.message }; }
+  }
+  renderOrder(o);
+}
+
+function renderOrder(o){
+  clear($app);
+  const [lab, cls] = ORDER_LABEL[o.status] || [o.status, ''];
+  const rows = SEATS.rows;
+  const free = Math.max(o.seats - o.filled, 0);
+  $app.append(
+    h('a', {class:'sub', href:'#', style:'display:inline-block;margin-bottom:6px;'}, h('span', {class:'ar'}, '<'), ' All orders'),
+    h('div', {class:'order-top'}, h('div', {}, h('h2', {class:'page-title'}, o.bundle), h('div', {class:'sub'}, [o.class_level, 'Term: ' + fmtDate(o.term_start) + ' to ' + fmtDate(o.term_end)].filter(Boolean).join(' · '))),
+      h('span', {class:'pill '+cls}, lab)),
+    h('div', {style:'margin:12px 0;'}, orderStats(o)));
+  const msg = {
+    requested:'Udaan Nepal has your request and will send the bill. You can already upload your class list; codes are made after the payment is confirmed.',
+    invoiced:'The bill has been sent. Codes are made as soon as Udaan Nepal confirms the payment. You can already upload your class list.',
+    paid:'This order is active. Students join by typing their code in My Profile.',
+    closed:'The term has ended and student access has stopped. Report cards stay available for 60 days after the term end' + (o.report_until ? ' (until ' + fmtDate(o.report_until) + ')' : '') + '.',
+    cancelled:'This order was cancelled.'
+  }[o.status];
+  if(msg) $app.append(h('div', {class:'note'+(o.status === 'cancelled' ? ' bad' : '')}, msg));
+  const tabs = [['list','Class list'], ['codes','Codes and slips']];
+  if(o.status === 'paid' || o.status === 'closed') tabs.push(['report','Report cards']);
+  $app.append(h('div', {class:'tabs', role:'tablist'}, tabs.map(([k,t]) => h('a', {class:'tab'+(CUR.tab === k ? ' on' : ''), role:'tab', 'aria-selected':CUR.tab === k ? 'true' : 'false', href:'#order/'+o.id+'/'+k}, t))));
+  const body = h('div', {id:'orderBody'});
+  $app.append(body);
+  if(CUR.tab === 'codes') codesTab(body, o);
+  else if(CUR.tab === 'report') reportTab(body, o);
+  else listTab(body, o, free);
+}
+
+/* ---------- class list tab ---------- */
+function seatMeta(r){
+  return [r.class_name ? 'Class ' + r.class_name : null, r.section ? 'Section ' + r.section : null, r.roll_no ? 'Roll ' + r.roll_no : null,
+          r.admission_no ? 'Adm. ' + r.admission_no : null].filter(Boolean);
+}
+function listTab(body, o, free){
+  const active = ['requested','invoiced','paid'].includes(o.status);
+  const rows = SEATS.rows;
+  const filled = rows.filter(r=>r.status !== 'vacant');
+  const vacant = rows.filter(r=>r.status === 'vacant');
+  if(active){
+    body.append(h('div', {class:'row', style:'margin:6px 0 10px;'},
+      h('button', {class:'btn btn-primary', disabled:free < 1, onclick:()=>addPanel(o)}, '+ Add students'),
+      h('button', {class:'btn btn-outline', onclick:()=>extraSeatsForm(o)}, 'Ask for extra seats')));
+    if(free < 1) body.append(h('div', {class:'note warn'}, 'All seats are used. To add more students, ask Udaan Nepal for extra seats, or release a student first.'));
+  }
+  const holder = h('div', {id:'addHolder'}); body.append(holder);
+  const search = h('input', {type:'search', placeholder:'Search by name, roll number or Reference ID', 'aria-label':'Search students', style:'width:100%;padding:11px 12px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-deep);color:var(--text-primary);font-size:14px;margin:8px 0;'});
+  const box = h('div', {class:'card'});
+  body.append(h('div', {class:'section-title'}, plural(filled.length, 'student') + (vacant.length ? ' · ' + plural(vacant.length, 'empty seat') : '')));
+  if(filled.length > 8) body.append(search);
+  body.append(box);
+  function paint(){
+    clear(box);
+    const t = search.value.trim().toLowerCase();
+    const list = rows.filter(r => !t || [r.student_name, r.roll_no, r.reference_id, r.admission_no, r.class_name, r.section].filter(Boolean).join(' ').toLowerCase().includes(t));
+    if(!list.length){ box.append(h('div', {class:'empty'}, rows.length ? 'No student matches your search.' : 'No students yet. Press "Add students" and upload your class list.')); return; }
+    list.forEach(r=>{
+      const [sl, sc] = SEAT_LABEL[r.status] || [r.status, ''];
+      if(r.status === 'vacant'){
+        box.append(h('div', {class:'srow vac'}, h('div', {class:'who'}, h('b', {}, 'Empty seat'), h('div', {class:'meta'}, h('span', {}, 'A new student can take this seat. Use "Add students".'))), h('span', {class:'pill'}, sl)));
+        return;
+      }
+      const canChange = active && !r.pending_change;
+      box.append(h('div', {class:'srow'},
+        h('div', {class:'who'}, h('b', {}, r.student_name),
+          h('div', {class:'meta'}, seatMeta(r).map(x=>h('span', {}, x)), h('span', {class:'mono'}, r.reference_id || ''))),
+        h('div', {class:'acts'},
+          r.name_flag ? h('span', {class:'pill amber', title:'The name you typed differs from the account name; you confirmed it is the same student.'}, 'Name confirmed') : null,
+          r.pending_change ? h('span', {class:'pill amber'}, 'Change waiting for Udaan Nepal') : h('span', {class:'pill '+sc}, sl),
+          canChange ? h('button', {class:'btn btn-outline sm', onclick:()=>changeForm(o, r)}, 'Replace') : null,
+          canChange ? h('button', {class:'btn btn-danger sm', onclick:()=>releaseForm(o, r)}, 'Release') : null)));
+    });
+  }
+  search.addEventListener('input', paint); paint();
+  body.append(h('p', {class:'sub'}, 'Each seat can be changed ' + OV.changes_per_seat + ' times per term by you. After that, Udaan Nepal has to approve the change. Udaan Nepal never shows you the account name, email or phone of a student.'));
+}
+
+/* ----- add students (upload, check, save) ----- */
+const HEADERS = {
+  name:['name','studentname','student','fullname'], class:['class','grade','std','standard'], section:['section','sec','division'],
+  roll:['roll','rollno','rollnumber','rollnum'], ref:['referenceid','reference','refid','ref','unid','studentid','id'],
+  admission:['admissionno','admission','admissionnumber','admno','admissionid']
+};
+/* "Admission no. (optional)" and "Roll No." must both be understood: drop the bracket and every sign */
+function normHead(s){ return String(s||'').toLowerCase().replace(/\(.*?\)/g,'').replace(/[^a-z0-9]/g,''); }
+function parseGrid(grid){
+  grid = grid.map(r=>r.map(c=>String(c==null?'':c).trim())).filter(r=>r.some(c=>c));
+  if(!grid.length) return [];
+  let map = null;
+  const first = grid[0].map(normHead);
+  const found = {};
+  Object.keys(HEADERS).forEach(k=>{ const i = first.findIndex(x=>HEADERS[k].includes(x)); if(i >= 0) found[k] = i; });
+  if(found.name !== undefined && found.ref !== undefined){ map = found; grid = grid.slice(1); }
+  else map = { name:0, class:1, section:2, roll:3, ref:4, admission:5 };
+  return grid.map(r=>({
+    name: r[map.name] || '', class: map.class !== undefined ? (r[map.class] || '') : '', section: map.section !== undefined ? (r[map.section] || '') : '',
+    roll: map.roll !== undefined ? (r[map.roll] || '') : '', ref: map.ref !== undefined ? (r[map.ref] || '') : '',
+    admission: map.admission !== undefined ? (r[map.admission] || '') : '', confirm:false
+  }));
+}
+function downloadXlsx(filename, sheets){
+  if(!window.XLSX){ toast('The Excel tool could not load. Check your internet and refresh.', true); return; }
+  const wb = XLSX.utils.book_new();
+  sheets.forEach(([n, rows])=>{ const ws = XLSX.utils.aoa_to_sheet(rows); ws['!cols'] = (rows[0]||[]).map(()=>({wch:22})); XLSX.utils.book_append_sheet(wb, ws, n); });
+  XLSX.writeFile(wb, filename);
+}
+function addPanel(o){
+  const holder = document.getElementById('addHolder'); clear(holder);
+  const free = Math.max(o.seats - o.filled, 0);
+  let draft = [], results = null;
+  const file = h('input', {type:'file', accept:'.xlsx,.xls,.csv', id:'upFile'});
+  const paste = h('textarea', {id:'upPaste', placeholder:'Or paste rows from Excel here: Name, Class, Section, Roll no., Reference ID, Admission no. (one student per line)'});
+  const out = h('div', {id:'upOut'});
+  file.addEventListener('change', async()=>{
+    const f = file.files[0]; if(!f) return;
+    if(!window.XLSX){ toast('The Excel tool could not load. Refresh and try again.', true); return; }
+    try{
+      const wb = XLSX.read(await f.arrayBuffer(), {type:'array'});
+      const grid = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1, defval:''});
+      draft = parseGrid(grid); results = null; pasteDirty = false; paste.value = ''; paint();
+    }catch(x){ toast('Could not read that file. Use the blank template.', true); }
+  });
+  /* Pasted rows are read a moment after typing stops, and again when "Check" is pressed. They are NOT read on blur,
+     because that would redraw the buttons in the middle of a tap and the first tap on "Check the list" would be lost. */
+  let pasteDirty = false, pasteTimer = null;
+  function syncPaste(){
+    clearTimeout(pasteTimer);
+    if(!pasteDirty) return;
+    pasteDirty = false;
+    const grid = paste.value.split(/\r?\n/).filter(l=>l.trim()).map(l => l.includes('\t') ? l.split('\t') : l.split(','));
+    draft = parseGrid(grid); results = null;
+  }
+  paste.addEventListener('input', ()=>{ pasteDirty = true; clearTimeout(pasteTimer); pasteTimer = setTimeout(()=>{ syncPaste(); paint(); }, 500); });
+  async function check(save){
+    syncPaste();
+    if(!draft.length){ toast('Choose a file or paste your list first', true); return; }
+    let r;
+    try{ r = await rpc('school_submit_list', { p_order:o.id, p_rows:draft, p_save:!!save }); }catch(e){ toast(e.message, true); return; }
+    results = r.rows;
+    if(save){
+      toast(plural(r.saved_count, 'student') + ' saved' + (r.codes_ready ? ' — codes are ready' : ''));
+      await refreshOverview();
+      const o2 = OV.orders.find(x=>x.id === o.id);
+      SEATS = await rpc('school_seats_list', { p_order:o.id });
+      renderOrder(o2);
+      return;
+    }
+    paint(r.summary);
+  }
+  function paint(summary){
+    clear(out);
+    if(!draft.length) return;
+    out.append(h('div', {class:'section-title'}, plural(draft.length, 'row') + ' read' + (draft.length > free ? ' — only ' + free + ' free seat' + (free === 1 ? '' : 's') : '')));
+    const card = h('div', {class:'card'});
+    draft.forEach((d, i)=>{
+      const rs = results && results[i];
+      const st = rs ? rs.result : null;
+      const ic = st === 'accepted' ? '✓' : st === 'confirm' ? '!' : st ? '✕' : '•';
+      card.append(h('div', {class:'res '+(st || '')},
+        h('span', {class:'ic'}, ic),
+        h('div', {style:'flex:1;min-width:0;'},
+          h('b', {}, d.name || '(no name)'), h('div', {class:'sub'}, [d.class && 'Class ' + d.class, d.section && 'Section ' + d.section, d.roll && 'Roll ' + d.roll, d.ref].filter(Boolean).join(' · ')),
+          rs && rs.message ? h('div', {class:'msg'}, rs.message) : null,
+          (st === 'confirm') ? h('label', {}, h('input', {type:'checkbox', checked:d.confirm, onchange:e=>{ d.confirm = e.target.checked; }}), 'Yes, this is the same student (then press "Check again")') : null)));
+    });
+    out.append(card);
+    if(summary){
+      const bits = [];
+      if(summary.accepted) bits.push(summary.accepted + ' accepted');
+      if(summary.confirm) bits.push(summary.confirm + ' need your confirmation');
+      if(summary.rejected) bits.push(summary.rejected + ' not accepted');
+      if(summary.duplicate) bits.push(summary.duplicate + ' repeated');
+      if(summary.no_room) bits.push(summary.no_room + ' without a free seat');
+      out.append(h('div', {class:'note'+(summary.accepted ? '' : ' warn')}, bits.join(' · ') + '.' + (summary.rejected ? ' A row is "not accepted" when the Reference ID is wrong or cannot be used for your school. Ask the student to open My Profile and read the ID again.' : '')));
+    }
+    const ready = results ? results.filter(x=>x.result === 'accepted').length : 0;
+    out.append(h('div', {class:'row'},
+      h('button', {class:'btn btn-outline', id:'upCheck', onclick:e=>busy(e.currentTarget, ()=>check(false))}, results ? 'Check again' : 'Check the list'),
+      h('button', {class:'btn btn-primary', id:'upSave', disabled:!results || !ready, onclick:e=>busy(e.currentTarget, ()=>check(true))}, results ? 'Save ' + plural(ready, 'accepted row') : 'Save')));
+  }
+  holder.append(h('div', {class:'card'},
+    h('h3', {}, 'Add students'),
+    h('p', {class:'sub'}, 'You can add ' + plural(free, 'more student') + '. Each student needs their own Reference ID (shown on the student\'s My Profile page, like UN-2026-123456). The student must have an Udaan Nepal student account first.'),
+    h('div', {class:'row', style:'margin:10px 0;'}, h('button', {class:'btn btn-outline sm', onclick:()=>downloadXlsx('class-list-template.xlsx', [['Class list', [['Name','Class','Section','Roll no.','Reference ID','Admission no. (optional)'], ['Example Student','7','A','1','UN-2026-123456','']]]])}, 'Download blank template')),
+    h('div', {class:'field'}, h('label', {for:'upFile'}, 'Excel or CSV file'), file),
+    h('div', {class:'field'}, h('label', {for:'upPaste'}, 'Or paste'), paste),
+    h('div', {class:'row'}, h('button', {class:'btn btn-outline sm', onclick:()=>clear(holder)}, 'Close')),
+    out));
+}
+
+/* ----- change a seat ----- */
+function releaseForm(o, r){
+  const left = r.changes_left;
+  let close;
+  close = openSheet('Release ' + r.student_name + '?', [
+    h('p', {class:'sub', style:'margin-bottom:10px;'}, 'The student loses the bundle courses now and the code stops working. Their progress is kept on their own account. The seat becomes empty and you can give it to another student.'),
+    left > 0
+      ? h('div', {class:'note'}, 'This uses 1 of the ' + OV.changes_per_seat + ' changes this seat has per term. Changes left on this seat: ' + left + '.')
+      : h('div', {class:'note warn'}, 'This seat has used all its changes. Your request will go to Udaan Nepal for approval; nothing changes until they approve.'),
+    h('div', {class:'row'},
+      h('button', {class:'btn btn-danger', id:'relGo', onclick:e=>busy(e.currentTarget, async()=>{
+        let res;
+        try{ res = await rpc('school_change_seat', { p_seat:r.seat_id, p_row:null, p_release:true }); }catch(err){ toast(err.message, true); return; }
+        close(); toast(res.result === 'requested' ? 'Request sent to Udaan Nepal' : 'Seat released');
+        await afterChange(o);
+      })}, left > 0 ? 'Release student' : 'Send request'),
+      h('button', {class:'btn btn-outline', onclick:()=>close()}, 'Cancel'))]);
+}
+function changeForm(o, r){
+  const f = { name:h('input', {type:'text', id:'cfn', maxlength:'120'}), cls:h('input', {type:'text', id:'cfc', value:r.class_name || '', maxlength:'40'}),
+    sec:h('input', {type:'text', id:'cfs', value:r.section || '', maxlength:'40'}), roll:h('input', {type:'text', id:'cfr', maxlength:'40'}),
+    ref:h('input', {type:'text', id:'cfi', placeholder:'UN-2026-123456', autocapitalize:'characters'}), adm:h('input', {type:'text', id:'cfa', maxlength:'40'}) };
+  const msg = h('div'); let confirm = false;
+  const left = r.changes_left;
+  let close;
+  close = openSheet('Replace ' + r.student_name, [
+    h('p', {class:'sub', style:'margin-bottom:10px;'}, 'Type the new student\'s details. The old student loses access now and their code stops working.'),
+    left > 0 ? h('div', {class:'note'}, 'Changes left on this seat: ' + left + ' (this uses one).') : h('div', {class:'note warn'}, 'This seat has used all its changes. Your request goes to Udaan Nepal for approval.'),
+    h('div', {class:'field'}, h('label', {for:'cfn'}, 'New student name'), f.name),
+    h('div', {class:'two'}, h('div', {class:'field'}, h('label', {for:'cfc'}, 'Class'), f.cls), h('div', {class:'field'}, h('label', {for:'cfs'}, 'Section'), f.sec)),
+    h('div', {class:'two'}, h('div', {class:'field'}, h('label', {for:'cfr'}, 'Roll no.'), f.roll), h('div', {class:'field'}, h('label', {for:'cfa'}, 'Admission no. (optional)'), f.adm)),
+    h('div', {class:'field'}, h('label', {for:'cfi'}, 'Reference ID'), f.ref),
+    msg,
+    h('div', {class:'row'},
+      h('button', {class:'btn btn-primary', id:'chgGo', onclick:e=>busy(e.currentTarget, async()=>{
+        const row = { name:f.name.value.trim(), class:f.cls.value.trim(), section:f.sec.value.trim(), roll:f.roll.value.trim(), ref:f.ref.value.trim(), admission:f.adm.value.trim(), confirm:confirm };
+        if(!row.name || !row.ref){ toast('Enter the name and the Reference ID', true); return; }
+        let res;
+        try{ res = await rpc('school_change_seat', { p_seat:r.seat_id, p_row:row, p_release:false }); }catch(err){ toast(err.message, true); return; }
+        if(res.ok === false){
+          clear(msg);
+          msg.append(h('div', {class:'note '+(res.result === 'confirm' ? 'warn' : 'bad'), id:'chgMsg'}, res.message || 'Not accepted'));
+          if(res.result === 'confirm'){
+            msg.append(h('label', {style:'display:flex;gap:8px;align-items:center;font-size:13px;margin-bottom:10px;'}, h('input', {type:'checkbox', id:'chgConfirm', onchange:e=>{ confirm = e.target.checked; }}), 'Yes, this is the same student'));
+          }
+          return;
+        }
+        close(); toast(res.result === 'requested' ? 'Request sent to Udaan Nepal' : 'Seat changed');
+        await afterChange(o);
+      })}, left > 0 ? 'Replace student' : 'Send request'),
+      h('button', {class:'btn btn-outline', onclick:()=>close()}, 'Cancel'))]);
+}
+async function afterChange(o){
+  await refreshOverview();
+  const o2 = OV.orders.find(x=>x.id === o.id);
+  SEATS = await rpc('school_seats_list', { p_order:o.id });
+  renderOrder(o2);
+}
+function extraSeatsForm(o){
+  const n = h('input', {type:'number', min:'1', max:'5000', inputmode:'numeric', id:'xs'}), note = h('textarea', {id:'xn', maxlength:'500', placeholder:'Why do you need them? (optional)'});
+  let close;
+  close = openSheet('Ask for extra seats', [
+    h('p', {class:'sub', style:'margin-bottom:10px;'}, 'Udaan Nepal will answer your request. Extra seats are billed separately.'),
+    h('div', {class:'field'}, h('label', {for:'xs'}, 'How many extra seats?'), n),
+    h('div', {class:'field'}, h('label', {for:'xn'}, 'Note'), note),
+    h('div', {class:'row'},
+      h('button', {class:'btn btn-primary', onclick:e=>busy(e.currentTarget, async()=>{
+        const v = parseInt(n.value, 10); if(!v || v < 1){ toast('Enter how many seats', true); return; }
+        try{ await rpc('school_request_extra_seats', { p_order:o.id, p_seats:v, p_note:note.value.trim() || null }); }catch(err){ toast(err.message, true); return; }
+        close(); toast('Request sent to Udaan Nepal'); await refreshOverview();
+      })}, 'Send request'),
+      h('button', {class:'btn btn-outline', onclick:()=>close()}, 'Cancel'))]);
+}
+
+/* ---------- codes and slips ---------- */
+function codesTab(body, o){
+  const rows = SEATS.rows.filter(r=>r.status !== 'vacant');
+  if(o.status === 'requested' || o.status === 'invoiced'){
+    body.append(h('div', {class:'card'}, h('h3', {}, 'Codes are not ready yet'),
+      h('p', {class:'sub'}, 'Codes are made automatically when Udaan Nepal confirms the payment. ' + plural(rows.length, 'student') + ' ' + (rows.length === 1 ? 'is' : 'are') + ' on your class list and will get a code then.')));
+    return;
+  }
+  if(o.status === 'cancelled'){ body.append(h('div', {class:'empty'}, 'This order was cancelled.')); return; }
+  const open = rows.filter(r=>r.status === 'open'), joined = rows.filter(r=>r.status === 'claimed');
+  body.append(h('div', {class:'card'},
+    h('h3', {}, 'Student codes'),
+    h('p', {class:'sub'}, 'Each code works only for the student whose Reference ID is on it, once. A student types it in My Profile, under "Have a code from your school?". ' + plural(joined.length, 'student') + ' joined, ' + open.length + ' still to join.'),
+    h('div', {class:'row', style:'margin-top:10px;'},
+      h('button', {class:'btn btn-primary', disabled:!open.length, onclick:()=>printSlips(o, open)}, 'Print slips (' + open.length + ')'),
+      h('button', {class:'btn btn-outline', disabled:!rows.length, onclick:()=>exportCodes(o, rows)}, 'Download codes (Excel)'))));
+  const box = h('div', {class:'card'});
+  if(!rows.length) box.append(h('div', {class:'empty'}, 'No students on this order yet.'));
+  rows.forEach(r=>{
+    box.append(h('div', {class:'srow'},
+      h('div', {class:'who'}, h('b', {}, r.student_name), h('div', {class:'meta'}, seatMeta(r).map(x=>h('span', {}, x)), h('span', {class:'mono'}, r.reference_id || ''))),
+      r.status === 'open' ? h('span', {class:'big-code'}, r.code) : h('span', {class:'pill green'}, r.status === 'claimed' ? 'Joined' + (r.joined_at ? ' ' + fmtDate(r.joined_at) : '') : '—')));
+  });
+  body.append(box);
+}
+function exportCodes(o, rows){
+  const head = ['Name','Class','Section','Roll no.','Admission no.','Reference ID','Code','Status'];
+  const data = rows.map(r=>[r.student_name||'', r.class_name||'', r.section||'', r.roll_no||'', r.admission_no||'', r.reference_id||'', r.status === 'open' ? r.code : '', r.status === 'claimed' ? 'Joined' : (r.status === 'open' ? 'Not used yet' : 'Waiting')]);
+  downloadXlsx('student-codes-' + slug(OV.school) + '-' + slug(o.bundle) + '.xlsx', [['Student codes', [head].concat(data)]]);
+}
+function printSlips(o, rows){
+  const root = document.getElementById('printRoot'); clear(root);
+  const where = location.host || 'the Udaan Nepal website';
+  const wrap = h('div', {class:'slips'});
+  rows.forEach(r=>{
+    wrap.append(h('div', {class:'slip'},
+      h('div', {class:'t'}, 'Udaan Nepal · ' + OV.school),
+      h('div', {class:'nm'}, r.student_name),
+      h('div', {class:'cl'}, seatMeta(r).join(' · ')),
+      h('div', {class:'cd'}, r.code),
+      h('ol', {},
+        h('li', {}, 'Log in at ' + where + ' with your own student account.'),
+        h('li', {}, 'Open My Profile and find "Have a code from your school?".'),
+        h('li', {}, 'Type this code and press Join. It works only once.')),
+      h('div', {class:'own'}, 'Only for the account with Reference ID ' + (r.reference_id || '') + '.' + (o.term_end ? ' Valid until ' + fmtDate(o.term_end) + '.' : ''))));
+  });
+  root.append(wrap);
+  window.print();
+}
+
+/* ---------- report cards ---------- */
+function levelText(level, prov){ return level ? level + (prov ? ' (Provisional)' : '') : '—'; }
+function pct(v){ return v === null || v === undefined ? '—' : String(v); }
+function reportTab(body, o){
+  if(!REPORT){ body.append(h('div', {class:'empty'}, 'Loading…')); return; }
+  if(REPORT.error){ body.append(h('div', {class:'note warn'}, REPORT.error)); return; }
+  const rc = REPORT;
+  const joined = rc.rows.filter(r=>r.joined), notJoined = rc.rows.filter(r=>!r.joined);
+  const groups = [...new Set(joined.map(r => (r.class_name || '—') + '|' + (r.section || '—')))].sort((a,b)=>a.localeCompare(b, undefined, {numeric:true}));
+  const sel = h('select', {id:'rcGroup', 'aria-label':'Class and section', style:'padding:10px 12px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-deep);color:var(--text-primary);font-size:14px;'},
+    h('option', {value:''}, 'All classes and sections'), groups.map(g => h('option', {value:g}, 'Class ' + g.split('|')[0] + ' · Section ' + g.split('|')[1])));
+  const list = h('div', {class:'card'});
+  const printAll = h('button', {class:'btn btn-primary', onclick:()=>printCards(o, current())}, 'Print');
+  const current = () => joined.filter(r => !sel.value || ((r.class_name || '—') + '|' + (r.section || '—')) === sel.value);
+  function paint(){
+    clear(list);
+    const cur = current();
+    printAll.textContent = 'Print all (' + cur.length + ')'; printAll.disabled = !cur.length;
+    if(!cur.length){ list.append(h('div', {class:'empty'}, joined.length ? 'No student in this group.' : 'No student has joined yet, so there are no report cards.')); return; }
+    cur.forEach(r=>{
+      const ov = r.overall;
+      list.append(h('div', {class:'srow'},
+        h('div', {class:'who'}, h('b', {}, r.student_name), h('div', {class:'meta'}, seatMeta(r).map(x=>h('span', {}, x)))),
+        h('div', {class:'acts'}, h('span', {class:'pill '+(ov && ov.level ? (ov.provisional ? 'amber' : 'blue') : '')}, ov && ov.level ? 'Overall ' + ov.total_avg + '% · ' + levelText(ov.level, ov.provisional) : 'No checks yet'),
+          h('button', {class:'btn btn-outline sm', onclick:()=>printCards(o, [r])}, 'Print'))));
+    });
+  }
+  sel.addEventListener('change', paint);
+  body.append(h('div', {class:'card'}, h('h3', {}, 'Report cards'),
+    h('p', {class:'sub'}, 'One card per student, one row per subject. Printable until ' + (rc.printable_until ? fmtDate(rc.printable_until) : 'the end of the term plus 60 days') + '. A level is marked "Provisional" until 36% of that course is complete. ' + LEVEL_NOTE + '.'),
+    h('div', {class:'row', style:'margin-top:10px;'}, sel, printAll)));
+  body.append(list);
+  if(notJoined.length) body.append(h('p', {class:'sub'}, plural(notJoined.length, 'student') + ' on your list ' + (notJoined.length === 1 ? 'has' : 'have') + ' not joined yet, so ' + (notJoined.length === 1 ? 'has' : 'have') + ' no report card.'));
+  paint();
+}
+function reportCardNode(rc, r, o){
+  const subj = (id) => (rc.courses.find(c=>c.id === id) || {}).title || 'Course';
+  const rows = r.subjects.map(s=>[
+    h('tr', {},
+      h('td', {}, subj(s.course_id)),
+      h('td', {class:'n'}, s.lessons_done + ' of ' + s.lessons_total),
+      h('td', {class:'n'}, s.checks_done + ' of ' + s.checks_total),
+      h('td', {class:'n'}, pct(s.first_avg)), h('td', {class:'n'}, pct(s.best_avg)), h('td', {class:'n'}, pct(s.total_avg)),
+      h('td', {class:'n'}, s.attempts),
+      h('td', {}, levelText(s.level, s.provisional))),
+    h('tr', {}, h('td', {colspan:'8', class:'remark'}, s.remark))]);
+  const ov = r.overall;
+  return h('section', {class:'rc'},
+    h('div', {class:'brand'}, h('div', {}, h('b', {}, 'UDAAN NEPAL'), h('h1', {}, 'Student progress report')), h('div', {}, 'Printed on ' + fmtDate(rc.generated_on))),
+    h('div', {class:'who'},
+      h('div', {}, h('span', {}, 'Student: '), h('b', {}, r.student_name)), h('div', {}, h('span', {}, 'School: '), rc.school),
+      h('div', {}, h('span', {}, 'Class / Section: '), (r.class_name || '—') + ' / ' + (r.section || '—')), h('div', {}, h('span', {}, 'Roll no.: '), r.roll_no || '—'),
+      h('div', {}, h('span', {}, 'Programme: '), rc.bundle), h('div', {}, h('span', {}, 'Term: '), fmtDate(rc.term_start) + ' to ' + fmtDate(rc.term_end)),
+      r.admission_no ? h('div', {}, h('span', {}, 'Admission no.: '), r.admission_no) : null),
+    h('table', {},
+      h('thead', {}, h('tr', {}, ['Subject','Lessons done','Checks tried','First try %','Best %','Total average %','Attempts','Level'].map(t=>h('th', {}, t)))),
+      h('tbody', {}, rows, rows.length ? null : h('tr', {}, h('td', {colspan:'8', class:'remark'}, 'No lesson work has been recorded for this programme yet.')), ov ? h('tr', {}, h('td', {colspan:'5'}, h('b', {}, 'Overall')), h('td', {class:'n'}, h('b', {}, pct(ov.total_avg))), h('td', {}), h('td', {}, h('b', {}, levelText(ov.level, ov.provisional)))) : null)),
+    h('div', {class:'legend'},
+      h('div', {}, 'Total average = (first-try average + best average) ÷ 2. First try shows what the student understood before seeing any answers; best shows the best result after trying again.'),
+      h('div', {}, 'Lessons and checks count only the work the student has done. "Checks tried" = lesson checks attempted out of all lesson checks in the course.'),
+      h('div', {}, 'Level: High = ' + rc.levels.high + '% or more · Proficient = ' + rc.levels.proficient + '% or more · Basic = ' + rc.levels.basic + '% or more · Below basic = under ' + rc.levels.basic + '%.'),
+      h('div', {}, '"Provisional" means less than ' + rc.provisional_below_pct + '% of that course is complete, so the level may still change.')),
+    h('div', {class:'foot'}, 'This report is made from the student\'s lesson checks on Udaan Nepal. It is not the official CAS record of the school.'));
+}
+function printCards(o, list){
+  if(!list.length) return;
+  const root = document.getElementById('printRoot'); clear(root);
+  list.forEach(r => root.append(reportCardNode(REPORT, r, o)));
+  window.print();
+}
+
+start();
+</script>
+</body>
+</html>

@@ -582,7 +582,7 @@ document.querySelectorAll('.pw-toggle').forEach(btn=>{
     const redirect = params.get('redirect');
     // Only allow redirecting to a real page on this same site — never to an
     // external URL — so this can't be abused to send someone somewhere unsafe.
-    const safePages = ['profile','courses','notice','group','enroll-course','learn','quiz','admin','teacher-invite'];
+    const safePages = ['profile','courses','notice','group','enroll-course','learn','quiz','teacher-invite','school-invite'];   /* admin pages are opened only from My Profile, never straight after login */
     const dest = safePages.includes(redirect) ? redirect : 'profile';
     // Replace the auth page in history so pressing Back after login does not
     // return the user to the login form — it goes to the page before that instead.

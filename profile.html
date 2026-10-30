@@ -225,6 +225,10 @@ button{font-family:inherit;cursor:pointer;}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg>
         Admin
       </a>
+      <a id="schoolAdminLink" href="schooladmin" style="display:none;text-decoration:none;color:var(--cyan);font-size:12px;font-weight:700;padding:6px 12px;border:1px solid rgba(0,229,255,0.3);border-radius:7px;align-items:center;gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-6 9 6"/><path d="M5 10v9h14v-9"/><path d="M10 19v-5h4v5"/></svg>
+        School admin
+      </a>
     </div>
   </div>
 </div>
@@ -516,10 +520,22 @@ async function loadCurrentUser(){
     }));
   }
 
+  // The admin pages open only from these two buttons. Pressing one leaves a pass for that tab (see admin.html / schooladmin.html).
+  [['adminLink','un_admin_entry'],['schoolAdminLink','un_school_entry']].forEach(([id,key])=>{
+    const a = document.getElementById(id);
+    if(a && !a.dataset.passWired){ a.dataset.passWired = '1'; ['click','auxclick'].forEach(ev=>a.addEventListener(ev, ()=>{ try{ sessionStorage.setItem(key,'1'); }catch(e){} })); }
+  });
+
   // Show admin link if staff
   supabaseClient.from('staff_roles').select('role').eq('user_id', user.id).limit(1).then(r=>{
     if(r && r.data && r.data.length){ const a=document.getElementById('adminLink'); if(a) a.style.display='inline-flex'; }
   });
+  // Show the School admin button only for the person who runs a school's page
+  try{
+    supabaseClient.rpc('my_school_admin_info').then(r=>{
+      if(r && !r.error && r.data && r.data.school){ const a=document.getElementById('schoolAdminLink'); if(a) a.style.display='inline-flex'; }
+    }).catch(()=>{});
+  }catch(e){}
 
   return true;
 }
@@ -585,7 +601,7 @@ function studentContent(){
       <div>
         <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;">Your Reference ID</div>
         <div class="rid" id="refIdText">${esc(refId)}</div>
-        <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">Share this with your parent/guardian to link accounts.</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">Share this with your parent/guardian to link accounts. Your school may also ask for it when they add you to their class list.</div>
       </div>
       <button class="ref-id-copy" id="copyRefBtn" title="Copy ID" aria-label="Copy Reference ID">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
@@ -1244,18 +1260,16 @@ document.getElementById('addChildConfirm').addEventListener('click', async ()=>{
   const btn = document.getElementById('addChildConfirm');
   btn.disabled = true; btn.textContent = 'Linking…';
 
-  // Find student by reference_id (try normalised form first, then raw stripped)
-  let { data: students, error: findErr } = await supabaseClient
-  .rpc('lookup_student_by_reference', { p_ref: refId });
-
-  // Fallback: try without dashes in case DB stored it differently
-  if((!students || !students.length) && refId !== raw){
-    const fb = await supabaseClient.rpc('lookup_student_by_reference', { p_ref: raw });
-    if(fb.data && fb.data.length){ students = fb.data; findErr = null; }
-  }
+  // Find the student by Reference ID (the database ignores dashes, spaces and letter case)
+  const { data: students, error: findErr } = await supabaseClient
+    .rpc('lookup_student_by_reference', { p_ref: refId });
 
   if(findErr || !students || !students.length){
-    msg.style.color='var(--red)'; msg.textContent='No student found with that Reference ID.'; msg.style.display='';
+    msg.style.color='var(--red)';
+    msg.textContent = (findErr && /too many/i.test(findErr.message || ''))
+      ? 'Too many searches found nobody. Please check the Reference ID with your child and try again later.'
+      : (findErr ? 'Could not search right now. Please try again in a moment.' : 'No student found with that Reference ID.');
+    msg.style.display='';
     btn.disabled=false; btn.textContent='Link Child'; return;
   }
   const student = students[0];
